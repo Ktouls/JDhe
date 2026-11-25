@@ -2025,7 +2025,7 @@ const EMBEDDED_DICT_GZ_B64 = "__JDH_DICT_GZ_B64__";
 let CUSTOM_DICT = [];
 let CUSTOM_SHORT_2 = [];
 let CUSTOM_SHORT_3 = [];
-const DICT_WORDS_BY_CODE = __JDH_SHORT_CODE_LOOKUP__;
+const DICT_WORDS_BY_CODE = new Map(Object.entries(__JDH_SHORT_CODE_LOOKUP__));
 const SHORT_BANK = [];
 for (const it of WULI_LIST) {
   if (it.cat === 'single' || it.cat === 'fly') continue;
@@ -2746,30 +2746,15 @@ function activeSplitPool() {
   if (splitScope === 'top1000') return CUSTOM_DICT.slice(0, 1000);
   return CUSTOM_DICT;
 }
-function splitRootsForCode(item, key) {
-  const cf = CHAIFEN[item.ch];
-  if (cf) {
-    if (key === cf[1]) return cf[0];
-    if (key === cf[3]) return cf[2];
-    return (BYKEY[key] || []).map(i => CARDS[i].parts[0]).join('');
-  }
-  const roots = [];
-  const re = /([^()\s]+)\(([a-z])\)/g;
-  let m;
-  while ((m = re.exec(item.parts || '')) !== null) {
-    if (m[2] === key) roots.push(m[1]);
-  }
-  return roots.join(' ') || (BYKEY[key] || []).map(i => CARDS[i].parts[0]).join('');
-}
-function splitPartsText(item) {
-  const cf = CHAIFEN[item.ch];
-  return cf ? cf[0] + '(' + cf[1] + ') + ' + cf[2] + '(' + cf[3] + ')' : item.parts;
-}
 function hydrateSplitItem(item) {
   const cf = CHAIFEN[item.ch];
   if (!cf) return item;
-  item.sh = cf[1] + cf[3];
-  item.shapes = [item.sh];
+  const sh = cf[1] + cf[3];
+  const keepShapes = (item.shapes || []).filter(s => s !== sh);
+  const keepCodes = (item.codes || []).filter(c => c !== item.sp + sh);
+  item.sh = sh;
+  item.shapes = [sh, ...keepShapes];
+  item.codes = [item.sp + sh, ...keepCodes];
   item.parts = cf[0] + '(' + cf[1] + ') + ' + cf[2] + '(' + cf[3] + ')';
   item.chaifen = cf;
   return item;
@@ -2792,19 +2777,15 @@ function nextSplitQuestion() {
     const d = document.createElement('div'); d.className = 'slot' + (i === 0 ? ' active' : ''); d.id = 'splitSlot' + i;
     slotsWrap.appendChild(d);
   }
-  const code = splitCur.sh;
   for (const row of $('splitVkb').querySelectorAll('.vkb-row')) {
     for (const b of row.querySelectorAll('.vkey')) {
-      const key = b.dataset.k;
-      const roots = splitRootsForCode(splitCur, key);
-      const target = code.includes(key) ? '本字 · ' + roots : roots;
+      const roots = (BYKEY[b.dataset.k] || []).map(i => CARDS[i].parts[0]).join(' ');
       const sub = b.querySelector('.ksub');
-      if (sub) sub.textContent = target;
+      if (sub) sub.textContent = roots;
       b.classList.add('with-roots');
     }
   }
-  if (!is4) $('splitSub').textContent = '首末拆分：' + splitPartsText(splitCur) + ' · 字根对应字母已标在键帽上';
-  else $('splitSub').textContent = '双拼 ' + splitCur.sp.toUpperCase() + ' + 首末拆分：' + splitPartsText(splitCur);
+  $('splitSub').textContent = is4 ? '先双拼两码，再取首末字根两码 · 空格看提示' : '取首末字根对应的两个字母 · 空格看提示';
   $('splitAnswer').className = 'answer-line'; $('splitAnswer').innerHTML = '';
   clearVkb('splitVkb');
 }
