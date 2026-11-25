@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """从 src/ 源文件重新构建单文件静态站点 index.html（无需第三方依赖）。"""
-import base64, collections, gzip, pathlib, re
+import base64, collections, gzip, json, pathlib, re
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SRC = ROOT / "src"
@@ -9,6 +9,13 @@ tpl = (SRC / "jdh-official.tpl.html").read_text(encoding="utf-8")
 font_b64 = (SRC / "jdh_font.woff.b64").read_text(encoding="utf-8").strip()
 raw_zigen_json = (SRC / "raw_zigen.json").read_text(encoding="utf-8").strip()
 split_json = (SRC / "split_bank.json").read_text(encoding="utf-8").strip()
+chaifen = {}
+for line in (SRC / "jde.dict.yaml").read_text(encoding="utf-8").splitlines():
+    m = re.fullmatch(r"(.)\t\[([^]]+)\]([a-z]{2})(?:\t.*)?", line)
+    if m:
+        ch, roots, code = m.groups()
+        chaifen[ch] = [roots[0], code[0], roots[-1], code[1]]
+chaifen_json = json.dumps(chaifen, ensure_ascii=False, separators=(",", ":"))
 
 cjk_single = re.compile(r"^[\u4e00-\u9fff]$")
 cjk_multi = re.compile(r"^[\u4e00-\u9fff]{2,8}$")
@@ -16,6 +23,7 @@ code_re = re.compile(r"^[a-z]{1,4}$")
 
 char_freq = collections.Counter()
 single4, short2, short3 = {}, {}, {}
+short_code_lookup = {}
 
 for raw in (SRC / "jdh_dict_multi.txt").read_text(encoding="utf-8").splitlines():
     line = raw.strip()
@@ -27,7 +35,10 @@ for raw in (SRC / "jdh_dict_multi.txt").read_text(encoding="utf-8").splitlines()
     code = parts[0].strip().lower()
     if not code_re.match(code):
         continue
-    for w in parts[1].strip().split():
+    words = parts[1].strip().split()
+    if len(code) == 2 and any(cjk_multi.match(w) for w in words):
+        short_code_lookup[code] = {"words": [w for w in words if cjk_multi.match(w)]}
+    for w in words:
         if len(w) == 1 and cjk_single.match(w):
             if len(code) == 1: char_freq[w] += 5000
             elif len(code) == 2: char_freq[w] += 1000
@@ -59,7 +70,9 @@ out = (
     tpl.replace("__JDH_FONT_BASE64__", font_b64)
        .replace("__JDH_RAW_JSON__", raw_zigen_json)
        .replace("__JDH_SPLIT_JSON__", split_json)
+       .replace("__JDH_CHAIFEN_JSON__", chaifen_json)
        .replace("__JDH_DICT_GZ_B64__", dict_gz_b64)
+       .replace("__JDH_SHORT_CODE_LOOKUP__", json.dumps(short_code_lookup, ensure_ascii=False, separators=(",", ":")))
 )
 assert "__JDH_" not in out, "存在未替换占位符"
 (ROOT / "index.html").write_text(out, encoding="utf-8")

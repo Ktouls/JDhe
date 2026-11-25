@@ -897,6 +897,12 @@ tr:last-child td { border-bottom: 0; }
   font-size: 12.5px;
   cursor: pointer;
 }
+.vkey.with-roots { height: 64px; }
+.vkey.with-roots .ksub { font-family: 'JdhChai', "KaiTi", serif; font-size: 11px; line-height: 1.15; max-height: 2.3em; max-width: 100%; overflow: hidden; }
+.vkb-controls { display: flex; align-items: center; justify-content: center; gap: 10px; width: min(100%, 420px); margin: 2px auto 0; }
+.vkb-controls .space-btn { margin: 0; }
+.vkb-delete { flex: 0 0 88px; height: 40px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--surface); color: var(--ink-soft); font-size: 14px; cursor: pointer; touch-action: manipulation; }
+.vkb-delete:active { background: var(--blue-soft); color: var(--blue); }
 .space-btn:hover { color: var(--blue); border-color: var(--blue); }
 
 /* Zigen List Table */
@@ -1997,9 +2003,9 @@ const WULI_LIST = [
   { code: 'en', words: '一年', cat: 'e', note: '一开头量词' },
   { code: 'em', words: '一名', cat: 'e', note: '一开头量词' },
   { code: 'js', words: '就是', cat: 'scz', note: 's/sh 无理' },
-  { code: 'bs', words: '不是', cat: 'scz', note: 's/sh 无理' },
-  { code: 'ms', words: '马上 / 没事 / 模式', cat: 'scz', note: 's/sh 无理' },
-  { code: 'ls', words: '脸上', cat: 'scz', note: 's/sh 无理' },
+  { code: 'bs', words: '不算', cat: 'scz', note: 'V9.3：不算（不是已改 bu）' },
+  { code: 'ms', words: '马上', cat: 'scz', note: 'V9.3：仅保留马上；没事、模式已改 mu' },
+  { code: 'ls', words: '类似', cat: 'scz', note: 'V9.3：类似、脸色；脸上已删除' },
   { code: 'sj', words: '手机 / 实际', cat: 'scz', note: 's/sh 及实无理' },
   { code: 'sb', words: '上班', cat: 'scz', note: 's/sh 无理' },
   { code: 'sm', words: '什么 / 上面 / 生命', cat: 'scz', note: 's/sh 无理' },
@@ -2014,16 +2020,22 @@ const WULI_LIST = [
 ];
 
 const SPLIT_BANK = __JDH_SPLIT_JSON__;
+const CHAIFEN = __JDH_CHAIFEN_JSON__;
 const EMBEDDED_DICT_GZ_B64 = "__JDH_DICT_GZ_B64__";
 let CUSTOM_DICT = [];
 let CUSTOM_SHORT_2 = [];
 let CUSTOM_SHORT_3 = [];
-const SHORT_BANK = WULI_LIST.filter(it => it.cat !== 'single').map(it => ({
-  word: it.words,
-  code: it.code,
-  cat: it.cat === 'fly' ? 'extra' : it.cat,
-  note: it.note
-}));
+const DICT_WORDS_BY_CODE = __JDH_SHORT_CODE_LOOKUP__;
+const SHORT_BANK = [];
+for (const it of WULI_LIST) {
+  if (it.cat === 'single' || it.cat === 'fly') continue;
+  for (const word of it.words.split(' / ')) {
+    if (/[（(]/.test(word)) continue;
+    const entry = DICT_WORDS_BY_CODE.get(it.code);
+    if (!entry || !entry.words.includes(word)) continue;
+    SHORT_BANK.push({ word, code: it.code, cat: it.cat === 'fly' ? 'extra' : it.cat, note: it.note });
+  }
+}
 
 const ROADMAP_STEPS = [
   {
@@ -2734,12 +2746,40 @@ function activeSplitPool() {
   if (splitScope === 'top1000') return CUSTOM_DICT.slice(0, 1000);
   return CUSTOM_DICT;
 }
+function splitRootsForCode(item, key) {
+  const cf = CHAIFEN[item.ch];
+  if (cf) {
+    if (key === cf[1]) return cf[0];
+    if (key === cf[3]) return cf[2];
+    return (BYKEY[key] || []).map(i => CARDS[i].parts[0]).join('');
+  }
+  const roots = [];
+  const re = /([^()\s]+)\(([a-z])\)/g;
+  let m;
+  while ((m = re.exec(item.parts || '')) !== null) {
+    if (m[2] === key) roots.push(m[1]);
+  }
+  return roots.join(' ') || (BYKEY[key] || []).map(i => CARDS[i].parts[0]).join('');
+}
+function splitPartsText(item) {
+  const cf = CHAIFEN[item.ch];
+  return cf ? cf[0] + '(' + cf[1] + ') + ' + cf[2] + '(' + cf[3] + ')' : item.parts;
+}
+function hydrateSplitItem(item) {
+  const cf = CHAIFEN[item.ch];
+  if (!cf) return item;
+  item.sh = cf[1] + cf[3];
+  item.shapes = [item.sh];
+  item.parts = cf[0] + '(' + cf[1] + ') + ' + cf[2] + '(' + cf[3] + ')';
+  item.chaifen = cf;
+  return item;
+}
 function nextSplitQuestion() {
   const basePool = activeSplitPool();
   const isBuiltin = (splitScope === 'builtin' || !CUSTOM_DICT.length);
   const unmastered = isBuiltin ? basePool.filter(x => !STATE.split.mastered.includes(x.ch)) : basePool;
   const pool = unmastered.length && Math.random() < 0.85 ? unmastered : basePool;
-  splitCur = pool[Math.floor(Math.random() * pool.length)];
+  splitCur = hydrateSplitItem(pool[Math.floor(Math.random() * pool.length)]);
   splitTyped = ''; splitLocked = false;
   const is4 = STATE.split.mode === 'full4';
   const scopeName = isBuiltin ? '内置精校' : (splitScope === 'top1000' ? '常用 1000 字' : '全词库 ' + CUSTOM_DICT.length + ' 字');
@@ -2752,6 +2792,19 @@ function nextSplitQuestion() {
     const d = document.createElement('div'); d.className = 'slot' + (i === 0 ? ' active' : ''); d.id = 'splitSlot' + i;
     slotsWrap.appendChild(d);
   }
+  const code = splitCur.sh;
+  for (const row of $('splitVkb').querySelectorAll('.vkb-row')) {
+    for (const b of row.querySelectorAll('.vkey')) {
+      const key = b.dataset.k;
+      const roots = splitRootsForCode(splitCur, key);
+      const target = code.includes(key) ? '本字 · ' + roots : roots;
+      const sub = b.querySelector('.ksub');
+      if (sub) sub.textContent = target;
+      b.classList.add('with-roots');
+    }
+  }
+  if (!is4) $('splitSub').textContent = '首末拆分：' + splitPartsText(splitCur) + ' · 字根对应字母已标在键帽上';
+  else $('splitSub').textContent = '双拼 ' + splitCur.sp.toUpperCase() + ' + 首末拆分：' + splitPartsText(splitCur);
   $('splitAnswer').className = 'answer-line'; $('splitAnswer').innerHTML = '';
   clearVkb('splitVkb');
 }
@@ -2819,7 +2872,7 @@ function parseRimeDictText(text, sourceLabel) {
         sh,
         codes: [code],
         shapes: [sh],
-        parts: ref ? ref.parts : (sh[0].toUpperCase() + ' + ' + sh[1].toUpperCase()),
+        parts: CHAIFEN[ch] ? CHAIFEN[ch][0] + '(' + CHAIFEN[ch][1] + ') + ' + CHAIFEN[ch][2] + '(' + CHAIFEN[ch][3] + ')' : (ref ? ref.parts : sh),
         note: ref ? ref.note : (sourceLabel || '官方词库')
       });
     } else {
@@ -2884,7 +2937,7 @@ async function loadEmbeddedDict() {
           sh,
           codes: allCodes,
           shapes,
-          parts: ref ? ref.parts : (sh[0].toUpperCase() + ' + ' + sh[1].toUpperCase()),
+          parts: CHAIFEN[ch] ? CHAIFEN[ch][0] + '(' + CHAIFEN[ch][1] + ') + ' + CHAIFEN[ch][2] + '(' + CHAIFEN[ch][3] + ')' : (ref ? ref.parts : sh),
           note: ref ? ref.note : '内置全词库（jdh_dict_multi）'
         });
       }
@@ -2972,7 +3025,9 @@ function handleSplitKey(k) {
     return;
   }
   if (!/^[a-z]$/.test(k)) return;
-  const idx = splitTyped.length; splitTyped += k;
+  const idx = splitTyped.length;
+  if (idx >= primary.length) return;
+  splitTyped += k;
   const slot = $('splitSlot' + idx); slot.textContent = k.toUpperCase();
   if (splitTyped.length < primary.length) { slot.className = 'slot'; $('splitSlot' + (idx + 1)).className = 'slot active'; return; }
   splitLocked = true;
@@ -3131,10 +3186,20 @@ function buildVkb(containerId, onKey, subFn, spaceLabel) {
     }
     box.appendChild(row);
   });
+  const controls = document.createElement('div');
+  controls.className = 'vkb-controls';
   const sp = document.createElement('button');
   sp.type = 'button'; sp.className = 'space-btn'; sp.textContent = spaceLabel;
   sp.addEventListener('click', () => onKey(' '));
-  box.appendChild(sp);
+  controls.appendChild(sp);
+  if (containerId === 'spVkb' || containerId === 'splitVkb' || containerId === 'shortVkb') {
+    const del = document.createElement('button');
+    del.type = 'button'; del.className = 'vkb-delete'; del.textContent = '⌫ 删除';
+    del.setAttribute('aria-label', '删除上一位编码');
+    del.addEventListener('click', deleteLastPracticeChar);
+    controls.appendChild(del);
+  }
+  box.appendChild(controls);
 }
 function clearVkb(id) { $(id).querySelectorAll('.vkey').forEach(k => k.classList.remove('hintkey', 'good', 'bad', 'pressed')); }
 function highlightVkb(id, ch, cls) { const el = $(id).querySelector('.vkey[data-k="' + ch + '"]'); if (el) el.classList.add(cls); }
