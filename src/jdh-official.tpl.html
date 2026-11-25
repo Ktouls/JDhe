@@ -4,11 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>简单鹤 — 轻羽落键，意到字成</title>
-<style>
+<style id="jdh-font-css">
 @font-face {
   font-family: 'JdhChai';
   src: url(data:font/woff;base64,__JDH_FONT_BASE64__) format('woff');
   font-display: swap;
+  unicode-range: U+E000-F8FF;
+}
+@font-face {
+  font-family: 'JdhChai';
+  src: url(data:font/woff;base64,__JDH_ROOTS_FONT_BASE64__) format('woff');
+  font-display: swap;
+  unicode-range: U+3000-303F, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF;
 }
 
 :root {
@@ -77,7 +84,7 @@ body {
 a { color: var(--blue); text-decoration: none; }
 a:hover { text-decoration: underline; }
 button, input { font-family: inherit; }
-.chai { font-family: 'JdhChai', "KaiTi", serif; }
+.chai { font-family: 'JdhChai', "KaiTi", "Noto Serif CJK SC", serif; }
 .mono { font-family: var(--font-mono); font-weight: 600; }
 
 /* ==================== 54px Frosted Topbar ==================== */
@@ -569,7 +576,7 @@ button, input { font-family: inherit; }
 .qq-quiz-q { margin-bottom: 8px; }
 .qq-quiz-q strong { color: var(--ink); display: block; }
 .zg-keycap .zk-roots {
-  font-family: 'JdhChai', "KaiTi", serif;
+  font-family: 'JdhChai', "KaiTi", "Noto Serif CJK SC", serif;
   font-size: 15.5px;
   line-height: 1.38;
   color: var(--ink);
@@ -599,7 +606,7 @@ button, input { font-family: inherit; }
   flex-wrap: wrap;
 }
 .zg-detail-glyphs {
-  font-family: 'JdhChai', "KaiTi", serif;
+  font-family: 'JdhChai', "KaiTi", "Noto Serif CJK SC", serif;
   font-size: 28px;
   line-height: 1.45;
   display: flex;
@@ -816,7 +823,7 @@ tr:last-child td { border-bottom: 0; }
 
 .q-label { font-size: 12px; color: var(--ink-faint); font-weight: 600; letter-spacing: 0.03em; margin-bottom: 12px; }
 .zigen-display {
-  font-family: 'JdhChai', "KaiTi", serif;
+  font-family: 'JdhChai', "KaiTi", "Noto Serif CJK SC", serif;
   font-size: clamp(3rem, 8vw, 5rem);
   line-height: 1.3;
   color: var(--ink);
@@ -898,7 +905,7 @@ tr:last-child td { border-bottom: 0; }
   cursor: pointer;
 }
 .vkey.with-roots { height: 64px; }
-.vkey.with-roots .ksub { font-family: 'JdhChai', "KaiTi", serif; font-size: 11px; line-height: 1.15; max-height: 2.3em; max-width: 100%; overflow: hidden; }
+.vkey.with-roots .ksub { font-family: 'JdhChai', "KaiTi", "Noto Serif CJK SC", serif; font-size: 11px; line-height: 1.15; max-height: 2.3em; max-width: 100%; overflow: hidden; }
 .vkb-controls { display: flex; align-items: center; justify-content: center; gap: 10px; width: min(100%, 420px); margin: 2px auto 0; }
 .vkb-controls .space-btn { margin: 0; }
 .vkb-delete { flex: 0 0 88px; height: 40px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--surface); color: var(--ink-soft); font-size: 14px; cursor: pointer; touch-action: manipulation; }
@@ -913,7 +920,7 @@ tr:last-child td { border-bottom: 0; }
 .zcell .kp { font-size: 11px; color: var(--ink-faint); }
 .zcell .bar { height: 4px; border-radius: 99px; background: var(--surface-2); margin-bottom: 10px; overflow: hidden; }
 .zcell .bar i { display: block; height: 100%; background: var(--ok); border-radius: 99px; }
-.zcell .zitems { font-family: 'JdhChai', "KaiTi", serif; font-size: 22px; line-height: 1.5; color: var(--ink); word-break: break-all; margin-bottom: 12px; }
+.zcell .zitems { font-family: 'JdhChai', "KaiTi", "Noto Serif CJK SC", serif; font-size: 22px; line-height: 1.5; color: var(--ink); word-break: break-all; margin-bottom: 12px; }
 .zcell .zitems span { display: inline-block; margin-right: 6px; }
 
 /* Ecosystem Cards */
@@ -2366,7 +2373,18 @@ function renderVisualZigenChart() {
   });
 }
 
+function collectFontFaceCss() {
+  try {
+    const sheet = document.getElementById('jdh-font-css').sheet;
+    const rules = [];
+    for (const rule of sheet.cssRules) {
+      if (rule.type === CSSRule.FONT_FACE_RULE) rules.push(rule.cssText);
+    }
+    return rules.join('\n');
+  } catch (e) { return ''; }
+}
 function exportZigenSvg() {
+  const fontCss = collectFontFaceCss();
   const rows = [
     { keys: 'qwertyuiop', ox: 40, oy: 110 },
     { keys: 'asdfghjkl', ox: 96, oy: 266 },
@@ -2382,6 +2400,7 @@ function exportZigenSvg() {
       const lines = list.map(i => CARDS[i].parts.join(' '));
       body += `<rect x="${x}" y="${y}" width="${kw}" height="${kh}" rx="16" fill="#f5f5f7" stroke="#d2d2d7" stroke-width="1.5"/>`;
       body += `<text x="${x + 14}" y="${y + 28}" font-family="Menlo,Consolas,monospace" font-size="18" font-weight="800" fill="#0071e3">${ch.toUpperCase()}</text>`;
+      if (STROKE_BADGE[ch]) body += `<text x="${x + kw - 14}" y="${y + 28}" text-anchor="end" font-family="JdhChai,PingFang SC,sans-serif" font-size="14" font-weight="700" fill="#e37400">${STROKE_BADGE[ch]}</text>`;
       lines.slice(0, 5).forEach((ln, li) => {
         const safe = ln.replace(/&/g, '&amp;').replace(/</g, '&lt;');
         body += `<text x="${x + 14}" y="${y + 54 + li * 19}" font-family="JdhChai,KaiTi,serif" font-size="15" fill="#1d1d1f">${safe}</text>`;
@@ -2397,9 +2416,10 @@ function exportZigenSvg() {
     '6. 键位 H 的字根“釆”并非采集的采字，而是“番”字的上部。',
     '7. 键位 Z 的字根“艹”是草字头（如“花”的首形），并非“廾”，类似“弄”的末形取“竖”。'
   ];
-  const notesSvg = notes.map((t, i) => `<text x="40" y="${614 + i * 24}" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13.5" fill="#48484a">${t}</text>`).join('');
+  const notesSvg = notes.map((t, i) => `<text x="40" y="${614 + i * 24}" font-family="JdhChai,PingFang SC,Microsoft YaHei,sans-serif" font-size="13.5" fill="#48484a">${t}</text>`).join('');
   const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="1360" height="800" viewBox="0 0 1360 800">
+  <defs><style><![CDATA[${fontCss}]]></style></defs>
   <rect width="1360" height="800" fill="#ffffff"/>
   <text x="40" y="54" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="28" font-weight="800" fill="#1d1d1f">简单鹤字根图 V9（26 键 · 共 97 组字根）</text>
   <text x="40" y="82" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="14" fill="#6e6e73">轻羽落键，意到字成 · 拆分口诀：笔顺优先（无笔画粘连的口可无视笔顺），首末取大，相交也拆，插隔也取，字根字重复，禾取丿八</text>

@@ -7,6 +7,7 @@ SRC = ROOT / "src"
 
 tpl = (SRC / "jdh-official.tpl.html").read_text(encoding="utf-8")
 font_b64 = (SRC / "jdh_font.woff.b64").read_text(encoding="utf-8").strip()
+roots_font_b64 = (SRC / "jdh_roots_font.woff.b64").read_text(encoding="utf-8").strip()
 raw_zigen_json = (SRC / "raw_zigen.json").read_text(encoding="utf-8").strip()
 split_json = (SRC / "split_bank.json").read_text(encoding="utf-8").strip()
 chaifen = {}
@@ -68,6 +69,7 @@ dict_gz_b64 = base64.b64encode(gzip.compress(payload.encode("utf-8"), 9)).decode
 
 out = (
     tpl.replace("__JDH_FONT_BASE64__", font_b64)
+       .replace("__JDH_ROOTS_FONT_BASE64__", roots_font_b64)
        .replace("__JDH_RAW_JSON__", raw_zigen_json)
        .replace("__JDH_SPLIT_JSON__", split_json)
        .replace("__JDH_CHAIFEN_JSON__", chaifen_json)
