@@ -1468,7 +1468,7 @@ tr:last-child td { border-bottom: 0; }
         <div class="qcard" id="zgCard">
           <div class="q-label" id="zgLabel">循序渐进 · 已解锁 3/26 键</div>
           <div class="zigen-display" id="zgGlyph"></div>
-          <div class="q-sub" id="zgSub">按对应字母键 · 空格看提示（不跳过、不断连击）</div>
+          <div class="q-sub" id="zgSub">按对应字母键 · 空格看提示 · 答错不跳过，按对才进下一题</div>
           <div class="slots"><div class="slot active" id="zgSlot"></div></div>
           <div class="answer-line" id="zgAnswer"></div>
         </div>
@@ -1515,7 +1515,7 @@ tr:last-child td { border-bottom: 0; }
           <div class="q-label" id="splitLabel">输入这个字的简单鹤首末形码（2 键）</div>
           <div class="sp-prompt" id="splitChar">由</div>
           <div class="sp-pinyin" id="splitPinyin">you (yz)</div>
-          <div class="q-sub" id="splitSub">笔顺优先 · 首末取大 · 相交也拆 · 插隔也取 · 字根字重复 · 空格看提示</div>
+          <div class="q-sub" id="splitSub">笔顺优先 · 首末取大 · 相交也拆 · 插隔也取 · 字根字重复 · 空格看提示 · 答错重按</div>
           <div class="slots" id="splitSlots"></div>
           <div class="answer-line" id="splitAnswer"></div>
         </div>
@@ -1548,7 +1548,7 @@ tr:last-child td { border-bottom: 0; }
           <div class="q-label" id="shortLabel">输入该常用词组的简单鹤简码（2 键）</div>
           <div class="sp-prompt" id="shortWord" style="font-size:clamp(2rem,5.5vw,3rem)">就是</div>
           <div class="sp-pinyin" id="shortHintNote" style="color:var(--ink-soft);font-family:var(--font-sans);font-size:13.5px">s/sh 无理</div>
-          <div class="q-sub" id="shortSub">不含单字 · 记住高频简词提速，空格看提示</div>
+          <div class="q-sub" id="shortSub">不含单字 · 记住高频简词提速，空格看提示 · 答错重按</div>
           <div class="slots" id="shortSlots"></div>
           <div class="answer-line" id="shortAnswer"></div>
         </div>
@@ -1578,7 +1578,7 @@ tr:last-child td { border-bottom: 0; }
           <div class="q-label" id="spLabel">输入这个字的小鹤双拼（2 键）</div>
           <div class="sp-prompt" id="spChar">双</div>
           <div class="sp-pinyin" id="spPinyin">shuang</div>
-          <div class="q-sub" id="spSub">按物理键盘或点下方键帽 · 空格看提示</div>
+          <div class="q-sub" id="spSub">按物理键盘或点下方键帽 · 空格看提示 · 答错重按</div>
           <div class="slots">
             <div class="slot active" id="spSlot0"></div>
             <div class="slot" id="spSlot1"></div>
@@ -2540,11 +2540,20 @@ function renderWuliGrid() {
 }
 
 /* ==================== 10. 练习：小鹤双拼热身 ==================== */
-let spCur = null, spTyped = '', spLocked = false;
+function resetSlotsForRetry(prefix, len) {
+  for (let i = 0; i < len; i++) {
+    const s = $(prefix + 'Slot' + i);
+    if (!s) continue;
+    s.textContent = '';
+    s.className = 'slot' + (i === 0 ? ' active' : '');
+  }
+  clearVkb(prefix + 'Vkb');
+}
+let spCur = null, spTyped = '', spLocked = false, spMissed = false;
 function nextSpQuestion() {
   const pool = STATE.sp.mode === 'all' ? SP_BANK : SP_BANK.filter(x => x.cat === STATE.sp.mode);
   spCur = pool[Math.floor(Math.random() * pool.length)];
-  spTyped = ''; spLocked = false;
+  spTyped = ''; spLocked = false; spMissed = false;
   $('spChar').textContent = spCur.ch; $('spPinyin').textContent = spCur.py;
   $('spSlot0').textContent = ''; $('spSlot0').className = 'slot active';
   $('spSlot1').textContent = ''; $('spSlot1').className = 'slot';
@@ -2582,16 +2591,20 @@ function handleSpKey(k) {
   } else {
     $('spSlot0').className = 'slot bad'; $('spSlot1').className = 'slot bad';
     $('spCard').classList.add('wrongflash', 'shake');
-    $('spAnswer').innerHTML = '正确是 <b>' + spCur.code.toUpperCase() + '</b> · ' + spCur.tip;
+    $('spAnswer').innerHTML = '正确是 <b>' + spCur.code.toUpperCase() + '</b> · ' + spCur.tip + '<br>看清提示，再照着输入一次';
     $('spAnswer').className = 'answer-line show';
-    STATE.sp.wrong++; STATE.sp.combo = 0;
+    if (!spMissed) { STATE.sp.wrong++; spMissed = true; }
+    STATE.sp.combo = 0;
     beep('bad'); saveState(); renderSpHud();
-    setTimeout(() => { $('spCard').classList.remove('wrongflash', 'shake'); nextSpQuestion(); }, 1100);
+    setTimeout(() => {
+      $('spCard').classList.remove('wrongflash', 'shake');
+      spTyped = ''; spLocked = false; resetSlotsForRetry('sp', 2);
+    }, 620);
   }
 }
 
 /* ==================== 11. 练习：97 字根助记 ==================== */
-let zgQueue = [], zgCur = -1, zgLocked = false, zgHintTimer = null, zgAnswerShown = false;
+let zgQueue = [], zgCur = -1, zgLocked = false, zgHintTimer = null, zgAnswerShown = false, zgMissed = false;
 function shuffle(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
 function zgMultiplier() { return Math.min(4, 1 + Math.floor(STATE.zg.combo / 10) * 0.5); }
 function zgMasteredCount() { return STATE.zg.levels.filter(l => l > 1).length; }
@@ -2620,7 +2633,7 @@ function zgRebuildQueue() {
   idx.sort((a, b) => (STATE.zg.levels[a] === 8 ? 1 : 0) - (STATE.zg.levels[b] === 8 ? 1 : 0));
   zgQueue = idx;
 }
-function zgPullNext() { if (!zgQueue.length) zgRebuildQueue(); zgCur = zgQueue.shift(); zgAnswerShown = false; zgLocked = false; renderZgQuestion(); armZgHint(); }
+function zgPullNext() { if (!zgQueue.length) zgRebuildQueue(); zgCur = zgQueue.shift(); zgAnswerShown = false; zgLocked = false; zgMissed = false; renderZgQuestion(); armZgHint(); }
 function zgGrade(ok) {
   const s = STATE.zg;
   if (ok) { let lv = s.levels[zgCur] + 1; if (lv > GAPS.length - 1) lv = 8; s.levels[zgCur] = lv; if (lv !== 8) zgQueue.splice(Math.min(GAPS[lv] ?? 3, zgQueue.length), 0, zgCur); }
@@ -2698,12 +2711,18 @@ function handleZgKey(k) {
     }
     setTimeout(() => { $('zgCard').classList.remove('rightflash', 'pop'); zgPullNext(); }, 350);
   } else {
-    zgLocked = true; slot.className = 'slot bad';
+    slot.className = 'slot bad';
     highlightVkb('zgVkb', k, 'bad');
     $('zgCard').classList.add('wrongflash', 'shake');
-    STATE.zg.combo = 0; STATE.zg.wrong++;
-    beep('bad'); showZgAnswer('正确答案'); zgGrade(false); renderZgHud(); saveState();
-    setTimeout(() => { $('zgCard').classList.remove('wrongflash', 'shake'); zgPullNext(); }, 1080);
+    STATE.zg.combo = 0;
+    if (!zgMissed) { STATE.zg.wrong++; zgMissed = true; zgGrade(false); }
+    beep('bad'); showZgAnswer('正确答案'); renderZgHud(); saveState();
+    setTimeout(() => {
+      $('zgCard').classList.remove('wrongflash', 'shake');
+      zgLocked = false;
+      slot.textContent = ''; slot.className = 'slot active';
+      clearVkb('zgVkb');
+    }, 700);
   }
 }
 
@@ -2737,7 +2756,7 @@ function renderZigenTable() {
   $('tableSummary').textContent = '共 ' + TOTAL_ZG + ' 个字根 · 已掌握 ' + zgMasteredCount() + ' 个';
 }
 
-let splitCur = null, splitTyped = '', splitLocked = false;
+let splitCur = null, splitTyped = '', splitLocked = false, splitMissed = false;
 let splitScope = 'top1000';
 let dictSyncState = 'idle'; // idle | loading | synced | local | fallback
 
@@ -2765,7 +2784,7 @@ function nextSplitQuestion() {
   const unmastered = isBuiltin ? basePool.filter(x => !STATE.split.mastered.includes(x.ch)) : basePool;
   const pool = unmastered.length && Math.random() < 0.85 ? unmastered : basePool;
   splitCur = hydrateSplitItem(pool[Math.floor(Math.random() * pool.length)]);
-  splitTyped = ''; splitLocked = false;
+  splitTyped = ''; splitLocked = false; splitMissed = false;
   const is4 = STATE.split.mode === 'full4';
   const scopeName = isBuiltin ? '内置精校' : (splitScope === 'top1000' ? '常用 1000 字' : '全词库 ' + CUSTOM_DICT.length + ' 字');
   $('splitLabel').textContent = scopeName + ' · ' + (is4 ? '输入完整音形 4 码（双拼 + 形码）' : '输入简单鹤首末形码（后 2 码）');
@@ -2785,7 +2804,7 @@ function nextSplitQuestion() {
       b.classList.add('with-roots');
     }
   }
-  $('splitSub').textContent = is4 ? '先双拼两码，再取首末字根两码 · 空格看提示' : '取首末字根对应的两个字母 · 空格看提示';
+  $('splitSub').textContent = is4 ? '先双拼两码，再取首末字根两码 · 空格看提示 · 答错重按' : '取首末字根对应的两个字母 · 空格看提示 · 答错重按';
   $('splitAnswer').className = 'answer-line'; $('splitAnswer').innerHTML = '';
   clearVkb('splitVkb');
 }
@@ -3023,16 +3042,20 @@ function handleSplitKey(k) {
     for (let i = 0; i < primary.length; i++) $('splitSlot' + i).className = 'slot bad';
     $('splitCard').classList.add('wrongflash', 'shake');
     const alt = validList.length > 1 ? ' / ' + validList.slice(1, 3).map(x => x.toUpperCase()).join(' / ') : '';
-    $('splitAnswer').innerHTML = '正确是 <b>' + primary.toUpperCase() + alt + '</b> · 拆分：<span class="chai" style="font-size:18px">' + splitCur.parts + '</span>';
+    $('splitAnswer').innerHTML = '正确是 <b>' + primary.toUpperCase() + alt + '</b> · 拆分：<span class="chai" style="font-size:18px">' + splitCur.parts + '</span><br>看清拆分，再照着输入一次';
     $('splitAnswer').className = 'answer-line show';
-    STATE.split.wrong++; STATE.split.combo = 0;
+    if (!splitMissed) { STATE.split.wrong++; splitMissed = true; }
+    STATE.split.combo = 0;
     beep('bad'); saveState(); renderSplitHud();
-    setTimeout(() => { $('splitCard').classList.remove('wrongflash', 'shake'); nextSplitQuestion(); }, 1250);
+    setTimeout(() => {
+      $('splitCard').classList.remove('wrongflash', 'shake');
+      splitTyped = ''; splitLocked = false; resetSlotsForRetry('split', primary.length);
+    }, 700);
   }
 }
 
 /* ==================== 12B. 练习：常用简码训练（不含单字） ==================== */
-let shortCur = null, shortTyped = '', shortLocked = false;
+let shortCur = null, shortTyped = '', shortLocked = false, shortMissed = false;
 
 async function syncShortCodeDict(manual) {
   const urls = [
@@ -3076,7 +3099,7 @@ function nextShortQuestion() {
   const unmastered = isDict ? basePool : basePool.filter(x => !STATE.short.mastered.includes(x.code));
   const pool = unmastered.length && Math.random() < 0.85 ? unmastered : basePool;
   shortCur = pool[Math.floor(Math.random() * pool.length)];
-  shortTyped = ''; shortLocked = false;
+  shortTyped = ''; shortLocked = false; shortMissed = false;
   const len = shortCur.code.length;
   $('shortLabel').textContent = (isDict ? (len === 2 ? '全词库二简词 · ' : '全词库三简词 · ') : '高频常用简码 · ') + '输入 ' + len + ' 位简码';
   $('shortWord').textContent = shortCur.word;
@@ -3143,11 +3166,15 @@ function handleShortKey(k) {
   } else {
     for (let i = 0; i < primary.length; i++) $('shortSlot' + i).className = 'slot bad';
     $('shortCard').classList.add('wrongflash', 'shake');
-    $('shortAnswer').innerHTML = '正确是 <b>' + primary.toUpperCase() + '</b> · ' + shortCur.word;
+    $('shortAnswer').innerHTML = '正确是 <b>' + primary.toUpperCase() + '</b> · ' + shortCur.word + '<br>看清简码，再照着输入一次';
     $('shortAnswer').className = 'answer-line show';
-    STATE.short.wrong++; STATE.short.combo = 0;
+    if (!shortMissed) { STATE.short.wrong++; shortMissed = true; }
+    STATE.short.combo = 0;
     beep('bad'); saveState(); renderShortHud();
-    setTimeout(() => { $('shortCard').classList.remove('wrongflash', 'shake'); nextShortQuestion(); }, 1180);
+    setTimeout(() => {
+      $('shortCard').classList.remove('wrongflash', 'shake');
+      shortTyped = ''; shortLocked = false; resetSlotsForRetry('short', primary.length);
+    }, 700);
   }
 }
 
