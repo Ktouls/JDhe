@@ -3167,6 +3167,24 @@ function syncZgSettingsUi() {
 }
 
 /* ==================== 14. 事件绑定 ==================== */
+function deleteLastPracticeChar() {
+  let prefix = '', typed = '', locked = false;
+  if (currentPracticeSub === 'p-sp') { prefix = 'sp'; typed = spTyped; locked = spLocked; }
+  else if (currentPracticeSub === 'p-split') { prefix = 'split'; typed = splitTyped; locked = splitLocked; }
+  else if (currentPracticeSub === 'p-short') { prefix = 'short'; typed = shortTyped; locked = shortLocked; }
+  if (!prefix) return false;
+  if (locked || !typed.length) return true;
+  const idx = typed.length - 1;
+  const slot = $(prefix + 'Slot' + idx);
+  if (slot) { slot.textContent = ''; slot.className = 'slot active'; }
+  typed = typed.slice(0, -1);
+  if (prefix === 'sp') spTyped = typed;
+  else if (prefix === 'split') splitTyped = typed;
+  else shortTyped = typed;
+  clearVkb(prefix + 'Vkb');
+  return true;
+}
+
 function bindEvents() {
   $('brandHome').addEventListener('click', () => switchRoute('home'));
   $('themeBtn').addEventListener('click', () => { STATE.theme = STATE.theme === 'dark' ? 'light' : 'dark'; applyTheme(); saveState(); });
@@ -3319,6 +3337,10 @@ function bindEvents() {
     if (tag === 'INPUT' || tag === 'TEXTAREA') return;
     if (currentRoute !== 'practice') return;
     if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === 'Backspace' || e.key === 'Delete') {
+      if (deleteLastPracticeChar()) e.preventDefault();
+      return;
+    }
     const k = e.key.toLowerCase();
     if (k !== ' ' && !/^[a-z]$/.test(k)) return;
     e.preventDefault();
