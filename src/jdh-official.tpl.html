@@ -2784,6 +2784,7 @@ function renderSplitHud() {
   const hasFull = CUSTOM_DICT.length > 0;
   $('splitPoolLbl').textContent =
     dictSyncState === 'loading' ? '正在检查在线更新…' :
+    dictSyncState === 'synced' && lastSyncInfo ? (splitScope === 'top1000' ? '官方 v9.3 · 前 1000 常用字' : (splitScope === 'full' ? '官方 v9.3 全词库' : '内置精校 167 字')) + ' · 已核对 ' + lastSyncInfo.at.toLocaleTimeString('zh-CN', { hour12: false }) :
     dictSyncState === 'synced' ? (splitScope === 'top1000' ? 'v9.3 前 1000 常用字' : (splitScope === 'full' ? 'v9.3 官方全词库' : '内置精校 167 字')) :
     dictSyncState === 'local' ? (splitScope === 'top1000' ? '本地词库 · 前 1000 字' : (splitScope === 'full' ? '已导入本地全词库' : '内置精校 167 字')) :
     hasFull ? (splitScope === 'top1000' ? '内置全词库 · 前 1000 常用字' : (splitScope === 'full' ? '内置全词库（含容错）' : '内置精校 167 字')) :
@@ -2939,47 +2940,157 @@ async function loadEmbeddedDict() {
     return false;
   }
 }
+const ONLINE_SOURCES = [
+  'https://raw.githubusercontent.com/rimeinn/rime-JDhe/main/cn_dicts/jde/jde.dict.yaml',
+  'https://fastly.jsdelivr.net/gh/rimeinn/rime-JDhe@main/cn_dicts/jde/jde.dict.yaml',
+  'https://raw.githubusercontent.com/rimeinn/rime-JDhe/main/cn_dicts/jde/jde_ext.dict.yaml',
+  'https://fastly.jsdelivr.net/gh/rimeinn/rime-JDhe@main/cn_dicts/jde/jde_ext.dict.yaml'
+];
+let onlineIndex = 0;
+let lastSyncInfo = null;
+
+function parseOnlineDict(text) {
+  const chars = new Map(), roots = new Map(), short2 = new Map(), short3 = new Map();
+  let inHeader = false;
+  const lines = text.split(/\r?\n/);
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line || line.startsWith('#')) continue;
+    if (line === '---') { inHeader = true; continue; }
+    if (line === '...') { inHeader = false; continue; }
+    if (inHeader) continue;
+    const rootMatch = line.match(/^(.)\t\[([^\]]+)\]([a-z]{2})(?:\t.*)?$/);
+    if (rootMatch) {
+      roots.set(rootMatch[1], [rootMatch[2][0], rootMatch[3][0], rootMatch[2][rootMatch[2].length - 1], rootMatch[3][1]]);
+      continue;
+    }
+    const cols = line.split('\t');
+    if (cols.length < 2) continue;
+    const head = cols[0].trim(), code = cols[1].trim().toLowerCase();
+    if (/^[\u4e00-\u9fff]$/.test(head) && /^[a-z]{4}$/.test(code)) {
+      if (!chars.has(head)) chars.set(head, { codes: [], shapes: [] });
+      const rec = chars.get(head);
+      if (!rec.codes.includes(code)) rec.codes.push(code);
+      const shape = code.slice(2, 4);
+      if (!rec.shapes.includes(shape)) rec.shapes.push(shape);
+    } else if (/^[\u4e00-\u9fff]{2,8}$/.test(head) && /^[a-z]{2,3}$/.test(code)) {
+      const bucket = code.length === 2 ? short2 : short3;
+      if (!bucket.has(head)) bucket.set(head, code);
+    }
+  }
+  return { chars, roots, short2, short3 };
+}
+
+function applyOnlineDict(dict) {
+  const merged = [];
+  let addedChars = 0, addedCodes = 0, addedRoots = 0;
+  for (const item of (CUSTOM_DICT.length ? CUSTOM_DICT : SPLIT_BANK)) {
+    const hit = dict.chars.get(item.ch);
+    if (!hit) { merged.push(item); continue; }
+    for (const c of hit.codes) if (!item.codes.includes(c)) { item.codes.push(c); addedCodes++; }
+    for (const s2 of hit.shapes) if (!item.shapes.includes(s2)) { item.shapes.push(s2); }
+    const cf = dict.roots.get(item.ch);
+    if (cf && !CHAIFEN[item.ch]) { CHAIFEN[item.ch] = cf; addedRoots++; }
+    merged.push(item);
+  }
+  for (const [ch, hit] of dict.chars) {
+    if (merged.some(x => x.ch === ch)) continue;
+    const cf = dict.roots.get(ch) || null;
+    const sh = cf ? cf[1] + cf[3] : hit.codes[0].slice(2, 4);
+    merged.push({
+      ch,
+      py: '',
+      sp: hit.codes[0].slice(0, 2),
+      sh,
+      codes: hit.codes.slice(),
+      shapes: hit.shapes.slice(),
+      parts: cf ? cf[0] + '(' + cf[1] + ') + ' + cf[2] + '(' + cf[3] + ')' : sh,
+      note: '在线词库 v9.3'
+    });
+    if (cf) { CHAIFEN[ch] = cf; addedRoots++; }
+    addedChars++;
+  }
+  if (merged.length) CUSTOM_DICT = merged;
+
+  if (dict.short2.size) {
+    CUSTOM_SHORT_2 = Array.from(dict.short2, ([word, code]) => ({ word, code, codes: [code], cat: 'dict2', note: 'v9.3 官方词库' }));
+  }
+  if (dict.short3.size) {
+    CUSTOM_SHORT_3 = Array.from(dict.short3, ([word, code]) => ({ word, code, codes: [code], cat: 'dict3', note: 'v9.3 官方词库' }));
+  }
+  return { addedChars, addedCodes, addedRoots };
+}
+
+function setSyncBusy(busy) {
+  [['syncDictBtn', '检查在线更新'], ['syncShortDictBtn', '检查简词更新']].forEach(([id, label]) => {
+    const btn = $(id);
+    if (!btn) return;
+    btn.disabled = busy;
+    btn.textContent = busy ? '检查中…' : label;
+  });
+}
+
 async function syncOnlineDict(manual) {
   if (dictSyncState === 'loading') return;
   const prevState = dictSyncState;
   dictSyncState = 'loading';
   renderSplitHud();
-  const urls = [
-    'https://cdn.jsdelivr.net/gh/rimeinn/rime-JDhe@main/charset.dict.yaml',
-    'https://raw.githubusercontent.com/rimeinn/rime-JDhe/main/charset.dict.yaml',
-    'https://cdn.jsdelivr.net/gh/rimeinn/rime-JDhe@main/jde_fixed.dict.yaml',
-    'https://raw.githubusercontent.com/rimeinn/rime-JDhe/main/jde_fixed.dict.yaml'
-  ];
-  for (const url of urls) {
-    try {
-      const res = await fetch(url);
-      if (!res.ok) continue;
-      const txt = await res.text();
-      const parsed = parseRimeDictText(txt, 'rime-JDhe v9.3 官方词库');
-      if (parsed.length >= 500) {
-        CUSTOM_DICT = parsed;
-        const sc = parseRimeShortCodes(txt, 'v9.3 官方词库');
-        if (sc.s2.length) CUSTOM_SHORT_2 = sc.s2;
-        if (sc.s3.length) CUSTOM_SHORT_3 = sc.s3;
+  if (manual) setSyncBusy(true);
+  let lastReason = '网络不可达';
+  try {
+    for (let round = 0; round < 2; round++) {
+      const url = ONLINE_SOURCES[onlineIndex];
+      const label = url.includes('jde_ext') ? '扩展字集' : '主词库';
+      try {
+        const res = await fetch(url, { cache: 'no-cache' });
+        if (!res.ok) { lastReason = 'HTTP ' + res.status; onlineIndex = (onlineIndex + 1) % ONLINE_SOURCES.length; continue; }
+        const txt = await res.text();
+        const dict = parseOnlineDict(txt);
+        if (!dict.chars.size && !dict.short3.size) {
+          lastReason = '返回内容无法识别（' + label + '）';
+          onlineIndex = (onlineIndex + 1) % ONLINE_SOURCES.length;
+          continue;
+        }
+        const before = { chars: CUSTOM_DICT.length, s2: CUSTOM_SHORT_2.length, s3: CUSTOM_SHORT_3.length };
+        const stats = applyOnlineDict(dict);
+        const after = { chars: CUSTOM_DICT.length, s2: CUSTOM_SHORT_2.length, s3: CUSTOM_SHORT_3.length };
+        lastSyncInfo = { at: new Date(), label, changed: stats.addedChars > 0 || stats.addedCodes > 0
+          || after.s2 !== before.s2 || after.s3 !== before.s3 };
         dictSyncState = 'synced';
         renderSplitHud();
+        renderShortHud();
         nextSplitQuestion();
-        // If charset.dict.yaml didn't contain multi-char short codes, also fetch jde_fixed.dict.yaml in background
-        if (!CUSTOM_SHORT_2.length) syncShortCodeDict(false);
-        else renderShortHud();
-        if (manual) toast('已同步官方 v9.3 全词库：共 ' + parsed.length + ' 个单字（支持容错）');
+        if (STATE.short.cat === 'dict2' || STATE.short.cat === 'dict3') nextShortQuestion();
+        saveState();
+        if (manual) {
+          const summary = '单字 ' + after.chars.toLocaleString() + ' · 二简 ' + after.s2.toLocaleString() + ' · 三简 ' + after.s3.toLocaleString();
+          const added = [];
+          if (stats.addedChars) added.push('新增 ' + stats.addedChars + ' 字');
+          if (stats.addedCodes) added.push('新增容错 ' + stats.addedCodes + ' 码');
+          if (after.s2 !== before.s2) added.push('二简 ' + (after.s2 - before.s2 > 0 ? '+' : '') + (after.s2 - before.s2));
+          if (after.s3 !== before.s3) added.push('三简 ' + (after.s3 - before.s3 > 0 ? '+' : '') + (after.s3 - before.s3));
+          toast(added.length
+            ? '已更新到官方 v9.3（' + label + '）：' + added.join(' · ') + '，现有 ' + summary
+            : '已是最新：内置词库与官方 v9.3 一致（' + summary + '）· 核对时间 ' + lastSyncInfo.at.toLocaleTimeString('zh-CN', { hour12: false }));
+        }
         return;
+      } catch (e) {
+        lastReason = '跨域或网络错误';
+        onlineIndex = (onlineIndex + 1) % ONLINE_SOURCES.length;
       }
-    } catch (e) {}
+    }
+  } finally {
+    if (manual) setSyncBusy(false);
+    renderSplitHud();
   }
   dictSyncState = CUSTOM_DICT.length ? (prevState === 'local' ? 'local' : 'embedded') : 'fallback';
   renderSplitHud();
   if (manual) {
-    toast(CUSTOM_DICT.length
-      ? '在线更新受限，已继续使用内置全词库（' + CUSTOM_DICT.length + ' 字，支持容错）'
-      : '在线拉取受限，已保留内置 167 字，也可点「导入本地码表」加载全词库');
+    toast('在线更新失败（' + lastReason + '）· 继续使用内置 v9.3 词库：单字 '
+      + CUSTOM_DICT.length + ' · 二简 ' + CUSTOM_SHORT_2.length + ' · 三简 ' + CUSTOM_SHORT_3.length);
   }
 }
+
 function handleSplitKey(k) {
   if (!splitCur || splitLocked) return;
   const is4 = STATE.split.mode === 'full4';
@@ -3294,7 +3405,7 @@ function bindEvents() {
       nextShortQuestion();
     });
   });
-  $('syncShortDictBtn').addEventListener('click', () => syncShortCodeDict(true));
+  $('syncShortDictBtn').addEventListener('click', () => syncOnlineDict(true));
   $('importDictBtn').addEventListener('click', () => $('dictFileInput').click());
   $('dictFileInput').addEventListener('change', e => {
     const f = e.target.files[0]; if (!f) return;
