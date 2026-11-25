@@ -1,0 +1,3379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>简单鹤 — 轻羽落键，意到字成</title>
+<style>
+@font-face {
+  font-family: 'JdhChai';
+  src: url(data:font/woff;base64,__JDH_FONT_BASE64__) format('woff');
+  font-display: swap;
+}
+
+:root {
+  --bg: #ffffff;
+  --surface: #f5f5f7;
+  --surface-2: #eaeaee;
+  --surface-dark: #0a0b0f;
+  --glass: rgba(255, 255, 255, 0.8);
+  --ink: #1d1d1f;
+  --ink-soft: #6e6e73;
+  --ink-faint: #86868b;
+  --line: rgba(0, 0, 0, 0.07);
+  --line-strong: rgba(0, 0, 0, 0.14);
+  --blue: #0071e3;
+  --blue-hover: #0077ed;
+  --blue-soft: rgba(0, 113, 227, 0.1);
+  --ok: #188038;
+  --ok-soft: rgba(24, 128, 56, 0.11);
+  --bad: #d93025;
+  --bad-soft: rgba(217, 48, 37, 0.11);
+  --amber: #e37400;
+  --amber-soft: rgba(227, 116, 0, 0.11);
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --radius-xl: 34px;
+  --shadow-pop: 0 24px 64px rgba(0, 0, 0, 0.16);
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Google Sans", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  --font-mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+
+[data-theme="dark"] {
+  --bg: #000000;
+  --surface: #161617;
+  --surface-2: #232326;
+  --surface-dark: #101218;
+  --glass: rgba(0, 0, 0, 0.78);
+  --ink: #f5f5f7;
+  --ink-soft: #a1a1a6;
+  --ink-faint: #6e6e73;
+  --line: rgba(255, 255, 255, 0.09);
+  --line-strong: rgba(255, 255, 255, 0.18);
+  --blue: #2997ff;
+  --blue-hover: #47a7ff;
+  --blue-soft: rgba(41, 151, 255, 0.16);
+  --ok: #34a853;
+  --ok-soft: rgba(52, 168, 83, 0.16);
+  --bad: #f28b82;
+  --bad-soft: rgba(242, 139, 130, 0.16);
+  --amber: #fbbc04;
+  --amber-soft: rgba(251, 188, 4, 0.16);
+  --shadow-pop: 0 28px 72px rgba(0, 0, 0, 0.65);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.55;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+button, input { font-family: inherit; }
+.chai { font-family: 'JdhChai', "KaiTi", serif; }
+.mono { font-family: var(--font-mono); font-weight: 600; }
+
+/* ==================== 54px Frosted Topbar ==================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--glass);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--line);
+}
+.header-inner {
+  max-width: 1140px;
+  margin: 0 auto;
+  height: 54px;
+  padding: 0 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+.brand-logo { width: 28px; height: 28px; display: block; }
+
+.main-nav { display: flex; align-items: center; gap: 4px; }
+.nav-btn {
+  border: 0;
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.16s, background 0.16s;
+  white-space: nowrap;
+}
+.nav-btn:hover { color: var(--ink); background: var(--surface); }
+.nav-btn.active { color: var(--ink); background: var(--surface); font-weight: 600; }
+
+.header-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.skip-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.18s;
+  white-space: nowrap;
+}
+.skip-pill:hover { border-color: var(--blue); color: var(--blue); }
+.skip-pill.on { background: var(--blue-soft); border-color: transparent; color: var(--blue); }
+.skip-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.55; }
+.skip-pill.on .dot { opacity: 1; }
+
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-soft);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: 0.16s;
+}
+.icon-btn:hover { color: var(--ink); background: var(--surface); }
+
+/* Mobile Top Sub-Nav Strip (Zero bottom overlap) */
+.mobile-dock {
+  display: none;
+  border-top: 1px solid var(--line);
+  background: var(--glass);
+  padding: 6px 10px;
+}
+.mobile-dock-inner {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
+}
+.dock-btn {
+  border: 0;
+  background: transparent;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 2px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.16s;
+  white-space: nowrap;
+}
+.dock-btn.active { background: var(--surface); color: var(--blue); }
+
+/* ==================== Layout & Buttons ==================== */
+.container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 40px 22px 84px;
+}
+.view { display: none; animation: fadeUp 0.28s cubic-bezier(0.22, 1, 0.36, 1); }
+.view.active { display: block; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 11px 22px;
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: transform 0.16s, background 0.16s, border-color 0.16s, color 0.16s;
+  text-decoration: none;
+}
+.btn:hover { text-decoration: none; }
+.btn:active { transform: scale(0.98); }
+.btn-primary { background: var(--blue); color: #fff; }
+.btn-primary:hover { background: var(--blue-hover); }
+.btn-dark { background: var(--ink); color: var(--bg); }
+.btn-dark:hover { opacity: 0.88; }
+.btn-outline { background: transparent; border-color: var(--line-strong); color: var(--ink); }
+.btn-outline:hover { border-color: var(--ink); }
+.btn-soft { background: var(--blue-soft); color: var(--blue); }
+.btn-soft:hover { background: var(--blue); color: #fff; }
+.btn-sm { padding: 7px 14px; font-size: 13px; }
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink-soft);
+}
+.tag-blue { background: var(--blue-soft); color: var(--blue); }
+.tag-ok { background: var(--ok-soft); color: var(--ok); }
+.tag-amber { background: var(--amber-soft); color: var(--amber); }
+
+/* ==================== Hero ==================== */
+.hero-center {
+  text-align: center;
+  max-width: 780px;
+  margin: 14px auto 38px;
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--blue);
+  margin-bottom: 14px;
+  letter-spacing: 0.04em;
+}
+.hero-title {
+  margin: 0 0 18px;
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+.hero-title .grad {
+  background: linear-gradient(95deg, #0071e3 0%, #3b82f6 52%, #0ea5e9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+[data-theme="dark"] .hero-title .grad {
+  background: linear-gradient(95deg, #2997ff 0%, #60a5fa 55%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero-sub {
+  margin: 0 auto 26px;
+  max-width: 580px;
+  font-size: clamp(15px, 2vw, 18px);
+  color: var(--ink-soft);
+  line-height: 1.65;
+}
+
+.track-switch {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  margin-bottom: 24px;
+  max-width: 100%;
+}
+.track-opt {
+  border: 0;
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  white-space: nowrap;
+}
+.track-opt.active {
+  background: var(--bg);
+  color: var(--ink);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+[data-theme="dark"] .track-opt.active { background: var(--surface-2); box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5); }
+
+.hero-ctas { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
+.hero-status {
+  font-size: 13px;
+  color: var(--ink-faint);
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.hero-status b { color: var(--ink); font-weight: 600; }
+
+/* Dark Obsidian Interactive Showcase */
+.showcase {
+  background: var(--surface-dark);
+  color: #f5f5f7;
+  border-radius: var(--radius-xl);
+  padding: 34px 36px 32px;
+  margin-bottom: 54px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.showcase::before {
+  content: "";
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  right: -140px;
+  top: -220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(41, 151, 255, 0.22), transparent 68%);
+  pointer-events: none;
+}
+.showcase-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+}
+.showcase-kicker { font-size: 13px; font-weight: 600; color: #a1a1a6; }
+.demo-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.demo-pill {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+  color: #e5e5ea;
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.18s;
+}
+.demo-pill:hover { background: rgba(255, 255, 255, 0.12); }
+.demo-pill.active { background: #ffffff; color: #0b0c10; border-color: #ffffff; }
+
+.showcase-body {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 34px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+.demo-glyph-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  padding: 18px 26px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.demo-glyph-box .big-hz { font-size: 66px; font-weight: 800; line-height: 1.05; }
+.demo-glyph-box .big-py { font-family: var(--font-mono); font-size: 13px; color: #8e8e93; margin-top: 6px; }
+.demo-right { display: flex; flex-direction: column; gap: 16px; }
+.hw-keys { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.hw-key {
+  width: 64px;
+  height: 72px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #252834 0%, #171922 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+.hw-key.k-sound { border-color: rgba(41, 151, 255, 0.55); box-shadow: 0 6px 20px rgba(41, 151, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15); }
+.hw-key.k-shape { border-color: rgba(52, 211, 153, 0.55); box-shadow: 0 6px 20px rgba(52, 211, 153, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.15); }
+.hw-key b { font-family: var(--font-mono); font-size: 24px; line-height: 1; text-transform: uppercase; color: #ffffff; }
+.hw-key.k-sound small { color: #60a5fa; font-size: 11px; font-weight: 600; }
+.hw-key.k-shape small { color: #34d399; font-size: 13px; font-weight: 600; }
+.hw-plus { color: #636366; font-size: 20px; font-weight: 700; margin: 0 2px; }
+.demo-meta { font-size: 14.5px; color: #c7c7cc; line-height: 1.65; }
+.demo-meta strong { color: #ffffff; }
+
+/* ==================== Bento & Grids ==================== */
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.section-head h2 {
+  margin: 0;
+  font-size: clamp(24px, 3.4vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.18;
+}
+.section-head p { margin: 6px 0 0; font-size: 15px; color: var(--ink-soft); }
+
+.bento { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; margin-bottom: 52px; }
+.bento-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  transition: transform 0.22s ease, border-color 0.22s ease;
+}
+.bento-card:hover { transform: translateY(-2px); border-color: var(--line-strong); }
+.span-7 { grid-column: span 7; }
+.span-5 { grid-column: span 5; }
+.span-4 { grid-column: span 4; }
+.span-6 { grid-column: span 6; }
+
+.bento-metric { font-size: clamp(36px, 4.4vw, 50px); font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+.bento-metric span { font-size: 17px; font-weight: 600; color: var(--ink-soft); margin-left: 4px; letter-spacing: 0; }
+.bento-card h3 { margin: 0 0 6px; font-size: 19px; font-weight: 700; letter-spacing: -0.02em; }
+.bento-card p { margin: 0; font-size: 14.5px; color: var(--ink-soft); line-height: 1.65; }
+.bento-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  color: var(--blue);
+}
+.bento-icon svg { width: 20px; height: 20px; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 24px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 26px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px; }
+
+/* ==================== 交互式 26 键 QWERTY 字根图 ==================== */
+.zg-chart-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.zg-kb-scroll { width: 100%; }
+.zg-kb {
+  --kgap: 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+.zg-kb-row { display: flex; justify-content: center; gap: var(--kgap); width: 100%; }
+.zg-keycap {
+  flex: 0 0 calc((100% - 9 * var(--kgap)) / 10);
+  width: calc((100% - 9 * var(--kgap)) / 10);
+  min-width: 0;
+  min-height: 92px;
+  border-radius: 14px;
+  border: 1px solid var(--line-strong);
+  background: var(--bg);
+  padding: 8px 7px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 5px;
+  text-align: left;
+  transition: transform 0.14s, border-color 0.16s, box-shadow 0.16s;
+  overflow: hidden;
+}
+.zg-keycap:hover { transform: translateY(-1px); border-color: var(--blue); }
+.zg-keycap.active { border-color: var(--blue); box-shadow: 0 0 0 2.5px var(--blue-soft); }
+.zg-keycap.all-done { border-color: var(--ok); }
+.zg-keycap .zk-head { display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 2px; }
+.zg-keycap .zk-let { font-family: var(--font-mono); font-size: 15px; font-weight: 800; color: var(--ink); line-height: 1; }
+.zg-keycap .zk-cnt { font-size: 9.5px; font-weight: 700; color: var(--ink-faint); padding: 1px 5px; border-radius: 99px; background: var(--surface); }
+.zg-keycap.all-done .zk-cnt { background: var(--ok-soft); color: var(--ok); }
+.zg-keycap .zk-stroke {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--bad);
+  border: 1px solid var(--bad);
+  background: var(--bad-soft);
+  padding: 0 4px;
+  border-radius: 5px;
+  line-height: 1.4;
+}
+.zg-notes {
+  margin-top: 18px;
+  padding: 18px 20px;
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  border: 1px solid var(--line);
+}
+.zg-notes h4 { margin: 0 0 10px; font-size: 14px; font-weight: 700; color: var(--ink); }
+.zg-notes ol { margin: 0; padding-left: 20px; font-size: 13px; color: var(--ink-soft); line-height: 1.85; }
+.zg-notes li { margin-bottom: 2px; }
+.qq-quiz {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  line-height: 1.75;
+}
+.qq-quiz summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--blue);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.qq-quiz summary::-webkit-details-marker { display: none; }
+.qq-quiz-body { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line-strong); }
+.qq-quiz-q { margin-bottom: 8px; }
+.qq-quiz-q strong { color: var(--ink); display: block; }
+.zg-keycap .zk-roots {
+  font-family: 'JdhChai', "KaiTi", serif;
+  font-size: 15.5px;
+  line-height: 1.38;
+  color: var(--ink);
+  word-break: break-all;
+}
+.zg-keycap .zk-roots span { display: inline-block; margin-right: 3px; }
+/* 手指分区着色 */
+.zg-kb.zones .z-lp { background: rgba(217, 48, 37, 0.055); }
+.zg-kb.zones .z-lr { background: rgba(227, 116, 0, 0.06); }
+.zg-kb.zones .z-lm { background: rgba(24, 128, 56, 0.06); }
+.zg-kb.zones .z-li { background: rgba(0, 113, 227, 0.065); }
+.zg-kb.zones .z-ri { background: rgba(124, 58, 237, 0.065); }
+.zg-kb.zones .z-rm { background: rgba(24, 128, 56, 0.06); }
+.zg-kb.zones .z-rr { background: rgba(227, 116, 0, 0.06); }
+.zg-kb.zones .z-rp { background: rgba(217, 48, 37, 0.055); }
+
+.zg-detail-bar {
+  margin-top: 16px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.zg-detail-glyphs {
+  font-family: 'JdhChai', "KaiTi", serif;
+  font-size: 28px;
+  line-height: 1.45;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.zg-detail-chip {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 4px 12px;
+}
+
+/* ==================== Roadmap ==================== */
+.roadmap-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin-bottom: 22px;
+}
+.progress-track { flex: 1; min-width: 200px; height: 8px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.progress-fill { height: 100%; background: var(--blue); border-radius: 999px; transition: width 0.32s cubic-bezier(0.22, 1, 0.36, 1); }
+.step-list { display: grid; gap: 14px; }
+.step-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 18px;
+  align-items: start;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  transition: border-color 0.2s, opacity 0.2s;
+}
+.step-card.done { border-color: var(--ok); }
+.step-card.skipped { opacity: 0.72; padding: 16px 24px; border-style: dashed; }
+.step-check {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 2px solid var(--line-strong);
+  background: var(--bg);
+  color: transparent;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 14px;
+  margin-top: 2px;
+  transition: 0.16s;
+}
+.step-card.done .step-check { background: var(--ok); border-color: var(--ok); color: #fff; }
+.step-card.skipped .step-check { background: var(--blue-soft); border-color: transparent; color: var(--blue); }
+.step-body h3 { margin: 0 0 6px; font-size: 18px; font-weight: 700; letter-spacing: -0.02em; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.step-body p { margin: 0 0 10px; font-size: 14px; color: var(--ink-soft); }
+.step-tips { margin: 0; padding-left: 18px; font-size: 13.5px; color: var(--ink-soft); }
+.step-tips li { margin-bottom: 4px; }
+.step-cta { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+
+/* ==================== Sub-tabs, SP Keyboard, Tables ==================== */
+.subtabs {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  margin-bottom: 24px;
+  max-width: 100%;
+}
+.subtab {
+  border: 0;
+  background: transparent;
+  color: var(--ink-soft);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.16s;
+  white-space: nowrap;
+}
+.subtab:hover { color: var(--ink); }
+.subtab.active { background: var(--bg); color: var(--ink); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); }
+[data-theme="dark"] .subtab.active { background: var(--surface-2); }
+.subtab.dimmed { opacity: 0.55; }
+.subpanel { display: none; }
+.subpanel.active { display: block; animation: fadeUp 0.22s ease; }
+
+.sp-kb { --kgap: 6px; display: flex; flex-direction: column; gap: 6px; margin: 16px 0; width: 100%; }
+.sp-row { display: flex; justify-content: center; gap: var(--kgap); width: 100%; }
+.sp-key {
+  flex: 0 0 calc((100% - 9 * var(--kgap)) / 10);
+  width: calc((100% - 9 * var(--kgap)) / 10);
+  min-width: 0;
+  min-height: 58px;
+  border-radius: 11px;
+  border: 1px solid var(--line-strong);
+  background: var(--bg);
+  padding: 5px 2px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  transition: 0.15s;
+  overflow: hidden;
+}
+.sp-key:hover, .sp-key.active { border-color: var(--blue); background: var(--blue-soft); }
+.sp-key .k-top { display: flex; align-items: center; justify-content: center; gap: 3px; flex-wrap: wrap; }
+.sp-key .k-let { font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--ink); line-height: 1.1; }
+.sp-key .k-sh { font-size: 9.5px; font-weight: 700; color: var(--bad); background: var(--bad-soft); padding: 0 4px; border-radius: 4px; line-height: 1.3; }
+.sp-key .k-ym { font-size: 10px; font-weight: 600; color: var(--blue); text-align: center; line-height: 1.15; word-break: break-word; }
+.sp-detail {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.tbl-wrap { overflow-x: auto; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--bg); }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+th, td { padding: 11px 14px; border-bottom: 1px solid var(--line); text-align: left; }
+th { background: var(--surface); font-weight: 600; color: var(--ink-soft); font-size: 12.5px; }
+tr:last-child td { border-bottom: 0; }
+
+.filter-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 18px; }
+.search-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13.5px;
+  outline: none;
+  transition: 0.16s;
+}
+.search-input:focus { border-color: var(--blue); background: var(--bg); box-shadow: 0 0 0 3px var(--blue-soft); }
+.chip-group { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--ink-soft);
+  padding: 6px 13px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.15s;
+}
+.chip:hover { border-color: var(--ink); color: var(--ink); }
+.chip.active { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+
+.code-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+.code-item { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 5px; }
+.code-item .ci-top { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+.code-item .ci-code { font-family: var(--font-mono); font-size: 16px; font-weight: 700; color: var(--blue); }
+.code-item .ci-cat { font-size: 10.5px; color: var(--ink-faint); }
+.code-item .ci-words { font-size: 14.5px; font-weight: 700; color: var(--ink); }
+
+/* ==================== Practice Studio ==================== */
+.hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 14px 20px;
+}
+.hud-group { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.hud-stat { display: flex; align-items: center; gap: 9px; }
+.hud-stat .val { font-size: 18px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.hud-stat .lbl { font-size: 11px; color: var(--ink-faint); }
+.ring { position: relative; width: 42px; height: 42px; flex: none; }
+.ring svg { transform: rotate(-90deg); }
+.ring .pct { position: absolute; inset: 0; display: grid; place-items: center; font-size: 10px; font-weight: 700; color: var(--blue); }
+
+.stage { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 6px 0; }
+.qcard {
+  width: min(100%, 580px);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  padding: 32px 26px 26px;
+  text-align: center;
+  transition: transform 0.16s, box-shadow 0.2s, border-color 0.2s;
+}
+.qcard.pop { animation: pop 0.28s ease; }
+.qcard.shake { animation: shake 0.34s ease; }
+.qcard.rightflash { border-color: var(--ok); box-shadow: 0 0 0 3px var(--ok-soft); }
+.qcard.wrongflash { border-color: var(--bad); box-shadow: 0 0 0 3px var(--bad-soft); }
+@keyframes pop { 0%{transform:scale(.98)} 50%{transform:scale(1.018)} 100%{transform:scale(1)} }
+@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 45%{transform:translateX(7px)} 70%{transform:translateX(-5px)} }
+
+.q-label { font-size: 12px; color: var(--ink-faint); font-weight: 600; letter-spacing: 0.03em; margin-bottom: 12px; }
+.zigen-display {
+  font-family: 'JdhChai', "KaiTi", serif;
+  font-size: clamp(3rem, 8vw, 5rem);
+  line-height: 1.3;
+  color: var(--ink);
+  min-height: 1.45em;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.22em;
+}
+.zigen-display .note { font-family: var(--font-sans); font-size: 0.27em; color: var(--ink-faint); align-self: flex-end; margin-bottom: 0.5em; }
+.sp-prompt { font-size: clamp(2.4rem, 6vw, 3.6rem); font-weight: 800; line-height: 1.2; margin: 4px 0; letter-spacing: -0.03em; }
+.sp-pinyin { font-family: var(--font-mono); font-size: 16px; color: var(--blue); font-weight: 600; }
+.q-sub { font-size: 12.5px; color: var(--ink-faint); margin-top: 8px; min-height: 20px; }
+
+.slots { display: flex; justify-content: center; gap: 10px; margin: 20px 0 10px; }
+.slot {
+  width: 56px;
+  height: 58px;
+  border-radius: 15px;
+  border: 2px solid var(--line-strong);
+  background: var(--bg);
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--blue);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  transition: 0.14s;
+}
+.slot.active { border-color: var(--blue); box-shadow: 0 0 0 4px var(--blue-soft); }
+.slot.ok { border-color: var(--ok); color: var(--ok); background: var(--ok-soft); }
+.slot.bad { border-color: var(--bad); color: var(--bad); background: var(--bad-soft); }
+
+.answer-line { min-height: 28px; font-size: 13.5px; color: var(--ink-soft); opacity: 0; transition: opacity 0.2s; }
+.answer-line.show { opacity: 1; }
+.answer-line b { font-family: var(--font-mono); font-size: 18px; color: var(--blue); text-transform: uppercase; }
+
+.vkb { --kgap: 6px; width: min(100%, 640px); display: flex; flex-direction: column; gap: 7px; user-select: none; }
+.vkb-row { display: flex; justify-content: center; gap: var(--kgap); width: 100%; }
+.vkey {
+  flex: 0 0 calc((100% - 9 * var(--kgap)) / 10);
+  width: calc((100% - 9 * var(--kgap)) / 10);
+  height: 50px;
+  border-radius: 12px;
+  border: 1px solid var(--line-strong);
+  background: var(--bg);
+  box-shadow: 0 2px 0 var(--line);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: transform 0.08s, background 0.15s, border-color 0.15s;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.vkey:hover { border-color: var(--blue); background: var(--blue-soft); }
+.vkey:active, .vkey.pressed { transform: translateY(2px); box-shadow: none; }
+.vkey .ksub { font-family: var(--font-sans); font-size: 9px; font-weight: 600; color: var(--ink-faint); text-transform: none; line-height: 1; margin-top: 2px; }
+.vkey.hintkey { background: var(--blue-soft); border-color: var(--blue); color: var(--blue); animation: pulse 1.1s infinite; }
+.vkey.good { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+.vkey.bad { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(0,113,227,0.35)} 50%{box-shadow:0 0 0 6px rgba(0,113,227,0)} }
+.space-btn {
+  height: 40px;
+  max-width: 260px;
+  width: 100%;
+  margin: 2px auto 0;
+  border-radius: 999px;
+  border: 1px dashed var(--line-strong);
+  background: transparent;
+  color: var(--ink-faint);
+  font-size: 12.5px;
+  cursor: pointer;
+}
+.space-btn:hover { color: var(--blue); border-color: var(--blue); }
+
+/* Zigen List Table */
+.ztable { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 12px; }
+.zcell { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; }
+.zcell .kh { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.zcell .kk { font-family: var(--font-mono); font-size: 18px; font-weight: 700; color: var(--blue); text-transform: uppercase; }
+.zcell .kp { font-size: 11px; color: var(--ink-faint); }
+.zcell .bar { height: 4px; border-radius: 99px; background: var(--surface-2); margin-bottom: 10px; overflow: hidden; }
+.zcell .bar i { display: block; height: 100%; background: var(--ok); border-radius: 99px; }
+.zcell .zitems { font-family: 'JdhChai', "KaiTi", serif; font-size: 22px; line-height: 1.5; color: var(--ink); word-break: break-all; margin-bottom: 12px; }
+.zcell .zitems span { display: inline-block; margin-right: 6px; }
+
+/* Ecosystem Cards */
+.eco-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.eco-card:hover { transform: translateY(-2px); border-color: var(--line-strong); }
+.eco-card.featured { border-color: var(--blue); background: linear-gradient(180deg, var(--blue-soft) 0%, var(--surface) 45%); }
+.eco-card h3 { margin: 0 0 6px; font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; letter-spacing: -0.01em; }
+.eco-card p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+
+/* Modals */
+.mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.48);
+  backdrop-filter: blur(8px);
+  z-index: 60;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+.mask.on { display: flex; }
+.modal {
+  width: min(100%, 560px);
+  max-height: 86vh;
+  overflow: auto;
+  background: var(--bg);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  padding: 26px;
+  box-shadow: var(--shadow-pop);
+}
+.modal h2 { margin: 0 0 4px; font-size: 20px; font-weight: 700; }
+.modal .desc { font-size: 13px; color: var(--ink-faint); margin-bottom: 16px; }
+.modal h3 { font-size: 11.5px; margin: 18px 0 8px; color: var(--ink-faint); letter-spacing: 0.08em; text-transform: uppercase; }
+.s-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+.s-row:last-child { border-bottom: 0; }
+.s-row small { display: block; font-size: 11.5px; color: var(--ink-faint); }
+.seg { display: flex; gap: 6px; flex-wrap: wrap; }
+.seg button { border: 1px solid var(--line-strong); background: transparent; color: var(--ink-soft); border-radius: 999px; padding: 5px 12px; font-size: 12px; font-weight: 600; cursor: pointer; }
+.seg button.on { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.switch { width: 44px; height: 26px; border-radius: 999px; background: var(--surface-2); border: 0; position: relative; cursor: pointer; flex: none; transition: 0.18s; }
+.switch::after { content: ""; position: absolute; width: 20px; height: 20px; border-radius: 50%; background: #fff; top: 3px; left: 3px; transition: 0.18s; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2); }
+.switch.on { background: var(--blue); }
+.switch.on::after { left: 21px; }
+.keysel { display: grid; grid-template-columns: repeat(9, 1fr); gap: 6px; margin: 8px 0 4px; }
+.keysel button { border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink-soft); border-radius: 8px; padding: 7px 0; font-size: 12px; font-family: var(--font-mono); font-weight: 700; cursor: pointer; text-transform: uppercase; }
+.keysel button.on { background: var(--blue); border-color: var(--blue); color: #fff; }
+.modal-foot { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+
+/* Toast & Confetti */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%) translateY(16px);
+  opacity: 0;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 999px;
+  z-index: 80;
+  pointer-events: none;
+  transition: 0.25s;
+}
+.toast.on { opacity: 0.96; transform: translateX(-50%) translateY(0); }
+.confetti { position: fixed; inset: 0; pointer-events: none; z-index: 90; overflow: hidden; }
+.cf { position: absolute; width: 8px; height: 14px; top: -20px; animation: fall linear forwards; opacity: 0.92; }
+@keyframes fall { to { transform: translateY(105vh) rotate(720deg); opacity: 0; } }
+
+.site-footer { border-top: 1px solid var(--line); padding: 28px 22px; text-align: center; font-size: 12.5px; color: var(--ink-faint); }
+
+/* ==================== Mobile & Tablet Adaptation ==================== */
+@media (max-width: 920px) {
+  .span-7, .span-5, .span-4, .span-6 { grid-column: span 12; }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .showcase-body { grid-template-columns: 1fr; gap: 20px; }
+  .demo-glyph-box { flex-direction: row; gap: 16px; justify-content: flex-start; }
+}
+@media (max-width: 720px) {
+  .main-nav { display: none; }
+  .mobile-dock { display: block; }
+  .container { padding: 18px 12px 64px; }
+  .card { padding: 14px; border-radius: 20px; }
+  .header-inner { padding: 0 12px; height: 48px; }
+  .skip-pill { padding: 0 10px; font-size: 11.5px; }
+  .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  .step-card { grid-template-columns: auto 1fr; padding: 16px; }
+  .step-cta { grid-column: 1 / -1; flex-direction: row; align-items: center; flex-wrap: wrap; }
+  .showcase { padding: 20px 16px; border-radius: 22px; }
+  .hw-key { width: 50px; height: 58px; }
+  .hw-key b { font-size: 19px; }
+  .track-switch { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
+  .track-opt { padding: 8px 6px; font-size: 12px; white-space: normal; line-height: 1.3; }
+  .subtabs { display: flex; overflow-x: auto; flex-wrap: nowrap; border-radius: 16px; width: 100%; }
+  /* Mobile full-glyph 26-key zigen keyboard (uniform key width across all 3 rows) */
+  .zg-kb { --kgap: 2.5px; gap: 4px; }
+  .zg-keycap { min-height: 70px; padding: 3px 2px 4px; border-radius: 8px; align-items: flex-start; justify-content: flex-start; gap: 2px; }
+  .zg-keycap .zk-head { justify-content: space-between; margin-bottom: 0; }
+  .zg-keycap .zk-let { font-size: 11px; }
+  .zg-keycap .zk-cnt { display: none; }
+  .zg-keycap .zk-stroke { font-size: 8px; padding: 0 2.5px; border-radius: 3px; line-height: 1.25; }
+  .zg-keycap .zk-roots { display: block; font-size: 8.5px; line-height: 1.14; letter-spacing: -0.2px; }
+  .zg-keycap .zk-roots span { margin-right: 1px; }
+  .zg-detail-bar { padding: 14px; }
+  .zg-detail-glyphs { font-size: 24px; gap: 8px; }
+  /* Mobile fit-to-screen Shuangpin keyboard (uniform key width) */
+  .sp-kb { --kgap: 3px; gap: 4px; }
+  .sp-key { min-height: 48px; padding: 3px 1px; border-radius: 8px; }
+  .sp-key .k-let { font-size: 12px; }
+  .sp-key .k-sh { font-size: 8.5px; padding: 0 3px; }
+  .sp-key .k-ym { font-size: 8.5px; }
+  .qcard { padding: 20px 14px 18px; border-radius: 22px; }
+  /* Mobile practice virtual keyboard (uniform key width across all 3 rows) */
+  .vkb { --kgap: 3.5px; gap: 5px; }
+  .vkey { height: 44px; font-size: 13.5px; border-radius: 8px; }
+  .slot { width: 44px; height: 48px; font-size: 21px; }
+  .keysel { grid-template-columns: repeat(7, 1fr); }
+  .ztable { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .zcell { padding: 12px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <button class="brand" id="brandHome" type="button" aria-label="简单鹤首页">
+      <!-- 极简流体几何飞鹤 Logo -->
+      <svg class="brand-logo" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="craneWingGrad" x1="6" y1="6" x2="34" y2="30" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#0071e3"/>
+            <stop offset="100%" stop-color="#38bdf8"/>
+          </linearGradient>
+        </defs>
+        <!-- 舒展上翼（流体渐变压弧） -->
+        <path d="M22.2 5.5C18.6 10.6 16.2 14.8 14.5 19.2L23.4 17.6C24.2 13.4 23.9 9.2 22.2 5.5Z" fill="url(#craneWingGrad)"/>
+        <!-- 优雅鹤身、修长鹤颈与利落飞喙 -->
+        <path d="M4.5 24.8C10.8 22.6 17.4 20.5 24.4 18.6L30.8 12.2L36.2 13.5L29.6 16.4C27.2 21.8 22.4 25.4 15.6 26.8L10.8 33.2L12.6 25.9L4.5 24.8Z" fill="currentColor"/>
+        <!-- 丹顶朱点（极细微品牌灵魂点睛） -->
+        <circle cx="30.6" cy="13.7" r="1.25" fill="#e11d48"/>
+      </svg>
+      <span>简单鹤</span>
+    </button>
+
+    <nav class="main-nav" aria-label="主导航">
+      <button class="nav-btn active" data-route="home" type="button">概览</button>
+      <button class="nav-btn" data-route="roadmap" type="button">上手路径</button>
+      <button class="nav-btn" data-route="guide" type="button">字根图与规则</button>
+      <button class="nav-btn" data-route="practice" type="button">练习工坊</button>
+      <button class="nav-btn" data-route="ecosystem" type="button">全端下载</button>
+    </nav>
+
+    <div class="header-actions">
+      <button class="skip-pill" id="headerSkipBtn" type="button" title="切换是否已熟练掌握小鹤双拼">
+        <span class="dot"></span>
+        <span id="headerSkipLabel">含双拼引导</span>
+      </button>
+      <button class="icon-btn" id="themeBtn" type="button" title="切换深浅色主题" aria-label="切换主题">◐</button>
+    </div>
+  </div>
+  <!-- 手机端顶部紧凑导航条（不遮挡底部悬浮按钮） -->
+  <nav class="mobile-dock" aria-label="移动端导航">
+    <div class="mobile-dock-inner">
+      <button class="dock-btn active" data-route="home" type="button">概览</button>
+      <button class="dock-btn" data-route="roadmap" type="button">路径</button>
+      <button class="dock-btn" data-route="guide" type="button">字根图</button>
+      <button class="dock-btn" data-route="practice" type="button">练习</button>
+      <button class="dock-btn" data-route="ecosystem" type="button">下载</button>
+    </div>
+  </nav>
+</header>
+
+<main class="container">
+
+  <!-- ==================== VIEW 1: 概览 ==================== -->
+  <section class="view active" id="view-home">
+    <div class="hero-center">
+      <h1 class="hero-title">极简音形，<br><span class="grad">为盲打而生。</span></h1>
+      <p class="hero-sub">
+        <strong style="color:var(--ink);font-weight:600">轻羽落键，意到字成。</strong>小鹤双拼与 97 个乱序字根的纯粹结合，单字低重、字词不重、没有小字。
+      </p>
+
+      <div class="track-switch" role="group" aria-label="选择你的起步方式">
+        <button class="track-opt active" id="trackZero" type="button">零基础 · 从双拼起步</button>
+        <button class="track-opt" id="trackSkip" type="button">已熟练小鹤双拼 · 跳过</button>
+      </div>
+
+      <div class="hero-ctas">
+        <button class="btn btn-primary" id="heroPrimaryBtn" type="button">开启上手之旅</button>
+        <button class="btn btn-dark" data-jump="guide:g-chart" type="button">交互字根图</button>
+        <button class="btn btn-outline" data-jump="ecosystem" type="button">全端方案下载</button>
+      </div>
+
+      <div class="hero-status">
+        <span>字根掌握 <b id="homeMastered">0 / 97</b></span>
+        <span>上手进度 <b id="homeRoadmapPct">0 / 5</b></span>
+        <span id="homeTrackHint">当前模式：完整 5 步（含小鹤双拼）</span>
+      </div>
+    </div>
+
+    <!-- 深色硬件键帽交互演示区 -->
+    <div class="showcase">
+      <div class="showcase-top">
+        <div class="showcase-kicker">交互原理演示 · 双拼 2 码 + 首末字根 2 码</div>
+        <div class="demo-pills" id="demoChars"></div>
+      </div>
+      <div class="showcase-body" id="demoStage"></div>
+    </div>
+
+    <!-- Bento 特性网格 -->
+    <div class="section-head">
+      <div>
+        <h2>轻盈上手，久打不倦。</h2>
+        <p>四个克制而彻底的设计原则，让音形输入法真正回归直觉。</p>
+      </div>
+    </div>
+
+    <div class="bento">
+      <div class="bento-card span-7">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div class="bento-metric">97<span>字根 · 最快 1h 入门</span></div>
+          <div class="bento-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M7 10h.01M11 10h.01M15 10h.01M8 14h8"/></svg>
+          </div>
+        </div>
+        <div>
+          <h3>乱序字根，敲键即记</h3>
+          <p>无需死背口诀。借助内置间隔重复练习器高频敲击，最快一小时即可在指尖建立条件反射，彻底告别边打字边翻表。</p>
+        </div>
+      </div>
+
+      <div class="bento-card span-5">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div class="bento-metric">0<span>小字负担</span></div>
+          <div class="bento-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
+          </div>
+        </div>
+        <div>
+          <h3>没有小字，拆分直观</h3>
+          <p>遵循笔顺优先与首末取大，遇生僻字也能第一眼直观拆出，并内置贴心容错码表，直觉拆分就能上屏。</p>
+        </div>
+      </div>
+
+      <div class="bento-card span-5">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div class="bento-metric">低重<span>轻松盲打</span></div>
+          <div class="bento-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+        </div>
+        <div>
+          <h3>单字低重，离散分布</h3>
+          <p>乱序分布让同音字的首末形码高度离散，大幅压缩选重率，让你把注意力留在思考本身，而非候选栏。</p>
+        </div>
+      </div>
+
+      <div class="bento-card span-7">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div class="bento-metric">3码单字<span>+ 4码首选词</span></div>
+          <div class="bento-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h10M4 17h14"/></svg>
+          </div>
+        </div>
+        <div>
+          <h3>极端字词避重，畅快打词</h3>
+          <p>算码时尽量让更多单字落在三码位，其余四码单字统一放在次选，让四码首选永远留给高频词组，字词节奏互不打架。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bento" style="margin-bottom:0">
+      <div class="bento-card span-4" id="homeCardSp">
+        <div>
+          <span class="tag tag-blue" id="homeCardSpTag">Step 01</span>
+          <h3 style="margin-top:12px">小鹤双拼热身</h3>
+          <p>攻克 zh/ch/sh 与易混韵母，打牢前两码基础。</p>
+        </div>
+        <div><button class="btn btn-soft btn-sm" data-jump="practice:sp" type="button">进入双拼热身</button></div>
+      </div>
+      <div class="bento-card span-4">
+        <div>
+          <span class="tag tag-blue">核心训练</span>
+          <h3 style="margin-top:12px">97 字根助记练习</h3>
+          <p>循序渐进从 3 键解锁到 26 键，错根自动高频复现。</p>
+        </div>
+        <div><button class="btn btn-soft btn-sm" data-jump="practice:zigen" type="button">启动字根练习</button></div>
+      </div>
+      <div class="bento-card span-4">
+        <div>
+          <span class="tag tag-ok">实战检验</span>
+          <h3 style="margin-top:12px">拆字取码实战</h3>
+          <p>内置 20,877 字全词库（含前 1000 高频字与 167 精校字）及 23,000+ 二三简词，离线即练。</p>
+        </div>
+        <div><button class="btn btn-soft btn-sm" data-jump="practice:split" type="button">开始拆字实战</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== VIEW 2: 上手路径 ==================== -->
+  <section class="view" id="view-roadmap">
+    <div class="section-head">
+      <div>
+        <h2>循序渐进，自然成诵。</h2>
+        <p>按阶段推进的科学上手路径。如果你已熟练小鹤双拼，可一键跳过双拼环节直奔字根。</p>
+      </div>
+      <button class="btn btn-outline btn-sm" id="rmSkipToggleBtn" type="button">我已熟练小鹤双拼，跳过第 1 步</button>
+    </div>
+
+    <div class="roadmap-bar">
+      <div style="min-width:120px">
+        <div style="font-size:12px;color:var(--ink-faint)">当前完成度</div>
+        <div style="font-size:26px;font-weight:800;letter-spacing:-0.03em" id="roadmapPercent">0%</div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="roadmapFill" style="width:0%"></div></div>
+      <div style="display:flex;gap:16px;font-size:13px;color:var(--ink-soft);flex-wrap:wrap">
+        <span>已完成 <b id="roadmapBadge" style="color:var(--ink)">0 / 5</b></span>
+        <span>字根 <b id="rmZigen" style="color:var(--ink)">0/97</b></span>
+        <span>拆字 <b id="rmSplit" style="color:var(--ink)">0/167</b></span>
+      </div>
+    </div>
+
+    <div class="step-list" id="roadmapList"></div>
+  </section>
+
+  <!-- ==================== VIEW 3: 字根图与规则 ==================== -->
+  <section class="view" id="view-guide">
+    <div class="section-head">
+      <div>
+        <h2>字根图与规则手册</h2>
+        <p>完整 26 键交互式字根图、六条核心拆字规则、飞键无理简词与双拼键位一站速查。</p>
+      </div>
+    </div>
+
+    <div class="subtabs" id="guideTabs">
+      <button class="subtab active" data-sub="g-chart" type="button">26 键字根图</button>
+      <button class="subtab" data-sub="g-split" type="button">拆分规则</button>
+      <button class="subtab" data-sub="g-wuli" type="button">飞键与简词</button>
+      <button class="subtab" data-sub="g-sp" type="button" id="guideSpTab">小鹤双拼键位</button>
+    </div>
+
+    <!-- Guide 0: 交互式 26 键 QWERTY 字根图 -->
+    <div class="subpanel active" id="g-chart">
+      <div class="card">
+        <div class="zg-chart-bar">
+          <div>
+            <h3 style="margin:0 0 3px;font-size:18px">简单鹤 26 键完整字根图</h3>
+            <p style="margin:0;font-size:13px;color:var(--ink-soft)">共 97 个去重字根。点击任意键帽可放大查看并一键专练该键。</p>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-outline btn-sm" id="toggleZonesBtn" type="button">指法分区色：关</button>
+            <button class="btn btn-dark btn-sm" id="exportSvgBtn" type="button">下载高清字根图 SVG</button>
+          </div>
+        </div>
+
+        <div class="zg-kb-scroll">
+          <div class="zg-kb" id="zgVisualKb"></div>
+        </div>
+
+        <div class="zg-detail-bar" id="zgVisualDetail"></div>
+
+        <div class="zg-notes">
+          <h4>字根图 V9 注释与提示</h4>
+          <ol>
+            <li>键位 <strong>H</strong> 的笔画“点”类包括了笔画“捺（乀）”（如“哀”的末形）。</li>
+            <li>键位 <strong>D</strong> 的笔画“横”类包括了笔画“提（㇀）”（如“刁”的末形）。</li>
+            <li>键位 <strong>P</strong> 的笔画“竖”类包括了笔画“竖钩”（如“手”的末形）。</li>
+            <li>键位 <strong>R</strong> 的笔画“折”类包括了各种折撇、折钩、横折钩、竖折钩、折折钩等（如“乃”的首形）。</li>
+            <li>键位 <strong>N</strong> 的字根“囗”是框（如“圆”和“黑”的首形），而键位 <strong>O</strong> 的“口”是 kǒu（如“员”、“史”和“哟”的首形）。</li>
+            <li>键位 <strong>H</strong> 的字根“釆”并非采集的采字，而是“番”字的上部。</li>
+            <li>键位 <strong>Z</strong> 的字根“艹”是草字头（如“花”的首形），并非“廾”，类似“弄”的末形取“竖”。</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Guide 1: 简单鹤拆分规则 -->
+    <div class="subpanel" id="g-split">
+      <div class="showcase" style="padding:28px 30px;margin-bottom:22px">
+        <div style="font-size:12px;color:#60a5fa;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px">简单鹤核心拆分口诀</div>
+        <div style="font-size:clamp(18px,2.4vw,24px);font-weight:700;line-height:1.5;color:#fff">
+          笔顺优先（无笔画粘连的口可无视笔顺），首末取大，相交也拆，插隔也取，字根字重复，禾取丿八。
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <span class="tag tag-blue">规则 01</span>
+          <h3 style="margin:12px 0 6px;font-size:17px">笔顺优先</h3>
+          <p style="margin:0;font-size:14px;color:var(--ink-soft)">严格按规范笔顺取首字根和末字根。<strong>特例：</strong>无笔画粘连的「口」可无视笔顺。</p>
+        </div>
+        <div class="card">
+          <span class="tag tag-blue">规则 02</span>
+          <h3 style="margin:12px 0 6px;font-size:17px">首末取大</h3>
+          <p style="margin:0;font-size:14px;color:var(--ink-soft)">取首末字根时，优先取覆盖笔画更多的大字根，让拆分保持直观、不碎裂。</p>
+        </div>
+        <div class="card">
+          <span class="tag tag-ok">规则 03</span>
+          <h3 style="margin:12px 0 6px;font-size:17px">相交也拆</h3>
+          <p style="margin:0;font-size:14px;color:var(--ink-soft)">笔画相交也拆开取根。官方例字：<strong>由 = <span class="chai">日</span>(v) + <span class="chai">丨</span>(p)</strong>。</p>
+        </div>
+        <div class="card">
+          <span class="tag tag-ok">规则 04</span>
+          <h3 style="margin:12px 0 6px;font-size:17px">插隔也取</h3>
+          <p style="margin:0;font-size:14px;color:var(--ink-soft)">笔画被穿插隔开依然取根。官方例字：<strong>平 = <span class="chai">一</span>(d) + <span class="chai">十</span>(s)</strong>。</p>
+        </div>
+        <div class="card">
+          <span class="tag tag-amber">规则 05</span>
+          <h3 style="margin:12px 0 6px;font-size:17px">字根字重复</h3>
+          <p style="margin:0;font-size:14px;color:var(--ink-soft)">单字本身即是字根时重复该键。官方例字：<strong>虫 = <span class="chai">虫</span>(f) + <span class="chai">虫</span>(f)</strong>。</p>
+        </div>
+        <div class="card">
+          <span class="tag tag-amber">规则 06</span>
+          <h3 style="margin:12px 0 6px;font-size:17px">禾取丿八</h3>
+          <p style="margin:0;font-size:14px;color:var(--ink-soft)">「禾」按 <span class="chai">丿</span>(u) 与 <span class="chai">八</span>(f) 处理，记住这一条即可通吃禾字旁汉字。</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="margin:0 0 8px;font-size:16.5px">贴心容错机制</h3>
+          <p style="margin:0;font-size:14px;color:var(--ink-soft)">你以为的拆法也许正是大家以为的。简单鹤内置大量贴心容错，当一个字有两种打法都能打出时，不用怀疑是不是打错了。</p>
+        </div>
+        <div class="card">
+          <h3 style="margin:0 0 8px;font-size:16.5px">固词 vs 动词模式</h3>
+          <p style="margin:0;font-size:14px;color:var(--ink-soft)"><strong>固词（默认）：</strong>前 4 码固定走简单鹤码表，四码单字与词序确定性极强。<br><strong>动词：</strong>仅前 3 码固定，4 码随使用动态调频（<code>Ctrl + ~</code> 随时切换）。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Guide 2: 飞键与无理简词 -->
+    <div class="subpanel" id="g-wuli">
+      <div class="card" style="margin-bottom:18px;padding:16px 20px">
+        <p style="margin:0;font-size:13.5px;color:var(--ink-soft)">
+          <strong>原则：</strong>除 <strong>qo / xo</strong> 两个飞键建议记住外，其余所有简词均保留完整全码且<strong>不出简让全</strong>，忘了就打全码，随用随熟即可。
+        </p>
+      </div>
+      <div class="filter-bar">
+        <input class="search-input" id="wuliSearch" type="search" placeholder="搜索编码或词语，例如：qo、就是、一起、一定、手机...">
+        <div class="chip-group" id="wuliChips">
+          <button class="chip active" data-cat="all" type="button">全部</button>
+          <button class="chip" data-cat="fly" type="button">必记飞键</button>
+          <button class="chip" data-cat="single" type="button">无理单字</button>
+          <button class="chip" data-cat="y" type="button">y 开头超高频</button>
+          <button class="chip" data-cat="e" type="button">e 开头与尾一</button>
+          <button class="chip" data-cat="scz" type="button">s/c/z/实无理</button>
+          <button class="chip" data-cat="extra" type="button">高频常用</button>
+        </div>
+      </div>
+      <div class="code-grid" id="wuliGrid"></div>
+    </div>
+
+    <!-- Guide 4: 小鹤双拼键位 -->
+    <div class="subpanel" id="g-sp">
+      <div class="card" style="margin-bottom:18px">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <div>
+            <h3 style="margin:0 0 4px;font-size:17px">交互式小鹤双拼 26 键位图</h3>
+            <p style="margin:0;font-size:13.5px;color:var(--ink-soft)">第一键声母 + 第二键韵母 = 任意音节两键。点击键帽查看示例。</p>
+          </div>
+          <button class="btn btn-primary btn-sm" data-jump="practice:sp" type="button">去做双拼热身</button>
+        </div>
+        <div class="sp-kb" id="spGuideKb"></div>
+        <div class="sp-detail" id="spGuideDetail"></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="margin:0 0 10px;font-size:16px">零声母两键补齐规则</h3>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>例字</th><th>拼音</th><th>双拼</th><th>规则</th></tr></thead>
+              <tbody>
+                <tr><td>啊 / 哦 / 饿</td><td>a / o / e</td><td class="mono">aa / oo / ee</td><td>单字母重复</td></tr>
+                <tr><td>爱 / 安 / 欧 / 二</td><td>ai / an / ou / er</td><td class="mono">ai / an / ou / er</td><td>两字母保持全拼</td></tr>
+                <tr><td>昂 / 鞥</td><td>ang / eng</td><td class="mono">ah / eg</td><td>首字母 + 韵母键</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="margin:0 0 10px;font-size:16px">易混淆的 4 组键位</h3>
+          <div style="display:grid;gap:10px;font-size:13.5px;color:var(--ink-soft)">
+            <div><strong style="color:var(--ink)">1. in 在 B，ing 在 K：</strong>「拼」=<span class="mono">pb</span>，「平」=<span class="mono">pk</span>。</div>
+            <div><strong style="color:var(--ink)">2. V 的双重角色：</strong>首键 <b>zh</b>，次键 <b>ui / ü</b>（如「追」=<span class="mono">vv</span>）。</div>
+            <div><strong style="color:var(--ink)">3. L 与 N 长韵母：</strong>L = <b>iang/uang</b>（「亮」=<span class="mono">ll</span>），N = <b>iao</b>（「料」=<span class="mono">ln</span>）。</div>
+            <div><strong style="color:var(--ink)">4. ü 系列常写作 u：</strong>「学(xue)」=<span class="mono">xt</span>，「云(yun)」=<span class="mono">yy</span>。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== VIEW 4: 练习工坊 ==================== -->
+  <section class="view" id="view-practice">
+    <div class="section-head">
+      <div>
+        <h2>练习工坊</h2>
+        <p>敲键建立肌肉记忆，PC 物理键盘与手机触屏虚拟键帽均完整适配。</p>
+      </div>
+      <button class="btn btn-outline btn-sm" id="pracSkipToggleBtn" type="button">已熟练小鹤双拼 · 跳过双拼热身</button>
+    </div>
+
+    <div class="subtabs" id="practiceTabs">
+      <button class="subtab active" data-sub="p-zigen" type="button">97 字根助记</button>
+      <button class="subtab" data-sub="p-table" type="button">字根分组速查</button>
+      <button class="subtab" data-sub="p-split" type="button">拆字取码实战</button>
+      <button class="subtab" data-sub="p-short" type="button">简码训练</button>
+      <button class="subtab" data-sub="p-sp" type="button" id="pracSpTab">小鹤双拼热身</button>
+    </div>
+
+    <!-- Practice A: 97 字根助记 -->
+    <div class="subpanel active" id="p-zigen">
+      <div class="hud">
+        <div class="hud-group">
+          <div class="hud-stat">
+            <div class="ring">
+              <svg width="42" height="42" viewBox="0 0 42 42">
+                <circle cx="21" cy="21" r="17" fill="none" stroke="var(--line-strong)" stroke-width="3.5"/>
+                <circle id="zgRing" cx="21" cy="21" r="17" fill="none" stroke="var(--blue)" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="0 106.8"/>
+              </svg>
+              <div class="pct" id="zgPct">0%</div>
+            </div>
+            <div><div class="val" id="zgMastered">0/97</div><div class="lbl">已掌握字根</div></div>
+          </div>
+          <div class="hud-stat"><div><div class="val" id="zgScore">0</div><div class="lbl">积分 <span id="zgMulti" style="color:var(--blue);font-weight:700">×1</span></div></div></div>
+          <div class="hud-stat"><div><div class="val" id="zgCombo">0</div><div class="lbl">连击 (最高 <span id="zgMaxCombo">0</span>)</div></div></div>
+          <div class="hud-stat"><div><div class="val" id="zgAcc">—</div><div class="lbl" id="zgAccSub">本轮正确率</div></div></div>
+          <div class="hud-stat"><div><div class="val" id="zgWeak">0</div><div class="lbl">待巩固</div></div></div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-outline btn-sm" id="zgHelpBtn" type="button">说明</button>
+          <button class="btn btn-dark btn-sm" id="zgSetBtn" type="button">模式与设置</button>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="qcard" id="zgCard">
+          <div class="q-label" id="zgLabel">循序渐进 · 已解锁 3/26 键</div>
+          <div class="zigen-display" id="zgGlyph"></div>
+          <div class="q-sub" id="zgSub">按对应字母键 · 空格看提示（不跳过、不断连击）</div>
+          <div class="slots"><div class="slot active" id="zgSlot"></div></div>
+          <div class="answer-line" id="zgAnswer"></div>
+        </div>
+        <div class="vkb" id="zgVkb"></div>
+      </div>
+    </div>
+
+    <!-- Practice B: 字根分组速查 -->
+    <div class="subpanel" id="p-table">
+      <div class="filter-bar">
+        <input class="search-input" id="tableSearch" type="search" placeholder="按字母键或字根汉字筛选，例如：a、木、氵、马...">
+        <span class="tag tag-blue" id="tableSummary">共 97 个字根 · 已掌握 0 个</span>
+        <button class="btn btn-outline btn-sm" data-jump="guide:g-chart" type="button">查看键盘字根图</button>
+      </div>
+      <div class="ztable" id="ztable"></div>
+    </div>
+
+    <!-- Practice C: 拆字取码实战 -->
+    <div class="subpanel" id="p-split">
+      <div class="hud">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+          <div class="chip-group" id="splitModeChips">
+            <button class="chip active" data-splitmode="shape2" type="button">仅练形码（2 键）</button>
+            <button class="chip" data-splitmode="full4" type="button">完整音形（4 键）</button>
+          </div>
+          <div class="chip-group" id="splitScopeChips">
+            <button class="chip active" data-scope="top1000" type="button">常用 1000 字</button>
+            <button class="chip" data-scope="full" type="button">全词库随机</button>
+            <button class="chip" data-scope="builtin" type="button">内置精校</button>
+          </div>
+        </div>
+        <div class="hud-group">
+          <div class="hud-stat"><div><div class="val" id="splitMastered">167 字</div><div class="lbl" id="splitPoolLbl">正在加载内置全词库…</div></div></div>
+          <div class="hud-stat"><div><div class="val" id="splitCombo">0</div><div class="lbl">连击</div></div></div>
+          <div class="hud-stat"><div><div class="val" id="splitAcc">—</div><div class="lbl">正确率</div></div></div>
+          <button class="btn btn-outline btn-sm" id="syncDictBtn" type="button">检查在线更新</button>
+          <button class="btn btn-outline btn-sm" id="importDictBtn" type="button">导入本地码表</button>
+          <input type="file" id="dictFileInput" accept=".yaml,.yml,.txt,.tsv" style="display:none">
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="qcard" id="splitCard">
+          <div class="q-label" id="splitLabel">输入这个字的简单鹤首末形码（2 键）</div>
+          <div class="sp-prompt" id="splitChar">由</div>
+          <div class="sp-pinyin" id="splitPinyin">you (yz)</div>
+          <div class="q-sub" id="splitSub">笔顺优先 · 首末取大 · 相交也拆 · 插隔也取 · 字根字重复 · 空格看提示</div>
+          <div class="slots" id="splitSlots"></div>
+          <div class="answer-line" id="splitAnswer"></div>
+        </div>
+        <div class="vkb" id="splitVkb"></div>
+      </div>
+    </div>
+
+    <!-- Practice C2: 常用简码训练（不含单字） -->
+    <div class="subpanel" id="p-short">
+      <div class="hud">
+        <div class="chip-group" id="shortCatChips">
+          <button class="chip active" data-shortcat="all" type="button">高频简词（全部）</button>
+          <button class="chip" data-shortcat="y" type="button">y 开头超高频</button>
+          <button class="chip" data-shortcat="e" type="button">e 开头与尾一</button>
+          <button class="chip" data-shortcat="scz" type="button">s/c/z/实无理</button>
+          <button class="chip" data-shortcat="extra" type="button">快捷词与飞键</button>
+          <button class="chip" data-shortcat="dict2" type="button">全词库二简词</button>
+          <button class="chip" data-shortcat="dict3" type="button">全词库三简词</button>
+        </div>
+        <div class="hud-group">
+          <div class="hud-stat"><div><div class="val" id="shortMastered">0/51</div><div class="lbl" id="shortPoolLbl">高频词组简码</div></div></div>
+          <div class="hud-stat"><div><div class="val" id="shortCombo">0</div><div class="lbl">连击</div></div></div>
+          <div class="hud-stat"><div><div class="val" id="shortAcc">—</div><div class="lbl">正确率</div></div></div>
+          <button class="btn btn-outline btn-sm" id="syncShortDictBtn" type="button">检查简词更新</button>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="qcard" id="shortCard">
+          <div class="q-label" id="shortLabel">输入该常用词组的简单鹤简码（2 键）</div>
+          <div class="sp-prompt" id="shortWord" style="font-size:clamp(2rem,5.5vw,3rem)">就是</div>
+          <div class="sp-pinyin" id="shortHintNote" style="color:var(--ink-soft);font-family:var(--font-sans);font-size:13.5px">s/sh 无理</div>
+          <div class="q-sub" id="shortSub">不含单字 · 记住高频简词提速，空格看提示</div>
+          <div class="slots" id="shortSlots"></div>
+          <div class="answer-line" id="shortAnswer"></div>
+        </div>
+        <div class="vkb" id="shortVkb"></div>
+      </div>
+    </div>
+
+    <!-- Practice D: 小鹤双拼热身 -->
+    <div class="subpanel" id="p-sp">
+      <div class="hud">
+        <div class="chip-group" id="spModeChips">
+          <button class="chip active" data-spmode="all" type="button">全部综合</button>
+          <button class="chip" data-spmode="special" type="button">特殊声母 zh/ch/sh</button>
+          <button class="chip" data-spmode="nasal" type="button">易混鼻音</button>
+          <button class="chip" data-spmode="long" type="button">长复合韵母</button>
+          <button class="chip" data-spmode="zero" type="button">零声母</button>
+        </div>
+        <div class="hud-group">
+          <div class="hud-stat"><div><div class="val" id="spAcc">—</div><div class="lbl">正确率</div></div></div>
+          <div class="hud-stat"><div><div class="val" id="spCombo">0</div><div class="lbl">连击</div></div></div>
+          <button class="btn btn-outline btn-sm" id="spHintToggle" type="button">键帽韵母提示：开</button>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="qcard" id="spCard">
+          <div class="q-label" id="spLabel">输入这个字的小鹤双拼（2 键）</div>
+          <div class="sp-prompt" id="spChar">双</div>
+          <div class="sp-pinyin" id="spPinyin">shuang</div>
+          <div class="q-sub" id="spSub">按物理键盘或点下方键帽 · 空格看提示</div>
+          <div class="slots">
+            <div class="slot active" id="spSlot0"></div>
+            <div class="slot" id="spSlot1"></div>
+          </div>
+          <div class="answer-line" id="spAnswer"></div>
+        </div>
+        <div class="vkb" id="spVkb"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== VIEW 5: 全端下载 ==================== -->
+  <section class="view" id="view-ecosystem">
+    <div class="section-head">
+      <div>
+        <h2>全端方案与开源生态</h2>
+        <p>覆盖 Windows PC、Android 手机与跨平台 Rime 生态，按设备选择即刻开打。</p>
+      </div>
+    </div>
+
+    <!-- 精选分平台推荐（各方案独立技巧与快捷键说明） -->
+    <div class="grid-2">
+      <div class="eco-card featured">
+        <div>
+          <h3>PC / Windows 端方案 <span class="tag tag-blue">Windows 推荐</span></h3>
+          <p><strong>Fun10165 / rime-JDhe-win</strong> — 基于上游 <code>rimeinn/rime-JDhe</code> 封装的小狼毫（Weasel）一键安装版，内置语言模型与预测缓存。</p>
+          <div style="margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--bg);border:1px solid var(--line);font-size:12.5px;color:var(--ink-soft);line-height:1.75">
+            <strong style="color:var(--ink)">一键安装：</strong>安装 Weasel 后运行 <code>.\install.ps1</code>，自动备份原配置并部署（首次编译约 1–5 分钟）。<br>
+            <strong style="color:var(--ink)">核心快捷键：</strong><code>空格</code> 首选 · <code>;</code> 次选 · <code>/</code> 三选 · <code>'</code> 分词 · <code>Ctrl+`</code> / <code>F4</code> 方案选单（默认仅保留简单鹤）。<br>
+            <strong style="color:var(--ink)">常用自定义：</strong><code>jde.custom.yaml</code> 改上屏键与分隔符 · <code>config_styles.yaml</code> 改皮肤字体（默认霞鹜文楷 GB） · <code>config_app_options.yaml</code> 改应用默认中英态；多机同步建议跳过 <code>*.userdb/</code>。
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a class="btn btn-primary btn-sm" href="https://github.com/Fun10165/rime-JDhe-win" target="_blank" rel="noopener noreferrer">前往 rime-JDhe-win ↗</a>
+        </div>
+      </div>
+
+      <div class="eco-card featured">
+        <div>
+          <h3>Android 安卓端方案 <span class="tag tag-ok">Android 推荐</span></h3>
+          <p><strong>Ktouls / rime-JDhe-CyIME</strong> — 针对 Android CyIME 重做入口的简单鹤 v9.3 适配版，已精简桌面资产并清理 14,111 条四码 <code>①</code> 占位。</p>
+          <div style="margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--bg);border:1px solid var(--line);font-size:12.5px;color:var(--ink-soft);line-height:1.75">
+            <strong style="color:var(--ink)">部署要点：</strong>解压至 CyIME 目录，将 <code>fonts/xime.custom.snippet.yaml</code> 并入 <code>xime.custom.yaml</code> 防方框；方案列表<strong>仅启用「简单鹤 (jde)」</strong>，勿勾选内部依赖。<br>
+            <strong style="color:var(--ink)">反查与快捷键：</strong>有输入时按 <code>`</code>（外接键盘 <code>Ctrl+I</code>）实时开关拆分注释 · 空输入按 <code>`</code> 反查拼音显示 <code>[字根·形码]</code> · <code>oiz+全拼</code> 部件反查 · <code>//</code> 魔然造词。<br>
+            <strong style="color:var(--ink)">整句技巧：</strong>整句中补 2 位形码时在形码后加 <code>o</code>；补齐 19 组小鹤飞键并锁定 1–2 码不调频。
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a class="btn btn-primary btn-sm" href="https://github.com/Ktouls/rime-JDhe-CyIME" target="_blank" rel="noopener noreferrer">前往 rime-JDhe-CyIME ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="eco-card">
+        <div>
+          <h3>rimeinn / rime-JDhe <span class="tag">通用 Rime 主线</span></h3>
+          <p>小鹤双拼 + 简单鹤乱序辅助 + 全拼 + 虎码的跨平台 Rime 配置。</p>
+          <div style="margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--bg);border:1px solid var(--line);font-size:12px;color:var(--ink-soft);line-height:1.7">
+            <strong style="color:var(--ink)">本方案专属快捷键：</strong><br>
+            <code>Ctrl+~</code> 固词/动词 · <code>Ctrl+I</code> 拆分提示 · <code>Ctrl+,</code> 拼音<br>
+            <code>Ctrl+T/- /=</code> 置顶调序 · <code>编码A//编码B</code> 造词<br>
+            <code>oiz</code> 拆字 / <code>obh</code> 笔画 / <code>ohm</code> 虎码 / <code>`</code> 通配反查<br>
+            <code>;a</code> 标点快符 · <code>;d</code> 重复上屏
+          </div>
+        </div>
+        <div>
+          <a class="btn btn-dark btn-sm" href="https://github.com/rimeinn/rime-JDhe" target="_blank" rel="noopener noreferrer">查看 GitHub 完整文档 ↗</a>
+        </div>
+      </div>
+
+      <div class="eco-card">
+        <div>
+          <h3>amzxyz / rime-wanxiang <span class="tag">万象拼音 Pro</span></h3>
+          <p>支持整句大模型与多套辅码的 Rime 生态底座（当前 v18.2.1 正式分包主打小鹤等 9 套辅码，简单鹤方案也借鉴了其辅码映射与语法模型）。</p>
+          <div style="margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--bg);border:1px solid var(--line);font-size:12px;color:var(--ink-soft);line-height:1.7">
+            <strong style="color:var(--ink)">辅码与反查：</strong><code>/zjf</code> 直接辅码（末尾 <code>/</code> 聚拢单字） · <code>/jjf</code> 间接辅码（<code>拼音/辅码</code>） · <code>`</code> 部件/五笔画（<code>hspnz</code>）反查与超级辅筛。<br>
+            <strong style="color:var(--ink)">高频快捷键：</strong><code>Ctrl+a</code> 辅码/声调提示 · <code>Ctrl+p</code> 置顶 · <code>Ctrl+j/k</code> 调序 · <code>7/8/9/0</code> 数字声调筛选。
+          </div>
+        </div>
+        <div>
+          <a class="btn btn-outline btn-sm" href="https://github.com/amzxyz/rime-wanxiang" target="_blank" rel="noopener noreferrer">前往万象拼音 GitHub ↗</a>
+        </div>
+      </div>
+
+      <div class="eco-card">
+        <div>
+          <h3>简单鹤原官网 <span class="tag">官方源码</span></h3>
+          <p>Flauver 维护的简单鹤原版官网与源码仓库，提供方案核心说明与原始字根数据。</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a class="btn btn-outline btn-sm" href="https://flauver.github.io/jdh/" target="_blank" rel="noopener noreferrer">访问原官网 ↗</a>
+          <a class="btn btn-outline btn-sm" href="https://github.com/Flauver/jdh" target="_blank" rel="noopener noreferrer">源码 ↗</a>
+        </div>
+      </div>
+
+      <div class="eco-card">
+        <div>
+          <h3>汉字自动拆分系统 <span class="tag">拆字反查</span></h3>
+          <p>开源在线汉字拆分与方案评测平台，遇到生僻字拿不准时随时查询简单鹤拆法。</p>
+        </div>
+        <div>
+          <a class="btn btn-outline btn-sm" href="https://chaifen.app/" target="_blank" rel="noopener noreferrer">打开 chaifen.app ↗</a>
+        </div>
+      </div>
+
+      <div class="eco-card">
+        <div>
+          <h3>跟打与指法工具 <span class="tag tag-amber">进阶提速</span></h3>
+          <p>记熟字根并过完拆字后，用木易跟打器刷常用单字与文章；指法校准可选打字打字或 Keybr。</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a class="btn btn-outline btn-sm" href="https://typer.owenyang.top/" target="_blank" rel="noopener noreferrer">木易跟打器 ↗</a>
+          <a class="btn btn-outline btn-sm" href="https://dazidazi.com" target="_blank" rel="noopener noreferrer">打字打字 ↗</a>
+          <a class="btn btn-outline btn-sm" href="https://www.keybr.com" target="_blank" rel="noopener noreferrer">Keybr ↗</a>
+        </div>
+      </div>
+
+      <div class="eco-card">
+        <div>
+          <h3>简单鹤交流群 <span class="tag tag-blue">社区</span></h3>
+          <p>获取码表作者「简单」的最新码表、字根图、容错更新以及新手答疑互助。</p>
+          <details class="qq-quiz">
+            <summary><span>入群验证问题（点击展开）</span><span>▾</span></summary>
+            <div class="qq-quiz-body">
+              <div style="margin-bottom:8px;color:var(--ink);font-weight:600">将以下问题答案的选项相乘：</div>
+              <div class="qq-quiz-q"><strong>1. 简单鹤是什么类型的方案：</strong>2. 音码　3. 形码　5. 音形码　7. 形音码</div>
+              <div class="qq-quiz-q"><strong>2. 简单鹤有无理码吗？</strong>11. 无　13. 有</div>
+              <div class="qq-quiz-q"><strong>3. 简单鹤的字根数量在：</strong>17. 0~70　19. 70~140　23. 140~210　29. 210+</div>
+              <div class="qq-quiz-q"><strong>4. 音形无上秘籍是谁写的？</strong>31. 简单　37. 深白　41. 鲸鱼会唱歌　43. Cloud</div>
+              <div class="qq-quiz-q"><strong>5. 丨的编码是</strong>47. p　53. r</div>
+              <div class="qq-quiz-q" style="margin-bottom:0"><strong>6. 简单鹤推荐的打法</strong>57. 四码定长　59. 不定长</div>
+            </div>
+          </details>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span class="mono" style="font-size:14px;background:var(--bg);padding:6px 12px;border-radius:999px;border:1px solid var(--line)">QQ 群 605928107</span>
+          <button class="btn btn-soft btn-sm" id="copyQqBtn" type="button">复制群号</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 10px;font-size:17px">三步部署简单鹤</h3>
+      <ol style="margin:0;padding-left:20px;font-size:14px;color:var(--ink-soft);line-height:1.9">
+        <li><strong style="color:var(--ink)">选择对应端引擎：</strong>Windows 小狼毫可直上 <a href="https://github.com/Fun10165/rime-JDhe-win" target="_blank" rel="noopener noreferrer">rime-JDhe-win</a>，Android 端可直上 <a href="https://github.com/Ktouls/rime-JDhe-CyIME" target="_blank" rel="noopener noreferrer">rime-JDhe-CyIME</a>，macOS 鼠须管 / iOS 仓输入法可选通用 <a href="https://github.com/rimeinn/rime-JDhe" target="_blank" rel="noopener noreferrer">rime-JDhe</a>。</li>
+        <li><strong style="color:var(--ink)">导入配置并部署：</strong>将仓库配置文件放入对应输入法用户目录，执行「重新部署」。</li>
+        <li><strong style="color:var(--ink)">开始日常盲打：</strong>桌面端按 <code>Ctrl + ~</code> 切至「简单鹤」（默认固词模式），忘拆时按 <code>Ctrl + I</code> 临时显示拆分提示。</li>
+      </ol>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  简单鹤 · 轻羽落键，意到字成 · 资料整理自 <a href="https://flauver.github.io/jdh/" target="_blank" rel="noopener noreferrer">flauver.github.io/jdh</a>、<a href="https://github.com/rimeinn/rime-JDhe" target="_blank" rel="noopener noreferrer">rime-JDhe</a>、<a href="https://github.com/Fun10165/rime-JDhe-win" target="_blank" rel="noopener noreferrer">rime-JDhe-win</a> 与 <a href="https://github.com/Ktouls/rime-JDhe-CyIME" target="_blank" rel="noopener noreferrer">rime-JDhe-CyIME</a>
+</footer>
+
+<!-- ==================== MODALS ==================== -->
+<div class="mask" id="maskHelp">
+  <div class="modal">
+    <h2>97 字根练习须知</h2>
+    <div class="desc">通过高频重复建立指尖条件反射，告别拿着字根表死背</div>
+    <ol style="margin:0;padding-left:20px;font-size:14px;line-height:1.95;color:var(--ink-soft)">
+      <li>屏幕给出简单鹤字根，按下对应的 <b>字母键</b>（物理键盘或触屏键帽均可）。</li>
+      <li><b>按对自动跳下一题</b>，连击越高积分倍率越高（最高 ×4）。</li>
+      <li><b>按错会很快重复出现</b>（间隔重复算法），专治记不住的字根。</li>
+      <li>想不起来就 <b>按空格看答案提示</b>——不跳过、不断连击，看清后自己敲对才继续。</li>
+      <li>推荐默认 <b>「循序渐进」模式</b>：从 3 键起步，全掌握后自动解锁下一键。</li>
+    </ol>
+    <div class="modal-foot">
+      <button class="btn btn-primary btn-sm" data-close-mask type="button">开始敲键</button>
+    </div>
+  </div>
+</div>
+
+<div class="mask" id="maskSettings">
+  <div class="modal">
+    <h2>字根练习设置</h2>
+    <div class="desc">所有模式与进度自动保存在本地浏览器</div>
+
+    <h3>练习范围</h3>
+    <div class="s-row">
+      <div><strong>练习模式</strong><small id="zgModeNote">推荐先「循序渐进」，逐键建立肌肉记忆</small></div>
+      <div class="seg" id="zgModeSeg">
+        <button data-mode="unlock" type="button">循序渐进</button>
+        <button data-mode="all" type="button">全部混合</button>
+        <button data-mode="key" type="button">分键专练</button>
+        <button data-mode="weak" type="button">错根强化</button>
+        <button data-mode="order" type="button">顺序练习</button>
+      </div>
+    </div>
+    <div id="keyPickBlock" style="display:none;padding:8px 0 4px">
+      <div style="font-size:12px;color:var(--ink-faint);margin-bottom:6px">选择要专练的键（可多选）：</div>
+      <div class="keysel" id="keyPickGrid"></div>
+    </div>
+
+    <h3>辅助选项</h3>
+    <div class="s-row">
+      <div><strong>自动显示提示</strong><small>超时未按时淡入显示答案，不算答错</small></div>
+      <div class="seg" id="zgHintSeg">
+        <button data-hint="0" type="button">关闭</button>
+        <button data-hint="3" type="button">3 秒</button>
+        <button data-hint="5" type="button">5 秒</button>
+        <button data-hint="8" type="button">8 秒</button>
+      </div>
+    </div>
+    <div class="s-row">
+      <div><strong>提示音效</strong><small>答对清脆音、答错低沉音</small></div>
+      <button class="switch on" id="swSound" type="button" aria-label="切换提示音效"></button>
+    </div>
+    <div class="s-row">
+      <div><strong>显示虚拟键盘</strong><small>手机触屏或对照键位时建议开启</small></div>
+      <button class="switch on" id="swKb" type="button" aria-label="切换虚拟键盘"></button>
+    </div>
+    <div class="s-row">
+      <div><strong>过关目标积分</strong><small>达到目标分数触发撒花庆祝</small></div>
+      <div class="seg" id="zgTargetSeg">
+        <button data-t="500" type="button">500</button>
+        <button data-t="1000" type="button">1000</button>
+        <button data-t="3000" type="button">3000</button>
+        <button data-t="30000" type="button">3 万</button>
+      </div>
+    </div>
+
+    <h3>进度备份</h3>
+    <div class="s-row">
+      <div><strong>导入 / 导出 / 重置</strong><small>兼容旧版字根练习 JSON 备份</small></div>
+      <div class="seg">
+        <button id="btnExport" type="button">导出 JSON</button>
+        <button id="btnImport" type="button">导入 JSON</button>
+        <button id="btnResetAsk" type="button" style="color:var(--bad);border-color:var(--bad)">重置进度</button>
+      </div>
+    </div>
+    <input type="file" id="fileInput" accept="application/json,.json" style="display:none">
+
+    <div class="modal-foot">
+      <button class="btn btn-primary btn-sm" data-close-mask type="button">完成</button>
+    </div>
+  </div>
+</div>
+
+<div class="mask" id="maskConfirmReset">
+  <div class="modal" style="max-width:400px">
+    <h2>确定重置字根进度？</h2>
+    <div class="desc">将清空所有已掌握字根、积分、连击与解锁状态，建议先导出备份。</div>
+    <div class="modal-foot">
+      <button class="btn btn-outline btn-sm" data-close-mask type="button">取消</button>
+      <button class="btn btn-dark btn-sm" id="btnResetConfirm" type="button" style="background:var(--bad);color:#fff">确认清空</button>
+    </div>
+  </div>
+</div>
+
+<div class="mask" id="maskWin">
+  <div class="modal" style="text-align:center;max-width:420px">
+    <div style="font-size:44px;line-height:1.1;margin-bottom:8px">🎉</div>
+    <h2>达成阶段目标</h2>
+    <p id="winText" style="font-size:14px;color:var(--ink-soft);line-height:1.8"></p>
+    <div class="modal-foot" style="justify-content:center">
+      <button class="btn btn-outline btn-sm" id="winRestartBtn" type="button">新开一轮</button>
+      <button class="btn btn-primary btn-sm" data-close-mask type="button">继续冲分</button>
+    </div>
+  </div>
+</div>
+
+<div class="confetti" id="confetti"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+/* ==================== 1. 核心数据 ==================== */
+const RAW_ZIGEN = __JDH_RAW_JSON__;
+
+const CARDS = [];
+(function initCards() {
+  const seen = new Set();
+  for (const it of RAW_ZIGEN) {
+    const dedup = it.name + '|' + it.key;
+    if (seen.has(dedup)) continue;
+    seen.add(dedup);
+    let name = it.name, note = '';
+    const m = name.match(/[（(]([^）)]+)[）)]/);
+    if (m) { note = m[1]; name = name.replace(m[0], '').trim(); }
+    const parts = name.split(/\s+/).filter(Boolean);
+    CARDS.push({ key: it.key, parts, note, raw: it.name });
+  }
+})();
+const TOTAL_ZG = CARDS.length;
+const BYKEY = {};
+CARDS.forEach((c, i) => { (BYKEY[c.key] = BYKEY[c.key] || []).push(i); });
+const LETTERS = Object.keys(BYKEY).sort();
+const GAPS = [3, 9, 21, 36, 60, 100];
+
+const STROKE_BADGE = { d: '横', p: '竖', u: '撇', h: '点', r: '折' };
+const FINGER_ZONE = {
+  q:'z-lp', a:'z-lp', z:'z-lp',
+  w:'z-lr', s:'z-lr', x:'z-lr',
+  e:'z-lm', d:'z-lm', c:'z-lm',
+  r:'z-li', f:'z-li', v:'z-li', t:'z-li', g:'z-li', b:'z-li',
+  y:'z-ri', h:'z-ri', n:'z-ri', u:'z-ri', j:'z-ri', m:'z-ri',
+  i:'z-rm', k:'z-rm',
+  o:'z-rr', l:'z-rr',
+  p:'z-rp'
+};
+
+const DEMO_ITEMS = [
+  { ch: '由', py: 'you', sp: 'yz', sh: 'vp', s1: 'y', s2: 'ou', r1: '日', r2: '丨', rule: '官方例字（相交也拆）· 蓝键为小鹤双拼 y+z(ou)，绿键为简单鹤首末字根 日(v)+丨(p)。' },
+  { ch: '平', py: 'ping', sp: 'pk', sh: 'ds', s1: 'p', s2: 'ing', r1: '一', r2: '十', rule: '官方例字（插隔也取）· 蓝键为小鹤双拼 p+k(ing)，绿键为简单鹤首末字根 一(d)+十(s)。' },
+  { ch: '虫', py: 'chong', sp: 'is', sh: 'ff', s1: 'ch', s2: 'ong', r1: '虫', r2: '虫', rule: '官方例字（字根字重复）· 蓝键为小鹤双拼 i(ch)+s(ong)，绿键为单根字 虫(f) 重复。' },
+  { ch: '明', py: 'ming', sp: 'mk', sh: 'vl', s1: 'm', s2: 'ing', r1: '日', r2: '月', rule: '左右直观拆分 · 蓝键 m+k(ing)，绿键 日(v)+月(l)，一眼拆出零负担。' },
+  { ch: '好', py: 'hao', sp: 'hc', sh: 'ya', s1: 'h', s2: 'ao', r1: '女', r2: '子', rule: '左右直观拆分 · 蓝键 h+c(ao)，绿键 女(y)+子(a)。' },
+  { ch: '汉', py: 'han', sp: 'hj', sh: 'kl', s1: 'h', s2: 'an', r1: '氵', r2: '又', rule: '左右直观拆分 · 蓝键 h+j(an)，绿键 氵(k)+又(l)，四码直接定字。' }
+];
+
+const SP_KEYS = {
+  q: { sh: 'q', ym: 'iu', ex: '秋(qq) · 求(qq)' },
+  w: { sh: 'w', ym: 'ei', ex: '位(ww) · 飞(fw)' },
+  e: { sh: '—', ym: 'e', ex: '鹅(ee) · 鹤(he)' },
+  r: { sh: 'r', ym: 'uan / er', ex: '软(rr) · 卷(jr)' },
+  t: { sh: 't', ym: 'ue / üe', ex: '学(xt) · 月(yt)' },
+  y: { sh: 'y', ym: 'un / ün', ex: '云(yy) · 群(qy)' },
+  u: { sh: 'sh', ym: 'u', ex: '书(uu) · 双(ul)', special: true },
+  i: { sh: 'ch', ym: 'i', ex: '吃(ii) · 虫(is)', special: true },
+  o: { sh: '—', ym: 'uo / o', ex: '我(wo) · 说(uo)' },
+  p: { sh: 'p', ym: 'ie', ex: '别(bp) · 写(xp)' },
+  a: { sh: '—', ym: 'a', ex: '啊(aa) · 大(da)' },
+  s: { sh: 's', ym: 'ong / iong', ex: '中(vs) · 穷(qs)' },
+  d: { sh: 'd', ym: 'ai', ex: '白(bd) · 来(ld)' },
+  f: { sh: 'f', ym: 'en', ex: '文(wf) · 人(rf)' },
+  g: { sh: 'g', ym: 'eng', ex: '风(fg) · 成(ig)' },
+  h: { sh: 'h', ym: 'ang', ex: '帮(bh) · 昂(ah)' },
+  j: { sh: 'j', ym: 'an', ex: '单(dj) · 汉(hj)' },
+  k: { sh: 'k', ym: 'ing / uai', ex: '平(pk) · 快(kk)' },
+  l: { sh: 'l', ym: 'iang / uang', ex: '双(ul) · 亮(ll)' },
+  z: { sh: 'z', ym: 'ou', ex: '走(zz) · 由(yz)' },
+  x: { sh: 'x', ym: 'ua / ia', ex: '花(hx) · 家(jx)' },
+  c: { sh: 'c', ym: 'ao', ex: '好(hc) · 草(cc)' },
+  v: { sh: 'zh', ym: 'ui / ü', ex: '中(vs) · 追(vv)', special: true },
+  b: { sh: 'b', ym: 'in', ex: '拼(pb) · 林(lb)' },
+  n: { sh: 'n', ym: 'iao', ex: '小(xn) · 料(ln)' },
+  m: { sh: 'm', ym: 'ian', ex: '简(jm) · 键(jm)' }
+};
+
+const SP_BANK = [
+  { ch: '中', py: 'zhong', code: 'vs', cat: 'special', tip: 'zh→V，ong→S' },
+  { ch: '知', py: 'zhi', code: 'vi', cat: 'special', tip: 'zh→V，i→I' },
+  { ch: '吃', py: 'chi', code: 'ii', cat: 'special', tip: 'ch→I，i→I' },
+  { ch: '虫', py: 'chong', code: 'is', cat: 'special', tip: 'ch→I，ong→S' },
+  { ch: '双', py: 'shuang', code: 'ul', cat: 'special', tip: 'sh→U，uang→L' },
+  { ch: '书', py: 'shu', code: 'uu', cat: 'special', tip: 'sh→U，u→U' },
+  { ch: '说', py: 'shuo', code: 'uo', cat: 'special', tip: 'sh→U，uo→O' },
+  { ch: '追', py: 'zhui', code: 'vv', cat: 'special', tip: 'zh→V，ui→V' },
+  { ch: '拼', py: 'pin', code: 'pb', cat: 'nasal', tip: 'p→P，in→B' },
+  { ch: '平', py: 'ping', code: 'pk', cat: 'nasal', tip: 'p→P，ing→K' },
+  { ch: '林', py: 'lin', code: 'lb', cat: 'nasal', tip: 'l→L，in→B' },
+  { ch: '明', py: 'ming', code: 'mk', cat: 'nasal', tip: 'm→M，ing→K' },
+  { ch: '文', py: 'wen', code: 'wf', cat: 'nasal', tip: 'w→W，en→F' },
+  { ch: '风', py: 'feng', code: 'fg', cat: 'nasal', tip: 'f→F，eng→G' },
+  { ch: '单', py: 'dan', code: 'dj', cat: 'nasal', tip: 'd→D，an→J' },
+  { ch: '帮', py: 'bang', code: 'bh', cat: 'nasal', tip: 'b→B，ang→H' },
+  { ch: '简', py: 'jian', code: 'jm', cat: 'long', tip: 'j→J，ian→M' },
+  { ch: '键', py: 'jian', code: 'jm', cat: 'long', tip: 'j→J，ian→M' },
+  { ch: '小', py: 'xiao', code: 'xn', cat: 'long', tip: 'x→X，iao→N' },
+  { ch: '亮', py: 'liang', code: 'll', cat: 'long', tip: 'l→L，iang→L' },
+  { ch: '卷', py: 'juan', code: 'jr', cat: 'long', tip: 'j→J，uan→R' },
+  { ch: '学', py: 'xue', code: 'xt', cat: 'long', tip: 'x→X，ue→T' },
+  { ch: '云', py: 'yun', code: 'yy', cat: 'long', tip: 'y→Y，un→Y' },
+  { ch: '快', py: 'kuai', code: 'kk', cat: 'long', tip: 'k→K，uai→K' },
+  { ch: '啊', py: 'a', code: 'aa', cat: 'zero', tip: '单字母重复：a→AA' },
+  { ch: '哦', py: 'o', code: 'oo', cat: 'zero', tip: '单字母重复：o→OO' },
+  { ch: '饿', py: 'e', code: 'ee', cat: 'zero', tip: '单字母重复：e→EE' },
+  { ch: '爱', py: 'ai', code: 'ai', cat: 'zero', tip: '两字母全拼：ai→AI' },
+  { ch: '安', py: 'an', code: 'an', cat: 'zero', tip: '两字母全拼：an→AN' },
+  { ch: '欧', py: 'ou', code: 'ou', cat: 'zero', tip: '两字母全拼：ou→OU' },
+  { ch: '昂', py: 'ang', code: 'ah', cat: 'zero', tip: '首字母 A + ang(H)' },
+  { ch: '二', py: 'er', code: 'er', cat: 'zero', tip: '两字母全拼：er→ER' }
+];
+
+const WULI_LIST = [
+  { code: 'qo', words: '飞键（替 qx）', cat: 'fly', note: '官方建议必记' },
+  { code: 'xo', words: '飞键（替 xq）', cat: 'fly', note: '官方建议必记' },
+  { code: 'o', words: '也', cat: 'single', note: '无理单字' },
+  { code: 'p', words: '得 / 道 / 道：“', cat: 'single', note: '无理单字' },
+  { code: 's', words: '时', cat: 'single', note: '无理单字' },
+  { code: 'f', words: '能', cat: 'single', note: '无理单字' },
+  { code: 'jo', words: '几（及相关词）', cat: 'single', note: '无理单字' },
+  { code: 'be', words: '百（及相关词）', cat: 'single', note: '无理单字' },
+  { code: 'yy', words: '一样', cat: 'y', note: 'y 开头超高频' },
+  { code: 'yd', words: '一定 / 一点', cat: 'y', note: 'y 开头超高频' },
+  { code: 'yg', words: '一个', cat: 'y', note: 'y 开头超高频' },
+  { code: 'yx', words: '一下 / 一些', cat: 'y', note: 'y 开头超高频' },
+  { code: 'yc', words: '一次', cat: 'y', note: 'y 开头超高频' },
+  { code: 'yv', words: '一直', cat: 'y', note: 'y 开头超高频' },
+  { code: 'yp', words: '一个人 / 有时候 / 一会儿', cat: 'extra', note: '作者高频快捷词' },
+  { code: 'dp', words: '到时候 / 的时候', cat: 'extra', note: '对应 x时候' },
+  { code: 'vp', words: '这时候', cat: 'extra', note: '作者高频快捷词' },
+  { code: 'np', words: '那时候', cat: 'extra', note: '作者高频快捷词' },
+  { code: 'jf', words: '不知道', cat: 'extra', note: '作者高频快捷词' },
+  { code: 'uo', words: '时间 / 世界 / 说：“', cat: 'extra', note: '作者高频快捷词' },
+  { code: 'we', words: '唯一 / 万一', cat: 'e', note: '尾一 e 简词' },
+  { code: 'de', words: '第一', cat: 'e', note: '尾一 e 简词' },
+  { code: 'le', words: '了一 / 另一', cat: 'e', note: '尾一 e 简词' },
+  { code: 've', words: '之一', cat: 'e', note: '尾一 e 简词' },
+  { code: 'me', words: '每一', cat: 'e', note: '尾一 e 简词' },
+  { code: 'eq', words: '一起 / 一切', cat: 'e', note: '一开头量词' },
+  { code: 'ew', words: '一位', cat: 'e', note: '一开头量词' },
+  { code: 'et', words: '一天', cat: 'e', note: '一开头量词' },
+  { code: 'ey', words: '一眼', cat: 'e', note: '一开头量词' },
+  { code: 'eu', words: '一声 / 一生', cat: 'e', note: '一开头量词' },
+  { code: 'ei', words: '一场', cat: 'e', note: '一开头量词' },
+  { code: 'ep', words: '一片', cat: 'e', note: '一开头量词' },
+  { code: 'es', words: '一丝', cat: 'e', note: '一开头量词' },
+  { code: 'ed', words: '一旦', cat: 'e', note: '一开头量词' },
+  { code: 'ef', words: '一份 / 一副', cat: 'e', note: '一开头量词' },
+  { code: 'eg', words: '一股 / 一根', cat: 'e', note: '一开头量词' },
+  { code: 'eh', words: '一行', cat: 'e', note: '一开头量词' },
+  { code: 'ej', words: '一件 / 一句', cat: 'e', note: '一开头量词' },
+  { code: 'ek', words: '一块', cat: 'e', note: '一开头量词' },
+  { code: 'ev', words: '一种 / 一阵 / 一只', cat: 'e', note: '一开头量词' },
+  { code: 'eb', words: '一般 / 一边 / 一半', cat: 'e', note: '一开头量词' },
+  { code: 'en', words: '一年', cat: 'e', note: '一开头量词' },
+  { code: 'em', words: '一名', cat: 'e', note: '一开头量词' },
+  { code: 'js', words: '就是', cat: 'scz', note: 's/sh 无理' },
+  { code: 'bs', words: '不是', cat: 'scz', note: 's/sh 无理' },
+  { code: 'ms', words: '马上 / 没事 / 模式', cat: 'scz', note: 's/sh 无理' },
+  { code: 'ls', words: '脸上', cat: 'scz', note: 's/sh 无理' },
+  { code: 'sj', words: '手机 / 实际', cat: 'scz', note: 's/sh 及实无理' },
+  { code: 'sb', words: '上班', cat: 'scz', note: 's/sh 无理' },
+  { code: 'sm', words: '什么 / 上面 / 生命', cat: 'scz', note: 's/sh 无理' },
+  { code: 'ss', words: '试试', cat: 'scz', note: 's/sh 无理' },
+  { code: 'sh', words: '说话 / 时候 / 似乎', cat: 'scz', note: 's/sh 无理' },
+  { code: 'sy', words: '使用', cat: 'scz', note: 's/sh 无理' },
+  { code: 'jc', words: '经常', cat: 'scz', note: 'c/ch 无理' },
+  { code: 'zy', words: '重要', cat: 'scz', note: 'z/zh 无理' },
+  { code: 'sl', words: '实力', cat: 'scz', note: '实无理' },
+  { code: 'sx', words: '实现', cat: 'scz', note: '实无理' },
+  { code: 'xs', words: '现实', cat: 'scz', note: '实无理' }
+];
+
+const SPLIT_BANK = __JDH_SPLIT_JSON__;
+const EMBEDDED_DICT_GZ_B64 = "__JDH_DICT_GZ_B64__";
+let CUSTOM_DICT = [];
+let CUSTOM_SHORT_2 = [];
+let CUSTOM_SHORT_3 = [];
+const SHORT_BANK = WULI_LIST.filter(it => it.cat !== 'single').map(it => ({
+  word: it.words,
+  code: it.code,
+  cat: it.cat === 'fly' ? 'extra' : it.cat,
+  note: it.note
+}));
+
+const ROADMAP_STEPS = [
+  {
+    isSp: true,
+    title: '标准指法与小鹤双拼',
+    time: '约 1 ~ 2 天',
+    desc: '简单鹤的前两码就是小鹤双拼。零基础先攻克 3 个特殊声母与易混韵母；若你已熟练小鹤双拼，直接跳过此步。',
+    tips: [
+      '特殊声母：zh → V、ch → I、sh → U',
+      '重点区分 in/ing、en/eng、an/ang 与零声母两键补齐',
+      '目标：不看键位图也能稳定敲出常用字前两码'
+    ],
+    ctaLabel: '去做双拼热身',
+    ctaJump: 'practice:sp',
+    secLabel: '看双拼键位图',
+    secJump: 'guide:g-sp'
+  },
+  {
+    title: '敲键记牢 97 个乱序字根',
+    time: '最快 1 小时入门 · 3 天巩固',
+    desc: '乱序字根切忌边打字边查表。直接用练习器高频重复，最快一小时即可在指尖建立条件反射。',
+    tips: [
+      '打开默认「循序渐进」模式，从 3 个键起步，全掌握后自动解锁下一键',
+      '想不起来就按空格看提示（不跳过不断连击），错根会自动高频复现',
+      '随时对照「26 键字根图」，每天 5~10 分钟即可形成长期记忆'
+    ],
+    ctaLabel: '启动字根练习',
+    ctaJump: 'practice:zigen',
+    secLabel: '看 26 键字根图',
+    secJump: 'guide:g-chart'
+  },
+  {
+    title: '15 分钟吃透 6 条拆字规则',
+    time: '约 1 天',
+    desc: '记住「笔顺优先、首末取大、相交也拆、插隔也取、字根字重复、禾取丿八」，通过拆字实战把字根用活。',
+    tips: [
+      '先练「仅后两码形码」，熟练后再切换「完整 4 码」建立完整节奏',
+      '此阶段不追求速度，重点是看到汉字能立刻反应出首末字根',
+      '遇到生僻字拿不准时，随时去 chaifen.app 或 Rime 按 Ctrl+I 反查'
+    ],
+    ctaLabel: '去做拆字实战',
+    ctaJump: 'practice:split',
+    secLabel: '精读 6 条规则',
+    secJump: 'guide:g-split'
+  },
+  {
+    title: '部署 PC / 手机端方案，正式日常过渡',
+    time: '约 1 ~ 2 周',
+    desc: 'Windows 选用 rime-JDhe-win、Android 选用 rime-JDhe-CyIME 或通用 rime-JDhe，在真实输入中建立肌肉记忆。',
+    tips: [
+      '默认开启「固词」模式，感受三码单字与四码首选词的超高确定性',
+      '善用简单鹤贴心容错，打得出来就大胆用',
+      '忘记某字拆分时，在桌面端直接按 Ctrl+I 临时开启拆分提示'
+    ],
+    ctaLabel: '前往全端下载',
+    ctaJump: 'ecosystem',
+    secLabel: '查看拆分规则',
+    secJump: 'guide:g-split'
+  },
+  {
+    title: '飞键、简词与跟打提速',
+    time: '随用随熟',
+    desc: '日常流畅盲打后，顺手记住 qo/xo 两个飞键与少量超高频简词，再用木易跟打器稳步提速。',
+    tips: [
+      '必记飞键：qo（替 qx）、xo（替 xq）',
+      '所有简词均保留全码且不出简让全，记住即提速，忘了打全码即可',
+      '每天 10 分钟木易跟打器文章练习，彻底固化肌肉记忆'
+    ],
+    ctaLabel: '去做简码训练',
+    ctaJump: 'practice:short',
+    secLabel: '打开跟打工具',
+    secJump: 'ecosystem'
+  }
+];
+
+/* ==================== 2. 状态管理 ==================== */
+const DEFAULT_ZG = {
+  levels: CARDS.map(() => -1),
+  score: 0, combo: 0, maxCombo: 0,
+  right: 0, wrong: 0,
+  mode: 'unlock', activeKeys: [], unlockN: 3,
+  autoHint: 5, sound: true, showKb: true, target: 1000, won: false
+};
+const DEFAULT_STATE = {
+  theme: 'light',
+  skipSp: false,
+  showZones: false,
+  roadmapDone: [false, false, false, false, false],
+  zg: JSON.parse(JSON.stringify(DEFAULT_ZG)),
+  sp: { mode: 'all', showHint: true, right: 0, wrong: 0, combo: 0 },
+  split: { mode: 'shape2', right: 0, wrong: 0, combo: 0, mastered: [] },
+  short: { cat: 'all', right: 0, wrong: 0, combo: 0, mastered: [] }
+};
+
+let STATE = loadState();
+function loadState() {
+  const base = JSON.parse(JSON.stringify(DEFAULT_STATE));
+  try {
+    const saved = JSON.parse(localStorage.getItem('jdh_site_v2'));
+    if (saved && typeof saved === 'object') {
+      if (saved.theme === 'dark' || saved.theme === 'light') base.theme = saved.theme;
+      if (typeof saved.skipSp === 'boolean') base.skipSp = saved.skipSp;
+      if (typeof saved.showZones === 'boolean') base.showZones = saved.showZones;
+      if (Array.isArray(saved.roadmapDone) && saved.roadmapDone.length === 5) base.roadmapDone = saved.roadmapDone;
+      if (saved.zg && Array.isArray(saved.zg.levels) && saved.zg.levels.length === TOTAL_ZG) {
+        base.zg = Object.assign(JSON.parse(JSON.stringify(DEFAULT_ZG)), saved.zg);
+      }
+      if (saved.sp) base.sp = Object.assign(base.sp, saved.sp);
+      if (saved.split) {
+        base.split = Object.assign(base.split, saved.split);
+        if (!Array.isArray(base.split.mastered)) base.split.mastered = [];
+      }
+      if (saved.short) {
+        base.short = Object.assign(base.short, saved.short);
+        if (!Array.isArray(base.short.mastered)) base.short.mastered = [];
+      }
+      return base;
+    }
+    const legacy = JSON.parse(localStorage.getItem('jdh_zigen_v1'));
+    if (legacy && Array.isArray(legacy.levels) && legacy.levels.length === TOTAL_ZG) {
+      base.zg = Object.assign(JSON.parse(JSON.stringify(DEFAULT_ZG)), legacy);
+    }
+  } catch (e) {}
+  return base;
+}
+function saveState() {
+  try { localStorage.setItem('jdh_site_v2', JSON.stringify(STATE)); } catch (e) {}
+}
+
+const $ = id => document.getElementById(id);
+let currentRoute = 'home';
+let currentPracticeSub = 'p-zigen';
+
+function toast(msg) {
+  const el = $('toast');
+  el.textContent = msg;
+  el.classList.add('on');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('on'), 2100);
+}
+
+/* ==================== 3. 音效 & 撒花 ==================== */
+let AC = null;
+function beep(type) {
+  if (!STATE.zg.sound) return;
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === 'suspended') AC.resume();
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.connect(g); g.connect(AC.destination);
+    const t = AC.currentTime;
+    if (type === 'ok') {
+      o.type = 'sine'; o.frequency.setValueAtTime(740, t); o.frequency.exponentialRampToValueAtTime(1100, t + 0.08);
+      g.gain.setValueAtTime(0.08, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+      o.start(t); o.stop(t + 0.16);
+    } else if (type === 'bad') {
+      o.type = 'triangle'; o.frequency.setValueAtTime(240, t); o.frequency.exponentialRampToValueAtTime(150, t + 0.14);
+      g.gain.setValueAtTime(0.07, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+      o.start(t); o.stop(t + 0.21);
+    } else if (type === 'win') {
+      [523, 659, 784, 1047].forEach((f, idx) => {
+        const oo = AC.createOscillator(), gg = AC.createGain();
+        oo.connect(gg); gg.connect(AC.destination);
+        oo.type = 'sine'; oo.frequency.value = f;
+        gg.gain.setValueAtTime(0.0001, t + idx * 0.11);
+        gg.gain.exponentialRampToValueAtTime(0.08, t + idx * 0.11 + 0.02);
+        gg.gain.exponentialRampToValueAtTime(0.001, t + idx * 0.11 + 0.34);
+        oo.start(t + idx * 0.11); oo.stop(t + idx * 0.11 + 0.35);
+      });
+    }
+  } catch (e) {}
+}
+
+function launchConfetti() {
+  const box = $('confetti'); box.innerHTML = '';
+  const cols = ['#0071e3', '#34a853', '#fbbc04', '#ea4335', '#7c3aed', '#0ea5e9'];
+  for (let i = 0; i < 65; i++) {
+    const d = document.createElement('i'); d.className = 'cf';
+    d.style.left = Math.random() * 100 + 'vw';
+    d.style.background = cols[i % cols.length];
+    d.style.animationDuration = (1.7 + Math.random() * 1.5) + 's';
+    d.style.animationDelay = (Math.random() * 0.45) + 's';
+    box.appendChild(d);
+  }
+  setTimeout(() => { box.innerHTML = ''; }, 4000);
+}
+
+/* ==================== 4. 跳过小鹤双拼联动 ==================== */
+function setSkipSp(val, silent) {
+  STATE.skipSp = !!val;
+  saveState();
+  applySkipSpUi();
+  renderRoadmap();
+  syncOverviewCounters();
+  if (!silent) {
+    toast(STATE.skipSp ? '已开启「熟练双拼跳过」：路径精简为 4 步，直奔字根与拆字' : '已恢复完整 5 步路径（含小鹤双拼）');
+  }
+}
+
+function applySkipSpUi() {
+  const sk = STATE.skipSp;
+  $('trackZero').classList.toggle('active', !sk);
+  $('trackSkip').classList.toggle('active', sk);
+  $('headerSkipBtn').classList.toggle('on', sk);
+  $('headerSkipLabel').textContent = sk ? '已跳过双拼' : '含双拼引导';
+  $('homeTrackHint').textContent = sk ? '当前模式：4 步极速路径（已跳过小鹤双拼）' : '当前模式：完整 5 步（含小鹤双拼）';
+  $('heroPrimaryBtn').textContent = sk ? '直接开始练字根' : '开启上手之旅';
+  $('rmSkipToggleBtn').textContent = sk ? '✓ 已跳过小鹤双拼（点此恢复）' : '我已熟练小鹤双拼，跳过第 1 步';
+  $('pracSkipToggleBtn').textContent = sk ? '✓ 已隐藏双拼热身（点此显示）' : '已熟练小鹤双拼 · 跳过双拼热身';
+
+  $('homeCardSpTag').textContent = sk ? '已熟练跳过' : 'Step 01';
+  $('homeCardSpTag').className = sk ? 'tag tag-ok' : 'tag tag-blue';
+  $('homeCardSp').style.opacity = sk ? '0.62' : '1';
+
+  $('pracSpTab').style.display = sk ? 'none' : 'inline-block';
+  $('guideSpTab').classList.toggle('dimmed', sk);
+  if (sk && currentPracticeSub === 'p-sp') {
+    switchSubTab('practiceTabs', 'view-practice', 'p-zigen');
+  }
+}
+
+/* ==================== 5. 路由与主题 ==================== */
+function applyTheme() {
+  document.documentElement.setAttribute('data-theme', STATE.theme);
+  $('themeBtn').textContent = STATE.theme === 'dark' ? '☀' : '◐';
+}
+
+function switchRoute(route, subTarget) {
+  currentRoute = route;
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + route));
+  document.querySelectorAll('.nav-btn, .dock-btn').forEach(b => b.classList.toggle('active', b.dataset.route === route));
+
+  if (route === 'guide') {
+    switchSubTab('guideTabs', 'view-guide', subTarget || 'g-chart');
+  }
+  if (route === 'practice') {
+    const map = { sp: 'p-sp', zigen: 'p-zigen', table: 'p-table', split: 'p-split', short: 'p-short' };
+    let sub = map[subTarget] || subTarget || currentPracticeSub;
+    if (sub === 'p-sp' && STATE.skipSp) $('pracSpTab').style.display = 'inline-block';
+    switchSubTab('practiceTabs', 'view-practice', sub);
+  }
+  if (route === 'roadmap') renderRoadmap();
+  syncOverviewCounters();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function switchSubTab(tabBarId, containerId, targetId) {
+  const bar = $(tabBarId);
+  const wrap = $(containerId);
+  bar.querySelectorAll('.subtab').forEach(b => b.classList.toggle('active', b.dataset.sub === targetId));
+  wrap.querySelectorAll('.subpanel').forEach(p => p.classList.toggle('active', p.id === targetId));
+  if (tabBarId === 'guideTabs' && targetId === 'g-chart') renderVisualZigenChart();
+  if (tabBarId === 'practiceTabs') {
+    currentPracticeSub = targetId;
+    if (targetId === 'p-table') renderZigenTable();
+    if (targetId === 'p-zigen') { armZgHint(); renderZgHud(); }
+    else clearTimeout(zgHintTimer);
+  }
+}
+
+function syncOverviewCounters() {
+  const m = STATE.zg.levels.filter(l => l > 1).length;
+  const activeIndices = STATE.skipSp ? [1, 2, 3, 4] : [0, 1, 2, 3, 4];
+  const doneSteps = activeIndices.filter(i => STATE.roadmapDone[i]).length;
+  const totalSteps = activeIndices.length;
+  const pct = Math.round(doneSteps / totalSteps * 100);
+
+  $('homeMastered').textContent = m + ' / ' + TOTAL_ZG;
+  $('homeRoadmapPct').textContent = doneSteps + ' / ' + totalSteps;
+  $('rmZigen').textContent = m + '/' + TOTAL_ZG;
+  $('rmSplit').textContent = STATE.split.mastered.length + '/' + SPLIT_BANK.length;
+  $('roadmapBadge').textContent = doneSteps + ' / ' + totalSteps;
+  $('roadmapPercent').textContent = pct + '%';
+  $('roadmapFill').style.width = pct + '%';
+}
+
+/* ==================== 6. 交互式 26 键 QWERTY 字根图 & SVG 导出 ==================== */
+let activeChartKey = 'a';
+function renderVisualZigenChart() {
+  const rows = [
+    { cls: 'r1', keys: 'qwertyuiop' },
+    { cls: 'r2', keys: 'asdfghjkl' },
+    { cls: 'r3', keys: 'zxcvbnm' }
+  ];
+  const kb = $('zgVisualKb');
+  kb.className = 'zg-kb' + (STATE.showZones ? ' zones' : '');
+  kb.innerHTML = '';
+  $('toggleZonesBtn').textContent = '指法分区色：' + (STATE.showZones ? '开' : '关');
+
+  rows.forEach(r => {
+    const rowEl = document.createElement('div');
+    rowEl.className = 'zg-kb-row ' + r.cls;
+    for (const ch of r.keys) {
+      const list = BYKEY[ch] || [];
+      const done = list.filter(i => STATE.zg.levels[i] > 1).length;
+      const allDone = list.length > 0 && done === list.length;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'zg-keycap ' + (FINGER_ZONE[ch] || '') + (ch === activeChartKey ? ' active' : '') + (allDone ? ' all-done' : '');
+      const rootsHtml = list.map(i => CARDS[i].parts.map(p => '<span>' + p + '</span>').join('')).join('');
+      const strokeTag = STROKE_BADGE[ch] ? '<span class="zk-stroke">' + STROKE_BADGE[ch] + '</span>' : '<span class="zk-cnt">' + done + '/' + list.length + '</span>';
+      btn.innerHTML =
+        '<div class="zk-head"><span class="zk-let">' + ch.toUpperCase() + '</span>' + strokeTag + '</div>' +
+        '<div class="zk-roots">' + rootsHtml + '</div>';
+      btn.addEventListener('click', () => { activeChartKey = ch; renderVisualZigenChart(); });
+      rowEl.appendChild(btn);
+    }
+    kb.appendChild(rowEl);
+  });
+
+  const list = BYKEY[activeChartKey] || [];
+  const done = list.filter(i => STATE.zg.levels[i] > 1).length;
+  const chips = list.map(i => {
+    const c = CARDS[i];
+    return '<span class="zg-detail-chip">' + c.parts.join(' ') + (c.note ? '<small style="font-family:var(--font-sans);font-size:12px;color:var(--ink-faint)">（' + c.note + '）</small>' : '') + '</span>';
+  }).join('');
+  $('zgVisualDetail').innerHTML =
+    '<div style="flex:1;min-width:220px">' +
+      '<div style="font-size:13px;color:var(--ink-soft);margin-bottom:8px">当前选中 <strong class="mono" style="color:var(--blue);font-size:16px">' + activeChartKey.toUpperCase() + '</strong> 键 · 共 ' + list.length + ' 组字根（已掌握 ' + done + '/' + list.length + '）</div>' +
+      '<div class="zg-detail-glyphs">' + chips + '</div>' +
+    '</div>' +
+    '<button class="btn btn-primary btn-sm" id="chartTrainKeyBtn" type="button">专练 ' + activeChartKey.toUpperCase() + ' 键</button>';
+  $('chartTrainKeyBtn').addEventListener('click', () => {
+    STATE.zg.mode = 'key'; STATE.zg.activeKeys = [activeChartKey];
+    saveState(); syncZgSettingsUi(); zgRestart(false);
+    switchRoute('practice', 'zigen');
+    toast('已切换为只练 ' + activeChartKey.toUpperCase() + ' 键');
+  });
+}
+
+function exportZigenSvg() {
+  const rows = [
+    { keys: 'qwertyuiop', ox: 40, oy: 110 },
+    { keys: 'asdfghjkl', ox: 96, oy: 266 },
+    { keys: 'zxcvbnm', ox: 176, oy: 422 }
+  ];
+  const kw = 116, kh = 136, gap = 12;
+  let body = '';
+  rows.forEach(r => {
+    r.keys.split('').forEach((ch, idx) => {
+      const x = r.ox + idx * (kw + gap);
+      const y = r.oy;
+      const list = BYKEY[ch] || [];
+      const lines = list.map(i => CARDS[i].parts.join(' '));
+      body += `<rect x="${x}" y="${y}" width="${kw}" height="${kh}" rx="16" fill="#f5f5f7" stroke="#d2d2d7" stroke-width="1.5"/>`;
+      body += `<text x="${x + 14}" y="${y + 28}" font-family="Menlo,Consolas,monospace" font-size="18" font-weight="800" fill="#0071e3">${ch.toUpperCase()}</text>`;
+      lines.slice(0, 5).forEach((ln, li) => {
+        const safe = ln.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+        body += `<text x="${x + 14}" y="${y + 54 + li * 19}" font-family="JdhChai,KaiTi,serif" font-size="15" fill="#1d1d1f">${safe}</text>`;
+      });
+    });
+  });
+  const notes = [
+    '1. 键位 H 的笔画“点”类包括了笔画“捺（乀）”（如“哀”的末形）。',
+    '2. 键位 D 的笔画“横”类包括了笔画“提（㇀）”（如“刁”的末形）。',
+    '3. 键位 P 的笔画“竖”类包括了笔画“竖钩”（如“手”的末形）。',
+    '4. 键位 R 的笔画“折”类包括了各种折撇、折钩、横折钩、竖折钩、折折钩等（如“乃”的首形）。',
+    '5. 键位 N 的字根“囗”是框（如“圆”和“黑”的首形），而键位 O 的“口”是 kǒu（如“员”、“史”和“哟”的首形）。',
+    '6. 键位 H 的字根“釆”并非采集的采字，而是“番”字的上部。',
+    '7. 键位 Z 的字根“艹”是草字头（如“花”的首形），并非“廾”，类似“弄”的末形取“竖”。'
+  ];
+  const notesSvg = notes.map((t, i) => `<text x="40" y="${614 + i * 24}" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="13.5" fill="#48484a">${t}</text>`).join('');
+  const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1360" height="800" viewBox="0 0 1360 800">
+  <rect width="1360" height="800" fill="#ffffff"/>
+  <text x="40" y="54" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="28" font-weight="800" fill="#1d1d1f">简单鹤字根图 V9（26 键 · 共 97 组字根）</text>
+  <text x="40" y="82" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="14" fill="#6e6e73">轻羽落键，意到字成 · 拆分口诀：笔顺优先（无笔画粘连的口可无视笔顺），首末取大，相交也拆，插隔也取，字根字重复，禾取丿八</text>
+  ${body}
+  <text x="40" y="588" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="15" font-weight="700" fill="#1d1d1f">提示与注释：</text>
+  ${notesSvg}
+</svg>`;
+  const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '简单鹤-26键字根图.svg';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  toast('已下载高清字根图 SVG');
+}
+
+/* ==================== 7. 首页硬件键帽演示 ==================== */
+let demoIdx = 0;
+function renderDemo() {
+  const wrap = $('demoChars'); wrap.innerHTML = '';
+  DEMO_ITEMS.forEach((it, idx) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'demo-pill' + (idx === demoIdx ? ' active' : '');
+    b.textContent = it.ch;
+    b.addEventListener('click', () => { demoIdx = idx; renderDemo(); });
+    wrap.appendChild(b);
+  });
+  const d = DEMO_ITEMS[demoIdx];
+  $('demoStage').innerHTML =
+    '<div class="demo-glyph-box"><div class="big-hz">' + d.ch + '</div><div class="big-py">' + d.py + '</div></div>' +
+    '<div class="demo-right">' +
+      '<div class="hw-keys">' +
+        '<div class="hw-key k-sound"><b>' + d.sp[0] + '</b><small>' + d.s1 + '</small></div>' +
+        '<div class="hw-key k-sound"><b>' + d.sp[1] + '</b><small>' + d.s2 + '</small></div>' +
+        '<span class="hw-plus">+</span>' +
+        '<div class="hw-key k-shape"><b>' + d.sh[0] + '</b><small class="chai">' + d.r1 + '</small></div>' +
+        '<div class="hw-key k-shape"><b>' + d.sh[1] + '</b><small class="chai">' + d.r2 + '</small></div>' +
+      '</div>' +
+      '<div class="demo-meta"><strong>完整编码 <span class="mono" style="color:#60a5fa">' + d.sp + '</span><span class="mono" style="color:#34d399">' + d.sh + '</span></strong><br>' + d.rule + '</div>' +
+    '</div>';
+}
+
+/* ==================== 8. 上手路径 ==================== */
+function renderRoadmap() {
+  const list = $('roadmapList'); list.innerHTML = '';
+  let stepNum = 0;
+  ROADMAP_STEPS.forEach((st, idx) => {
+    const isSkipped = !!(st.isSp && STATE.skipSp);
+    const done = !!STATE.roadmapDone[idx];
+    if (!isSkipped) stepNum++;
+
+    const card = document.createElement('div');
+    card.className = 'step-card' + (isSkipped ? ' skipped' : (done ? ' done' : ''));
+
+    if (isSkipped) {
+      card.innerHTML =
+        '<button class="step-check" type="button" title="已跳过">✓</button>' +
+        '<div class="step-body">' +
+          '<h3 style="margin:0;font-size:15.5px">' + st.title + ' <span class="tag tag-blue">已熟练跳过</span></h3>' +
+          '<p style="margin:4px 0 0;font-size:13px">你已标记熟练掌握小鹤双拼，本步骤已折叠跳过，随时可恢复或去规则手册查键位。</p>' +
+        '</div>' +
+        '<div class="step-cta"><button class="btn btn-outline btn-sm" id="restoreSpStepBtn" type="button">恢复此步</button></div>';
+      card.querySelector('#restoreSpStepBtn').addEventListener('click', () => setSkipSp(false));
+      card.querySelector('.step-check').addEventListener('click', () => setSkipSp(false));
+    } else {
+      card.innerHTML =
+        '<button class="step-check" type="button" aria-label="切换步骤完成状态">' + (done ? '✓' : '') + '</button>' +
+        '<div class="step-body">' +
+          '<h3>Step 0' + stepNum + ' · ' + st.title + ' <span class="tag">' + st.time + '</span></h3>' +
+          '<p>' + st.desc + '</p>' +
+          '<ul class="step-tips">' + st.tips.map(t => '<li>' + t + '</li>').join('') + '</ul>' +
+        '</div>' +
+        '<div class="step-cta">' +
+          '<button class="btn btn-primary btn-sm" data-step-jump="' + st.ctaJump + '" type="button">' + st.ctaLabel + '</button>' +
+          '<button class="btn btn-outline btn-sm" data-step-jump="' + st.secJump + '" type="button">' + st.secLabel + '</button>' +
+          (st.isSp ? '<button class="btn btn-soft btn-sm" id="inlineSkipSpBtn" type="button">已会双拼，跳过</button>' : '') +
+        '</div>';
+      card.querySelector('.step-check').addEventListener('click', () => {
+        STATE.roadmapDone[idx] = !STATE.roadmapDone[idx];
+        saveState(); renderRoadmap(); syncOverviewCounters();
+        toast(STATE.roadmapDone[idx] ? '已打卡完成：' + st.title : '已取消打卡');
+      });
+      card.querySelectorAll('[data-step-jump]').forEach(btn => btn.addEventListener('click', () => handleJumpString(btn.dataset.stepJump)));
+      const inlineSkip = card.querySelector('#inlineSkipSpBtn');
+      if (inlineSkip) inlineSkip.addEventListener('click', () => setSkipSp(true));
+    }
+    list.appendChild(card);
+  });
+  syncOverviewCounters();
+}
+
+function handleJumpString(str) {
+  const [route, sub] = str.split(':');
+  switchRoute(route, sub);
+}
+
+/* ==================== 9. 双拼键位图 & 无理码 ==================== */
+let activeSpGuideKey = 'v';
+function renderSpGuideKb() {
+  const rows = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
+  const box = $('spGuideKb'); box.innerHTML = '';
+  rows.forEach((r, ri) => {
+    const row = document.createElement('div'); row.className = 'sp-row r' + (ri + 1);
+    for (const ch of r) {
+      const info = SP_KEYS[ch];
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'sp-key' + (ch === activeSpGuideKey ? ' active' : '');
+      b.innerHTML =
+        '<div class="k-top"><span class="k-let">' + ch.toUpperCase() + '</span>' +
+        (info.special ? '<span class="k-sh">' + info.sh + '</span>' : '') +
+        '</div><div class="k-ym">' + info.ym + '</div>';
+      b.addEventListener('click', () => { activeSpGuideKey = ch; renderSpGuideKb(); });
+      row.appendChild(b);
+    }
+    box.appendChild(row);
+  });
+  const d = SP_KEYS[activeSpGuideKey];
+  $('spGuideDetail').innerHTML =
+    '<div><strong style="font-size:15.5px">键位 <span class="mono">' + activeSpGuideKey.toUpperCase() + '</span></strong> · 声母：<b>' + d.sh + '</b> · 韵母：<b>' + d.ym + '</b></div>' +
+    '<div style="font-size:13.5px;color:var(--ink-soft)">示例：' + d.ex + '</div>';
+}
+
+let wuliCat = 'all';
+function renderWuliGrid() {
+  const q = ($('wuliSearch').value || '').trim().toLowerCase();
+  const list = WULI_LIST.filter(it => {
+    if (wuliCat !== 'all' && it.cat !== wuliCat) return false;
+    if (!q) return true;
+    return it.code.includes(q) || it.words.toLowerCase().includes(q) || it.note.toLowerCase().includes(q);
+  });
+  const grid = $('wuliGrid');
+  if (!list.length) { grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--ink-faint);padding:24px">没有找到匹配的简词或编码</div>'; return; }
+  grid.innerHTML = list.map(it =>
+    '<div class="code-item"><div class="ci-top"><span class="ci-code">' + it.code + '</span><span class="ci-cat">' + it.note + '</span></div><div class="ci-words">' + it.words + '</div></div>'
+  ).join('');
+}
+
+/* ==================== 10. 练习：小鹤双拼热身 ==================== */
+let spCur = null, spTyped = '', spLocked = false;
+function nextSpQuestion() {
+  const pool = STATE.sp.mode === 'all' ? SP_BANK : SP_BANK.filter(x => x.cat === STATE.sp.mode);
+  spCur = pool[Math.floor(Math.random() * pool.length)];
+  spTyped = ''; spLocked = false;
+  $('spChar').textContent = spCur.ch; $('spPinyin').textContent = spCur.py;
+  $('spSlot0').textContent = ''; $('spSlot0').className = 'slot active';
+  $('spSlot1').textContent = ''; $('spSlot1').className = 'slot';
+  $('spAnswer').className = 'answer-line'; $('spAnswer').innerHTML = '';
+  clearVkb('spVkb');
+}
+function renderSpVkb() {
+  buildVkb('spVkb', ch => handleSpKey(ch), ch => STATE.sp.showHint ? (SP_KEYS[ch].special ? SP_KEYS[ch].sh + '/' + SP_KEYS[ch].ym.split(' ')[0] : SP_KEYS[ch].ym.split(' ')[0]) : '', '空格 = 查看双拼提示');
+}
+function renderSpHud() {
+  const n = STATE.sp.right + STATE.sp.wrong;
+  $('spAcc').textContent = n ? Math.round(STATE.sp.right / n * 100) + '%' : '—';
+  $('spCombo').textContent = STATE.sp.combo;
+  $('spHintToggle').textContent = '键帽韵母提示：' + (STATE.sp.showHint ? '开' : '关');
+}
+function handleSpKey(k) {
+  if (!spCur || spLocked) return;
+  if (k === ' ') {
+    $('spAnswer').innerHTML = '双拼编码：<b>' + spCur.code.toUpperCase() + '</b>（' + spCur.tip + '）';
+    $('spAnswer').className = 'answer-line show';
+    highlightVkb('spVkb', spCur.code[spTyped.length], 'hintkey');
+    return;
+  }
+  if (!/^[a-z]$/.test(k)) return;
+  const idx = spTyped.length; spTyped += k;
+  const slot = $('spSlot' + idx); slot.textContent = k.toUpperCase();
+  if (spTyped.length < 2) { slot.className = 'slot'; $('spSlot1').className = 'slot active'; return; }
+  spLocked = true;
+  if (spTyped === spCur.code) {
+    $('spSlot0').className = 'slot ok'; $('spSlot1').className = 'slot ok';
+    $('spCard').classList.add('rightflash', 'pop');
+    STATE.sp.right++; STATE.sp.combo++;
+    beep('ok'); saveState(); renderSpHud();
+    setTimeout(() => { $('spCard').classList.remove('rightflash', 'pop'); nextSpQuestion(); }, 360);
+  } else {
+    $('spSlot0').className = 'slot bad'; $('spSlot1').className = 'slot bad';
+    $('spCard').classList.add('wrongflash', 'shake');
+    $('spAnswer').innerHTML = '正确是 <b>' + spCur.code.toUpperCase() + '</b> · ' + spCur.tip;
+    $('spAnswer').className = 'answer-line show';
+    STATE.sp.wrong++; STATE.sp.combo = 0;
+    beep('bad'); saveState(); renderSpHud();
+    setTimeout(() => { $('spCard').classList.remove('wrongflash', 'shake'); nextSpQuestion(); }, 1100);
+  }
+}
+
+/* ==================== 11. 练习：97 字根助记 ==================== */
+let zgQueue = [], zgCur = -1, zgLocked = false, zgHintTimer = null, zgAnswerShown = false;
+function shuffle(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
+function zgMultiplier() { return Math.min(4, 1 + Math.floor(STATE.zg.combo / 10) * 0.5); }
+function zgMasteredCount() { return STATE.zg.levels.filter(l => l > 1).length; }
+function zgWeakCount() { return STATE.zg.levels.filter(l => l >= 0 && l <= 1).length; }
+function zgInScope(i) {
+  const s = STATE.zg;
+  if (s.mode === 'unlock') return LETTERS.indexOf(CARDS[i].key) < s.unlockN;
+  if (s.mode === 'key' && s.activeKeys.length) return s.activeKeys.includes(CARDS[i].key);
+  if (s.mode === 'weak') return s.levels[i] < 2;
+  return true;
+}
+function zgCheckUnlock() {
+  const s = STATE.zg;
+  if (s.mode !== 'unlock' || s.unlockN >= LETTERS.length) return;
+  const done = LETTERS.slice(0, s.unlockN).every(k => BYKEY[k].every(i => s.levels[i] > 1));
+  if (!done) return;
+  const nk = LETTERS[s.unlockN]; s.unlockN++;
+  zgQueue.splice(Math.min(2, zgQueue.length), 0, ...shuffle(BYKEY[nk].slice()));
+  saveState();
+  toast('已掌握前 ' + (s.unlockN - 1) + ' 键，解锁 ' + nk.toUpperCase() + ' 键（' + s.unlockN + '/26）');
+}
+function zgRebuildQueue() {
+  let idx = CARDS.map((_, i) => i).filter(zgInScope);
+  if (!idx.length) idx = CARDS.map((_, i) => i);
+  if (STATE.zg.mode === 'order') idx.sort((a, b) => a - b); else shuffle(idx);
+  idx.sort((a, b) => (STATE.zg.levels[a] === 8 ? 1 : 0) - (STATE.zg.levels[b] === 8 ? 1 : 0));
+  zgQueue = idx;
+}
+function zgPullNext() { if (!zgQueue.length) zgRebuildQueue(); zgCur = zgQueue.shift(); zgAnswerShown = false; zgLocked = false; renderZgQuestion(); armZgHint(); }
+function zgGrade(ok) {
+  const s = STATE.zg;
+  if (ok) { let lv = s.levels[zgCur] + 1; if (lv > GAPS.length - 1) lv = 8; s.levels[zgCur] = lv; if (lv !== 8) zgQueue.splice(Math.min(GAPS[lv] ?? 3, zgQueue.length), 0, zgCur); }
+  else { s.levels[zgCur] = -1; zgQueue.splice(Math.min(3, zgQueue.length), 0, zgCur); }
+  saveState();
+}
+function zgRestart(resetRound) {
+  if (resetRound) { STATE.zg.score = 0; STATE.zg.combo = 0; STATE.zg.right = 0; STATE.zg.wrong = 0; STATE.zg.won = false; }
+  zgQueue = []; zgRebuildQueue(); zgPullNext(); renderZgHud(); syncOverviewCounters(); saveState();
+}
+function renderZgQuestion() {
+  if (zgCur < 0 || zgCur >= TOTAL_ZG) return;
+  const c = CARDS[zgCur];
+  const box = $('zgGlyph'); box.innerHTML = '';
+  c.parts.forEach(p => { const sp = document.createElement('span'); sp.textContent = p; box.appendChild(sp); });
+  if (c.note) { const n = document.createElement('span'); n.className = 'note'; n.textContent = '（' + c.note + '）'; box.appendChild(n); }
+  $('zgSlot').textContent = ''; $('zgSlot').className = 'slot active';
+  $('zgAnswer').className = 'answer-line'; $('zgAnswer').innerHTML = '';
+  const s = STATE.zg;
+  $('zgLabel').textContent =
+    s.mode === 'unlock' ? '循序渐进 · 已解锁 ' + s.unlockN + '/26 键' :
+    s.mode === 'key' && s.activeKeys.length ? '分键专练 · [' + s.activeKeys.map(x => x.toUpperCase()).join(' / ') + '] 键' :
+    s.mode === 'weak' ? '错根强化 · 专攻未掌握字根' :
+    s.mode === 'order' ? '顺序练习 · 依次巩固 97 字根' : '全部混合 · 97 字根综合检测';
+  clearVkb('zgVkb');
+}
+function renderZgHud() {
+  const s = STATE.zg;
+  const m = zgMasteredCount(), pct = Math.round(m / TOTAL_ZG * 100);
+  $('zgPct').textContent = pct + '%';
+  $('zgRing').setAttribute('stroke-dasharray', (pct / 100 * 106.8).toFixed(1) + ' 106.8');
+  $('zgMastered').textContent = m + '/' + TOTAL_ZG;
+  $('zgScore').textContent = s.score;
+  $('zgMulti').textContent = '×' + zgMultiplier();
+  $('zgCombo').textContent = s.combo;
+  $('zgMaxCombo').textContent = s.maxCombo;
+  const n = s.right + s.wrong;
+  $('zgAcc').textContent = n ? Math.round(s.right / n * 100) + '%' : '—';
+  $('zgAccSub').textContent = n ? ('对 ' + s.right + ' · 错 ' + s.wrong) : '本轮正确率';
+  $('zgWeak').textContent = zgWeakCount();
+  $('zgVkb').style.display = s.showKb ? 'flex' : 'none';
+}
+function armZgHint() {
+  clearTimeout(zgHintTimer);
+  if (!STATE.zg.autoHint || currentRoute !== 'practice' || currentPracticeSub !== 'p-zigen') return;
+  zgHintTimer = setTimeout(() => { if (zgLocked || zgCur < 0) return; showZgAnswer('自动提示'); }, STATE.zg.autoHint * 1000);
+}
+function showZgAnswer(tag) {
+  if (zgAnswerShown || zgCur < 0) return;
+  zgAnswerShown = true;
+  const c = CARDS[zgCur];
+  $('zgAnswer').innerHTML = '答案是 <b>' + c.key.toUpperCase() + '</b> <span class="tag tag-blue" style="margin-left:6px">' + tag + '</span>';
+  $('zgAnswer').className = 'answer-line show';
+  highlightVkb('zgVkb', c.key, 'hintkey');
+}
+function handleZgKey(k) {
+  if (zgCur < 0) return;
+  if (k === ' ') { if (!zgLocked) { clearTimeout(zgHintTimer); showZgAnswer('提示'); } return; }
+  if (!/^[a-z]$/.test(k) || zgLocked) return;
+  clearTimeout(zgHintTimer);
+  const c = CARDS[zgCur];
+  const slot = $('zgSlot'); slot.textContent = k.toUpperCase();
+  if (k === c.key) {
+    zgLocked = true; slot.className = 'slot ok';
+    highlightVkb('zgVkb', k, 'good');
+    $('zgCard').classList.add('rightflash', 'pop');
+    STATE.zg.combo++; STATE.zg.right++;
+    STATE.zg.score += Math.round(10 * zgMultiplier());
+    STATE.zg.maxCombo = Math.max(STATE.zg.maxCombo, STATE.zg.combo);
+    beep('ok'); zgGrade(true); zgCheckUnlock(); renderZgHud(); syncOverviewCounters();
+    if (!STATE.zg.won && STATE.zg.score >= STATE.zg.target) {
+      STATE.zg.won = true; saveState(); beep('win'); launchConfetti();
+      $('winText').innerHTML = '已获得 <b>' + STATE.zg.score + '</b> 分，掌握 <b>' + zgMasteredCount() + '/' + TOTAL_ZG + '</b> 个字根，最高连击 <b>' + STATE.zg.maxCombo + '</b>。';
+      openMask('maskWin');
+    }
+    setTimeout(() => { $('zgCard').classList.remove('rightflash', 'pop'); zgPullNext(); }, 350);
+  } else {
+    zgLocked = true; slot.className = 'slot bad';
+    highlightVkb('zgVkb', k, 'bad');
+    $('zgCard').classList.add('wrongflash', 'shake');
+    STATE.zg.combo = 0; STATE.zg.wrong++;
+    beep('bad'); showZgAnswer('正确答案'); zgGrade(false); renderZgHud(); saveState();
+    setTimeout(() => { $('zgCard').classList.remove('wrongflash', 'shake'); zgPullNext(); }, 1080);
+  }
+}
+
+/* ==================== 12. 练习：字根分组速查 & 拆字实战 ==================== */
+function renderZigenTable() {
+  const q = ($('tableSearch').value || '').trim().toLowerCase();
+  const box = $('ztable'); box.innerHTML = '';
+  let shown = 0;
+  LETTERS.forEach(k => {
+    const list = BYKEY[k];
+    const joined = list.map(i => CARDS[i].raw).join(' ');
+    if (q && k !== q && !joined.toLowerCase().includes(q)) return;
+    shown++;
+    const done = list.filter(i => STATE.zg.levels[i] > 1).length;
+    const cell = document.createElement('div'); cell.className = 'zcell';
+    const itemsHtml = list.map(i => CARDS[i].parts.map(p => '<span>' + p + '</span>').join('')).join('');
+    cell.innerHTML =
+      '<div><div class="kh"><span class="kk">' + k.toUpperCase() + '</span><span class="kp">' + done + '/' + list.length + '</span></div>' +
+      '<div class="bar"><i style="width:' + Math.round(done / list.length * 100) + '%"></i></div>' +
+      '<div class="zitems">' + itemsHtml + '</div></div>' +
+      '<button class="btn btn-soft btn-sm" style="width:100%" type="button">专练 ' + k.toUpperCase() + ' 键</button>';
+    cell.querySelector('button').addEventListener('click', () => {
+      STATE.zg.mode = 'key'; STATE.zg.activeKeys = [k];
+      saveState(); syncZgSettingsUi(); zgRestart(false);
+      switchSubTab('practiceTabs', 'view-practice', 'p-zigen');
+      toast('已切换为只练 ' + k.toUpperCase() + ' 键');
+    });
+    box.appendChild(cell);
+  });
+  if (!shown) box.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--ink-faint);padding:24px">未匹配到对应字根或字母键</div>';
+  $('tableSummary').textContent = '共 ' + TOTAL_ZG + ' 个字根 · 已掌握 ' + zgMasteredCount() + ' 个';
+}
+
+let splitCur = null, splitTyped = '', splitLocked = false;
+let splitScope = 'top1000';
+let dictSyncState = 'idle'; // idle | loading | synced | local | fallback
+
+function activeSplitPool() {
+  if (splitScope === 'builtin' || !CUSTOM_DICT.length) return SPLIT_BANK;
+  if (splitScope === 'top1000') return CUSTOM_DICT.slice(0, 1000);
+  return CUSTOM_DICT;
+}
+function nextSplitQuestion() {
+  const basePool = activeSplitPool();
+  const isBuiltin = (splitScope === 'builtin' || !CUSTOM_DICT.length);
+  const unmastered = isBuiltin ? basePool.filter(x => !STATE.split.mastered.includes(x.ch)) : basePool;
+  const pool = unmastered.length && Math.random() < 0.85 ? unmastered : basePool;
+  splitCur = pool[Math.floor(Math.random() * pool.length)];
+  splitTyped = ''; splitLocked = false;
+  const is4 = STATE.split.mode === 'full4';
+  const scopeName = isBuiltin ? '内置精校' : (splitScope === 'top1000' ? '常用 1000 字' : '全词库 ' + CUSTOM_DICT.length + ' 字');
+  $('splitLabel').textContent = scopeName + ' · ' + (is4 ? '输入完整音形 4 码（双拼 + 形码）' : '输入简单鹤首末形码（后 2 码）');
+  $('splitChar').textContent = splitCur.ch;
+  $('splitPinyin').textContent = (splitCur.py ? splitCur.py + ' ' : '') + (is4 ? '' : '（双拼：' + splitCur.sp + '）');
+  const slotsWrap = $('splitSlots'); slotsWrap.innerHTML = '';
+  const len = is4 ? 4 : 2;
+  for (let i = 0; i < len; i++) {
+    const d = document.createElement('div'); d.className = 'slot' + (i === 0 ? ' active' : ''); d.id = 'splitSlot' + i;
+    slotsWrap.appendChild(d);
+  }
+  $('splitAnswer').className = 'answer-line'; $('splitAnswer').innerHTML = '';
+  clearVkb('splitVkb');
+}
+function renderSplitHud() {
+  const n = STATE.split.right + STATE.split.wrong;
+  const pool = activeSplitPool();
+  const isBuiltin = (splitScope === 'builtin' || !CUSTOM_DICT.length);
+  $('splitMastered').textContent = isBuiltin ? (STATE.split.mastered.length + '/' + SPLIT_BANK.length) : (pool.length + ' 字');
+  const hasFull = CUSTOM_DICT.length > 0;
+  $('splitPoolLbl').textContent =
+    dictSyncState === 'loading' ? '正在检查在线更新…' :
+    dictSyncState === 'synced' ? (splitScope === 'top1000' ? 'v9.3 前 1000 常用字' : (splitScope === 'full' ? 'v9.3 官方全词库' : '内置精校 167 字')) :
+    dictSyncState === 'local' ? (splitScope === 'top1000' ? '本地词库 · 前 1000 字' : (splitScope === 'full' ? '已导入本地全词库' : '内置精校 167 字')) :
+    hasFull ? (splitScope === 'top1000' ? '内置全词库 · 前 1000 常用字' : (splitScope === 'full' ? '内置全词库（含容错）' : '内置精校 167 字')) :
+    '内置精校 167 字';
+  $('splitCombo').textContent = STATE.split.combo;
+  $('splitAcc').textContent = n ? Math.round(STATE.split.right / n * 100) + '%' : '—';
+  $('splitScopeChips').querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.dataset.scope === splitScope));
+}
+function parseRimeShortCodes(text, sourceLabel) {
+  const lines = text.split(/\r?\n/);
+  const map2 = new Map(), map3 = new Map();
+  let inHeader = false;
+  const addShort = (word, code) => {
+    const targetMap = code.length === 2 ? map2 : map3;
+    if (!targetMap.has(word)) {
+      targetMap.set(word, { word, code, codes: [code], cat: code.length === 2 ? 'dict2' : 'dict3', note: sourceLabel || 'v9.3 简词' });
+    } else {
+      const ex = targetMap.get(word);
+      if (!ex.codes.includes(code)) ex.codes.push(code);
+    }
+  };
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line || line.startsWith('#')) continue;
+    if (line === '---') { inHeader = true; continue; }
+    if (line === '...') { inHeader = false; continue; }
+    if (inHeader) continue;
+    const cols = line.split(/[\t ]+/);
+    if (cols.length < 2) continue;
+    if (/^[\u4e00-\u9fff]{2,8}$/.test(cols[0]) && /^[a-z]{2,3}$/.test(cols[1])) {
+      addShort(cols[0], cols[1]);
+    } else if (/^[a-z]{2,3}$/.test(cols[0])) {
+      const code = cols[0];
+      for (let i = 1; i < cols.length; i++) {
+        if (/^[\u4e00-\u9fff]{2,8}$/.test(cols[i])) addShort(cols[i], code);
+      }
+    }
+  }
+  return { s2: Array.from(map2.values()), s3: Array.from(map3.values()) };
+}
+function parseRimeDictText(text, sourceLabel) {
+  const lines = text.split(/\r?\n/);
+  const map = new Map();
+  const splitLookup = new Map(SPLIT_BANK.map(x => [x.ch, x]));
+  let inHeader = false;
+  const addChar = (ch, code) => {
+    const sp = code.slice(0, 2), sh = code.slice(2, 4);
+    if (!map.has(ch)) {
+      const ref = splitLookup.get(ch);
+      map.set(ch, {
+        ch,
+        py: ref ? ref.py : '',
+        sp,
+        sh,
+        codes: [code],
+        shapes: [sh],
+        parts: ref ? ref.parts : (sh[0].toUpperCase() + ' + ' + sh[1].toUpperCase()),
+        note: ref ? ref.note : (sourceLabel || '官方词库')
+      });
+    } else {
+      const ex = map.get(ch);
+      if (!ex.codes.includes(code)) ex.codes.push(code);
+      if (!ex.shapes.includes(sh)) ex.shapes.push(sh);
+    }
+  };
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line || line.startsWith('#')) continue;
+    if (line === '---') { inHeader = true; continue; }
+    if (line === '...') { inHeader = false; continue; }
+    if (inHeader) continue;
+    const cols = line.split(/[\t ]+/);
+    if (cols.length < 2) continue;
+    if (/^[\u4e00-\u9fff]$/.test(cols[0]) && /^[a-z]{4}$/.test(cols[1])) {
+      addChar(cols[0], cols[1]);
+    } else if (/^[a-z]{4}$/.test(cols[0])) {
+      const code = cols[0];
+      for (let i = 1; i < cols.length; i++) {
+        if (/^[\u4e00-\u9fff]$/.test(cols[i])) addChar(cols[i], code);
+      }
+    }
+  }
+  return Array.from(map.values());
+}
+async function loadEmbeddedDict() {
+  if (!EMBEDDED_DICT_GZ_B64 || EMBEDDED_DICT_GZ_B64.startsWith('__')) return false;
+  try {
+    if (typeof DecompressionStream === 'undefined') return false;
+    const bin = atob(EMBEDDED_DICT_GZ_B64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const ds = new DecompressionStream('gzip');
+    const stream = new Blob([bytes]).stream().pipeThrough(ds);
+    const txt = await new Response(stream).text();
+    const parts = txt.split('\n===\n');
+    const splitLookup = new Map(SPLIT_BANK.map(x => [x.ch, x]));
+    const dict = [];
+    if (parts[0]) {
+      for (const line of parts[0].split('\n')) {
+        if (!line) continue;
+        const sep = line.indexOf(':');
+        if (sep <= 0) continue;
+        const ch = line.slice(0, sep);
+        const codes = line.slice(sep + 1).split(',').filter(Boolean);
+        if (!codes.length) continue;
+        const ref = splitLookup.get(ch);
+        const primary = ref ? (ref.sp + ref.sh) : codes[0];
+        const sp = primary.slice(0, 2), sh = primary.slice(2, 4);
+        const allCodes = ref ? [primary, ...codes.filter(c => c !== primary)] : codes;
+        const shapes = [];
+        for (const c of allCodes) {
+          const s = c.slice(2, 4);
+          if (!shapes.includes(s)) shapes.push(s);
+        }
+        dict.push({
+          ch,
+          py: ref ? ref.py : '',
+          sp,
+          sh,
+          codes: allCodes,
+          shapes,
+          parts: ref ? ref.parts : (sh[0].toUpperCase() + ' + ' + sh[1].toUpperCase()),
+          note: ref ? ref.note : '内置全词库（jdh_dict_multi）'
+        });
+      }
+    }
+    const parseSec = (sec, cat, label) => {
+      const arr = [];
+      if (!sec) return arr;
+      for (const line of sec.split('\n')) {
+        if (!line) continue;
+        const sep = line.indexOf(':');
+        if (sep <= 0) continue;
+        const word = line.slice(0, sep);
+        const codes = line.slice(sep + 1).split(',').filter(Boolean);
+        if (!codes.length) continue;
+        arr.push({ word, code: codes[0], codes, cat, note: label });
+      }
+      return arr;
+    };
+    const sc2 = parseSec(parts[1], 'dict2', '内置全词库二简词');
+    const sc3 = parseSec(parts[2], 'dict3', '内置全词库三简词');
+    if (dict.length) CUSTOM_DICT = dict;
+    if (sc2.length) CUSTOM_SHORT_2 = sc2;
+    if (sc3.length) CUSTOM_SHORT_3 = sc3;
+    dictSyncState = 'embedded';
+    renderSplitHud();
+    nextSplitQuestion();
+    renderShortHud();
+    if (STATE.short.cat === 'dict2' || STATE.short.cat === 'dict3') nextShortQuestion();
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+async function syncOnlineDict(manual) {
+  if (dictSyncState === 'loading') return;
+  const prevState = dictSyncState;
+  dictSyncState = 'loading';
+  renderSplitHud();
+  const urls = [
+    'https://cdn.jsdelivr.net/gh/rimeinn/rime-JDhe@main/charset.dict.yaml',
+    'https://raw.githubusercontent.com/rimeinn/rime-JDhe/main/charset.dict.yaml',
+    'https://cdn.jsdelivr.net/gh/rimeinn/rime-JDhe@main/jde_fixed.dict.yaml',
+    'https://raw.githubusercontent.com/rimeinn/rime-JDhe/main/jde_fixed.dict.yaml'
+  ];
+  for (const url of urls) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) continue;
+      const txt = await res.text();
+      const parsed = parseRimeDictText(txt, 'rime-JDhe v9.3 官方词库');
+      if (parsed.length >= 500) {
+        CUSTOM_DICT = parsed;
+        const sc = parseRimeShortCodes(txt, 'v9.3 官方词库');
+        if (sc.s2.length) CUSTOM_SHORT_2 = sc.s2;
+        if (sc.s3.length) CUSTOM_SHORT_3 = sc.s3;
+        dictSyncState = 'synced';
+        renderSplitHud();
+        nextSplitQuestion();
+        // If charset.dict.yaml didn't contain multi-char short codes, also fetch jde_fixed.dict.yaml in background
+        if (!CUSTOM_SHORT_2.length) syncShortCodeDict(false);
+        else renderShortHud();
+        if (manual) toast('已同步官方 v9.3 全词库：共 ' + parsed.length + ' 个单字（支持容错）');
+        return;
+      }
+    } catch (e) {}
+  }
+  dictSyncState = CUSTOM_DICT.length ? (prevState === 'local' ? 'local' : 'embedded') : 'fallback';
+  renderSplitHud();
+  if (manual) {
+    toast(CUSTOM_DICT.length
+      ? '在线更新受限，已继续使用内置全词库（' + CUSTOM_DICT.length + ' 字，支持容错）'
+      : '在线拉取受限，已保留内置 167 字，也可点「导入本地码表」加载全词库');
+  }
+}
+function handleSplitKey(k) {
+  if (!splitCur || splitLocked) return;
+  const is4 = STATE.split.mode === 'full4';
+  const primary = is4 ? (splitCur.sp + splitCur.sh) : splitCur.sh;
+  const validList = is4 ? (splitCur.codes || [primary]) : (splitCur.shapes || [primary]);
+  if (k === ' ') {
+    const alt = validList.length > 1 ? '（容错：' + validList.slice(1, 3).map(x => x.toUpperCase()).join('/') + '）' : '';
+    $('splitAnswer').innerHTML = '参考：<span class="chai" style="font-size:18px">' + splitCur.parts + '</span> · 编码：<b>' + primary.toUpperCase() + '</b>' + alt + ' · ' + splitCur.note;
+    $('splitAnswer').className = 'answer-line show';
+    highlightVkb('splitVkb', primary[splitTyped.length], 'hintkey');
+    return;
+  }
+  if (!/^[a-z]$/.test(k)) return;
+  const idx = splitTyped.length; splitTyped += k;
+  const slot = $('splitSlot' + idx); slot.textContent = k.toUpperCase();
+  if (splitTyped.length < primary.length) { slot.className = 'slot'; $('splitSlot' + (idx + 1)).className = 'slot active'; return; }
+  splitLocked = true;
+  if (validList.includes(splitTyped)) {
+    for (let i = 0; i < primary.length; i++) $('splitSlot' + i).className = 'slot ok';
+    $('splitCard').classList.add('rightflash', 'pop');
+    STATE.split.right++; STATE.split.combo++;
+    if (!STATE.split.mastered.includes(splitCur.ch)) STATE.split.mastered.push(splitCur.ch);
+    beep('ok'); saveState(); renderSplitHud(); syncOverviewCounters();
+    setTimeout(() => { $('splitCard').classList.remove('rightflash', 'pop'); nextSplitQuestion(); }, 380);
+  } else {
+    for (let i = 0; i < primary.length; i++) $('splitSlot' + i).className = 'slot bad';
+    $('splitCard').classList.add('wrongflash', 'shake');
+    const alt = validList.length > 1 ? ' / ' + validList.slice(1, 3).map(x => x.toUpperCase()).join(' / ') : '';
+    $('splitAnswer').innerHTML = '正确是 <b>' + primary.toUpperCase() + alt + '</b> · 拆分：<span class="chai" style="font-size:18px">' + splitCur.parts + '</span>';
+    $('splitAnswer').className = 'answer-line show';
+    STATE.split.wrong++; STATE.split.combo = 0;
+    beep('bad'); saveState(); renderSplitHud();
+    setTimeout(() => { $('splitCard').classList.remove('wrongflash', 'shake'); nextSplitQuestion(); }, 1250);
+  }
+}
+
+/* ==================== 12B. 练习：常用简码训练（不含单字） ==================== */
+let shortCur = null, shortTyped = '', shortLocked = false;
+
+async function syncShortCodeDict(manual) {
+  const urls = [
+    'https://cdn.jsdelivr.net/gh/rimeinn/rime-JDhe@main/jde_fixed.dict.yaml',
+    'https://raw.githubusercontent.com/rimeinn/rime-JDhe/main/jde_fixed.dict.yaml'
+  ];
+  for (const url of urls) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) continue;
+      const txt = await res.text();
+      const sc = parseRimeShortCodes(txt, 'rime-JDhe 固词简码');
+      if (sc.s2.length || sc.s3.length) {
+        CUSTOM_SHORT_2 = sc.s2;
+        CUSTOM_SHORT_3 = sc.s3;
+        renderShortHud();
+        if (STATE.short.cat === 'dict2' || STATE.short.cat === 'dict3') nextShortQuestion();
+        if (manual) toast('已同步全量简词：二简 ' + sc.s2.length + ' 词 · 三简 ' + sc.s3.length + ' 词');
+        return;
+      }
+    } catch (e) {}
+  }
+  if (manual) {
+    toast((CUSTOM_SHORT_2.length || CUSTOM_SHORT_3.length)
+      ? '在线更新受限，已继续使用内置全量简词（二简 ' + CUSTOM_SHORT_2.length + ' 词 · 三简 ' + CUSTOM_SHORT_3.length + ' 词）'
+      : '在线同步受限，可直接使用内置 51 组高频简词，或通过「拆字取码实战 → 导入本地码表」导入码表');
+  }
+}
+
+function activeShortPool() {
+  const cat = STATE.short.cat;
+  if (cat === 'dict2') return CUSTOM_SHORT_2.length ? CUSTOM_SHORT_2 : SHORT_BANK;
+  if (cat === 'dict3') return CUSTOM_SHORT_3.length ? CUSTOM_SHORT_3 : SHORT_BANK;
+  if (cat === 'all') return SHORT_BANK;
+  return SHORT_BANK.filter(x => x.cat === cat);
+}
+
+function nextShortQuestion() {
+  const basePool = activeShortPool();
+  const isDict = (STATE.short.cat === 'dict2' && CUSTOM_SHORT_2.length) || (STATE.short.cat === 'dict3' && CUSTOM_SHORT_3.length);
+  const unmastered = isDict ? basePool : basePool.filter(x => !STATE.short.mastered.includes(x.code));
+  const pool = unmastered.length && Math.random() < 0.85 ? unmastered : basePool;
+  shortCur = pool[Math.floor(Math.random() * pool.length)];
+  shortTyped = ''; shortLocked = false;
+  const len = shortCur.code.length;
+  $('shortLabel').textContent = (isDict ? (len === 2 ? '全词库二简词 · ' : '全词库三简词 · ') : '高频常用简码 · ') + '输入 ' + len + ' 位简码';
+  $('shortWord').textContent = shortCur.word;
+  $('shortHintNote').textContent = shortCur.note;
+  const slotsWrap = $('shortSlots'); slotsWrap.innerHTML = '';
+  for (let i = 0; i < len; i++) {
+    const d = document.createElement('div');
+    d.className = 'slot' + (i === 0 ? ' active' : '');
+    d.id = 'shortSlot' + i;
+    slotsWrap.appendChild(d);
+  }
+  $('shortAnswer').className = 'answer-line'; $('shortAnswer').innerHTML = '';
+  clearVkb('shortVkb');
+}
+
+function renderShortHud() {
+  const n = STATE.short.right + STATE.short.wrong;
+  const cat = STATE.short.cat;
+  const pool = activeShortPool();
+  const isDict2 = (cat === 'dict2' && CUSTOM_SHORT_2.length);
+  const isDict3 = (cat === 'dict3' && CUSTOM_SHORT_3.length);
+  if (isDict2) {
+    $('shortMastered').textContent = CUSTOM_SHORT_2.length + ' 词';
+    $('shortPoolLbl').textContent = dictSyncState === 'embedded' ? '内置全词库二简词' : 'v9.3 全部二简词';
+  } else if (isDict3) {
+    $('shortMastered').textContent = CUSTOM_SHORT_3.length + ' 词';
+    $('shortPoolLbl').textContent = dictSyncState === 'embedded' ? '内置全词库三简词' : 'v9.3 全部三简词';
+  } else {
+    const masteredInPool = pool.filter(x => STATE.short.mastered.includes(x.code)).length;
+    $('shortMastered').textContent = masteredInPool + '/' + pool.length;
+    $('shortPoolLbl').textContent = (cat === 'dict2' || cat === 'dict3') ? '未同步全量（暂用内置高频）' : '已掌握高频简词';
+  }
+  $('shortCombo').textContent = STATE.short.combo;
+  $('shortAcc').textContent = n ? Math.round(STATE.short.right / n * 100) + '%' : '—';
+  $('shortCatChips').querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.dataset.shortcat === cat));
+}
+
+function handleShortKey(k) {
+  if (!shortCur || shortLocked) return;
+  const primary = shortCur.code;
+  const validList = shortCur.codes || [primary];
+  if (k === ' ') {
+    $('shortAnswer').innerHTML = '简码：<b>' + primary.toUpperCase() + '</b>（' + shortCur.note + '）';
+    $('shortAnswer').className = 'answer-line show';
+    highlightVkb('shortVkb', primary[shortTyped.length], 'hintkey');
+    return;
+  }
+  if (!/^[a-z]$/.test(k)) return;
+  const idx = shortTyped.length; shortTyped += k;
+  const slot = $('shortSlot' + idx); slot.textContent = k.toUpperCase();
+  if (shortTyped.length < primary.length) {
+    slot.className = 'slot';
+    $('shortSlot' + (idx + 1)).className = 'slot active';
+    return;
+  }
+  shortLocked = true;
+  if (validList.includes(shortTyped)) {
+    for (let i = 0; i < primary.length; i++) $('shortSlot' + i).className = 'slot ok';
+    $('shortCard').classList.add('rightflash', 'pop');
+    STATE.short.right++; STATE.short.combo++;
+    if (!STATE.short.mastered.includes(primary)) STATE.short.mastered.push(primary);
+    beep('ok'); saveState(); renderShortHud();
+    setTimeout(() => { $('shortCard').classList.remove('rightflash', 'pop'); nextShortQuestion(); }, 380);
+  } else {
+    for (let i = 0; i < primary.length; i++) $('shortSlot' + i).className = 'slot bad';
+    $('shortCard').classList.add('wrongflash', 'shake');
+    $('shortAnswer').innerHTML = '正确是 <b>' + primary.toUpperCase() + '</b> · ' + shortCur.word;
+    $('shortAnswer').className = 'answer-line show';
+    STATE.short.wrong++; STATE.short.combo = 0;
+    beep('bad'); saveState(); renderShortHud();
+    setTimeout(() => { $('shortCard').classList.remove('wrongflash', 'shake'); nextShortQuestion(); }, 1180);
+  }
+}
+
+/* ==================== 13. 虚拟键盘 & 弹窗 ==================== */
+function buildVkb(containerId, onKey, subFn, spaceLabel) {
+  const rows = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
+  const box = $(containerId); box.innerHTML = '';
+  rows.forEach(r => {
+    const row = document.createElement('div'); row.className = 'vkb-row';
+    for (const ch of r) {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'vkey'; b.dataset.k = ch;
+      const sub = subFn ? subFn(ch) : '';
+      b.innerHTML = ch.toUpperCase() + (sub !== '' ? '<span class="ksub">' + sub + '</span>' : '');
+      b.addEventListener('click', () => onKey(ch));
+      row.appendChild(b);
+    }
+    box.appendChild(row);
+  });
+  const sp = document.createElement('button');
+  sp.type = 'button'; sp.className = 'space-btn'; sp.textContent = spaceLabel;
+  sp.addEventListener('click', () => onKey(' '));
+  box.appendChild(sp);
+}
+function clearVkb(id) { $(id).querySelectorAll('.vkey').forEach(k => k.classList.remove('hintkey', 'good', 'bad', 'pressed')); }
+function highlightVkb(id, ch, cls) { const el = $(id).querySelector('.vkey[data-k="' + ch + '"]'); if (el) el.classList.add(cls); }
+function openMask(id) { closeMasks(); $(id).classList.add('on'); }
+function closeMasks() { document.querySelectorAll('.mask').forEach(m => m.classList.remove('on')); }
+
+function syncZgSettingsUi() {
+  const s = STATE.zg;
+  document.querySelectorAll('#zgModeSeg button').forEach(b => b.classList.toggle('on', b.dataset.mode === s.mode));
+  $('keyPickBlock').style.display = s.mode === 'key' ? 'block' : 'none';
+  document.querySelectorAll('#zgHintSeg button').forEach(b => b.classList.toggle('on', +b.dataset.hint === s.autoHint));
+  document.querySelectorAll('#zgTargetSeg button').forEach(b => b.classList.toggle('on', +b.dataset.t === s.target));
+  $('swSound').classList.toggle('on', s.sound);
+  $('swKb').classList.toggle('on', s.showKb);
+  $('zgModeNote').textContent = s.mode === 'unlock'
+    ? '循序渐进：已解锁 ' + s.unlockN + '/26 键，全部掌握后自动解锁下一键'
+    : '推荐先「循序渐进」，逐键建立肌肉记忆';
+  const grid = $('keyPickGrid'); grid.innerHTML = '';
+  LETTERS.forEach(ch => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = ch;
+    if (s.activeKeys.includes(ch)) b.classList.add('on');
+    b.addEventListener('click', () => {
+      const i = s.activeKeys.indexOf(ch);
+      if (i >= 0) s.activeKeys.splice(i, 1); else s.activeKeys.push(ch);
+      b.classList.toggle('on'); saveState(); zgRestart(false);
+    });
+    grid.appendChild(b);
+  });
+}
+
+/* ==================== 14. 事件绑定 ==================== */
+function bindEvents() {
+  $('brandHome').addEventListener('click', () => switchRoute('home'));
+  $('themeBtn').addEventListener('click', () => { STATE.theme = STATE.theme === 'dark' ? 'light' : 'dark'; applyTheme(); saveState(); });
+
+  $('trackZero').addEventListener('click', () => setSkipSp(false));
+  $('trackSkip').addEventListener('click', () => setSkipSp(true));
+  $('headerSkipBtn').addEventListener('click', () => setSkipSp(!STATE.skipSp));
+  $('rmSkipToggleBtn').addEventListener('click', () => setSkipSp(!STATE.skipSp));
+  $('pracSkipToggleBtn').addEventListener('click', () => setSkipSp(!STATE.skipSp));
+  $('heroPrimaryBtn').addEventListener('click', () => switchRoute(STATE.skipSp ? 'practice' : 'roadmap', STATE.skipSp ? 'zigen' : undefined));
+
+  document.querySelectorAll('.nav-btn, .dock-btn').forEach(b => b.addEventListener('click', () => switchRoute(b.dataset.route)));
+  document.querySelectorAll('[data-jump]').forEach(b => b.addEventListener('click', () => handleJumpString(b.dataset.jump)));
+
+  $('guideTabs').querySelectorAll('.subtab').forEach(b => b.addEventListener('click', () => switchSubTab('guideTabs', 'view-guide', b.dataset.sub)));
+  $('practiceTabs').querySelectorAll('.subtab').forEach(b => b.addEventListener('click', () => switchSubTab('practiceTabs', 'view-practice', b.dataset.sub)));
+
+  $('toggleZonesBtn').addEventListener('click', () => { STATE.showZones = !STATE.showZones; saveState(); renderVisualZigenChart(); });
+  $('exportSvgBtn').addEventListener('click', exportZigenSvg);
+
+  $('wuliSearch').addEventListener('input', renderWuliGrid);
+  $('wuliChips').querySelectorAll('.chip').forEach(c => {
+    c.addEventListener('click', () => {
+      wuliCat = c.dataset.cat;
+      $('wuliChips').querySelectorAll('.chip').forEach(x => x.classList.toggle('active', x === c));
+      renderWuliGrid();
+    });
+  });
+
+  $('spModeChips').querySelectorAll('.chip').forEach(c => {
+    c.addEventListener('click', () => {
+      STATE.sp.mode = c.dataset.spmode;
+      $('spModeChips').querySelectorAll('.chip').forEach(x => x.classList.toggle('active', x === c));
+      saveState(); nextSpQuestion();
+    });
+  });
+  $('spHintToggle').addEventListener('click', () => { STATE.sp.showHint = !STATE.sp.showHint; saveState(); renderSpHud(); renderSpVkb(); });
+
+  $('zgHelpBtn').addEventListener('click', () => openMask('maskHelp'));
+  $('zgSetBtn').addEventListener('click', () => { syncZgSettingsUi(); openMask('maskSettings'); });
+  $('tableSearch').addEventListener('input', renderZigenTable);
+
+  $('splitModeChips').querySelectorAll('.chip').forEach(c => {
+    c.addEventListener('click', () => {
+      STATE.split.mode = c.dataset.splitmode;
+      $('splitModeChips').querySelectorAll('.chip').forEach(x => x.classList.toggle('active', x === c));
+      saveState(); nextSplitQuestion();
+    });
+  });
+  $('splitScopeChips').querySelectorAll('.chip').forEach(c => {
+    c.addEventListener('click', () => {
+      splitScope = c.dataset.scope;
+      if (splitScope !== 'builtin' && !CUSTOM_DICT.length) syncOnlineDict(true);
+      renderSplitHud(); nextSplitQuestion();
+    });
+  });
+  $('syncDictBtn').addEventListener('click', () => syncOnlineDict(true));
+  $('shortCatChips').querySelectorAll('.chip').forEach(c => {
+    c.addEventListener('click', () => {
+      STATE.short.cat = c.dataset.shortcat;
+      saveState();
+      if ((STATE.short.cat === 'dict2' && !CUSTOM_SHORT_2.length) || (STATE.short.cat === 'dict3' && !CUSTOM_SHORT_3.length)) {
+        syncShortCodeDict(true);
+      }
+      renderShortHud();
+      nextShortQuestion();
+    });
+  });
+  $('syncShortDictBtn').addEventListener('click', () => syncShortCodeDict(true));
+  $('importDictBtn').addEventListener('click', () => $('dictFileInput').click());
+  $('dictFileInput').addEventListener('change', e => {
+    const f = e.target.files[0]; if (!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      const rawTxt = r.result || '';
+      const parsed = parseRimeDictText(rawTxt, '本地导入词库');
+      const sc = parseRimeShortCodes(rawTxt, '本地导入简词');
+      if (sc.s2.length) CUSTOM_SHORT_2 = sc.s2;
+      if (sc.s3.length) CUSTOM_SHORT_3 = sc.s3;
+      if (sc.s2.length || sc.s3.length) renderShortHud();
+      if (!parsed.length && !sc.s2.length && !sc.s3.length) { toast('未识别到有效码表条目（支持 Rime .dict.yaml / .txt）'); return; }
+      if (!parsed.length) { toast('已导入简词：二简 ' + sc.s2.length + ' 词 · 三简 ' + sc.s3.length + ' 词'); return; }
+      CUSTOM_DICT = parsed;
+      dictSyncState = 'local';
+      if (splitScope === 'builtin') splitScope = 'top1000';
+      renderSplitHud(); nextSplitQuestion();
+      toast('已导入本地全词库：' + parsed.length + ' 个单字（支持容错）');
+    };
+    r.readAsText(f);
+    e.target.value = '';
+  });
+
+  document.querySelectorAll('#zgModeSeg button').forEach(b => {
+    b.addEventListener('click', () => {
+      STATE.zg.mode = b.dataset.mode;
+      if (STATE.zg.mode === 'key' && !STATE.zg.activeKeys.length) STATE.zg.activeKeys = [LETTERS[0]];
+      saveState(); syncZgSettingsUi(); zgRestart(false);
+    });
+  });
+  document.querySelectorAll('#zgHintSeg button').forEach(b => {
+    b.addEventListener('click', () => { STATE.zg.autoHint = +b.dataset.hint; saveState(); syncZgSettingsUi(); armZgHint(); });
+  });
+  document.querySelectorAll('#zgTargetSeg button').forEach(b => {
+    b.addEventListener('click', () => { STATE.zg.target = +b.dataset.t; STATE.zg.won = false; saveState(); syncZgSettingsUi(); renderZgHud(); });
+  });
+  $('swSound').addEventListener('click', () => { STATE.zg.sound = !STATE.zg.sound; saveState(); syncZgSettingsUi(); if (STATE.zg.sound) beep('ok'); });
+  $('swKb').addEventListener('click', () => { STATE.zg.showKb = !STATE.zg.showKb; saveState(); syncZgSettingsUi(); renderZgHud(); });
+
+  $('btnExport').addEventListener('click', () => {
+    const blob = new Blob([JSON.stringify(STATE.zg, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = '简单鹤字根练习-进度.json'; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    toast('进度已导出为 JSON');
+  });
+  $('btnImport').addEventListener('click', () => $('fileInput').click());
+  $('fileInput').addEventListener('change', e => {
+    const f = e.target.files[0]; if (!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      try {
+        const o = JSON.parse(r.result);
+        const zgData = (o && Array.isArray(o.levels)) ? o : (o && o.zg && Array.isArray(o.zg.levels) ? o.zg : null);
+        if (!zgData || zgData.levels.length !== TOTAL_ZG) throw new Error('bad');
+        STATE.zg = Object.assign(JSON.parse(JSON.stringify(DEFAULT_ZG)), zgData);
+        saveState(); syncZgSettingsUi(); zgRestart(false); toast('进度已成功导入');
+      } catch (err) { toast('导入失败：JSON 格式不匹配'); }
+    };
+    r.readAsText(f); e.target.value = '';
+  });
+
+  $('btnResetAsk').addEventListener('click', () => openMask('maskConfirmReset'));
+  $('btnResetConfirm').addEventListener('click', () => {
+    STATE.zg = JSON.parse(JSON.stringify(DEFAULT_ZG));
+    saveState(); closeMasks(); syncZgSettingsUi(); zgRestart(true); toast('字根进度已清空');
+  });
+  $('winRestartBtn').addEventListener('click', () => { closeMasks(); zgRestart(true); });
+  document.querySelectorAll('[data-close-mask]').forEach(b => b.addEventListener('click', closeMasks));
+  document.querySelectorAll('.mask').forEach(m => m.addEventListener('click', e => { if (e.target === m) closeMasks(); }));
+
+  $('copyQqBtn').addEventListener('click', () => {
+    const txt = '605928107';
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(() => toast('已复制 QQ 群号：605928107')).catch(() => fallbackCopy(txt));
+    } else fallbackCopy(txt);
+  });
+
+  document.addEventListener('keydown', e => {
+    if (document.querySelector('.mask.on')) { if (e.key === 'Escape') closeMasks(); return; }
+    const tag = (document.activeElement && document.activeElement.tagName) || '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    if (currentRoute !== 'practice') return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const k = e.key.toLowerCase();
+    if (k !== ' ' && !/^[a-z]$/.test(k)) return;
+    e.preventDefault();
+    if (currentPracticeSub === 'p-sp') handleSpKey(k);
+    else if (currentPracticeSub === 'p-zigen') handleZgKey(k);
+    else if (currentPracticeSub === 'p-split') handleSplitKey(k);
+    else if (currentPracticeSub === 'p-short') handleShortKey(k);
+  });
+}
+
+function fallbackCopy(txt) {
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    toast('已复制 QQ 群号：' + txt);
+  } catch (e) { toast('群号：' + txt); }
+}
+
+/* ==================== 15. 启动 ==================== */
+applyTheme();
+applySkipSpUi();
+renderDemo();
+renderRoadmap();
+renderVisualZigenChart();
+renderSpGuideKb();
+renderWuliGrid();
+
+renderSpVkb();
+renderSpHud();
+nextSpQuestion();
+
+buildVkb('zgVkb', ch => handleZgKey(ch), ch => String(BYKEY[ch] ? BYKEY[ch].length : 0), '空格 = 看答案提示（不跳过、不断连击）');
+if (typeof STATE.zg.unlockN !== 'number' || STATE.zg.unlockN < 3) STATE.zg.unlockN = 3;
+zgRestart(false);
+
+buildVkb('splitVkb', ch => handleSplitKey(ch), null, '空格 = 查看拆分与目标编码提示');
+renderSplitHud();
+nextSplitQuestion();
+
+buildVkb('shortVkb', ch => handleShortKey(ch), null, '空格 = 查看简码提示');
+renderShortHud();
+nextShortQuestion();
+
+bindEvents();
+syncOverviewCounters();
+loadEmbeddedDict().then(ok => { if (!ok) syncOnlineDict(false); });
+
+if (document.fonts && document.fonts.load) {
+  document.fonts.load('48px JdhChai').then(() => {
+    renderDemo();
+    renderVisualZigenChart();
+    if (!zgLocked && !zgAnswerShown) renderZgQuestion();
+  }).catch(() => {});
+}
+</script>
+</body>
+</html>
