@@ -9,6 +9,12 @@
 - `src/`：网页模板（`jdh-official.tpl.html`）、精校字库（`split_bank.json`）、全量码表（`jdh_dict_multi.txt`）、拆分表（`jde.dict.yaml`）、字体与原始字根数据
 - `scripts/build.py`：Python 3 构建脚本，修改 `src/` 后运行 `python3 scripts/build.py` 即可重新生成 `index.html`
 - `scripts/build_fonts.py`：可选，重新生成内置字体（需要 `fonttools` 与 Noto Serif CJK 源字体）
+- `scripts/build_chart.py`：生成 `zigen-chart.svg`（高清字根图，文字全部转路径，不依赖字体）
+- `zigen-chart.svg`：站点根目录的可下载高清字根图，由 `build.py` 自动生成
+
+## 高清字根图
+
+「下载高清字根图 SVG」按钮直接下载站点根目录的 `zigen-chart.svg`。该文件的所有文字（包括私有区字形、部首、标点和注释）都已转成矢量路径，所以用相册、图片查看器或设计软件打开都不会出现方框，也不依赖设备字体。
 
 ## 内置字体
 

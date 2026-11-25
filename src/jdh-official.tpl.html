@@ -2373,67 +2373,15 @@ function renderVisualZigenChart() {
   });
 }
 
-function collectFontFaceCss() {
-  try {
-    const sheet = document.getElementById('jdh-font-css').sheet;
-    const rules = [];
-    for (const rule of sheet.cssRules) {
-      if (rule.type === CSSRule.FONT_FACE_RULE) rules.push(rule.cssText);
-    }
-    return rules.join('\n');
-  } catch (e) { return ''; }
-}
 function exportZigenSvg() {
-  const fontCss = collectFontFaceCss();
-  const rows = [
-    { keys: 'qwertyuiop', ox: 40, oy: 110 },
-    { keys: 'asdfghjkl', ox: 96, oy: 266 },
-    { keys: 'zxcvbnm', ox: 176, oy: 422 }
-  ];
-  const kw = 116, kh = 136, gap = 12;
-  let body = '';
-  rows.forEach(r => {
-    r.keys.split('').forEach((ch, idx) => {
-      const x = r.ox + idx * (kw + gap);
-      const y = r.oy;
-      const list = BYKEY[ch] || [];
-      const lines = list.map(i => CARDS[i].parts.join(' '));
-      body += `<rect x="${x}" y="${y}" width="${kw}" height="${kh}" rx="16" fill="#f5f5f7" stroke="#d2d2d7" stroke-width="1.5"/>`;
-      body += `<text x="${x + 14}" y="${y + 28}" font-family="Menlo,Consolas,monospace" font-size="18" font-weight="800" fill="#0071e3">${ch.toUpperCase()}</text>`;
-      if (STROKE_BADGE[ch]) body += `<text x="${x + kw - 14}" y="${y + 28}" text-anchor="end" font-family="JdhChai,PingFang SC,sans-serif" font-size="14" font-weight="700" fill="#e37400">${STROKE_BADGE[ch]}</text>`;
-      lines.slice(0, 5).forEach((ln, li) => {
-        const safe = ln.replace(/&/g, '&amp;').replace(/</g, '&lt;');
-        body += `<text x="${x + 14}" y="${y + 54 + li * 19}" font-family="JdhChai,KaiTi,serif" font-size="15" fill="#1d1d1f">${safe}</text>`;
-      });
-    });
-  });
-  const notes = [
-    '1. 键位 H 的笔画“点”类包括了笔画“捺（乀）”（如“哀”的末形）。',
-    '2. 键位 D 的笔画“横”类包括了笔画“提（㇀）”（如“刁”的末形）。',
-    '3. 键位 P 的笔画“竖”类包括了笔画“竖钩”（如“手”的末形）。',
-    '4. 键位 R 的笔画“折”类包括了各种折撇、折钩、横折钩、竖折钩、折折钩等（如“乃”的首形）。',
-    '5. 键位 N 的字根“囗”是框（如“圆”和“黑”的首形），而键位 O 的“口”是 kǒu（如“员”、“史”和“哟”的首形）。',
-    '6. 键位 H 的字根“釆”并非采集的采字，而是“番”字的上部。',
-    '7. 键位 Z 的字根“艹”是草字头（如“花”的首形），并非“廾”，类似“弄”的末形取“竖”。'
-  ];
-  const notesSvg = notes.map((t, i) => `<text x="40" y="${614 + i * 24}" font-family="JdhChai,PingFang SC,Microsoft YaHei,sans-serif" font-size="13.5" fill="#48484a">${t}</text>`).join('');
-  const svg = `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1360" height="800" viewBox="0 0 1360 800">
-  <defs><style><![CDATA[${fontCss}]]></style></defs>
-  <rect width="1360" height="800" fill="#ffffff"/>
-  <text x="40" y="54" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="28" font-weight="800" fill="#1d1d1f">简单鹤字根图 V9（26 键 · 共 97 组字根）</text>
-  <text x="40" y="82" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="14" fill="#6e6e73">轻羽落键，意到字成 · 拆分口诀：笔顺优先（无笔画粘连的口可无视笔顺），首末取大，相交也拆，插隔也取，字根字重复，禾取丿八</text>
-  ${body}
-  <text x="40" y="588" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="15" font-weight="700" fill="#1d1d1f">提示与注释：</text>
-  ${notesSvg}
-</svg>`;
-  const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+  // 静态矢量图：所有文字已转成路径，不依赖字体，任何查看器都不会出现方框
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = '简单鹤-26键字根图.svg';
+  a.href = 'zigen-chart.svg';
+  a.download = '简单鹤字根图-V9.svg';
+  document.body.appendChild(a);
   a.click();
-  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-  toast('已下载高清字根图 SVG');
+  a.remove();
+  toast('正在下载矢量字根图 SVG');
 }
 
 /* ==================== 7. 首页硬件键帽演示 ==================== */

@@ -80,7 +80,14 @@ def main():
         if count >= 1000:
             break
     chars |= top
-    chars = {c for c in chars if ord(c) > 0x2000}
+    # 字根图导出脚本里的标题、注释用字（含中文标点、笔画符号）
+    chart = (ROOT / "scripts" / "build_chart.py").read_text(encoding="utf-8")
+    chars |= {c for c in chart if not c.isascii()}
+
+    # 字根图注释里的拉丁字母、数字与带调韵母（如 kǒu）也需要覆盖
+    chars |= {chr(c) for c in range(0x20, 0x7F)}
+    chars |= {chr(c) for c in range(0xA0, 0x250)}
+    chars = {c for c in chars if ord(c) > 0x2000 or 0x20 <= ord(c) <= 0x7E or 0xA0 <= ord(c) <= 0x24F}
 
     cjk_path = os.environ.get("NOTO_CJK", "/workspace/NotoSerifCJK.ttc")
     coll = TTCollection(cjk_path)

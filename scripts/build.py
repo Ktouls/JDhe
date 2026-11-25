@@ -77,5 +77,14 @@ out = (
        .replace("__JDH_SHORT_CODE_LOOKUP__", json.dumps(short_code_lookup, ensure_ascii=False, separators=(",", ":")))
 )
 assert "__JDH_" not in out, "存在未替换占位符"
+
+# 顺带生成可直接下载的矢量字根图（文字已转路径，不依赖字体）
+try:
+    import build_chart
+
+    build_chart.main()
+    (ROOT / "zigen-chart.svg").write_bytes((SRC / "zigen-chart.svg").read_bytes())
+except Exception as exc:  # 缺少 fonttools 时不影响主页面构建
+    print(f"跳过字根图生成：{exc}")
 (ROOT / "index.html").write_text(out, encoding="utf-8")
 print(f"构建完成: index.html ({len(out.encode('utf-8')):,} bytes)")
