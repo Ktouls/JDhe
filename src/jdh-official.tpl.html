@@ -2102,7 +2102,6 @@ body::after {
         <div class="hero-status">
           <span>字根掌握 <b id="homeMastered">0 / 97</b></span>
           <span>上手进度 <b id="homeRoadmapPct">0 / 5</b></span>
-          <span id="homeTrackHint">当前模式：完整 5 步（含小鹤双拼）</span>
         </div>
       </div>
 
@@ -3353,9 +3352,6 @@ function applySkipSpUi() {
   $('trackSkip').classList.toggle('active', sk);
   $('headerSkipBtn').classList.toggle('on', sk);
   $('headerSkipLabel').textContent = sk ? '已跳过双拼' : '含双拼引导';
-  const hintEl = $('homeTrackHint');
-  hintEl.textContent = sk ? '当前模式：4 步极速路径（已跳过小鹤双拼）' : '当前模式：完整 5 步（含小鹤双拼）';
-  hintEl.classList.remove('hint-flash'); void hintEl.offsetWidth; hintEl.classList.add('hint-flash');
   $('heroPrimaryBtn').textContent = sk ? '直接开始练字根 ↗' : '开启上手之旅 ↗';
   requestAnimationFrame(syncTrackThumb);
   $('rmSkipToggleBtn').textContent = sk ? '✓ 已跳过小鹤双拼（点此恢复）' : '我已熟练小鹤双拼，跳过第 1 步';
