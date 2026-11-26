@@ -598,6 +598,11 @@ button, input { font-family: inherit; }
 .qq-quiz-body { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line-strong); }
 .qq-quiz-q { margin-bottom: 8px; }
 .qq-quiz-q strong { color: var(--ink); display: block; }
+.qq-list { display: flex; flex-direction: column; gap: 10px; }
+.qq-item { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 11px 14px; font-size: 13.5px; line-height: 1.7; }
+.qq-item strong { display: block; color: var(--ink); font-weight: 700; }
+.qq-item span { color: var(--ink-soft); }
+.qq-item a { font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
 .zg-keycap .zk-roots {
   font-family: 'JdhChai', "KaiTi", "Noto Serif CJK SC", serif;
   font-size: 15.5px;
@@ -2760,18 +2765,7 @@ body::after {
         <div>
           <h3>简单鹤交流群 <span class="tag tag-blue">社区</span></h3>
           <p>获取码表作者「简单」的最新码表、字根图、容错更新以及新手答疑互助。</p>
-          <details class="qq-quiz">
-            <summary><span>入群验证问题（点击展开）</span><span>▾</span></summary>
-            <div class="qq-quiz-body">
-              <div style="margin-bottom:8px;color:var(--ink);font-weight:600">将以下问题答案的选项相乘：</div>
-              <div class="qq-quiz-q"><strong>1. 简单鹤是什么类型的方案：</strong>2. 音码　3. 形码　5. 音形码　7. 形音码</div>
-              <div class="qq-quiz-q"><strong>2. 简单鹤有无理码吗？</strong>11. 无　13. 有</div>
-              <div class="qq-quiz-q"><strong>3. 简单鹤的字根数量在：</strong>17. 0~70　19. 70~140　23. 140~210　29. 210+</div>
-              <div class="qq-quiz-q"><strong>4. 音形无上秘籍是谁写的？</strong>31. 简单　37. 深白　41. 鲸鱼会唱歌　43. Cloud</div>
-              <div class="qq-quiz-q"><strong>5. 丨的编码是</strong>47. p　53. r</div>
-              <div class="qq-quiz-q" style="margin-bottom:0"><strong>6. 简单鹤推荐的打法</strong>57. 四码定长　59. 不定长</div>
-            </div>
-          </details>
+          <button class="btn btn-soft btn-sm" id="openQuizBtn" type="button">入群验证问题 ↗</button>
         </div>
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
           <span class="mono" style="font-size:14px;background:var(--bg);padding:6px 12px;border-radius:999px;border:1px solid var(--line)">QQ 群 605928107</span>
@@ -2797,6 +2791,25 @@ body::after {
 </footer>
 
 <!-- ==================== MODALS ==================== -->
+<div class="mask" id="maskQuiz">
+  <div class="modal">
+    <h2>入群验证问题</h2>
+    <div class="desc">将以下 6 题所选选项的数字相乘，把结果填进进群验证框</div>
+    <div class="qq-list">
+      <div class="qq-item"><strong>1. 简单鹤是什么类型的方案</strong><span>2. 音码　3. 形码　5. 音形码　7. 形音码</span></div>
+      <div class="qq-item"><strong>2. 简单鹤有无理码吗？</strong><span>11. 无　13. 有</span></div>
+      <div class="qq-item"><strong>3. 简单鹤的字根数量在</strong><span>17. 0~70　19. 70~140　23. 140~210　29. 210+</span></div>
+      <div class="qq-item"><strong>4. <a href="https://flauver.github.io/jdh/secret_manual.html" target="_blank" rel="noopener noreferrer">音形无上秘籍 ↗</a>是谁写的？</strong><span>31. 简单　37. 深白　41. 鲸鱼会唱歌　43. Cloud</span></div>
+      <div class="qq-item"><strong>5. 丨的编码是</strong><span>47. p　53. r</span></div>
+      <div class="qq-item"><strong>6. 简单鹤推荐的打法</strong><span>57. 四码定长　59. 不定长</span></div>
+    </div>
+    <div class="modal-foot">
+      <a class="btn btn-outline btn-sm" href="https://flauver.github.io/jdh/secret_manual.html" target="_blank" rel="noopener noreferrer">打开音形无上秘籍 ↗</a>
+      <button class="btn btn-primary btn-sm" data-close-mask type="button">知道了</button>
+    </div>
+  </div>
+</div>
+
 <div class="mask" id="maskHelp">
   <div class="modal">
     <h2>97 字根练习须知</h2>
@@ -4667,6 +4680,8 @@ function bindEvents() {
   $('winRestartBtn').addEventListener('click', () => { closeMasks(); zgRestart(true); });
   document.querySelectorAll('[data-close-mask]').forEach(b => b.addEventListener('click', closeMasks));
   document.querySelectorAll('.mask').forEach(m => m.addEventListener('click', e => { if (e.target === m) closeMasks(); }));
+
+  $('openQuizBtn').addEventListener('click', () => openMask('maskQuiz'));
 
   $('copyQqBtn').addEventListener('click', () => {
     const txt = '605928107';
