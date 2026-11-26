@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>简单鹤 — 轻羽落键，意到字成</title>
+<title>简单鹤JDhe · 轻羽落键，意到字成。</title>
 <style id="jdh-font-css">
 @font-face {
   font-family: 'JdhChai';
@@ -19,55 +19,78 @@
 }
 
 :root {
-  --bg: #ffffff;
-  --surface: #f5f5f7;
-  --surface-2: #eaeaee;
-  --surface-dark: #0a0b0f;
-  --glass: rgba(255, 255, 255, 0.8);
-  --ink: #1d1d1f;
-  --ink-soft: #6e6e73;
-  --ink-faint: #86868b;
-  --line: rgba(0, 0, 0, 0.07);
-  --line-strong: rgba(0, 0, 0, 0.14);
-  --blue: #0071e3;
-  --blue-hover: #0077ed;
-  --blue-soft: rgba(0, 113, 227, 0.1);
-  --ok: #188038;
-  --ok-soft: rgba(24, 128, 56, 0.11);
-  --bad: #d93025;
-  --bad-soft: rgba(217, 48, 37, 0.11);
-  --amber: #e37400;
-  --amber-soft: rgba(227, 116, 0, 0.11);
-  --radius-sm: 12px;
-  --radius-md: 20px;
-  --radius-lg: 28px;
-  --radius-xl: 34px;
-  --shadow-pop: 0 24px 64px rgba(0, 0, 0, 0.16);
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Google Sans", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  --bg: #fbfcfe;
+  --surface: #ffffff;
+  --surface-2: #eef2f7;
+  --surface-card: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  --surface-dark: #080d1a;
+  --glass: rgba(248, 250, 252, 0.82);
+  --ink: #0f172a;
+  --ink-soft: #475569;
+  --ink-faint: #64748b;
+  --line: rgba(15, 23, 42, 0.08);
+  --line-strong: rgba(15, 23, 42, 0.15);
+  --blue: #2563eb;
+  --blue-solid: #2563eb;
+  --blue-hover: #1d4ed8;
+  --blue-soft: rgba(37, 99, 235, 0.1);
+  --blue-glow: 0 8px 24px rgba(37, 99, 235, 0.28);
+  --dot-color: rgba(37, 99, 235, 0.085);
+  --aura-top: radial-gradient(ellipse 80% 420px at 50% -90px, rgba(59, 130, 246, 0.14), rgba(56, 189, 248, 0.05) 46%, transparent 74%);
+  --wave-a: rgba(37, 99, 235, 0.24);
+  --wave-b: rgba(14, 165, 233, 0.26);
+  --wave-c: rgba(99, 102, 241, 0.18);
+  --wave-pulse: rgba(37, 99, 235, 0.52);
+  --card-rim: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --card-hover-shadow: 0 14px 34px rgba(15, 23, 42, 0.07), 0 0 0 1px rgba(37, 99, 235, 0.22);
+  --ok: #16a34a;
+  --ok-soft: rgba(22, 163, 74, 0.11);
+  --bad: #dc2626;
+  --bad-soft: rgba(220, 38, 38, 0.11);
+  --amber: #d97706;
+  --amber-soft: rgba(217, 119, 6, 0.12);
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 26px;
+  --shadow-pop: 0 24px 64px rgba(15, 23, 42, 0.18);
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Inter", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  --font-serif: "Noto Serif SC", "Songti SC", "Source Han Serif SC", "STSong", Georgia, serif;
   --font-mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
 }
 
-[data-theme="dark"] {
-  --bg: #000000;
-  --surface: #161617;
-  --surface-2: #232326;
-  --surface-dark: #101218;
-  --glass: rgba(0, 0, 0, 0.78);
-  --ink: #f5f5f7;
-  --ink-soft: #a1a1a6;
-  --ink-faint: #6e6e73;
-  --line: rgba(255, 255, 255, 0.09);
-  --line-strong: rgba(255, 255, 255, 0.18);
-  --blue: #2997ff;
-  --blue-hover: #47a7ff;
-  --blue-soft: rgba(41, 151, 255, 0.16);
-  --ok: #34a853;
-  --ok-soft: rgba(52, 168, 83, 0.16);
-  --bad: #f28b82;
-  --bad-soft: rgba(242, 139, 130, 0.16);
-  --amber: #fbbc04;
-  --amber-soft: rgba(251, 188, 4, 0.16);
-  --shadow-pop: 0 28px 72px rgba(0, 0, 0, 0.65);
+:root[data-theme="dark"] {
+  --bg: #050811;
+  --wave-a: rgba(59, 130, 246, 0.34);
+  --wave-b: rgba(56, 189, 248, 0.30);
+  --wave-c: rgba(129, 140, 248, 0.24);
+  --wave-pulse: rgba(96, 165, 250, 0.85);
+  --surface: #0c1220;
+  --surface-2: #151e33;
+  --surface-card: linear-gradient(180deg, rgba(16, 23, 41, 0.92) 0%, rgba(10, 15, 28, 0.96) 100%);
+  --surface-dark: #090e1c;
+  --glass: rgba(6, 10, 20, 0.78);
+  --ink: #f8fafc;
+  --ink-soft: #94a3b8;
+  --ink-faint: #64748b;
+  --line: rgba(148, 163, 184, 0.13);
+  --line-strong: rgba(148, 163, 184, 0.24);
+  --blue: #3b82f6;
+  --blue-solid: #2563eb;
+  --blue-hover: #60a5fa;
+  --blue-soft: rgba(59, 130, 246, 0.15);
+  --blue-glow: 0 8px 28px rgba(37, 99, 235, 0.42), 0 0 0 1px rgba(96, 165, 250, 0.35);
+  --dot-color: rgba(148, 163, 184, 0.11);
+  --aura-top: radial-gradient(ellipse 78% 440px at 50% -90px, rgba(37, 99, 235, 0.2), rgba(56, 189, 248, 0.06) 42%, transparent 72%);
+  --card-rim: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --card-hover-shadow: 0 18px 42px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(59, 130, 246, 0.35);
+  --ok: #34d399;
+  --ok-soft: rgba(52, 211, 153, 0.15);
+  --bad: #f87171;
+  --bad-soft: rgba(248, 113, 113, 0.15);
+  --amber: #fbbf24;
+  --amber-soft: rgba(251, 191, 36, 0.15);
+  --shadow-pop: 0 28px 72px rgba(0, 0, 0, 0.72);
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -1005,6 +1028,755 @@ tr:last-child td { border-bottom: 0; }
 
 .site-footer { border-top: 1px solid var(--line); padding: 28px 22px; text-align: center; font-size: 12.5px; color: var(--ink-faint); }
 
+
+/* ==================== ReadOS-Inspired Visual Refinements ==================== */
+body { position: relative; }
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 0;
+}
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: var(--aura-top);
+  pointer-events: none;
+  z-index: 0;
+}
+.site-header, .container, .site-footer { position: relative; z-index: 1; }
+
+/* Scroll progress hairline on navbar */
+.scroll-progress {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, #2563eb 0%, #3b82f6 55%, #38bdf8 100%);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.65);
+  transition: width 0.08s linear;
+  pointer-events: none;
+}
+
+/* Nav active dot indicator */
+.nav-btn { position: relative; }
+.nav-btn.active {
+  background: transparent;
+  color: var(--ink);
+  font-weight: 600;
+}
+.nav-btn.active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--blue);
+  box-shadow: 0 0 10px var(--blue);
+}
+
+/* Blur-to-clear reveal animation */
+.view { animation: blurReveal 0.34s cubic-bezier(0.22, 1, 0.36, 1); }
+.subpanel.active { animation: blurReveal 0.26s cubic-bezier(0.22, 1, 0.36, 1); }
+@keyframes blurReveal {
+  from { opacity: 0; transform: translateY(10px); filter: blur(5px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+
+/* Hero editorial serif + pill eyebrow + capability slash strip */
+.hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  box-shadow: var(--card-rim);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin-bottom: 20px;
+  letter-spacing: 0.02em;
+}
+.hero-pill .pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--blue);
+  box-shadow: 0 0 10px var(--blue);
+}
+.hero-title {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.14;
+}
+.hero-title .grad {
+  background: linear-gradient(95deg, #1d4ed8 0%, #2563eb 50%, #0284c7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+[data-theme="dark"] .hero-title .grad {
+  background: linear-gradient(95deg, #e0f2fe 0%, #60a5fa 52%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero-caps {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-faint);
+  letter-spacing: 0.02em;
+}
+.hero-caps .slash { opacity: 0.4; }
+
+/* Luminous primary CTA & refined secondary buttons */
+.btn-primary {
+  background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+  color: #ffffff;
+  box-shadow: var(--blue-glow);
+}
+.btn-primary:hover {
+  background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%);
+  transform: translateY(-1px);
+}
+.btn-outline {
+  background: rgba(148, 163, 184, 0.05);
+  border-color: var(--line-strong);
+}
+.btn-outline:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: var(--blue-soft);
+}
+
+/* Numbered section eyebrows (ReadOS 01 | ... style) */
+.sec-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--blue);
+  letter-spacing: 0.02em;
+}
+.sec-eyebrow .num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-faint);
+}
+.sec-eyebrow .sep { color: var(--line-strong); }
+.section-head h2 {
+  font-family: var(--font-sans);
+  font-weight: 800;
+}
+.section-head h2 .serif-accent {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  background: linear-gradient(95deg, #1d4ed8 0%, #2563eb 55%, #0284c7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+[data-theme="dark"] .section-head h2 .serif-accent {
+  background: linear-gradient(95deg, #e0f2fe 0%, #60a5fa 55%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Elevated Bento, Card, Eco, Step & Showcase surfaces */
+.bento-card, .card, .eco-card, .step-card, .roadmap-bar, .hud, .qcard, .zcell, .code-item {
+  background: var(--surface-card);
+  box-shadow: var(--card-rim);
+}
+.bento-card:hover, .eco-card:hover {
+  border-color: rgba(59, 130, 246, 0.42);
+  box-shadow: var(--card-rim), var(--card-hover-shadow);
+}
+.bento-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+.bento-eyebrow .be-cat { color: var(--blue); }
+.bento-eyebrow .be-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-faint);
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+}
+.bento-icon {
+  background: var(--blue-soft);
+  border-color: rgba(59, 130, 246, 0.25);
+}
+
+/* Showcase workspace frame */
+.showcase {
+  background: linear-gradient(160deg, #0d1528 0%, #070b16 62%, #0a1020 100%);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: 0 24px 64px rgba(2, 6, 23, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.showcase::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 12% 110%, rgba(56, 189, 248, 0.12), transparent 48%);
+  pointer-events: none;
+}
+.showcase-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 10px;
+}
+.showcase-dots i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(148, 163, 184, 0.28);
+  display: block;
+}
+.showcase-dots i:first-child { background: rgba(248, 113, 113, 0.65); }
+.showcase-dots i:nth-child(2) { background: rgba(251, 191, 36, 0.65); }
+.showcase-dots i:nth-child(3) { background: rgba(52, 211, 153, 0.65); }
+.demo-pill.active {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #60a5fa;
+  box-shadow: 0 0 18px rgba(37, 99, 235, 0.48);
+}
+
+/* Practice & Keyboard polish */
+.slot {
+  background: var(--bg);
+  border-color: var(--line-strong);
+}
+.slot.active {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px var(--blue-soft), 0 0 18px rgba(59, 130, 246, 0.28);
+}
+.vkey {
+  background: var(--surface);
+  border-color: var(--line-strong);
+  box-shadow: 0 2px 0 var(--line), var(--card-rim);
+}
+.chip.active {
+  background: var(--blue-solid);
+  border-color: var(--blue);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.32);
+}
+.subtab.active {
+  background: var(--blue-solid);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+}
+[data-theme="dark"] .subtab.active {
+  background: var(--blue-solid);
+  color: #ffffff;
+}
+.track-opt.active {
+  background: var(--blue-solid);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.32);
+}
+[data-theme="dark"] .track-opt.active {
+  background: var(--blue-solid);
+  color: #ffffff;
+}
+.dock-btn.active {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+
+/* ==================== ReadOS Background Wave & Typography Motion ==================== */
+
+
+/* Gentle breathing top aura */
+body::after {
+  animation: auraDrift 16s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+@keyframes auraDrift {
+  0% { transform: translate3d(-2%, 0, 0) scale(1); opacity: 0.88; }
+  50% { transform: translate3d(2%, 12px, 0) scale(1.05); opacity: 1; }
+  100% { transform: translate3d(-1%, -6px, 0) scale(1.02); opacity: 0.92; }
+}
+
+/* Flowing Fiber-Optic Light Waves SVG Background */
+.bg-waves {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  opacity: 0.9;
+}
+.bg-waves path.wave-base {
+  fill: none;
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+.bg-waves path.wave-pulse {
+  fill: none;
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 180 1200;
+  animation: waveFlow 11s linear infinite;
+}
+.bg-waves path.wave-pulse.p2 {
+  stroke-dasharray: 140 1350;
+  animation-duration: 14.5s;
+  animation-delay: -4.2s;
+}
+.bg-waves path.wave-pulse.p3 {
+  stroke-dasharray: 210 1400;
+  animation-duration: 17s;
+  animation-delay: -8.5s;
+}
+.bg-waves .wave-group-1 { animation: waveFloat1 18s ease-in-out infinite alternate; transform-origin: center; }
+.bg-waves .wave-group-2 { animation: waveFloat2 22s ease-in-out infinite alternate; transform-origin: center; }
+@keyframes waveFlow {
+  from { stroke-dashoffset: 1380; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes waveFloat1 {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(18px); }
+}
+@keyframes waveFloat2 {
+  0% { transform: translateY(10px); }
+  100% { transform: translateY(-14px); }
+}
+
+/* Staggered Blur-to-Clear Typography Reveal */
+.t-reveal {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(11px);
+  transform: translateY(16px) scale(0.985);
+  animation: typeBlurIn 0.78s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--d, 0ms);
+}
+.hero-pill.t-reveal { display: inline-flex; }
+.hero-sub.t-reveal { display: block; }
+@keyframes typeBlurIn {
+  0% { opacity: 0; filter: blur(11px); transform: translateY(16px) scale(0.985); }
+  100% { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); }
+}
+
+/* Shimmering Gradient Typography */
+.hero-title .grad,
+.section-head h2 .serif-accent {
+  background-size: 220% auto;
+  animation: typeBlurIn 0.82s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 160ms) forwards, textShimmer 7.5s ease-in-out infinite;
+}
+.section-head h2 .serif-accent {
+  animation: textShimmer 7.5s ease-in-out infinite;
+}
+@keyframes textShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Scroll-Triggered Blur-to-Clear Reveal for Sections & Cards */
+.sr-item {
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(18px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--sr-d, 0ms);
+}
+.sr-item.sr-in {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::after, .bg-waves *, .t-reveal, .hero-title .grad, .section-head h2 .serif-accent {
+    animation: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+  }
+  .sr-item { opacity: 1; filter: none; transform: none; transition: none; }
+}
+
+
+/* Ensure every dark-mode inner surface stays genuinely dark */
+[data-theme="dark"] .zg-keycap,
+[data-theme="dark"] .sp-key,
+[data-theme="dark"] .zg-detail-bar,
+[data-theme="dark"] .zg-notes,
+[data-theme="dark"] .qq-quiz,
+[data-theme="dark"] .sp-detail,
+[data-theme="dark"] .tbl-wrap,
+[data-theme="dark"] .modal {
+  background: #0a101e;
+  border-color: var(--line-strong);
+}
+[data-theme="dark"] .zg-keycap:hover,
+[data-theme="dark"] .sp-key:hover {
+  background: rgba(59, 130, 246, 0.14);
+}
+[data-theme="dark"] .search-input {
+  background: #0c1324;
+  color: var(--ink);
+}
+[data-theme="dark"] .search-input:focus {
+  background: #0a101e;
+}
+[data-theme="dark"] .btn-dark {
+  background: #f8fafc;
+  color: #050811;
+}
+
+
+/* ==================== ReadOS Asymmetric Hero, 3D Stage, Visual Bento & Marquee ==================== */
+.hero-split {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.28fr);
+  gap: 36px;
+  align-items: center;
+  margin: 18px 0 30px;
+}
+.hero-left {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.hero-left .hero-title {
+  margin: 0 0 18px;
+  font-size: clamp(38px, 4.8vw, 60px);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+}
+.hero-left .hero-sub {
+  margin: 0 0 22px;
+  max-width: 440px;
+  font-size: 15.5px;
+  line-height: 1.7;
+}
+.hero-left .track-switch { margin-bottom: 20px; }
+.hero-left .hero-ctas { justify-content: flex-start; margin-bottom: 16px; }
+.hero-left .hero-caps { justify-content: flex-start; margin-bottom: 10px; }
+.hero-left .hero-status { justify-content: flex-start; gap: 14px; font-size: 12.5px; }
+
+/* Per-character kinetic blur-to-clear reveal */
+.kchar {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(12px);
+  transform: translateY(18px) scale(0.96);
+  animation: kcharIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: calc(var(--i, 0) * 48ms + 60ms);
+}
+@keyframes kcharIn {
+  0% { opacity: 0; filter: blur(12px); transform: translateY(18px) scale(0.96); }
+  100% { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); }
+}
+.hero-title .grad .kchar {
+  background: linear-gradient(95deg, #1d4ed8 0%, #2563eb 50%, #0284c7 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: kcharIn 0.76s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i, 0) * 48ms + 90ms) forwards, textShimmer 7s ease-in-out infinite;
+}
+:root[data-theme="dark"] .hero-title .grad .kchar {
+  background: linear-gradient(95deg, #e0f2fe 0%, #60a5fa 52%, #38bdf8 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Right 3D Perspective Showcase Stage */
+.hero-right {
+  perspective: 1300px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.hero-right .showcase {
+  margin-bottom: 0;
+  padding: 24px 26px 24px;
+  border-radius: 24px;
+  transform: rotateY(-3.5deg) rotateX(2deg);
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s ease;
+  box-shadow: 0 28px 68px rgba(15, 23, 42, 0.24), 0 0 0 1px rgba(59, 130, 246, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+.hero-right .showcase:hover {
+  transform: rotateY(0deg) rotateX(0deg) translateY(-2px);
+  box-shadow: 0 34px 80px rgba(37, 99, 235, 0.22), 0 0 0 1px rgba(96, 165, 250, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+.hero-right .showcase-body { gap: 22px; }
+.hero-right .demo-glyph-box { min-width: 102px; padding: 14px 20px; }
+.hero-right .demo-glyph-box .big-hz { font-size: 56px; }
+.hero-right .hw-key { width: 56px; height: 64px; border-radius: 14px; }
+.hero-right .hw-key b { font-size: 21px; }
+
+/* ReadOS 3-Step Auto-Cycling Interactive Pills below Showcase */
+.hero-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.hero-step-pill {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.22s, color 0.22s, box-shadow 0.22s, transform 0.18s;
+  text-align: left;
+}
+.hero-step-pill:hover { border-color: var(--blue); color: var(--ink); transform: translateY(-1px); }
+.hero-step-pill .snum {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: 0.2s;
+}
+.hero-step-pill.active {
+  border-color: var(--blue);
+  color: var(--ink);
+  box-shadow: 0 0 0 3px var(--blue-soft);
+}
+.hero-step-pill.active .snum {
+  background: var(--blue-solid);
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
+}
+.hero-step-pill::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, #2563eb, #38bdf8);
+}
+.hero-step-pill.active::after {
+  animation: stepSweep 3.6s linear forwards;
+}
+@keyframes stepSweep { from { width: 0%; } to { width: 100%; } }
+
+/* Bottom Hero 4-Feature Strip (ReadOS style) */
+.hero-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px 26px;
+  padding: 14px 20px;
+  margin-bottom: 54px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+.hero-strip-item { display: inline-flex; align-items: center; gap: 8px; }
+.hero-strip-item i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--blue);
+  box-shadow: 0 0 8px var(--blue);
+  display: inline-block;
+}
+
+/* Mouse-follow spotlight glow on Bento cards */
+.bento-card {
+  position: relative;
+  overflow: hidden;
+}
+.bento-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(360px circle at var(--mx, 50%) var(--my, 0%), rgba(59, 130, 246, 0.11), transparent 65%);
+  opacity: 0;
+  transition: opacity 0.28s ease;
+  pointer-events: none;
+}
+.bento-card:hover::before { opacity: 1; }
+:root[data-theme="dark"] .bento-card::before {
+  background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 0%), rgba(59, 130, 246, 0.18), transparent 65%);
+}
+
+/* Visual Mini-UI Widgets inside ReadOS-style Bento Cards */
+.bento-viz {
+  margin-top: 4px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.viz-keys { display: flex; gap: 6px; flex-wrap: wrap; }
+.viz-k {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.viz-k.hi {
+  border-color: var(--blue);
+  background: var(--blue-soft);
+  color: var(--blue);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.2);
+}
+.viz-bars { display: flex; align-items: flex-end; gap: 5px; height: 40px; }
+.viz-bars span {
+  flex: 1;
+  border-radius: 4px 4px 2px 2px;
+  background: var(--surface-2);
+  transition: height 0.3s ease;
+}
+.viz-bars span.hi {
+  background: linear-gradient(180deg, #38bdf8, #2563eb);
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.35);
+}
+.viz-cand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  font-weight: 600;
+}
+.viz-cand .c1 {
+  padding: 3px 10px;
+  border-radius: 8px;
+  background: var(--blue-solid);
+  color: #ffffff;
+}
+.viz-cand .c2 { color: var(--ink-soft); }
+
+/* ReadOS Infinite Scrolling Marquee Strip (Row 4 Full-Width Banner) */
+.marquee-card {
+  grid-column: span 12;
+  padding: 22px 26px;
+  gap: 14px;
+}
+.marquee-wrap {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-track {
+  display: flex;
+  gap: 10px;
+  width: max-content;
+  animation: jdhMarquee 34s linear infinite;
+}
+.marquee-wrap:hover .marquee-track { animation-play-state: paused; }
+@keyframes jdhMarquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.mq-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  background: var(--bg);
+  border: 1px solid var(--line-strong);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.mq-pill code {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--blue);
+  background: var(--blue-soft);
+  padding: 1px 6px;
+  border-radius: 6px;
+}
+
+@media (max-width: 960px) {
+  .hero-split { grid-template-columns: 1fr; gap: 26px; }
+  .hero-left { align-items: center; text-align: center; }
+  .hero-left .hero-ctas, .hero-left .hero-caps, .hero-left .hero-status { justify-content: center; }
+  .hero-right .showcase { transform: none; }
+}
+@media (max-width: 640px) {
+  .hero-steps { grid-template-columns: 1fr; }
+  .hero-strip { gap: 8px 14px; font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kchar, .marquee-track, .hero-step-pill.active::after { animation: none !important; opacity: 1 !important; filter: none !important; transform: none !important; }
+}
+
 /* ==================== Mobile & Tablet Adaptation ==================== */
 @media (max-width: 920px) {
   .span-7, .span-5, .span-4, .span-6 { grid-column: span 12; }
@@ -1057,6 +1829,32 @@ tr:last-child td { border-bottom: 0; }
 </style>
 </head>
 <body>
+<svg class="bg-waves" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="jdhWaveGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="transparent"/>
+      <stop offset="22%" stop-color="var(--wave-a)"/>
+      <stop offset="55%" stop-color="var(--wave-b)"/>
+      <stop offset="85%" stop-color="var(--wave-c)"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </linearGradient>
+    <linearGradient id="jdhWavePulse" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="transparent"/>
+      <stop offset="50%" stop-color="var(--wave-pulse)"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </linearGradient>
+  </defs>
+  <g class="wave-group-1">
+    <path class="wave-base" stroke="url(#jdhWaveGrad1)" d="M-120,210 C220,90 480,320 820,190 C1100,85 1300,240 1560,150"/>
+    <path class="wave-pulse" stroke="url(#jdhWavePulse)" d="M-120,210 C220,90 480,320 820,190 C1100,85 1300,240 1560,150"/>
+    <path class="wave-base" stroke="url(#jdhWaveGrad1)" opacity="0.65" d="M-100,520 C260,640 580,410 930,540 C1180,630 1360,470 1560,550"/>
+    <path class="wave-pulse p2" stroke="url(#jdhWavePulse)" d="M-100,520 C260,640 580,410 930,540 C1180,630 1360,470 1560,550"/>
+  </g>
+  <g class="wave-group-2">
+    <path class="wave-base" stroke="url(#jdhWaveGrad1)" opacity="0.5" d="M-140,760 C280,660 620,840 980,710 C1220,625 1380,760 1580,690"/>
+    <path class="wave-pulse p3" stroke="url(#jdhWavePulse)" d="M-140,760 C280,660 620,840 980,710 C1220,625 1380,760 1580,690"/>
+  </g>
+</svg>
 
 <header class="site-header">
   <div class="header-inner">
@@ -1076,7 +1874,7 @@ tr:last-child td { border-bottom: 0; }
         <!-- 丹顶朱点（极细微品牌灵魂点睛） -->
         <circle cx="30.6" cy="13.7" r="1.25" fill="#e11d48"/>
       </svg>
-      <span>简单鹤</span>
+      <span>简单鹤 · JDhe</span>
     </button>
 
     <nav class="main-nav" aria-label="主导航">
@@ -1105,108 +1903,163 @@ tr:last-child td { border-bottom: 0; }
       <button class="dock-btn" data-route="ecosystem" type="button">下载</button>
     </div>
   </nav>
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 </header>
 
 <main class="container">
 
   <!-- ==================== VIEW 1: 概览 ==================== -->
   <section class="view active" id="view-home">
-    <div class="hero-center">
-      <h1 class="hero-title">极简音形，<br><span class="grad">为盲打而生。</span></h1>
-      <p class="hero-sub">
-        <strong style="color:var(--ink);font-weight:600">轻羽落键，意到字成。</strong>小鹤双拼与 97 个乱序字根的纯粹结合，单字低重、字词不重、没有小字。
-      </p>
+    <div class="hero-split">
+      <div class="hero-left">
+        <div class="hero-pill t-reveal" style="--d:0ms"><span class="pulse-dot"></span><span>简单鹤 · 极简音形输入法</span></div>
+        <h1 class="hero-title" aria-label="极简音形，为盲打而生。"><span class="kchar" style="--i:0">极</span><span class="kchar" style="--i:1">简</span><span class="kchar" style="--i:2">音</span><span class="kchar" style="--i:3">形</span><span class="kchar" style="--i:4">，</span><br><span class="grad"><span class="kchar" style="--i:5">为</span><span class="kchar" style="--i:6">盲</span><span class="kchar" style="--i:7">打</span><span class="kchar" style="--i:8">而</span><span class="kchar" style="--i:9">生</span><span class="kchar" style="--i:10">。</span></span></h1>
+        <p class="hero-sub t-reveal" style="--d:320ms">
+          <strong style="color:var(--ink);font-weight:600">轻羽落键，意到字成。</strong>小鹤双拼与 97 个乱序字根的纯粹结合，单字低重、字词不重、没有小字。
+        </p>
 
-      <div class="track-switch" role="group" aria-label="选择你的起步方式">
-        <button class="track-opt active" id="trackZero" type="button">零基础 · 从双拼起步</button>
-        <button class="track-opt" id="trackSkip" type="button">已熟练小鹤双拼 · 跳过</button>
+        <div class="track-switch" role="group" aria-label="选择你的起步方式">
+          <button class="track-opt active" id="trackZero" type="button">零基础 · 从双拼起步</button>
+          <button class="track-opt" id="trackSkip" type="button">已熟练小鹤双拼 · 跳过</button>
+        </div>
+
+        <div class="hero-ctas">
+          <button class="btn btn-primary" id="heroPrimaryBtn" type="button">开启上手之旅 ↗</button>
+          <button class="btn btn-outline" data-jump="guide:g-chart" type="button">交互字根图</button>
+          <button class="btn btn-outline" data-jump="ecosystem" type="button">全端下载</button>
+        </div>
+
+        <div class="hero-caps">
+          <span>双拼 2 码</span><span class="slash">/</span>
+          <span>首末形 2 码</span><span class="slash">/</span>
+          <span>97 乱序字根</span><span class="slash">/</span>
+          <span>20,877 字离线全词库</span>
+        </div>
+
+        <div class="hero-status">
+          <span>字根掌握 <b id="homeMastered">0 / 97</b></span>
+          <span>上手进度 <b id="homeRoadmapPct">0 / 5</b></span>
+          <span id="homeTrackHint">当前模式：完整 5 步（含小鹤双拼）</span>
+        </div>
       </div>
 
-      <div class="hero-ctas">
-        <button class="btn btn-primary" id="heroPrimaryBtn" type="button">开启上手之旅</button>
-        <button class="btn btn-dark" data-jump="guide:g-chart" type="button">交互字根图</button>
-        <button class="btn btn-outline" data-jump="ecosystem" type="button">全端方案下载</button>
-      </div>
+      <!-- 右侧 3D 透视交互演示工作台 + 3 步自动轮播胶囊 -->
+      <div class="hero-right">
+        <div class="showcase">
+          <div class="showcase-top">
+            <div class="showcase-kicker" style="display:flex;align-items:center"><span class="showcase-dots" aria-hidden="true"><i></i><i></i><i></i></span>交互原理演示 · 双拼 2 码 + 首末字根 2 码</div>
+            <div class="demo-pills" id="demoChars"></div>
+          </div>
+          <div class="showcase-body" id="demoStage"></div>
+        </div>
 
-      <div class="hero-status">
-        <span>字根掌握 <b id="homeMastered">0 / 97</b></span>
-        <span>上手进度 <b id="homeRoadmapPct">0 / 5</b></span>
-        <span id="homeTrackHint">当前模式：完整 5 步（含小鹤双拼）</span>
+        <div class="hero-steps" id="heroSteps">
+          <button class="hero-step-pill active" data-step-idx="0" type="button"><span class="snum">1</span><span>双拼定前两码</span></button>
+          <button class="hero-step-pill" data-step-idx="1" type="button"><span class="snum">2</span><span>首末根定后两码</span></button>
+          <button class="hero-step-pill" data-step-idx="2" type="button"><span class="snum">3</span><span>四码直出免选重</span></button>
+        </div>
       </div>
     </div>
 
-    <!-- 深色硬件键帽交互演示区 -->
-    <div class="showcase">
-      <div class="showcase-top">
-        <div class="showcase-kicker">交互原理演示 · 双拼 2 码 + 首末字根 2 码</div>
-        <div class="demo-pills" id="demoChars"></div>
-      </div>
-      <div class="showcase-body" id="demoStage"></div>
+    <div class="hero-strip">
+      <span class="hero-strip-item"><i></i>97 个乱序字根最快 1h 入门</span>
+      <span class="hero-strip-item"><i></i>0 小字负担 · 笔顺直观拆</span>
+      <span class="hero-strip-item"><i></i>三码单字 + 四码首选词</span>
+      <span class="hero-strip-item"><i></i>20,877 单字与 23,153 简词离线即练</span>
     </div>
 
-    <!-- Bento 特性网格 -->
+    <!-- ReadOS 风格混合 Bento 特性网格 -->
     <div class="section-head">
       <div>
-        <h2>轻盈上手，久打不倦。</h2>
-        <p>四个克制而彻底的设计原则，让音形输入法真正回归直觉。</p>
+        <div class="sec-eyebrow"><span class="num">01</span><span class="sep">|</span><span>核心设计原则</span></div>
+        <h2>轻盈上手，<span class="serif-accent">久打不倦。</span></h2>
       </div>
+      <p style="max-width:360px">四个克制而彻底的设计原则，让音形输入法真正回归直觉与肌肉记忆。</p>
     </div>
 
     <div class="bento">
+      <!-- Row 1: 7 + 5 非对称双栏（带微型可视化 UI） -->
       <div class="bento-card span-7">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start">
-          <div class="bento-metric">97<span>字根 · 最快 1h 入门</span></div>
-          <div class="bento-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M7 10h.01M11 10h.01M15 10h.01M8 14h8"/></svg>
-          </div>
-        </div>
         <div>
-          <h3>乱序字根，敲键即记</h3>
+          <div class="bento-eyebrow"><span class="be-cat">字根记忆</span><span class="be-tag">97 ROOTS · 1H</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px">
+            <div class="bento-metric">97<span>字根 · 最快 1h 入门</span></div>
+            <div class="bento-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M7 10h.01M11 10h.01M15 10h.01M8 14h8"/></svg>
+            </div>
+          </div>
+          <h3 style="margin-top:14px">乱序字根，敲键即记</h3>
           <p>无需死背口诀。借助内置间隔重复练习器高频敲击，最快一小时即可在指尖建立条件反射，彻底告别边打字边翻表。</p>
         </div>
+        <div class="bento-viz">
+          <div class="viz-keys">
+            <span class="viz-k">Q <span class="chai">鱼 户 走</span></span>
+            <span class="viz-k">W <span class="chai">木 付 田</span></span>
+            <span class="viz-k hi">E <span class="chai">人 丝 夫</span></span>
+            <span class="viz-k">R <span class="chai">止 广 厂</span></span>
+            <span class="viz-k">V <span class="chai">日 甘</span></span>
+          </div>
+        </div>
       </div>
 
       <div class="bento-card span-5">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start">
-          <div class="bento-metric">0<span>小字负担</span></div>
-          <div class="bento-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
-          </div>
-        </div>
         <div>
-          <h3>没有小字，拆分直观</h3>
+          <div class="bento-eyebrow"><span class="be-cat">拆分逻辑</span><span class="be-tag">0 SMALL ROOTS</span></div>
+          <div class="bento-metric">0<span>小字负担</span></div>
+          <h3 style="margin-top:14px">没有小字，拆分直观</h3>
           <p>遵循笔顺优先与首末取大，遇生僻字也能第一眼直观拆出，并内置贴心容错码表，直觉拆分就能上屏。</p>
         </div>
+        <div class="bento-viz">
+          <div class="viz-keys">
+            <span class="viz-k">由</span>
+            <span class="viz-k hi">首形 日 · V</span>
+            <span class="viz-k hi">末形 丨 · P</span>
+          </div>
+        </div>
       </div>
 
-      <div class="bento-card span-5">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <!-- Row 2: 4 + 4 + 4 三栏（低重 + 字词避重 + 实战入口） -->
+      <div class="bento-card span-4">
+        <div>
+          <div class="bento-eyebrow"><span class="be-cat">离散分布</span><span class="be-tag">LOW COLLISION</span></div>
           <div class="bento-metric">低重<span>轻松盲打</span></div>
-          <div class="bento-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>
-          </div>
+          <h3 style="margin-top:12px">单字低重，离散分布</h3>
+          <p>乱序分布让同音字的首末形码高度离散，大幅压缩选重率，把注意力留在思考本身。</p>
         </div>
-        <div>
-          <h3>单字低重，离散分布</h3>
-          <p>乱序分布让同音字的首末形码高度离散，大幅压缩选重率，让你把注意力留在思考本身，而非候选栏。</p>
+        <div class="bento-viz">
+          <div class="viz-bars" aria-hidden="true">
+            <span style="height:42%"></span><span style="height:68%"></span><span class="hi" style="height:92%"></span><span style="height:54%"></span><span style="height:76%"></span><span class="hi" style="height:84%"></span><span style="height:48%"></span><span style="height:62%"></span>
+          </div>
         </div>
       </div>
 
-      <div class="bento-card span-7">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start">
-          <div class="bento-metric">3码单字<span>+ 4码首选词</span></div>
-          <div class="bento-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h10M4 17h14"/></svg>
+      <div class="bento-card span-4">
+        <div>
+          <div class="bento-eyebrow"><span class="be-cat">字词分流</span><span class="be-tag">3-CODE / 4-CODE</span></div>
+          <div class="bento-metric">3+4<span>字词不重</span></div>
+          <h3 style="margin-top:12px">极端字词避重，畅快打词</h3>
+          <p>尽量让单字落在三码位，四码首选永远留给高频词组，单字与整词节奏互不打架。</p>
+        </div>
+        <div class="bento-viz">
+          <div class="viz-cand">
+            <span class="c1">1. 简单鹤</span>
+            <span class="c2">2. 简</span>
+            <span class="c2">3. 剪</span>
           </div>
         </div>
-        <div>
-          <h3>极端字词避重，畅快打词</h3>
-          <p>算码时尽量让更多单字落在三码位，其余四码单字统一放在次选，让四码首选永远留给高频词组，字词节奏互不打架。</p>
-        </div>
       </div>
-    </div>
 
-    <div class="bento" style="margin-bottom:0">
+      <div class="bento-card span-4">
+        <div>
+          <div class="bento-eyebrow"><span class="be-cat">离线题库</span><span class="be-tag">OFFLINE READY</span></div>
+          <div class="bento-metric">20,877<span>全词库单字</span></div>
+          <h3 style="margin-top:12px">开箱即练，全量容错</h3>
+          <p>完整内置前 1000 高频字、167 精校字、20,877 单字与 23,153 个二三简词，离线秒开。</p>
+        </div>
+        <div><button class="btn btn-soft btn-sm" data-jump="practice:split" type="button">立即进入拆字实战 ↗</button></div>
+      </div>
+
+      <!-- Row 3: 3 个核心练习快捷卡片 -->
       <div class="bento-card span-4" id="homeCardSp">
         <div>
           <span class="tag tag-blue" id="homeCardSpTag">Step 01</span>
@@ -1225,11 +2078,44 @@ tr:last-child td { border-bottom: 0; }
       </div>
       <div class="bento-card span-4">
         <div>
-          <span class="tag tag-ok">实战检验</span>
-          <h3 style="margin-top:12px">拆字取码实战</h3>
-          <p>内置 20,877 字全词库（含前 1000 高频字与 167 精校字）及 23,000+ 二三简词，离线即练。</p>
+          <span class="tag tag-ok">简词提速</span>
+          <h3 style="margin-top:12px">高频与全词库简码</h3>
+          <p>覆盖 51 组无理飞键简词、1,220 二简词与 21,933 三简词。</p>
         </div>
-        <div><button class="btn btn-soft btn-sm" data-jump="practice:split" type="button">开始拆字实战</button></div>
+        <div><button class="btn btn-soft btn-sm" data-jump="practice:short" type="button">进入简码训练</button></div>
+      </div>
+
+      <!-- Row 4: ReadOS 风格通栏无限滚动编码胶囊带 -->
+      <div class="bento-card marquee-card">
+        <div class="bento-eyebrow" style="margin-bottom:0"><span class="be-cat">编码一览</span><span class="be-tag">LIVE EXAMPLES</span></div>
+        <div class="marquee-wrap" aria-label="简单鹤编码示例滚动条">
+          <div class="marquee-track">
+            <span class="mq-pill">由 <code>yzvp</code></span>
+            <span class="mq-pill">明 <code>mivl</code></span>
+            <span class="mq-pill">汉 <code>hjol</code></span>
+            <span class="mq-pill">好 <code>hcyk</code></span>
+            <span class="mq-pill">就是 <code>qo</code></span>
+            <span class="mq-pill">可以 <code>k</code></span>
+            <span class="mq-pill">没有 <code>m</code></span>
+            <span class="mq-pill">为什么 <code>w</code></span>
+            <span class="mq-pill">一起 <code>yq</code></span>
+            <span class="mq-pill">一定 <code>yd</code></span>
+            <span class="mq-pill">平 <code>pkdp</code></span>
+            <span class="mq-pill">虫 <code>isoh</code></span>
+            <span class="mq-pill">由 <code>yzvp</code></span>
+            <span class="mq-pill">明 <code>mivl</code></span>
+            <span class="mq-pill">汉 <code>hjol</code></span>
+            <span class="mq-pill">好 <code>hcyk</code></span>
+            <span class="mq-pill">就是 <code>qo</code></span>
+            <span class="mq-pill">可以 <code>k</code></span>
+            <span class="mq-pill">没有 <code>m</code></span>
+            <span class="mq-pill">为什么 <code>w</code></span>
+            <span class="mq-pill">一起 <code>yq</code></span>
+            <span class="mq-pill">一定 <code>yd</code></span>
+            <span class="mq-pill">平 <code>pkdp</code></span>
+            <span class="mq-pill">虫 <code>isoh</code></span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1238,7 +2124,8 @@ tr:last-child td { border-bottom: 0; }
   <section class="view" id="view-roadmap">
     <div class="section-head">
       <div>
-        <h2>循序渐进，自然成诵。</h2>
+        <div class="sec-eyebrow"><span class="num">02</span><span class="sep">|</span><span>科学上手路径</span></div>
+        <h2>循序渐进，<span class="serif-accent">自然成诵。</span></h2>
         <p>按阶段推进的科学上手路径。如果你已熟练小鹤双拼，可一键跳过双拼环节直奔字根。</p>
       </div>
       <button class="btn btn-outline btn-sm" id="rmSkipToggleBtn" type="button">我已熟练小鹤双拼，跳过第 1 步</button>
@@ -1264,7 +2151,8 @@ tr:last-child td { border-bottom: 0; }
   <section class="view" id="view-guide">
     <div class="section-head">
       <div>
-        <h2>字根图与规则手册</h2>
+        <div class="sec-eyebrow"><span class="num">03</span><span class="sep">|</span><span>字根与拆分规范</span></div>
+        <h2>字根图与<span class="serif-accent">规则手册</span></h2>
         <p>完整 26 键交互式字根图、六条核心拆字规则、飞键无理简词与双拼键位一站速查。</p>
       </div>
     </div>
@@ -1432,7 +2320,8 @@ tr:last-child td { border-bottom: 0; }
   <section class="view" id="view-practice">
     <div class="section-head">
       <div>
-        <h2>练习工坊</h2>
+        <div class="sec-eyebrow"><span class="num">04</span><span class="sep">|</span><span>交互肌肉记忆训练</span></div>
+        <h2>练习<span class="serif-accent">工坊</span></h2>
         <p>敲键建立肌肉记忆，PC 物理键盘与手机触屏虚拟键帽均完整适配。</p>
       </div>
       <button class="btn btn-outline btn-sm" id="pracSkipToggleBtn" type="button">已熟练小鹤双拼 · 跳过双拼热身</button>
@@ -1601,7 +2490,8 @@ tr:last-child td { border-bottom: 0; }
   <section class="view" id="view-ecosystem">
     <div class="section-head">
       <div>
-        <h2>全端方案与开源生态</h2>
+        <div class="sec-eyebrow"><span class="num">05</span><span class="sep">|</span><span>跨平台方案与社区</span></div>
+        <h2>全端方案与<span class="serif-accent">开源生态</span></h2>
         <p>覆盖 Windows PC、Android 手机与跨平台 Rime 生态，按设备选择即刻开打。</p>
       </div>
     </div>
@@ -2265,6 +3155,84 @@ function applySkipSpUi() {
 }
 
 /* ==================== 5. 路由与主题 ==================== */
+
+
+let srObserver = null;
+
+let heroStepTimer = null;
+let heroStepIdx = 0;
+function setHeroStep(idx, syncDemo) {
+  heroStepIdx = idx % 3;
+  const pills = document.querySelectorAll('#heroSteps .hero-step-pill');
+  pills.forEach((p, i) => {
+    p.classList.remove('active');
+    if (i === heroStepIdx) {
+      void p.offsetWidth;
+      p.classList.add('active');
+    }
+  });
+  if (syncDemo && typeof DEMO_LIST !== 'undefined' && DEMO_LIST.length) {
+    const demoIdx = (heroStepIdx * 2) % DEMO_LIST.length;
+    const demoBtns = document.querySelectorAll('#demoChars .demo-pill');
+    if (demoBtns[demoIdx]) demoBtns[demoIdx].click();
+  }
+}
+function initHeroMotion() {
+  const pills = document.querySelectorAll('#heroSteps .hero-step-pill');
+  if (pills.length) {
+    pills.forEach(p => {
+      p.addEventListener('click', () => {
+        if (heroStepTimer) clearInterval(heroStepTimer);
+        setHeroStep(Number(p.dataset.stepIdx || 0), true);
+        heroStepTimer = setInterval(() => setHeroStep(heroStepIdx + 1, true), 3600);
+      });
+    });
+    if (heroStepTimer) clearInterval(heroStepTimer);
+    heroStepTimer = setInterval(() => setHeroStep(heroStepIdx + 1, true), 3600);
+  }
+  document.querySelectorAll('.bento-card').forEach(card => {
+    card.addEventListener('pointermove', e => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left).toFixed(0) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top).toFixed(0) + 'px');
+    });
+  });
+}
+
+function initScrollReveal(scopeEl) {
+  const root = scopeEl || document;
+  const targets = root.querySelectorAll('.sec-eyebrow, .section-head h2, .section-head p, .bento-card, .step-card, .eco-card, .showcase');
+  if (!('IntersectionObserver' in window)) {
+    targets.forEach(el => el.classList.add('sr-in'));
+    return;
+  }
+  if (!srObserver) {
+    srObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('sr-in');
+          srObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -24px 0px' });
+  }
+  targets.forEach((el, idx) => {
+    el.classList.remove('sr-in');
+    el.classList.add('sr-item');
+    el.style.setProperty('--sr-d', Math.min(idx % 6, 5) * 65 + 'ms');
+    srObserver.observe(el);
+  });
+}
+
+function updateScrollProgress() {
+  const bar = $('scrollProgress');
+  if (!bar) return;
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = h > 0 ? Math.min(100, Math.max(0, (window.scrollY / h) * 100)) : 0;
+  bar.style.width = pct.toFixed(1) + '%';
+}
+window.addEventListener('scroll', updateScrollProgress, { passive: true });
+
 function applyTheme() {
   document.documentElement.setAttribute('data-theme', STATE.theme);
   $('themeBtn').textContent = STATE.theme === 'dark' ? '☀' : '◐';
@@ -2272,6 +3240,7 @@ function applyTheme() {
 
 function switchRoute(route, subTarget) {
   currentRoute = route;
+  setTimeout(() => { updateScrollProgress(); initScrollReveal($('view-' + route)); }, 30);
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + route));
   document.querySelectorAll('.nav-btn, .dock-btn').forEach(b => b.classList.toggle('active', b.dataset.route === route));
 
@@ -3339,7 +4308,9 @@ function deleteLastPracticeChar() {
 
 function bindEvents() {
   $('brandHome').addEventListener('click', () => switchRoute('home'));
-  $('themeBtn').addEventListener('click', () => { STATE.theme = STATE.theme === 'dark' ? 'light' : 'dark'; applyTheme(); saveState(); });
+  $('themeBtn').addEventListener('click', () => { STATE.theme = STATE.theme === 'dark' ? 'light' : 'dark'; applyTheme();
+initScrollReveal($('view-home'));
+initHeroMotion(); saveState(); });
 
   $('trackZero').addEventListener('click', () => setSkipSp(false));
   $('trackSkip').addEventListener('click', () => setSkipSp(true));
