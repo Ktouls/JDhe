@@ -1513,11 +1513,7 @@ body[data-route="practice"] .container {
   .subtab { padding: 8px 14px; font-size: 13.5px; }
   .studio-bar { gap: 10px; }
   .studio-title-group .studio-whisper { display: none; }
-  .zg-kb { --kgap: 4px; gap: 5px; }
-  .zg-keycap { min-height: 82px; padding: 5px 4px; border-radius: 9px; }
-  .zg-keycap .zk-let { font-size: 12.5px; }
-  .zg-keycap .zk-cnt { display: none; }
-  .zg-keycap .zk-roots { font-size: 12px; line-height: 1.25; }
+
 }
 
 /* Phone Standard / Pro Max <= 540px */
@@ -1534,12 +1530,7 @@ body[data-route="practice"] .container {
   .hw-key b { font-size: 20px; }
   .step-card { grid-template-columns: auto 1fr; }
   .step-cta { grid-column: 1 / -1; flex-direction: row; align-items: center; flex-wrap: wrap; }
-  .zg-kb { --kgap: 2.5px; gap: 4px; }
-  .zg-keycap { min-height: 68px; padding: 3px 2px 4px; border-radius: 7px; }
-  .zg-keycap .zk-let { font-size: 11px; }
-  .zg-keycap .zk-roots { font-size: 8.5px; line-height: 1.15; }
-  .sp-kb { --kgap: 3px; gap: 4px; }
-  .sp-key { min-height: 50px; }
+
   body[data-route="practice"] .container {
     padding-left: max(8px, env(safe-area-inset-left, 0px));
     padding-right: max(8px, env(safe-area-inset-right, 0px));
@@ -1620,6 +1611,182 @@ body[data-route="practice"] .container {
   .space-btn:hover { color: var(--ink-faint); border-color: var(--line-strong); }
 }
 
+
+/* Proportional Scale-to-Fit Reference Keyboards (1:1 Desktop Aspect Ratio on Mobile/Tablet) */
+.zg-kb-scroll, .sp-kb-scroll {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+.zg-kb, .sp-kb {
+  transform-origin: top left;
+}
+@media (max-width: 820px) {
+  #g-chart .card, #g-sp .card:first-child {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
+
+/* Mobile Zero-Swipe Comparison Cards (<= 680px) */
+@media (max-width: 680px) {
+  .cmp-wrap {
+    overflow: visible;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    border-radius: 0;
+  }
+  .cmp-table, .cmp-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+    width: 100%;
+  }
+  .cmp-table thead { display: none; }
+  .cmp-table tr {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: var(--shadow-card);
+    gap: 8px;
+  }
+  .cmp-table td {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 13.5px;
+    line-height: 1.55;
+    text-align: right;
+  }
+  .cmp-table td:last-child { border-bottom: 0; padding-bottom: 0; }
+  .cmp-table td:first-child {
+    position: static;
+    background: transparent;
+    box-shadow: none;
+    padding: 0 0 8px;
+    font-family: var(--font-serif);
+    font-size: 16.5px;
+    font-weight: 600;
+    color: var(--ink);
+    border-bottom: 1px solid var(--line);
+    justify-content: flex-start;
+    text-align: left;
+  }
+  .cmp-table td::before {
+    content: attr(data-label);
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--ink-faint);
+    flex-shrink: 0;
+    text-align: left;
+  }
+  .cmp-table td:first-child::before { display: none; }
+  .cmp-table td.col-jdh {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    gap: 2px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin: 4px 0 2px;
+  }
+  .cmp-table td.col-jdh::before {
+    content: "简单鹤 · 推荐";
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 2px;
+  }
+  .cmp-table td.col-jdh small {
+    font-size: 12px;
+    margin-top: 2px;
+  }
+}
+
+/* Single-row crisp subtabs & demo pills on mobile (zero 2-line wrapping!) */
+@media (max-width: 540px) {
+  .subtabs {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    width: 100%;
+    padding: 3px;
+    gap: 2px;
+    border-radius: 999px;
+  }
+  .subtab {
+    flex: 1 1 0;
+    min-width: 0;
+    text-align: center;
+    padding: 7px 2px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .subtab-thumb { display: none; }
+  .subtab.active {
+    background: var(--surface);
+    box-shadow: 0 1px 3px rgba(26, 24, 22, 0.09), 0 0 0 1px var(--line);
+  }
+  .demo-pills {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    width: 100%;
+    gap: 6px;
+  }
+  .demo-pill {
+    padding: 6px 0;
+    text-align: center;
+    font-size: 14px;
+  }
+  #g-chart .zg-kb-scroll, #g-sp .sp-kb-scroll {
+    margin: 0 -6px;
+    width: calc(100% + 12px);
+  }
+}
+
+/* Square-proportioned, larger-glyph scaled zigen keyboard on mobile/tablet */
+.zg-kb.is-scaled {
+  --kgap: 4px;
+  gap: 4px;
+}
+.zg-kb.is-scaled .zg-keycap {
+  min-height: 76px;
+  padding: 5px 4px;
+  border-radius: 9px;
+  gap: 2px;
+}
+.zg-kb.is-scaled .zk-let {
+  font-size: 15px;
+}
+.zg-kb.is-scaled .zk-cnt {
+  display: none;
+}
+.zg-kb.is-scaled .zk-stroke {
+  font-size: 10.5px;
+  padding: 0 4px;
+  line-height: 1.25;
+}
+.zg-kb.is-scaled .zk-roots {
+  font-size: 15.5px;
+  line-height: 1.18;
+  letter-spacing: -0.4px;
+}
+.zg-kb.is-scaled .zk-roots span {
+  margin-right: 1px;
+}
+
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -1653,7 +1820,7 @@ body[data-route="practice"] .container {
     <div class="header-actions">
       <button class="skip-pill" id="headerSkipBtn" type="button" title="切换是否已熟练掌握小鹤双拼">
         <span class="dot"></span>
-        <span id="headerSkipLabel">含双拼引导</span>
+        <span id="headerSkipLabel">新手引导</span>
       </button>
       <button class="icon-btn" id="themeBtn" type="button" title="切换深浅色主题" aria-label="切换主题">◐</button>
     </div>
@@ -1676,22 +1843,22 @@ body[data-route="practice"] .container {
   <!-- ==================== VIEW 1: 概览（第一眼：靠谱、高端、想试一下） ==================== -->
   <section class="view active" id="view-home">
     <div class="hero-editorial">
-      <div class="hero-badge"><i></i><span>简单鹤 v9.3 · 开源免费 · 全平台可用</span></div>
+      <div class="hero-badge"><i></i><span>简单鹤 · 极简音形输入方案</span></div>
       <h1 class="hero-title" aria-label="极简音形，为盲打而生。"><span class="kchar" style="--i:0">极</span><span class="kchar" style="--i:1">简</span><span class="kchar" style="--i:2">音</span><span class="kchar" style="--i:3">形</span><span class="kchar" style="--i:4">，</span><br><span class="grad"><span class="kchar" style="--i:5">为</span><span class="kchar" style="--i:6">盲</span><span class="kchar" style="--i:7">打</span><span class="kchar" style="--i:8">而</span><span class="kchar" style="--i:9">生</span><span class="kchar" style="--i:10">。</span></span></h1>
       <p class="hero-sub">
-        <strong>轻羽落键，意到字成。</strong>小鹤双拼与 97 个字根的纯粹结合，单字低重、字词分流、没有小字负担。
+        <strong>轻羽落键，意到字成。</strong>以小鹤双拼定音，97 个字根定形——不盯候选栏，让思绪与指尖同频。
       </p>
 
       <div class="hero-ctas">
-        <button class="btn btn-primary" id="heroPrimaryBtn" type="button">开启上手之旅 ↗</button>
-        <button class="btn btn-outline" data-jump="guide:g-chart" type="button">查看 26 键字根图</button>
-        <button class="text-link-btn" data-jump="ecosystem" type="button">直接下载安装 <span>→</span></button>
+        <button class="btn btn-primary" id="heroPrimaryBtn" type="button">开始学习 →</button>
+        <button class="btn btn-outline" data-jump="guide:g-chart" type="button">浏览字根图</button>
+        <button class="text-link-btn" data-jump="ecosystem" type="button">下载客户端 <span>→</span></button>
       </div>
 
       <div class="track-switch" id="trackSwitch" role="group" aria-label="选择你的起步方式">
         <span class="track-thumb" id="trackThumb" aria-hidden="true"></span>
-        <button class="track-opt active" id="trackZero" type="button">零基础 · 从双拼起步</button>
-        <button class="track-opt" id="trackSkip" type="button">已会小鹤双拼 · 直奔字根</button>
+        <button class="track-opt active" id="trackZero" type="button">零基础 · 从双拼学起</button>
+        <button class="track-opt" id="trackSkip" type="button">已会双拼 · 直奔字根</button>
       </div>
 
       <div class="hero-status">
@@ -1704,33 +1871,33 @@ body[data-route="practice"] .container {
     <div class="stage-frame">
       <div class="showcase">
         <div class="showcase-top">
-          <div class="showcase-kicker">亲自试打 · 点击或用键盘依次敲出下方 4 键，感受零选重直出</div>
+          <div class="showcase-kicker">指尖初体验 · 试着依次敲出下方 4 个键</div>
           <div class="demo-pills" id="demoChars"></div>
         </div>
         <div class="showcase-body" id="demoStage"></div>
       </div>
       <div class="hero-steps" id="heroSteps">
-        <button class="hero-step-pill active" data-step-idx="0" type="button"><span class="snum">01</span><span>双拼定前两码</span></button>
-        <button class="hero-step-pill" data-step-idx="1" type="button"><span class="snum">02</span><span>首末根定后两码</span></button>
-        <button class="hero-step-pill" data-step-idx="2" type="button"><span class="snum">03</span><span>四码直出免选重</span></button>
+        <button class="hero-step-pill active" data-step-idx="0" type="button"><span class="snum">01</span><span>两键定音</span></button>
+        <button class="hero-step-pill" data-step-idx="1" type="button"><span class="snum">02</span><span>两键定形</span></button>
+        <button class="hero-step-pill" data-step-idx="2" type="button"><span class="snum">03</span><span>四码直出</span></button>
       </div>
     </div>
 
     <!-- 四个设计原则 -->
     <div class="section-head">
       <div>
-        <div class="sec-eyebrow"><span class="num">01</span><span class="sep">/</span><span>为什么选择简单鹤</span></div>
+        <div class="sec-eyebrow"><span class="num">01</span><span class="sep">/</span><span>为什么是简单鹤</span></div>
         <h2>轻盈上手，<span class="serif-accent">久打不倦。</span></h2>
       </div>
-      <p>克制而彻底的设计取舍，让你把注意力留在思考本身，而不是候选栏。</p>
+      <p>删繁就简，只留下真正顺手的设计，让注意力回到表达本身。</p>
     </div>
 
     <div class="arch-grid">
       <div class="arch-cell">
         <div>
-          <div class="arch-num">97<span>字根 · 最快 1 小时入门</span></div>
-          <h3>无需死背口诀，敲键即记</h3>
-          <p>用内置间隔重复练习器高频敲击，一小时左右即可在指尖建立条件反射，告别边打字边翻表。</p>
+          <div class="arch-num">97<span>个字根 · 约 1 小时入门</span></div>
+          <h3>不背口诀，敲着就熟</h3>
+          <p>借助内置的间隔重复练习，在指尖自然形成条件反射，彻底告别边打字边翻表。</p>
         </div>
         <div class="arch-inline-demo">
           <span class="arch-chip"><strong>Q</strong> <span class="chai">鱼 户 走</span></span>
@@ -1742,8 +1909,8 @@ body[data-route="practice"] .container {
       <div class="arch-cell">
         <div>
           <div class="arch-num">0<span>小字负担</span></div>
-          <h3>没有小字，拆分符合直觉</h3>
-          <p>笔顺优先、首末取大，遇生僻字也能一眼拆出；内置大量贴心容错，怎么顺手就怎么打。</p>
+          <h3>没有小字，一眼可拆</h3>
+          <p>笔顺优先、首末取大，生僻字也能凭直觉拆出；内置丰富容错，顺手就能上屏。</p>
         </div>
         <div class="arch-inline-demo">
           <span class="arch-chip"><strong>由</strong></span>
@@ -1755,16 +1922,16 @@ body[data-route="practice"] .container {
       <div class="arch-cell">
         <div>
           <div class="arch-num">低重<span>轻松盲打</span></div>
-          <h3>离散分布，大幅压缩选重</h3>
-          <p>乱序排布让同音字的形码高度分散，单字重码率极低，不看候选栏也能稳定上屏。</p>
+          <h3>低重离散，安心盲打</h3>
+          <p>乱序排布让同音字形码高度分散，大幅减少翻页与选重，盲打也能稳稳出字。</p>
         </div>
       </div>
 
       <div class="arch-cell">
         <div>
           <div class="arch-num">3+4<span>字词分流</span></div>
-          <h3>单字与整词互不打架</h3>
-          <p>高频单字尽量落在三码位，四码首选留给常用词组，长文输入流畅连贯。</p>
+          <h3>字词分流，节奏连贯</h3>
+          <p>常用单字落在三码，四码首选留给高频词组，打单字与打整词互不干扰。</p>
         </div>
         <div class="arch-inline-demo">
           <span class="arch-chip hi"><strong>1. 简单鹤</strong></span>
@@ -1777,10 +1944,10 @@ body[data-route="practice"] .container {
     <!-- 方案横向对比 -->
     <div class="section-head">
       <div>
-        <div class="sec-eyebrow"><span class="num">02</span><span class="sep">/</span><span>横向对比</span></div>
-        <h2>更低的门槛，<span class="serif-accent">更高的盲打上限。</span></h2>
+        <div class="sec-eyebrow"><span class="num">02</span><span class="sep">/</span><span>一眼看懂差异</span></div>
+        <h2>更低门槛，<span class="serif-accent">更高上限。</span></h2>
       </div>
-      <p>与主流输入方式对照，直观看出简单鹤在学习成本与盲打体验之间的平衡点。</p>
+      <p>把上手成本压低，把盲打体验拉高，恰好落在日常使用的甜点区。</p>
     </div>
 
     <div class="cmp-wrap">
@@ -1788,7 +1955,7 @@ body[data-route="practice"] .container {
         <thead>
           <tr>
             <th>核心维度</th>
-            <th class="col-jdh">简单鹤 JDhe <span class="cmp-tag">推荐</span></th>
+            <th class="col-jdh">简单鹤 <span class="cmp-tag">推荐</span></th>
             <th>全拼输入法</th>
             <th>传统五笔</th>
             <th>常规双拼音形</th>
@@ -1797,38 +1964,38 @@ body[data-route="practice"] .container {
         <tbody>
           <tr>
             <td>上手周期</td>
-            <td class="col-jdh">最快 1 小时入门<small>会小鹤双拼即可直接切入 97 字根</small></td>
-            <td>零门槛</td>
-            <td>2–4 周以上</td>
-            <td>3–7 天</td>
+            <td class="col-jdh" data-label="简单鹤">最快 1 小时入门<small>会小鹤双拼即可直接切入 97 字根</small></td>
+            <td data-label="全拼输入法">零门槛</td>
+            <td data-label="传统五笔">2–4 周以上</td>
+            <td data-label="常规双拼音形">3–7 天</td>
           </tr>
           <tr>
             <td>字根与小字</td>
-            <td class="col-jdh">97 字根 · 0 小字<small>笔顺优先、首末取大，内置容错</small></td>
-            <td>无字根概念</td>
-            <td>130+ 字根与成字规则</td>
-            <td>多含小字或特例</td>
+            <td class="col-jdh" data-label="简单鹤">97 字根 · 0 小字<small>笔顺优先、首末取大，内置容错</small></td>
+            <td data-label="全拼输入法">无字根概念</td>
+            <td data-label="传统五笔">130+ 字根与成字规则</td>
+            <td data-label="常规双拼音形">多含小字或特例</td>
           </tr>
           <tr>
             <td>单字选重率</td>
-            <td class="col-jdh">极低（离散分布）<small>大幅减少翻页与盯候选栏</small></td>
-            <td>高，频繁选重</td>
-            <td>极低</td>
-            <td>较低</td>
+            <td class="col-jdh" data-label="简单鹤">极低（离散分布）<small>大幅减少翻页与盯候选栏</small></td>
+            <td data-label="全拼输入法">高，频繁选重</td>
+            <td data-label="传统五笔">极低</td>
+            <td data-label="常规双拼音形">较低</td>
           </tr>
           <tr>
             <td>字词避重</td>
-            <td class="col-jdh">极端字词分流<small>单字落三码，四码首选留给词组</small></td>
-            <td>依赖云端联想</td>
-            <td>词组与单字易冲突</td>
-            <td>部分字词混排</td>
+            <td class="col-jdh" data-label="简单鹤">极端字词分流<small>单字落三码，四码首选留给词组</small></td>
+            <td data-label="全拼输入法">依赖云端联想</td>
+            <td data-label="传统五笔">词组与单字易冲突</td>
+            <td data-label="常规双拼音形">部分字词混排</td>
           </tr>
           <tr>
             <td>盲打体验</td>
-            <td class="col-jdh">轻松盲打 · 久打不倦<small>不看候选栏也能稳定上屏</small></td>
-            <td>难以真正盲打</td>
-            <td>上限高但记忆重</td>
-            <td>良好</td>
+            <td class="col-jdh" data-label="简单鹤">轻松盲打 · 久打不倦<small>不看候选栏也能稳定上屏</small></td>
+            <td data-label="全拼输入法">难以真正盲打</td>
+            <td data-label="传统五笔">上限高但记忆重</td>
+            <td data-label="常规双拼音形">良好</td>
           </tr>
         </tbody>
       </table>
@@ -1837,34 +2004,34 @@ body[data-route="practice"] .container {
     <!-- 练习模块预览 -->
     <div class="section-head">
       <div>
-        <div class="sec-eyebrow"><span class="num">03</span><span class="sep">/</span><span>内置练习工坊</span></div>
-        <h2>打开即练，<span class="serif-accent">离线可用。</span></h2>
+        <div class="sec-eyebrow"><span class="num">03</span><span class="sep">/</span><span>在线练习工坊</span></div>
+        <h2>无需安装，<span class="serif-accent">打开即练。</span></h2>
       </div>
-      <p>内置 20,877 单字四码与 23,153 个高频简词，无需安装软件就能先练熟。</p>
+      <p>内置 20,877 个单字四码与 23,153 个常用简词，离线也能随时练出手感。</p>
     </div>
 
     <div class="prac-row">
       <div class="prac-tile" id="homeCardSp">
         <div>
           <div class="pt-idx" id="homeCardSpTag">STEP 01 · 双拼基础</div>
-          <h3>小鹤双拼热身</h3>
-          <p>攻克 zh/ch/sh 与易混韵母，打牢前两码基础。</p>
+          <h3>双拼热身</h3>
+          <p>理清特殊声母与易混韵母，打好前两码基本功。</p>
         </div>
         <div><button class="btn btn-soft btn-sm" data-jump="practice:sp" type="button">进入双拼热身 →</button></div>
       </div>
       <div class="prac-tile">
         <div>
           <div class="pt-idx">STEP 02 · 核心记忆</div>
-          <h3>97 字根助记</h3>
-          <p>从 3 键逐步解锁到 26 键，记不牢的字根自动高频复现。</p>
+          <h3>字根助记</h3>
+          <p>从 3 键循序解锁到 26 键，不熟的字根会自动多练几遍。</p>
         </div>
         <div><button class="btn btn-soft btn-sm" data-jump="practice:zigen" type="button">启动字根练习 →</button></div>
       </div>
       <div class="prac-tile">
         <div>
           <div class="pt-idx">STEP 03 · 实战提速</div>
-          <h3>拆字实战与简码</h3>
-          <p>覆盖常用 1000 字、全词库单字以及二三简高频词组。</p>
+          <h3>拆字与简码</h3>
+          <p>从常用千字练到全词库，顺手把高频简词一并拿下。</p>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="btn btn-soft btn-sm" data-jump="practice:split" type="button">拆字实战 →</button>
@@ -1877,8 +2044,8 @@ body[data-route="practice"] .container {
     <div class="flow-bridge">
       <div>
         <div class="fb-kicker">NEXT STEP · 01 → 02</div>
-        <h3>准备花一小时解锁盲打了吗？</h3>
-        <p>按照五步上手路径循序渐进，不需要任何形码基础。</p>
+        <h3>准备好告别翻页选重了吗？</h3>
+        <p>跟着五步路线慢慢来，零形码基础也能轻松上手。</p>
       </div>
       <div class="flow-bridge-actions">
         <button class="btn btn-primary" data-jump="roadmap" type="button">查看上手路径 →</button>
@@ -1892,10 +2059,10 @@ body[data-route="practice"] .container {
     <div class="section-head">
       <div>
         <div class="sec-eyebrow"><span class="num">02</span><span class="sep">/</span><span>学习路线</span></div>
-        <h2>五步上手，<span class="serif-accent">自然成诵。</span></h2>
-        <p>不必死记硬背。跟着下方节奏每天练习十几分钟，很快就能流畅盲打。</p>
+        <h2>五步上手，<span class="serif-accent">循序成诵。</span></h2>
+        <p>不死背口诀，每天一刻钟，把规律交给指尖去记。</p>
       </div>
-      <button class="btn btn-outline btn-sm" id="rmSkipToggleBtn" type="button">我已熟练小鹤双拼，跳过第 1 步</button>
+      <button class="btn btn-outline btn-sm" id="rmSkipToggleBtn" type="button">已会双拼，跳过第 1 步</button>
     </div>
 
     <div class="roadmap-bar">
@@ -1916,8 +2083,8 @@ body[data-route="practice"] .container {
     <div class="flow-bridge">
       <div>
         <div class="fb-kicker">NEXT STEP · 02 → 03</div>
-        <h3>先看一眼 26 键字根图与拆分规则</h3>
-        <p>花两分钟扫一遍整体布局，再进入练习工坊会事半功倍。</p>
+        <h3>先看一眼字根图与六条规则</h3>
+        <p>花两分钟熟悉全局，再去练习工坊会顺手得多。</p>
       </div>
       <div class="flow-bridge-actions">
         <button class="btn btn-primary" data-jump="guide:g-chart" type="button">浏览字根图与规则 →</button>
@@ -1931,16 +2098,16 @@ body[data-route="practice"] .container {
     <div class="section-head">
       <div>
         <div class="sec-eyebrow"><span class="num">03</span><span class="sep">/</span><span>字根与规则</span></div>
-        <h2>一张键盘图，<span class="serif-accent">六条直觉规则。</span></h2>
-        <p>随时点开键帽放大查看并专练，需要查细节时再展开说明，不给视线添负担。</p>
+        <h2>一张键图，<span class="serif-accent">六条直觉。</span></h2>
+        <p>点选任意键帽即可放大并专练；细微辨析均已收纳，需要时随时翻阅。</p>
       </div>
     </div>
 
     <div class="subtabs" id="guideTabs">
-      <button class="subtab active" data-sub="g-chart" type="button">26 键字根图</button>
+      <button class="subtab active" data-sub="g-chart" type="button">字根键图</button>
       <button class="subtab" data-sub="g-split" type="button">拆分规则</button>
-      <button class="subtab" data-sub="g-wuli" type="button">飞键与简词</button>
-      <button class="subtab" data-sub="g-sp" type="button" id="guideSpTab">小鹤双拼键位</button>
+      <button class="subtab" data-sub="g-wuli" type="button">飞键简词</button>
+      <button class="subtab" data-sub="g-sp" type="button" id="guideSpTab">双拼键位</button>
     </div>
 
     <!-- Guide 0: 26 键字根图 -->
@@ -1964,7 +2131,7 @@ body[data-route="practice"] .container {
         <div class="zg-detail-bar" id="zgVisualDetail"></div>
 
         <details class="clean-details">
-          <summary>查看字根图 V9 补充注释（7 条细节说明）</summary>
+          <summary>字根细微辨析（7 条）</summary>
           <div class="clean-details-body">
             <ol>
               <li>键位 <strong>H</strong> 的笔画“点”类包括了笔画“捺（乀）”（如“哀”的末形）。</li>
@@ -2066,7 +2233,7 @@ body[data-route="practice"] .container {
           </div>
           <button class="btn btn-primary btn-sm" data-jump="practice:sp" type="button">去做双拼热身 →</button>
         </div>
-        <div class="sp-kb" id="spGuideKb"></div>
+        <div class="sp-kb-scroll"><div class="sp-kb" id="spGuideKb"></div></div>
         <div class="sp-detail" id="spGuideDetail"></div>
       </div>
 
@@ -2099,8 +2266,8 @@ body[data-route="practice"] .container {
     <div class="flow-bridge">
       <div>
         <div class="fb-kicker">NEXT STEP · 03 → 04</div>
-        <h3>规则看明白了？现在直接动手敲</h3>
-        <p>不用等全部背完再练，边敲边记是最快的方式。</p>
+        <h3>规则够用了，去敲几分钟吧</h3>
+        <p>不必背完再开始，边敲边记才是最快的方式。</p>
       </div>
       <div class="flow-bridge-actions">
         <button class="btn btn-primary" data-jump="practice:zigen" type="button">进入练习工坊 →</button>
@@ -2113,18 +2280,18 @@ body[data-route="practice"] .container {
     <div class="studio-bar">
       <div class="studio-title-group">
         <h2>练习<span class="serif-accent">工坊</span></h2>
-        <span class="studio-whisper">跟着节奏慢慢敲，指尖自然会记住。</span>
+        <span class="studio-whisper">不急着背，跟着感觉慢慢敲。</span>
       </div>
 
       <div class="subtabs" id="practiceTabs">
-        <button class="subtab active" data-sub="p-zigen" type="button">97 字根助记</button>
+        <button class="subtab active" data-sub="p-zigen" type="button">字根助记</button>
         <button class="subtab" data-sub="p-table" type="button">字根速查</button>
         <button class="subtab" data-sub="p-split" type="button">拆字实战</button>
         <button class="subtab" data-sub="p-short" type="button">简码训练</button>
         <button class="subtab" data-sub="p-sp" type="button" id="pracSpTab">双拼热身</button>
       </div>
 
-      <button class="btn btn-outline btn-sm" id="pracSkipToggleBtn" type="button">已熟练小鹤双拼 · 跳过双拼热身</button>
+      <button class="btn btn-outline btn-sm" id="pracSkipToggleBtn" type="button">已会双拼 · 跳过热身</button>
     </div>
 
     <!-- Practice A: 97 字根助记 -->
@@ -2156,7 +2323,7 @@ body[data-route="practice"] .container {
         <div class="qcard" id="zgCard">
           <div class="q-label" id="zgLabel">循序渐进 · 已解锁 3/26 键</div>
           <div class="zigen-display" id="zgGlyph"></div>
-          <div class="q-sub" id="zgSub">按下对应字母键 · 空格查看提示</div>
+          <div class="q-sub" id="zgSub">按对应键帽 · 空格可看提示</div>
           <div class="slots"><div class="slot active" id="zgSlot"></div></div>
           <div class="answer-line" id="zgAnswer"></div>
         </div>
@@ -2203,7 +2370,7 @@ body[data-route="practice"] .container {
           <div class="q-label" id="splitLabel">输入这个字的首末形码（2 键）</div>
           <div class="sp-prompt" id="splitChar">由</div>
           <div class="sp-pinyin" id="splitPinyin">you (yz)</div>
-          <div class="q-sub" id="splitSub">笔顺优先 · 首末取大 · 空格看提示</div>
+          <div class="q-sub" id="splitSub">取首末字根两键 · 空格看拆法</div>
           <div class="slots" id="splitSlots"></div>
           <div class="answer-line" id="splitAnswer"></div>
         </div>
@@ -2236,7 +2403,7 @@ body[data-route="practice"] .container {
           <div class="q-label" id="shortLabel">输入该常用词组的简码（2 键）</div>
           <div class="sp-prompt" id="shortWord" style="font-size:clamp(2rem,5vw,3rem)">就是</div>
           <div class="sp-pinyin" id="shortHintNote" style="color:var(--ink-soft);font-family:var(--font-sans);font-size:13.5px">高频二简（j+u）</div>
-          <div class="q-sub" id="shortSub">记住高频简词大幅提速 · 空格看提示</div>
+          <div class="q-sub" id="shortSub">敲出词组简码 · 空格看提示</div>
           <div class="slots" id="shortSlots"></div>
           <div class="answer-line" id="shortAnswer"></div>
         </div>
@@ -2266,7 +2433,7 @@ body[data-route="practice"] .container {
           <div class="q-label" id="spLabel">输入这个字的小鹤双拼（2 键）</div>
           <div class="sp-prompt" id="spChar">双</div>
           <div class="sp-pinyin" id="spPinyin">shuang</div>
-          <div class="q-sub" id="spSub">直接敲键或点击下方键帽 · 空格看提示</div>
+          <div class="q-sub" id="spSub">声母 + 韵母两键 · 空格看提示</div>
           <div class="slots">
             <div class="slot active" id="spSlot0"></div>
             <div class="slot" id="spSlot1"></div>
@@ -2280,8 +2447,8 @@ body[data-route="practice"] .container {
     <div class="flow-bridge">
       <div>
         <div class="fb-kicker">NEXT STEP · 04 → 05</div>
-        <h3>手感练出来了？把它装到你的设备上</h3>
-        <p>支持 Windows、Android、macOS 与 iOS，三分钟即可投入日常使用。</p>
+        <h3>敲出感觉了？装到你的设备上吧</h3>
+        <p>支持 Windows、Android、macOS 与 iOS，几分钟就能投入日常。</p>
       </div>
       <div class="flow-bridge-actions">
         <button class="btn btn-primary" data-jump="ecosystem" type="button">前往下载安装 →</button>
@@ -2294,8 +2461,8 @@ body[data-route="practice"] .container {
     <div class="section-head">
       <div>
         <div class="sec-eyebrow"><span class="num">05</span><span class="sep">/</span><span>下载与安装</span></div>
-        <h2>选择你的设备，<span class="serif-accent">三分钟开打。</span></h2>
-        <p>按平台挑选对应的开箱配置包；详细快捷键与进阶自定义均已收纳，随时展开查阅。</p>
+        <h2>选好设备，<span class="serif-accent">即刻开打。</span></h2>
+        <p>挑一个顺手的开箱包即可；部署命令与快捷键都已收好，需要时再点开。</p>
       </div>
     </div>
 
@@ -2310,7 +2477,7 @@ body[data-route="practice"] .container {
           <h3>小狼毫一键版</h3>
           <p>基于上游 <strong>rime-JDhe</strong> 封装，内置语言模型与预测缓存，运行脚本即可自动备份并完成部署。</p>
           <details class="clean-details">
-            <summary>查看安装步骤与快捷键</summary>
+            <summary>展开安装步骤与快捷键</summary>
             <div class="clean-details-body">
               <strong>一键安装：</strong>先安装小狼毫（Weasel），再运行 <code>.\install.ps1</code>（首次编译约 1–5 分钟）。<br>
               <strong>常用键位：</strong><code>空格</code> 首选 · <code>;</code> 次选 · <code>/</code> 三选 · <code>'</code> 分词 · <code>Ctrl+`</code> / <code>F4</code> 选单。<br>
@@ -2332,7 +2499,7 @@ body[data-route="practice"] .container {
           <h3>CyIME 安卓适配版</h3>
           <p>专为 Android CyIME 重做入口的简单鹤 v9.3 方案，精简冗余资源并自带防方框字体配置。</p>
           <details class="clean-details">
-            <summary>查看部署要点与反查技巧</summary>
+            <summary>展开部署要点与反查技巧</summary>
             <div class="clean-details-body">
               <strong>部署要点：</strong>解压至 CyIME 目录，将 <code>fonts/xime.custom.snippet.yaml</code> 并入 <code>xime.custom.yaml</code>；方案列表<strong>仅启用「简单鹤 (jde)」</strong>。<br>
               <strong>反查与造词：</strong>输入时按 <code>`</code> 实时开关拆分注释 · 空输入按 <code>`</code> 拼音反查 · <code>oiz+全拼</code> 部件反查 · <code>//</code> 造词。<br>
@@ -2354,7 +2521,7 @@ body[data-route="practice"] .container {
           <h3>跨平台标准配置</h3>
           <p>适用于 macOS 鼠须管、iOS 仓输入法及 Linux Rime 引擎，包含小鹤双拼与简单鹤完整码表。</p>
           <details class="clean-details">
-            <summary>查看通用快捷键与反查指令</summary>
+            <summary>展开通用快捷键与反查</summary>
             <div class="clean-details-body">
               <strong>常用切换：</strong><code>Ctrl+~</code> 固词/动词 · <code>Ctrl+I</code> 拆分提示 · <code>Ctrl+,</code> 拼音。<br>
               <strong>调序造词：</strong><code>Ctrl+T/- /=</code> 置顶调序 · <code>编码A//编码B</code> 造词。<br>
@@ -2369,27 +2536,27 @@ body[data-route="practice"] .container {
     </div>
 
     <!-- 极简三步部署流程 -->
-    <h3 class="eco-subhead">三步完成部署</h3>
+    <h3 class="eco-subhead">三步即可开打</h3>
     <div class="onboard-strip">
       <div class="onboard-step">
         <div class="os-num">STEP 01</div>
-        <h4>安装对应引擎</h4>
+        <h4>装好输入法引擎</h4>
         <p>Windows 用小狼毫，Android 用 CyIME，macOS 用鼠须管，iOS 用仓输入法。</p>
       </div>
       <div class="onboard-step">
         <div class="os-num">STEP 02</div>
-        <h4>导入并重新部署</h4>
+        <h4>导入方案并部署</h4>
         <p>将上方下载的方案文件放入输入法用户目录，点击「重新部署」等待编译完成。</p>
       </div>
       <div class="onboard-step">
         <div class="os-num">STEP 03</div>
-        <h4>切换简单鹤开打</h4>
+        <h4>切出简单鹤即用</h4>
         <p>选中「简单鹤」（默认固词模式），忘拆时随时按 <code>Ctrl + I</code> 显示拆分提示。</p>
       </div>
     </div>
 
     <!-- 次级区：实用工具与社区 -->
-    <h3 class="eco-subhead">进阶工具与社区</h3>
+    <h3 class="eco-subhead">实用工具与社区</h3>
     <div class="eco-mini-grid">
       <div class="eco-mini-card">
         <div>
@@ -2770,9 +2937,9 @@ for (const it of WULI_LIST) {
 const ROADMAP_STEPS = [
   {
     isSp: true,
-    title: '标准指法与小鹤双拼',
+    title: '熟悉小鹤双拼',
     time: '约 1 ~ 2 天',
-    desc: '简单鹤的前两码就是小鹤双拼。零基础先攻克 3 个特殊声母与易混韵母；若你已熟练小鹤双拼，直接跳过此步。',
+    desc: '前两码就是小鹤双拼。零基础先理清 3 个特殊声母与几组易混韵母；已会双拼可直接跳过。',
     tips: [
       '特殊声母：zh → V、ch → I、sh → U',
       '重点区分 in/ing、en/eng、an/ang 与零声母两键补齐',
@@ -2784,9 +2951,9 @@ const ROADMAP_STEPS = [
     secJump: 'guide:g-sp'
   },
   {
-    title: '敲键记牢 97 个乱序字根',
+    title: '敲熟 97 个字根',
     time: '最快 1 小时入门 · 3 天巩固',
-    desc: '乱序字根切忌边打字边查表。直接用练习器高频重复，最快一小时即可在指尖建立条件反射。',
+    desc: '别拿着表死背。用练习工坊高频敲击，一小时左右指尖就能形成条件反射。',
     tips: [
       '打开默认「循序渐进」模式，从 3 个键起步，全掌握后自动解锁下一键',
       '想不起来就按空格看提示（不跳过不断连击），错根会自动高频复现',
@@ -2798,9 +2965,9 @@ const ROADMAP_STEPS = [
     secJump: 'guide:g-chart'
   },
   {
-    title: '15 分钟吃透 6 条拆字规则',
+    title: '掌握 6 条拆字直觉',
     time: '约 1 天',
-    desc: '记住「笔顺优先、首末取大、相交也拆、插隔也取、字根字重复、禾取丿八」，通过拆字实战把字根用活。',
+    desc: '读一遍六条核心口诀，直接在拆字实战里敲几组常用字，马上就能把字根用活。',
     tips: [
       '先练「仅后两码形码」，熟练后再切换「完整 4 码」建立完整节奏',
       '此阶段不追求速度，重点是看到汉字能立刻反应出首末字根',
@@ -2812,23 +2979,23 @@ const ROADMAP_STEPS = [
     secJump: 'guide:g-split'
   },
   {
-    title: '部署 PC / 手机端方案，正式日常过渡',
+    title: '装到主力设备，投入日常',
     time: '约 1 ~ 2 周',
-    desc: 'Windows 选用 rime-JDhe-win、Android 选用 rime-JDhe-CyIME 或通用 rime-JDhe，在真实输入中建立肌肉记忆。',
+    desc: '在电脑或手机上装好对应开箱包，在日常聊天与写作中自然巩固手感。',
     tips: [
       '默认开启「固词」模式，感受三码单字与四码首选词的超高确定性',
       '善用简单鹤贴心容错，打得出来就大胆用',
       '忘记某字拆分时，在桌面端直接按 Ctrl+I 临时开启拆分提示'
     ],
-    ctaLabel: '前往全端下载',
+    ctaLabel: '去下载安装',
     ctaJump: 'ecosystem',
     secLabel: '查看拆分规则',
     secJump: 'guide:g-split'
   },
   {
-    title: '飞键、简词与跟打提速',
+    title: '简词与跟打提速',
     time: '随用随熟',
-    desc: '日常流畅盲打后，顺手记住 qo/xo 两个飞键与少量超高频简词，再用木易跟打器稳步提速。',
+    desc: '盲打顺畅后，顺手记住 qo / xo 两个飞键与高频简词，再用跟打器稳步提速。',
     tips: [
       '必记飞键：qo（替 qx）、xo（替 xq）',
       '所有简词均保留全码且不出简让全，记住即提速，忘了打全码即可',
@@ -3007,12 +3174,38 @@ function syncSubtabThumb(tabBarId) {
   thumb.style.transform = 'translateX(' + act.offsetLeft + 'px)';
   thumb.classList.add('ready');
 }
+
+function scaleKeyboardToFit(kbId, baseWidth) {
+  const kb = $(kbId);
+  if (!kb || !kb.parentElement) return;
+  const wrap = kb.parentElement;
+  const avail = wrap.clientWidth;
+  if (!avail) return;
+  if (avail < baseWidth) {
+    kb.classList.add('is-scaled');
+    const ratio = avail / baseWidth;
+    kb.style.width = baseWidth + 'px';
+    kb.style.transform = 'scale(' + ratio.toFixed(4) + ')';
+    wrap.style.height = Math.ceil(kb.offsetHeight * ratio) + 'px';
+  } else {
+    kb.classList.remove('is-scaled');
+    kb.style.width = '100%';
+    kb.style.transform = 'none';
+    wrap.style.height = '';
+  }
+}
+function syncScaledKeyboards() {
+  scaleKeyboardToFit('zgVisualKb', 740);
+  scaleKeyboardToFit('spGuideKb', 700);
+}
+
 function syncAllSliders() {
   requestAnimationFrame(() => {
     syncTrackThumb();
     syncNavDot();
     syncSubtabThumb('guideTabs');
     syncSubtabThumb('practiceTabs');
+    syncScaledKeyboards();
   });
 }
 window.addEventListener('resize', syncAllSliders, { passive: true });
@@ -3024,11 +3217,11 @@ function applySkipSpUi() {
   $('trackZero').classList.toggle('active', !sk);
   $('trackSkip').classList.toggle('active', sk);
   $('headerSkipBtn').classList.toggle('on', sk);
-  $('headerSkipLabel').textContent = sk ? '已跳过双拼' : '含双拼引导';
-  $('heroPrimaryBtn').textContent = sk ? '直接开始练字根 ↗' : '开启上手之旅 ↗';
+  $('headerSkipLabel').textContent = sk ? '已跳双拼' : '新手引导';
+  $('heroPrimaryBtn').textContent = sk ? '直接练字根 →' : '开始学习 →';
   requestAnimationFrame(syncTrackThumb);
-  $('rmSkipToggleBtn').textContent = sk ? '✓ 已跳过小鹤双拼（点此恢复）' : '我已熟练小鹤双拼，跳过第 1 步';
-  $('pracSkipToggleBtn').textContent = sk ? '✓ 已隐藏双拼热身（点此显示）' : '已熟练小鹤双拼 · 跳过双拼热身';
+  $('rmSkipToggleBtn').textContent = sk ? '✓ 已跳过双拼（点此恢复）' : '已会双拼，跳过第 1 步';
+  $('pracSkipToggleBtn').textContent = sk ? '✓ 已隐藏双拼（点此显示）' : '已会双拼 · 跳过热身';
 
   $('homeCardSpTag').textContent = sk ? '已跳过 · 双拼基础（可随时复习）' : 'STEP 01 · 双拼基础';
   $('homeCardSpTag').className = 'pt-idx';
@@ -3165,7 +3358,8 @@ function switchSubTab(tabBarId, containerId, targetId) {
   bar.querySelectorAll('.subtab').forEach(b => b.classList.toggle('active', b.dataset.sub === targetId));
   requestAnimationFrame(() => syncSubtabThumb(tabBarId));
   wrap.querySelectorAll('.subpanel').forEach(p => p.classList.toggle('active', p.id === targetId));
-  if (tabBarId === 'guideTabs' && targetId === 'g-chart') renderVisualZigenChart();
+  if (tabBarId === 'guideTabs' && targetId === 'g-chart') { renderVisualZigenChart(); requestAnimationFrame(syncScaledKeyboards); }
+  if (tabBarId === 'guideTabs' && targetId === 'g-sp') { requestAnimationFrame(syncScaledKeyboards); }
   if (tabBarId === 'practiceTabs') {
     currentPracticeSub = targetId;
     document.body.dataset.practiceSub = targetId;
@@ -3200,7 +3394,7 @@ function renderVisualZigenChart() {
     { cls: 'r3', keys: 'zxcvbnm' }
   ];
   const kb = $('zgVisualKb');
-  kb.className = 'zg-kb' + (STATE.showZones ? ' zones' : '');
+  kb.classList.add('zg-kb'); kb.classList.toggle('zones', !!STATE.showZones);
   kb.innerHTML = '';
   $('toggleZonesBtn').textContent = '指法分区色：' + (STATE.showZones ? '开' : '关');
 
@@ -3219,7 +3413,7 @@ function renderVisualZigenChart() {
       btn.innerHTML =
         '<div class="zk-head"><span class="zk-let">' + ch.toUpperCase() + '</span>' + strokeTag + '</div>' +
         '<div class="zk-roots">' + rootsHtml + '</div>';
-      btn.addEventListener('click', () => { activeChartKey = ch; renderVisualZigenChart(); });
+      btn.addEventListener('click', () => { activeChartKey = ch; renderVisualZigenChart(); syncScaledKeyboards(); });
       rowEl.appendChild(btn);
     }
     kb.appendChild(rowEl);
@@ -3237,6 +3431,7 @@ function renderVisualZigenChart() {
       '<div class="zg-detail-glyphs">' + chips + '</div>' +
     '</div>' +
     '<button class="btn btn-primary btn-sm" id="chartTrainKeyBtn" type="button">专练 ' + activeChartKey.toUpperCase() + ' 键</button>';
+  syncScaledKeyboards();
   $('chartTrainKeyBtn').addEventListener('click', () => {
     STATE.zg.mode = 'key'; STATE.zg.activeKeys = [activeChartKey];
     saveState(); syncZgSettingsUi(); zgRestart(false);
@@ -3384,7 +3579,7 @@ function renderSpGuideKb() {
         '<div class="k-top"><span class="k-let">' + ch.toUpperCase() + '</span>' +
         (info.special ? '<span class="k-sh">' + info.sh + '</span>' : '') +
         '</div><div class="k-ym">' + info.ym + '</div>';
-      b.addEventListener('click', () => { activeSpGuideKey = ch; renderSpGuideKb(); });
+      b.addEventListener('click', () => { activeSpGuideKey = ch; renderSpGuideKb(); syncScaledKeyboards(); });
       row.appendChild(b);
     }
     box.appendChild(row);
@@ -3432,7 +3627,7 @@ function nextSpQuestion() {
   clearVkb('spVkb');
 }
 function renderSpVkb() {
-  buildVkb('spVkb', ch => handleSpKey(ch), ch => STATE.sp.showHint ? (SP_KEYS[ch].special ? SP_KEYS[ch].sh + '/' + SP_KEYS[ch].ym.split(' ')[0] : SP_KEYS[ch].ym.split(' ')[0]) : '', '空格 = 查看双拼提示');
+  buildVkb('spVkb', ch => handleSpKey(ch), ch => STATE.sp.showHint ? (SP_KEYS[ch].special ? SP_KEYS[ch].sh + '/' + SP_KEYS[ch].ym.split(' ')[0] : SP_KEYS[ch].ym.split(' ')[0]) : '', '空格 · 看双拼提示');
 }
 function renderSpHud() {
   const n = STATE.sp.right + STATE.sp.wrong;
@@ -4436,15 +4631,15 @@ renderSpVkb();
 renderSpHud();
 nextSpQuestion();
 
-buildVkb('zgVkb', ch => handleZgKey(ch), ch => String(BYKEY[ch] ? BYKEY[ch].length : 0), '空格 = 看答案提示（不跳过、不断连击）');
+buildVkb('zgVkb', ch => handleZgKey(ch), ch => String(BYKEY[ch] ? BYKEY[ch].length : 0), '空格 · 看提示');
 if (typeof STATE.zg.unlockN !== 'number' || STATE.zg.unlockN < 3) STATE.zg.unlockN = 3;
 zgRestart(false);
 
-buildVkb('splitVkb', ch => handleSplitKey(ch), null, '空格 = 查看拆分与目标编码提示');
+buildVkb('splitVkb', ch => handleSplitKey(ch), null, '空格 · 看拆法与编码');
 renderSplitHud();
 nextSplitQuestion();
 
-buildVkb('shortVkb', ch => handleShortKey(ch), null, '空格 = 查看简码提示');
+buildVkb('shortVkb', ch => handleShortKey(ch), null, '空格 · 看简码提示');
 renderShortHud();
 nextShortQuestion();
 
