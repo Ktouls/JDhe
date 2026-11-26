@@ -552,6 +552,7 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none; }
 
 .hero-sub {
   margin: 0 auto 34px;
+  text-wrap: balance;
   max-width: 560px;
   font-size: clamp(15.5px, 1.45vw, 18px);
   line-height: 1.88;
@@ -969,6 +970,7 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none; }
 .zg-kb { --kgap: 8px; display: flex; flex-direction: column; gap: 9px; width: 100%; }
 .zg-kb-row { display: flex; justify-content: center; gap: var(--kgap); width: 100%; }
 .zg-keycap {
+  position: relative;
   flex: 0 0 calc((100% - 9 * var(--kgap)) / 10);
   width: calc((100% - 9 * var(--kgap)) / 10);
   min-width: 0;
@@ -993,7 +995,7 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none; }
 .zg-keycap .zk-let { font-family: var(--font-mono); font-size: 16px; font-weight: 800; color: var(--ink); line-height: 1; }
 .zg-keycap .zk-cnt { font-size: 9.5px; font-weight: 700; color: var(--ink-faint); padding: 1px 5px; border-radius: 99px; background: var(--surface); }
 .zg-keycap.all-done .zk-cnt { background: var(--ok-soft); color: var(--ok); }
-.zg-keycap .zk-stroke { font-size: 10px; font-weight: 700; color: var(--bad); border: 1px solid var(--bad); background: var(--bad-soft); padding: 0 4px; border-radius: 5px; line-height: 1.35; }
+.zg-keycap .zk-stroke { position: absolute; right: 7px; bottom: 7px; font-size: 13px; font-weight: 700; color: var(--accent); border: 1px solid rgba(194, 59, 50, 0.42); background: var(--accent-soft); padding: 2px 6px; border-radius: 6px; line-height: 1.25; pointer-events: none; }
 .zg-keycap .zk-roots { font-family: 'JdhChai', "KaiTi", "Noto Serif CJK SC", serif; font-size: 17px; line-height: 1.44; color: var(--ink); word-break: break-all; }
 .zg-keycap .zk-roots span { display: inline-block; margin-right: 3px; }
 .zg-kb.zones .z-lp { background: rgba(217, 48, 37, 0.06); }
@@ -1035,7 +1037,8 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none; }
 .motto-text { font-family: var(--font-serif); font-size: clamp(18px, 2.2vw, 24px); font-weight: 600; line-height: 1.68; color: var(--ink); }
 
 /* Shuangpin Visual Keyboard */
-.sp-kb { --kgap: 7px; display: flex; flex-direction: column; gap: 7px; margin: 20px 0; width: 100%; }
+.sp-kb-scroll { margin: 18px 0; }
+.sp-kb { --kgap: 7px; display: flex; flex-direction: column; gap: 7px; margin: 0; width: 100%; }
 .sp-row { display: flex; justify-content: center; gap: var(--kgap); width: 100%; }
 .sp-key {
   flex: 0 0 calc((100% - 9 * var(--kgap)) / 10);
@@ -1751,8 +1754,13 @@ body[data-route="practice"] .container {
     font-size: 14px;
   }
   #g-chart .zg-kb-scroll, #g-sp .sp-kb-scroll {
-    margin: 0 -6px;
+    margin-left: -6px;
+    margin-right: -6px;
     width: calc(100% + 12px);
+  }
+  #g-sp .sp-kb-scroll {
+    margin-top: 18px;
+    margin-bottom: 16px;
   }
 }
 
@@ -1774,9 +1782,12 @@ body[data-route="practice"] .container {
   display: none;
 }
 .zg-kb.is-scaled .zk-stroke {
-  font-size: 10.5px;
-  padding: 0 4px;
-  line-height: 1.25;
+  right: 5px;
+  bottom: 5px;
+  font-size: 15px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  line-height: 1.2;
 }
 .zg-kb.is-scaled .zk-roots {
   font-size: 15.5px;
@@ -1843,10 +1854,10 @@ body[data-route="practice"] .container {
   <!-- ==================== VIEW 1: 概览（第一眼：靠谱、高端、想试一下） ==================== -->
   <section class="view active" id="view-home">
     <div class="hero-editorial">
-      <div class="hero-badge"><i></i><span>简单鹤 · 极简音形输入方案</span></div>
-      <h1 class="hero-title" aria-label="极简音形，为盲打而生。"><span class="kchar" style="--i:0">极</span><span class="kchar" style="--i:1">简</span><span class="kchar" style="--i:2">音</span><span class="kchar" style="--i:3">形</span><span class="kchar" style="--i:4">，</span><br><span class="grad"><span class="kchar" style="--i:5">为</span><span class="kchar" style="--i:6">盲</span><span class="kchar" style="--i:7">打</span><span class="kchar" style="--i:8">而</span><span class="kchar" style="--i:9">生</span><span class="kchar" style="--i:10">。</span></span></h1>
+      <div class="hero-badge"><i></i><span>简单鹤 · 轻羽落键，意到字成</span></div>
+      <h1 class="hero-title" aria-label="极简音形，为盲打而生"><span class="kchar" style="--i:0">极</span><span class="kchar" style="--i:1">简</span><span class="kchar" style="--i:2">音</span><span class="kchar" style="--i:3">形</span><br><span class="grad"><span class="kchar" style="--i:4">为</span><span class="kchar" style="--i:5">盲</span><span class="kchar" style="--i:6">打</span><span class="kchar" style="--i:7">而</span><span class="kchar" style="--i:8">生</span></span></h1>
       <p class="hero-sub">
-        <strong>轻羽落键，意到字成。</strong>以小鹤双拼定音，97 个字根定形——不盯候选栏，让思绪与指尖同频。
+        小鹤双拼定音，97 个字根定形。<br>不盯候选栏，让思绪与指尖同频。
       </p>
 
       <div class="hero-ctas">
@@ -3186,7 +3197,7 @@ function scaleKeyboardToFit(kbId, baseWidth) {
     const ratio = avail / baseWidth;
     kb.style.width = baseWidth + 'px';
     kb.style.transform = 'scale(' + ratio.toFixed(4) + ')';
-    wrap.style.height = Math.ceil(kb.offsetHeight * ratio) + 'px';
+    wrap.style.height = Math.ceil(kb.offsetHeight * ratio + 4) + 'px';
   } else {
     kb.classList.remove('is-scaled');
     kb.style.width = '100%';
@@ -3444,7 +3455,7 @@ function exportZigenSvg() {
   // 静态矢量图：所有文字已转成路径，不依赖字体，任何查看器都不会出现方框
   const a = document.createElement('a');
   a.href = 'zigen-chart.svg';
-  a.download = '简单鹤字根图-V9.svg';
+  a.download = '简单鹤字根图.svg';
   document.body.appendChild(a);
   a.click();
   a.remove();
