@@ -1881,6 +1881,963 @@ tr:last-child td { border-bottom: 0; }
   .brand-logo { height: 28px !important; }
 }
 
+
+/* ==================== Cross-Device Responsive & Airy Desktop Typography Overhaul ==================== */
+:root {
+  color-scheme: light;
+  --pad-x: clamp(16px, 3.8vw, 56px);
+  --pad-top: clamp(28px, 3.6vw, 48px);
+  --pad-b: clamp(64px, 7.5vw, 120px);
+  --container-max: 1320px;
+  --header-h: 68px;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ink-faint: #938c85;
+  --line: rgba(244, 242, 237, 0.11);
+  --line-strong: rgba(244, 242, 237, 0.22);
+}
+
+html {
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overscroll-behavior-x: none;
+}
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overflow-x: clip;
+  overscroll-behavior-x: none;
+  font-size: 15.5px;
+  line-height: 1.75;
+}
+
+/* Keyboard accessibility: crisp focus ring without click clutter */
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Safe areas & Safari backdrop-filter compatibility */
+.site-header {
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+}
+.header-inner {
+  max-width: var(--container-max);
+  height: var(--header-h);
+  padding: 0 var(--pad-x);
+}
+.mobile-dock {
+  padding: 6px max(10px, env(safe-area-inset-right, 0px)) 6px max(10px, env(safe-area-inset-left, 0px));
+}
+/* Uniform, poised top & bottom rhythm across all views (no abnormal stacked gap, no zero-padding cramping) */
+.container {
+  max-width: var(--container-max);
+  padding: var(--pad-top) max(var(--pad-x), env(safe-area-inset-right, 0px)) calc(var(--pad-b) + env(safe-area-inset-bottom, 0px)) max(var(--pad-x), env(safe-area-inset-left, 0px));
+}
+.site-footer {
+  padding: 36px max(24px, env(safe-area-inset-right, 0px)) calc(36px + env(safe-area-inset-bottom, 0px)) max(24px, env(safe-area-inset-left, 0px));
+  font-size: 13px;
+  line-height: 1.8;
+}
+.toast {
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  max-width: calc(100vw - 32px);
+  text-align: center;
+}
+.mask {
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+}
+.modal {
+  max-height: 86vh;
+  max-height: 86dvh;
+  padding: clamp(22px, 3vw, 34px);
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Touch ergonomics on interactive keys & controls */
+.vkey, .sp-key, .zg-keycap, .vkb-delete, .space-btn,
+.stage-frame .hw-key, .dock-btn, .subtab, .chip, .btn {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* ==================== Airy Desktop Density & Clear Typographic Hierarchy ==================== */
+.section-head {
+  margin-top: 0;
+  margin-bottom: clamp(28px, 3.6vw, 48px);
+  gap: 16px 28px;
+}
+.sec-eyebrow {
+  margin-bottom: 12px;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+.section-head h2 {
+  font-size: clamp(28px, 3.3vw, 44px);
+  line-height: 1.24;
+  letter-spacing: 0.01em;
+}
+.section-head p {
+  margin: 12px 0 0;
+  font-size: clamp(14.5px, 1.3vw, 16.5px);
+  line-height: 1.82;
+  color: var(--ink-soft);
+  max-width: 56ch;
+}
+
+/* Overview: Hero, Stage, Architecture Grid, Comparison, Practice Entry */
+.hero-editorial {
+  max-width: 860px;
+  margin: clamp(20px, 3.5vw, 52px) auto clamp(52px, 6.5vw, 92px);
+}
+.hero-editorial .hero-title {
+  margin: 0 0 clamp(20px, 2.4vw, 30px);
+  line-height: 1.18;
+}
+.hero-editorial .hero-sub {
+  margin: 0 auto clamp(28px, 3.2vw, 40px);
+  max-width: 600px;
+  font-size: clamp(15.5px, 1.45vw, 18.5px);
+  line-height: 1.9;
+}
+.track-switch {
+  margin-bottom: clamp(22px, 2.6vw, 32px);
+}
+.hero-editorial .hero-ctas {
+  gap: 14px 16px;
+  margin-bottom: clamp(22px, 2.6vw, 32px);
+}
+.hero-editorial .hero-status {
+  gap: 12px 28px;
+  font-size: 13.5px;
+}
+.official-meta {
+  padding: 12px 24px;
+  gap: 8px 20px;
+  font-size: 13.5px;
+  margin-top: 8px;
+}
+
+.stage-frame {
+  max-width: min(1040px, 100%);
+  margin: 0 auto clamp(64px, 7.5vw, 116px);
+}
+.stage-frame .showcase {
+  padding: clamp(24px, 3.6vw, 48px) clamp(22px, 4.2vw, 56px);
+}
+.stage-frame .showcase-top {
+  margin-bottom: clamp(24px, 3vw, 38px);
+  padding-bottom: clamp(16px, 2vw, 24px);
+}
+.stage-frame .showcase-body {
+  gap: clamp(24px, 4vw, 52px);
+}
+.stage-frame .demo-meta {
+  font-size: clamp(14.5px, 1.3vw, 16px);
+  line-height: 1.85;
+}
+
+.arch-grid {
+  margin-bottom: clamp(64px, 7.5vw, 116px);
+}
+.arch-cell {
+  padding: clamp(30px, 4.2vw, 60px) clamp(18px, 3.8vw, 56px);
+  gap: clamp(20px, 2.6vw, 32px);
+}
+.arch-cell h3 {
+  margin: 18px 0 12px;
+  font-size: clamp(18px, 1.8vw, 22px);
+  line-height: 1.35;
+}
+.arch-cell p {
+  font-size: clamp(14.5px, 1.3vw, 16px);
+  line-height: 1.85;
+  max-width: 50ch;
+}
+
+.cmp-wrap {
+  margin-bottom: clamp(64px, 7.5vw, 116px);
+  -webkit-overflow-scrolling: touch;
+}
+.cmp-table {
+  font-size: clamp(13.5px, 1.25vw, 15px);
+}
+.cmp-table th, .cmp-table td {
+  padding: clamp(14px, 1.8vw, 22px) clamp(16px, 2vw, 26px);
+  line-height: 1.68;
+}
+.cmp-table td.col-jdh small {
+  margin-top: 5px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.cmp-table td:first-child,
+.cmp-table th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: var(--surface);
+  box-shadow: 2px 0 6px rgba(28, 25, 23, 0.05);
+}
+.cmp-table th:first-child {
+  background: var(--bg);
+}
+:root[data-theme="dark"] .cmp-table td:first-child,
+:root[data-theme="dark"] .cmp-table th:first-child {
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.42);
+}
+
+/* Grids & Cards: spacious gaps, generous internal padding, legible prose */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2.4vw, 32px);
+  margin-bottom: clamp(28px, 3.6vw, 48px);
+}
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(18px, 2.4vw, 32px);
+  margin-bottom: clamp(28px, 3.4vw, 44px);
+}
+.prac-row {
+  gap: clamp(18px, 2.5vw, 34px);
+}
+.prac-tile {
+  padding: clamp(24px, 3vw, 40px) clamp(22px, 2.8vw, 36px);
+  gap: clamp(20px, 2.4vw, 30px);
+}
+.prac-tile h3 {
+  margin: 14px 0 10px;
+  font-size: clamp(18px, 1.6vw, 20.5px);
+}
+.prac-tile p {
+  font-size: clamp(14.5px, 1.25vw, 15.5px);
+  line-height: 1.82;
+}
+
+.card {
+  padding: clamp(20px, 3vw, 42px);
+}
+.card p {
+  line-height: 1.82;
+}
+
+/* Roadmap */
+.roadmap-bar {
+  padding: clamp(18px, 2.4vw, 28px) clamp(20px, 2.8vw, 34px);
+  margin-bottom: clamp(22px, 2.8vw, 34px);
+  gap: 20px 28px;
+}
+.step-list {
+  gap: clamp(16px, 2vw, 26px);
+}
+.step-card {
+  padding: clamp(20px, 2.6vw, 34px) clamp(20px, 3vw, 38px);
+  gap: clamp(16px, 2vw, 24px);
+}
+.step-body h3 {
+  margin-bottom: 10px;
+  font-size: clamp(17.5px, 1.6vw, 20px);
+}
+.step-body p {
+  margin-bottom: 14px;
+  font-size: 15px;
+  line-height: 1.8;
+}
+.step-tips {
+  font-size: 14.5px;
+  line-height: 1.82;
+}
+.step-tips li {
+  margin-bottom: 7px;
+}
+
+/* Guide: Subtabs, Zigen Chart, Split Rules, Wuli Codes, Shuangpin */
+.subtabs {
+  padding: 5px;
+  margin-bottom: clamp(22px, 2.8vw, 34px);
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.subtabs::-webkit-scrollbar {
+  display: none;
+}
+.subtab {
+  padding: 10px 20px;
+  font-size: 14.5px;
+}
+.zg-chart-bar {
+  margin-bottom: clamp(18px, 2.2vw, 26px);
+  gap: 14px 20px;
+}
+.zg-kb {
+  --kgap: 9px;
+  gap: 10px;
+}
+.zg-keycap {
+  min-height: 116px;
+  padding: 12px 10px;
+  gap: 7px;
+}
+.zg-keycap .zk-let {
+  font-size: 16.5px;
+}
+.zg-keycap .zk-roots {
+  font-size: 17.5px;
+  line-height: 1.48;
+}
+.zg-detail-bar {
+  margin-top: clamp(18px, 2.2vw, 26px);
+  padding: clamp(16px, 2.2vw, 24px) clamp(18px, 2.4vw, 28px);
+  gap: 16px 24px;
+}
+.zg-notes {
+  margin-top: clamp(20px, 2.4vw, 28px);
+  padding: clamp(18px, 2.4vw, 26px) clamp(20px, 2.6vw, 30px);
+}
+.zg-notes h4 {
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+.zg-notes ol {
+  font-size: 14px;
+  line-height: 2;
+}
+.motto-card {
+  padding: clamp(24px, 3vw, 38px) clamp(22px, 3.4vw, 44px);
+  margin-bottom: clamp(24px, 3vw, 36px);
+}
+.sp-kb {
+  --kgap: 8px;
+  gap: 8px;
+  margin: 22px 0;
+}
+.sp-key {
+  min-height: 72px;
+  padding: 6px 4px;
+}
+.sp-detail {
+  padding: 18px 22px;
+}
+.filter-bar {
+  gap: 12px 16px;
+  margin-bottom: clamp(20px, 2.4vw, 28px);
+}
+.code-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  gap: clamp(12px, 1.6vw, 20px);
+}
+.code-item {
+  padding: 18px 20px;
+  gap: 8px;
+}
+.ztable {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 215px), 1fr));
+  gap: clamp(14px, 1.8vw, 22px);
+}
+.zcell {
+  padding: 20px 22px;
+}
+
+/* Ecosystem Cards: generous spacing and legible embedded shortcut callouts */
+.eco-card {
+  padding: clamp(22px, 2.8vw, 38px);
+  gap: clamp(16px, 2vw, 24px);
+}
+.eco-card h3 {
+  margin-bottom: 10px;
+  font-size: clamp(17.5px, 1.5vw, 19.5px);
+}
+.eco-card p {
+  font-size: 15px;
+  line-height: 1.8;
+}
+.eco-card > div > div[style] {
+  margin-top: 16px !important;
+  padding: 15px 18px !important;
+  font-size: 13.5px !important;
+  line-height: 1.88 !important;
+}
+
+/* ==================== Practice Studio: Comfortable Natural Sizing (Allows Normal Vertical Scroll) ==================== */
+#view-practice .section-head {
+  margin-top: 0;
+  margin-bottom: clamp(24px, 3vw, 38px);
+}
+#view-practice .hud {
+  padding: clamp(16px, 2vw, 22px) clamp(18px, 2.4vw, 28px);
+  margin-bottom: clamp(22px, 2.8vw, 34px);
+  gap: 14px 22px;
+  border-radius: 16px;
+}
+#view-practice .hud-group {
+  gap: clamp(16px, 2vw, 26px);
+}
+#view-practice .hud-stat {
+  gap: 10px;
+}
+#view-practice .hud-stat .val {
+  font-size: clamp(17px, 1.6vw, 20px);
+}
+#view-practice .hud-stat .lbl {
+  font-size: 12px;
+  margin-top: 2px;
+}
+#view-practice .ring {
+  width: 44px;
+  height: 44px;
+}
+#view-practice .ring svg {
+  width: 100%;
+  height: 100%;
+}
+
+#view-practice .stage {
+  gap: clamp(22px, 2.8vw, 34px);
+  padding: 6px 0 16px;
+}
+#view-practice .qcard {
+  width: min(100%, 720px);
+  padding: clamp(28px, 3.8vw, 48px) clamp(24px, 3.8vw, 48px) clamp(24px, 3.2vw, 40px);
+  border-radius: 22px;
+}
+#view-practice .q-label {
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+#view-practice .zigen-display {
+  font-size: clamp(3rem, 6.2vw, 5.2rem);
+  line-height: 1.3;
+  min-height: 1.45em;
+}
+#view-practice .sp-prompt {
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  line-height: 1.22;
+  margin: 6px 0;
+}
+#view-practice .sp-pinyin {
+  font-size: 16.5px;
+  margin-top: 4px;
+}
+#view-practice .q-sub {
+  font-size: 13.5px;
+  margin-top: 12px;
+  line-height: 1.65;
+}
+#view-practice .slots {
+  margin: 26px 0 14px;
+  gap: 12px;
+}
+#view-practice .slot {
+  width: 64px;
+  height: 66px;
+  font-size: 28px;
+  border-radius: 14px;
+}
+#view-practice .answer-line {
+  min-height: 30px;
+  font-size: 14.5px;
+  margin-top: 6px;
+}
+
+#view-practice .vkb {
+  width: min(100%, 780px);
+  --kgap: 9px;
+  gap: 10px;
+}
+#view-practice .vkey {
+  height: 60px;
+  font-size: 17px;
+  border-radius: 12px;
+  padding: 4px 2px;
+}
+#view-practice .vkey.with-roots {
+  height: 76px;
+}
+#view-practice .vkb-controls {
+  margin-top: 8px;
+  gap: 12px;
+}
+#view-practice .space-btn,
+#view-practice .vkb-delete {
+  height: 44px;
+  font-size: 13.5px;
+}
+
+/* ==================== 6-Tier Responsive Breakpoints ==================== */
+
+/* 1. Large Desktop (>= 1501px: 1536, 1920, 2560) */
+@media (min-width: 1501px) {
+  :root {
+    --container-max: 1400px;
+    --pad-x: 60px;
+    --pad-top: 52px;
+  }
+  body {
+    font-size: 16px;
+  }
+  .hero-editorial {
+    max-width: 900px;
+  }
+}
+
+/* 2. Standard Desktop (1101px - 1500px: 1280x720, 1366x768, 1440x900) */
+@media (min-width: 1101px) and (max-width: 1500px) {
+  :root {
+    --container-max: 1300px;
+    --pad-x: clamp(32px, 3.6vw, 48px);
+    --pad-top: clamp(34px, 3.5vw, 46px);
+  }
+}
+
+/* 3. Tablet Landscape (821px - 1100px: iPad Landscape 1024/1080/1180) */
+@media (min-width: 821px) and (max-width: 1100px) {
+  :root {
+    --pad-x: 28px;
+    --pad-top: 30px;
+    --header-h: 62px;
+  }
+  .main-nav {
+    gap: 2px;
+  }
+  .nav-btn {
+    padding: 7px 11px;
+    font-size: 13.5px;
+  }
+  .skip-pill {
+    padding: 0 11px;
+    font-size: 12px;
+  }
+  .grid-3, .prac-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .arch-cell {
+    padding: 36px 26px;
+  }
+  .zg-kb {
+    --kgap: 6px;
+    gap: 7px;
+  }
+  .zg-keycap {
+    min-height: 98px;
+    padding: 8px 6px;
+  }
+  .zg-keycap .zk-roots {
+    font-size: 15px;
+  }
+  #view-practice .vkb {
+    --kgap: 7px;
+    gap: 8px;
+  }
+  #view-practice .vkey {
+    height: 54px;
+    font-size: 16px;
+  }
+}
+
+/* 4. Tablet Portrait (431px - 820px: iPad Portrait 768/810/820, Android Tablets) */
+@media (max-width: 820px) {
+  :root {
+    --pad-x: 22px;
+    --pad-top: 26px;
+    --header-h: 54px;
+  }
+  /* Switch to compact mobile-dock bar at <=820px to prevent 768px header horizontal overflow */
+  .main-nav {
+    display: none;
+  }
+  .mobile-dock {
+    display: block;
+  }
+  .dock-btn {
+    min-height: 38px;
+    font-size: 13px;
+    padding: 6px 4px;
+  }
+  .brand {
+    font-size: 15.5px;
+    gap: 8px;
+  }
+  .brand-logo {
+    height: 30px !important;
+  }
+  .grid-3, .prac-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .arch-grid {
+    grid-template-columns: 1fr;
+  }
+  .arch-cell {
+    padding: 30px 8px !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--line) !important;
+  }
+  .arch-cell:last-child {
+    border-bottom: 0 !important;
+  }
+  .stage-frame .showcase-body {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .stage-frame .demo-glyph-box {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 16px;
+    min-width: 0;
+    padding: 14px 18px;
+  }
+  .stage-frame .demo-glyph-box .big-hz {
+    font-size: 48px;
+  }
+  .stage-frame .demo-glyph-box .big-py {
+    margin-top: 0;
+  }
+  .subtabs {
+    display: flex;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    border-radius: 14px;
+    width: 100%;
+    padding: 4px;
+  }
+  .subtab {
+    padding: 8px 14px;
+    font-size: 13.5px;
+  }
+  .zg-kb {
+    --kgap: 4px;
+    gap: 5px;
+  }
+  .zg-keycap {
+    min-height: 82px;
+    padding: 5px 4px;
+    border-radius: 9px;
+  }
+  .zg-keycap .zk-let {
+    font-size: 12.5px;
+  }
+  .zg-keycap .zk-cnt {
+    display: none;
+  }
+  .zg-keycap .zk-roots {
+    font-size: 12px;
+    line-height: 1.25;
+  }
+  #view-practice .vkb {
+    --kgap: 6px;
+    gap: 7px;
+  }
+  #view-practice .vkey {
+    height: 52px;
+    font-size: 15.5px;
+  }
+  #view-practice .vkey.with-roots {
+    height: 66px;
+  }
+}
+
+/* 5. Phone Standard / Large (<= 520px, covering 391-430px Pro Max / Android 412px) */
+@media (max-width: 520px) {
+  :root {
+    --pad-x: 14px;
+    --pad-top: 20px;
+    --header-h: 48px;
+  }
+  body {
+    font-size: 14.5px;
+  }
+  .brand-logo {
+    height: 26px !important;
+  }
+  .dock-btn {
+    font-size: 12px;
+    min-height: 36px;
+  }
+  .grid-3, .grid-2, .prac-row {
+    grid-template-columns: 1fr;
+  }
+  .step-card {
+    grid-template-columns: auto 1fr;
+  }
+  .step-cta {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .zg-kb {
+    --kgap: 2.5px;
+    gap: 4px;
+  }
+  .zg-keycap {
+    min-height: 68px;
+    padding: 3px 2px 4px;
+    border-radius: 7px;
+  }
+  .zg-keycap .zk-let {
+    font-size: 11px;
+  }
+  .zg-keycap .zk-roots {
+    font-size: 8.5px;
+    line-height: 1.15;
+  }
+  .sp-kb {
+    --kgap: 3px;
+    gap: 4px;
+  }
+  .sp-key {
+    min-height: 50px;
+    padding: 3px 1px;
+  }
+  /* Maximize practice keyboard width & touch comfort on narrow phones */
+  body[data-route="practice"] .container {
+    padding-left: max(10px, env(safe-area-inset-left, 0px));
+    padding-right: max(10px, env(safe-area-inset-right, 0px));
+  }
+  #view-practice .section-head {
+    margin-bottom: 18px;
+  }
+  #view-practice .hud {
+    padding: 12px 14px;
+    margin-bottom: 18px;
+    gap: 10px 14px;
+  }
+  #view-practice .hud-group {
+    gap: 10px 14px;
+  }
+  #view-practice .ring {
+    width: 38px;
+    height: 38px;
+  }
+  #view-practice .qcard {
+    padding: 20px 14px 18px;
+    border-radius: 18px;
+  }
+  #view-practice .zigen-display {
+    font-size: clamp(2.4rem, 11vw, 3.4rem);
+  }
+  #view-practice .slots {
+    margin: 16px 0 10px;
+    gap: 8px;
+  }
+  #view-practice .slot {
+    width: 48px;
+    height: 50px;
+    font-size: 22px;
+  }
+  #view-practice .vkb {
+    --kgap: 3px;
+    gap: 5px;
+  }
+  #view-practice .vkey {
+    height: 46px;
+    min-height: 44px;
+    font-size: 14px;
+    border-radius: 8px;
+  }
+  #view-practice .vkey.with-roots {
+    height: 58px;
+  }
+  #view-practice .vkey.with-roots .ksub {
+    font-size: 9.5px;
+  }
+}
+
+/* 6. Phone Narrow (<= 390px: iPhone SE / 360px Android / iPhone 13-15 390px) */
+@media (max-width: 390px) {
+  :root {
+    --pad-x: 10px;
+    --pad-top: 18px;
+  }
+  .header-inner {
+    padding: 0 10px;
+    gap: 8px;
+  }
+  .skip-pill {
+    padding: 0 8px;
+    font-size: 11px;
+    height: 28px;
+  }
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+  }
+  #view-practice .vkb {
+    --kgap: 2.5px;
+    gap: 4px;
+  }
+  #view-practice .vkey {
+    height: 44px;
+    font-size: 13px;
+    border-radius: 7px;
+  }
+  .stage-frame .hw-key {
+    width: 46px;
+    height: 54px;
+  }
+  .stage-frame .hw-key b {
+    font-size: 18px;
+  }
+}
+
+/* 7. Phone Landscape (short viewport height <= 500px in landscape) */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root {
+    --header-h: 44px;
+    --pad-top: 10px;
+  }
+  .brand-logo {
+    height: 24px !important;
+  }
+  .mobile-dock {
+    padding-top: 3px;
+    padding-bottom: 3px;
+  }
+  .dock-btn {
+    min-height: 28px;
+    padding: 3px 4px;
+    font-size: 11.5px;
+  }
+  #view-practice .section-head {
+    margin-bottom: 10px;
+  }
+  #view-practice .section-head .sec-eyebrow,
+  #view-practice .section-head p {
+    display: none;
+  }
+  #view-practice .section-head h2 {
+    font-size: 20px;
+  }
+  #view-practice .subtabs {
+    margin-bottom: 10px;
+    padding: 3px;
+  }
+  #view-practice .subtab {
+    padding: 5px 12px;
+    font-size: 12px;
+  }
+  #view-practice .hud {
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    gap: 8px 12px;
+  }
+  #view-practice .ring {
+    width: 32px;
+    height: 32px;
+  }
+  /* Side-by-side layout on short phone landscape so question + keyboard stay usable */
+  #view-practice .stage {
+    display: grid;
+    grid-template-columns: minmax(210px, 38%) minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+    padding: 0;
+  }
+  #view-practice .qcard {
+    width: 100%;
+    padding: 12px 12px 10px;
+  }
+  #view-practice .q-sub {
+    display: none;
+  }
+  #view-practice .zigen-display {
+    font-size: clamp(1.8rem, 9dvh, 2.5rem);
+    min-height: 1.15em;
+  }
+  #view-practice .sp-prompt {
+    font-size: clamp(1.6rem, 8dvh, 2.2rem);
+  }
+  #view-practice .slots {
+    margin: 8px 0 6px;
+  }
+  #view-practice .slot {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+  #view-practice .vkb {
+    width: 100%;
+    --kgap: 3px;
+    gap: 4px;
+  }
+  #view-practice .vkey {
+    height: 42px;
+    font-size: 13px;
+    border-radius: 7px;
+  }
+  #view-practice .vkey.with-roots {
+    height: 46px;
+  }
+  #view-practice .space-btn,
+  #view-practice .vkb-delete {
+    height: 34px;
+    font-size: 12px;
+  }
+}
+
+/* Prevent iOS Safari auto-zoom on input focus */
+@media (max-width: 820px), (hover: none) and (pointer: coarse) {
+  input, select, textarea, .search-input {
+    font-size: 16px;
+  }
+}
+
+/* Touch devices: eliminate sticky :hover states while preserving crisp :active feedback */
+@media (hover: none), (pointer: coarse) {
+  .nav-btn:hover { color: var(--ink-soft); background: transparent; }
+  .nav-btn.active:hover { color: var(--ink); }
+  .skip-pill:hover { border-color: var(--line-strong); color: var(--ink-soft); }
+  .skip-pill.on:hover { color: var(--ink); }
+  .icon-btn:hover { color: var(--ink-soft); background: transparent; }
+  .btn-primary:hover { opacity: 1; transform: none; }
+  .btn-outline:hover { border-color: var(--line-strong); background: transparent; }
+  .btn-soft:hover { background: var(--surface-2); color: var(--ink); }
+  .bento-card:hover, .eco-card:hover, .prac-tile:hover { transform: none; border-color: var(--line); box-shadow: var(--shadow-card); }
+  .zg-keycap:hover { transform: none; border-color: var(--line-strong); }
+  .zg-keycap.active:hover { border-color: var(--blue); }
+  .sp-key:hover { border-color: var(--line-strong); background: var(--bg); }
+  .sp-key.active:hover { border-color: var(--blue); background: var(--blue-soft); }
+  .vkey:hover { border-color: var(--line-strong); background: var(--surface); }
+  .vkey.hintkey:hover { background: var(--blue-soft); border-color: var(--blue); }
+  .vkey.good:hover { background: var(--ok-soft); border-color: var(--ok); }
+  .vkey.bad:hover { background: var(--bad-soft); border-color: var(--bad); }
+  .chip:hover { border-color: var(--line-strong); color: var(--ink-soft); }
+  .chip.active:hover { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+  .stage-frame .hw-key:hover { transform: none; border-color: var(--line-strong); }
+  .stage-frame .demo-pill:hover { border-color: var(--line); color: var(--ink-soft); background: transparent; }
+  .stage-frame .demo-pill.active:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .hero-step-pill:hover { color: var(--ink-faint); background: transparent; }
+  .hero-step-pill.active:hover { color: var(--ink); background: var(--surface); }
+  .space-btn:hover { color: var(--ink-faint); border-color: var(--line-strong); }
+}
+
+/* Complete Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .view, .subpanel.active, .qcard.pop, .qcard.shake, .vkey.hintkey, .cf {
+    animation: none !important;
+  }
+  .btn, .nav-dot-slider, .track-thumb, .subtab-thumb, .progress-fill, .vkey {
+    transition: none !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -3206,6 +4163,8 @@ function syncAllSliders() {
   });
 }
 window.addEventListener('resize', syncAllSliders, { passive: true });
+window.addEventListener('orientationchange', () => setTimeout(syncAllSliders, 120), { passive: true });
+if (window.visualViewport) window.visualViewport.addEventListener('resize', syncAllSliders, { passive: true });
 
 function applySkipSpUi() {
   const sk = STATE.skipSp;
@@ -3322,7 +4281,13 @@ function applyTheme() {
 
 function switchRoute(route, subTarget) {
   currentRoute = route;
-  setTimeout(() => { updateScrollProgress(); initScrollReveal($('view-' + route)); }, 30);
+  document.body.dataset.route = route;
+  if (route === 'practice') {
+    document.body.dataset.practiceSub = currentPracticeSub;
+    setTimeout(() => { updateScrollProgress(); }, 30);
+  } else {
+    setTimeout(() => { updateScrollProgress(); initScrollReveal($('view-' + route)); }, 30);
+  }
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + route));
   document.querySelectorAll('.nav-btn, .dock-btn').forEach(b => b.classList.toggle('active', b.dataset.route === route));
   syncAllSliders();
@@ -3338,7 +4303,7 @@ function switchRoute(route, subTarget) {
   }
   if (route === 'roadmap') renderRoadmap();
   syncOverviewCounters();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: route === 'practice' ? 'auto' : 'smooth' });
 }
 
 function switchSubTab(tabBarId, containerId, targetId) {
@@ -3350,6 +4315,7 @@ function switchSubTab(tabBarId, containerId, targetId) {
   if (tabBarId === 'guideTabs' && targetId === 'g-chart') renderVisualZigenChart();
   if (tabBarId === 'practiceTabs') {
     currentPracticeSub = targetId;
+    document.body.dataset.practiceSub = targetId;
     if (targetId === 'p-table') renderZigenTable();
     if (targetId === 'p-zigen') { armZgHint(); renderZgHud(); }
     else clearTimeout(zgHintTimer);
@@ -4426,7 +5392,9 @@ function deleteLastPracticeChar() {
 
 function bindEvents() {
   $('brandHome').addEventListener('click', () => switchRoute('home'));
-  $('themeBtn').addEventListener('click', () => { const tb = $('themeBtn'); tb.classList.remove('spin'); void tb.offsetWidth; tb.classList.add('spin'); STATE.theme = STATE.theme === 'dark' ? 'light' : 'dark'; applyTheme(); saveState(); });
+  $('themeBtn').addEventListener('click', () => { const tb = $('themeBtn'); tb.classList.remove('spin'); void tb.offsetWidth; tb.classList.add('spin'); STATE.theme = STATE.theme === 'dark' ? 'light' : 'dark'; applyTheme();
+  document.body.dataset.route = currentRoute;
+  document.body.dataset.practiceSub = currentPracticeSub; saveState(); });
 
   $('trackZero').addEventListener('click', () => setSkipSp(false));
   $('trackSkip').addEventListener('click', () => setSkipSp(true));
