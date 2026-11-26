@@ -2823,7 +2823,8 @@ body::after {
       <li>屏幕给出简单鹤字根，按下对应的 <b>字母键</b>（物理键盘或触屏键帽均可）。</li>
       <li><b>按对自动跳下一题</b>，连击越高积分倍率越高（最高 ×4）。</li>
       <li><b>按错会很快重复出现</b>（间隔重复算法），专治记不住的字根。</li>
-      <li>想不起来就 <b>按空格看答案提示</b>——不跳过、不断连击，看清后自己敲对才继续。</li>
+      <li><b>新字根第一次出现会直接显示答案</b>，看清后照着敲对即可，不用干等。</li>
+      <li>再遇到时想不起来就 <b>按空格看答案提示</b>——不跳过、不断连击，看清后自己敲对才继续。</li>
       <li>推荐默认 <b>「循序渐进」模式</b>：从 3 键起步，全掌握后自动解锁下一键。</li>
     </ol>
     <div class="modal-foot">
@@ -3856,7 +3857,10 @@ function renderZgHud() {
 }
 function armZgHint() {
   clearTimeout(zgHintTimer);
-  if (!STATE.zg.autoHint || currentRoute !== 'practice' || currentPracticeSub !== 'p-zigen') return;
+  if (currentRoute !== 'practice' || currentPracticeSub !== 'p-zigen' || zgCur < 0) return;
+  // 新字根第一次出现：直接给出答案，新用户不必干等
+  if (STATE.zg.levels[zgCur] === -1) { showZgAnswer('首次提示'); return; }
+  if (!STATE.zg.autoHint) { zgHintTimer = null; return; }
   zgHintTimer = setTimeout(() => { if (zgLocked || zgCur < 0) return; showZgAnswer('自动提示'); }, STATE.zg.autoHint * 1000);
 }
 function showZgAnswer(tag) {
