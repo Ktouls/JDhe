@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-"""生成可独立打开的高清字根图 SVG。
+"""生成可独立打开的高清字根图 SVG（与网站 elegant 视觉一致）。
 
-所有文字（字根、笔画名、注释）都转成矢量路径，不依赖任何字体，
-因此在相册、图片查看器、Illustrator 等环境都不会出现方框。
+所有文字都转成矢量路径，不依赖字体，在相册 / 图片查看器 / 设计软件里都不会出现方框。
 输出：src/zigen-chart.svg
 """
 import base64
@@ -17,38 +16,50 @@ from fontTools.ttLib import TTFont
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SRC = ROOT / "src"
 
-KW, KH, GAP = 116, 136, 12
-W, H = 1360, 800
+# 与网站 :root 同一套配色（elegant 主题）
+BG = "#faf9f6"
+INK = "#1c1917"
+INK_SOFT = "#57534e"
+INK_FAINT = "#8c8780"
+CARD = "#ffffff"
+CARD_STROKE = "#d9d5cd"
+HAIRLINE = "#e7e3db"
+BLUE = "#25548a"
+ACCENT = "#c43c35"
+BADGE_BG = "#f9ebeb"
+
+KW, KH, GAP = 116, 140, 12
+W, H = 1360, 848
 
 
 def load(name):
     b64 = (SRC / (name + ".b64")).read_text().strip()
     font = TTFont(io.BytesIO(base64.b64decode(b64)))
-    return font, font.getBestCmap(), font.getGlyphSet(), font["head"].unitsPerEm
+    return font.getBestCmap(), font.getGlyphSet(), font["head"].unitsPerEm
 
 
-PUA, PUA_CMAP, PUA_GS, PUA_UPEM = load("jdh_font.woff")
-CJK, CJK_CMAP, CJK_GS, CJK_UPEM = load("jdh_roots_font.woff")
+PUA_CMAP, PUA_GS, PUA_UPEM = load("jdh_font.woff")
+CJK_CMAP, CJK_GS, CJK_UPEM = load("jdh_roots_font.woff")
 
 
 def resolve(ch):
     cp = ord(ch)
     if cp in PUA_CMAP:
-        return PUA_GS, PUA_UPEM, PUA_CMAP[cp], True
+        return PUA_GS, PUA_UPEM, PUA_CMAP[cp]
     if cp in CJK_CMAP:
-        return CJK_GS, CJK_UPEM, CJK_CMAP[cp], False
-    return None, None, None, None
+        return CJK_GS, CJK_UPEM, CJK_CMAP[cp]
+    return None, None, None
 
 
 def advance(ch, size):
-    gs, upem, name, _ = resolve(ch)
+    gs, upem, name = resolve(ch)
     if gs is None:
         return size * 0.5
     return gs[name].width * size / upem
 
 
 def glyph_path(ch, x, baseline, size):
-    gs, upem, name, _ = resolve(ch)
+    gs, upem, name = resolve(ch)
     if gs is None:
         print(f"警告：字体缺字 {ch!r} U+{ord(ch):04X}")
         return ""
@@ -56,27 +67,27 @@ def glyph_path(ch, x, baseline, size):
     pen = SVGPathPen(gs, ntos=lambda v: f"{v:.1f}".rstrip("0").rstrip("."))
     gs[name].draw(TransformPen(pen, (s, 0, 0, -s, x, baseline)))
     d = pen.getCommands()
-    return f'<path d="{d}" fill="currentColor"/>' if d else ""
+    return f'<path d="{d}"/>' if d else ""
 
 
-def text_paths(text, x, baseline, size, color, anchor="start", weight=None):
-    total = sum(advance(c, size) for c in text)
+def text_width(text, size):
+    return sum(advance(c, size) for c in text)
+
+
+def text_paths(text, x, baseline, size, color, anchor="start"):
+    total = text_width(text, size)
     if anchor == "end":
         x -= total
     elif anchor == "middle":
         x -= total / 2
-    out = []
-    cursor = x
+    out, cursor = [], x
     for ch in text:
         d = glyph_path(ch, cursor, baseline, size)
         if d:
             out.append(d)
         cursor += advance(ch, size)
     body = "".join(out)
-    if not body:
-        return ""
-    w = f' stroke="currentColor" stroke-width="{weight}"' if weight else ""
-    return f'<g fill="{color}" color="{color}"{w} transform="translate(0,0)">{body}</g>'
+    return f'<g fill="{color}">{body}</g>' if body else ""
 
 
 def build_cards():
@@ -88,7 +99,7 @@ def build_cards():
             continue
         seen.add(dedup)
         name = it["name"]
-        for a, b in ("（", "）"), ("(", ")"):
+        for a in ("（", "("):
             if a in name:
                 name = name.split(a)[0]
         parts = [p for p in name.replace("(", " ").replace("（", " ").split() if p]
@@ -99,9 +110,9 @@ def build_cards():
 CARDS = build_cards()
 STROKE_BADGE = {"d": "横", "p": "竖", "u": "撇", "h": "点", "r": "折"}
 ROWS = [
-    ("qwertyuiop", 40, 110),
-    ("asdfghjkl", 96, 266),
-    ("zxcvbnm", 176, 422),
+    ("qwertyuiop", 40, 134),
+    ("asdfghjkl", 96, 294),
+    ("zxcvbnm", 176, 454),
 ]
 NOTES = [
     "1. 键位 H 的笔画“点”类包括了笔画“捺（乀）”（如“哀”的末形）。",
@@ -115,25 +126,38 @@ NOTES = [
 
 
 def main():
-    parts = []
-    parts.append(f'<rect width="{W}" height="{H}" fill="#ffffff"/>')
-    parts.append(text_paths("简单鹤字根图 V9（26 键 · 共 97 组字根）", 40, 54, 28, "#1d1d1f"))
-    parts.append(text_paths("轻羽落键，意到字成 · 拆分口诀：笔顺优先（无笔画粘连的口可无视笔顺），首末取大，相交也拆，插隔也取，字根字重复，禾取丿八", 40, 82, 13.5, "#6e6e73"))
+    parts = [f'<rect width="{W}" height="{H}" fill="{BG}"/>']
+
+    # 页头：标题 + 副标题 + 右侧规格（不放图标，避免与站点图标不一致）
+    parts.append(text_paths("简单鹤字根图 V9", 40, 62, 28, INK))
+    parts.append(text_paths("简单鹤 · 极简音形输入方案 · 轻羽落键，意到字成", 40, 90, 13, INK_FAINT))
+    parts.append(text_paths("26 键 · 97 组字根", 1320, 60, 13, INK_FAINT, anchor="end"))
 
     for keys, ox, oy in ROWS:
         for idx, ch in enumerate(keys):
             x = ox + idx * (KW + GAP)
             y = oy
-            parts.append(f'<rect x="{x}" y="{y}" width="{KW}" height="{KH}" rx="16" fill="#f5f5f7" stroke="#d2d2d7" stroke-width="1.5"/>')
-            parts.append(text_paths(ch.upper(), x + 14, y + 28, 18, "#0071e3"))
+            parts.append(
+                f'<rect x="{x}" y="{y}" width="{KW}" height="{KH}" rx="14" '
+                f'fill="{CARD}" stroke="{CARD_STROKE}" stroke-width="1"/>'
+            )
+            parts.append(text_paths(ch.upper(), x + 14, y + 26, 16, BLUE))
             if ch in STROKE_BADGE:
-                parts.append(text_paths(STROKE_BADGE[ch], x + KW - 14, y + 28, 14, "#e37400", anchor="end"))
+                label = STROKE_BADGE[ch]
+                tw = text_width(label, 11)
+                bx = x + KW - 12 - (tw + 10)
+                parts.append(
+                    f'<rect x="{bx:.1f}" y="{y + 12}" width="{tw + 10:.1f}" height="18" rx="5" '
+                    f'fill="{BADGE_BG}" stroke="{ACCENT}" stroke-opacity="0.35"/>'
+                )
+                parts.append(text_paths(label, bx + 5, y + 25, 11, ACCENT))
             for li, card in enumerate(CARDS.get(ch, [])[:5]):
-                parts.append(text_paths(" ".join(card), x + 14, y + 54 + li * 19, 15, "#1d1d1f"))
+                parts.append(text_paths(" ".join(card), x + 14, y + 52 + li * 19, 14.5, INK))
 
-    parts.append(text_paths("提示与注释：", 40, 588, 15, "#1d1d1f"))
+    parts.append(f'<line x1="40" y1="614" x2="1320" y2="614" stroke="{HAIRLINE}" stroke-width="1"/>')
+    parts.append(text_paths("提示与注释", 40, 644, 15, INK))
     for i, note in enumerate(NOTES):
-        parts.append(text_paths(note, 40, 614 + i * 24, 13.5, "#48484a"))
+        parts.append(text_paths(note, 40, 672 + i * 24, 13, INK_SOFT))
 
     svg = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
