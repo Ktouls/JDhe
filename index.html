@@ -249,18 +249,6 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none; }
 #themeBtn.spin { animation: themeSpin 0.36s cubic-bezier(0.22, 1, 0.36, 1); }
 @keyframes themeSpin { 0% { transform: rotate(0) scale(0.92); } 100% { transform: rotate(180deg) scale(1); } }
 
-.scroll-progress {
-  position: absolute;
-  left: 0;
-  bottom: -1px;
-  height: 1.5px;
-  width: 0%;
-  background: var(--ink);
-  opacity: 0.2;
-  transition: width 0.08s linear;
-  pointer-events: none;
-}
-
 /* Mobile / Tablet Portrait Compact Top Nav Strip */
 .mobile-dock {
   display: none;
@@ -1846,7 +1834,6 @@ body[data-route="practice"] .container {
       <button class="dock-btn" data-route="ecosystem" type="button">下载</button>
     </div>
   </nav>
-  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 </header>
 
 <main class="container">
@@ -3320,15 +3307,6 @@ function initScrollReveal(scopeEl) {
   });
 }
 
-function updateScrollProgress() {
-  const bar = $('scrollProgress');
-  if (!bar) return;
-  const h = document.documentElement.scrollHeight - window.innerHeight;
-  const pct = h > 0 ? Math.min(100, Math.max(0, (window.scrollY / h) * 100)) : 0;
-  bar.style.width = pct.toFixed(1) + '%';
-}
-window.addEventListener('scroll', updateScrollProgress, { passive: true });
-
 function applyTheme() {
   document.documentElement.setAttribute('data-theme', STATE.theme);
   $('themeBtn').textContent = STATE.theme === 'dark' ? '☀' : '◐';
@@ -3341,9 +3319,8 @@ function switchRoute(route, subTarget) {
   document.body.dataset.route = route;
   if (route === 'practice') {
     document.body.dataset.practiceSub = currentPracticeSub;
-    setTimeout(() => { updateScrollProgress(); }, 30);
   } else {
-    setTimeout(() => { updateScrollProgress(); initScrollReveal($('view-' + route)); }, 30);
+    setTimeout(() => { initScrollReveal($('view-' + route)); }, 30);
   }
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + route));
   document.querySelectorAll('.nav-btn, .dock-btn').forEach(b => b.classList.toggle('active', b.dataset.route === route));
