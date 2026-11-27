@@ -65,7 +65,7 @@ s1 = "\n".join(f"{ch}:{','.join(cs)}" for ch, cs in ranked_single4)
 s2 = "\n".join(f"{w}:{','.join(cs)}" for w, cs in short2.items())
 s3 = "\n".join(f"{w}:{','.join(cs)}" for w, cs in short3.items())
 payload = s1 + "\n===\n" + s2 + "\n===\n" + s3
-dict_gz_b64 = base64.b64encode(gzip.compress(payload.encode("utf-8"), 9)).decode("ascii")
+dict_gz_b64 = base64.b64encode(gzip.compress(payload.encode("utf-8"), 9, mtime=0)).decode("ascii")
 
 out = (
     tpl.replace("__JDH_FONT_BASE64__", font_b64)

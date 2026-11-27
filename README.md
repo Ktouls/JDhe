@@ -1,6 +1,10 @@
 # 简单鹤输入法官网与练习工坊
 
+线上地址：<https://ktouls.github.io/JDhe/>
+
 纯静态单文件网页（内置字根字体、20,877 字全词库、1,220 个二简词与 21,933 个三简词），开箱即用，支持直接部署至 GitHub Pages。
+
+![简单鹤首页](docs/preview.png)
 
 ## 目录结构
 
@@ -34,6 +38,17 @@
 ```bash
 python3 -m http.server 8080
 ```
+
+## 构建校验
+
+CI 在 push / PR 时运行 `scripts/build.py` 与 `scripts/assess.py`，并检查 `index.html`、`zigen-chart.svg`、`src/zigen-chart.svg` 和 `src/assess.json` 是否有未提交的变化。提交前可以在本地跑同样两步：
+
+```bash
+python3 scripts/build.py
+python3 scripts/assess.py
+git diff --exit-code
+```
+
 ## 性能实测
 
 `scripts/measure.py` 用统一字频表做单字测算（输出 `metrics.json`）：
