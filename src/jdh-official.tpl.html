@@ -2171,6 +2171,42 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
 .an-card h4 { margin: 0 0 8px; font-size: 14.5px; font-weight: 700; color: var(--ink); }
 .an-card p { margin: 0; font-size: 13px; line-height: 1.85; color: var(--ink-soft); }
 @media (max-width: 760px) { .assess-notes { grid-template-columns: 1fr; } }
+/* 性能主张 & 速度换算 */
+.perf-claim {
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  padding: clamp(20px, 2.4vw, 30px);
+  margin-bottom: clamp(24px, 3vw, 36px);
+}
+.perf-claim h3 { margin: 0 0 10px; font-family: var(--font-serif); font-size: clamp(19px, 2.2vw, 24px); font-weight: 600; }
+.perf-claim p { margin: 0 0 12px; font-size: 14px; line-height: 1.85; color: var(--ink-soft); }
+.perf-claim p strong { color: var(--ink); }
+.perf-more { font-size: 13px; font-weight: 700; color: var(--accent); text-decoration: none; }
+.perf-more:hover { text-decoration: underline; text-underline-offset: 3px; }
+.speed-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  padding: clamp(20px, 2.4vw, 30px);
+  margin-bottom: clamp(24px, 3vw, 36px);
+}
+.sp-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+.sp-head h3 { margin: 0 0 6px; font-size: 16.5px; font-weight: 700; }
+.sp-head p { margin: 0; font-size: 13px; color: var(--ink-soft); }
+.sp-cols { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: center; gap: clamp(8px, 1.6vw, 20px); }
+.sp-col { text-align: center; padding: 14px 10px; border-radius: 12px; background: var(--bg); border: 1px solid var(--line); }
+.sp-col.hi { background: var(--accent-soft, rgba(196,60,53,.08)); border-color: var(--accent); }
+.sp-col b { display: block; font-family: var(--font-mono); font-size: clamp(24px, 3vw, 34px); line-height: 1; color: var(--ink); }
+.sp-col.hi b { color: var(--accent); }
+.sp-col span { display: block; margin-top: 6px; font-size: 11.5px; color: var(--ink-faint); }
+.sp-arrow { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-faint); white-space: nowrap; }
+.sp-note { margin: 18px 0 0; padding-top: 14px; border-top: 1px solid var(--line); font-size: 12px; line-height: 1.8; color: var(--ink-faint); }
+@media (max-width: 620px) {
+  .sp-cols { grid-template-columns: 1fr; gap: 8px; }
+  .sp-arrow { justify-self: center; }
+}
 </style>
 </head>
 <body>
@@ -2188,7 +2224,6 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
       <button class="nav-btn" data-route="practice" type="button">练习工坊</button>
       <button class="nav-btn" data-route="ecosystem" type="button">下载安装</button>
       <button class="nav-btn" data-route="docs" type="button">进阶文档</button>
-      <button class="nav-btn" data-route="assess" type="button">单字测评</button>
     </nav>
 
     <div class="header-actions">
@@ -2208,7 +2243,6 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
       <button class="dock-btn" data-route="practice" type="button">练习</button>
       <button class="dock-btn" data-route="ecosystem" type="button">下载</button>
       <button class="dock-btn" data-route="docs" type="button">文档</button>
-      <button class="dock-btn" data-route="assess" type="button">测评</button>
     </div>
   </nav>
 </header>
@@ -2376,7 +2410,33 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
         <a class="btn btn-outline btn-sm" href="#doc/commit">看详解 →</a>
       </div>
 
-      <h3 class="arena-subhead">前 3000 常用字 · 单字实测（八种方案）</h3>
+      <div class="speed-card">
+        <div class="sp-head">
+          <div>
+            <h3>日常 4 击/秒，能打多少个字</h3>
+            <p>按小鹤音形官网公布的换算口径：每上一个层级约提升 30%。</p>
+          </div>
+          <a class="perf-more" href="https://flypy.cc/" target="_blank" rel="noopener noreferrer">小鹤官网 ↗</a>
+        </div>
+        <div class="sp-cols">
+          <div class="sp-col"><b>60</b><span>全拼 · 字/分</span></div>
+          <div class="sp-arrow">×130%</div>
+          <div class="sp-col"><b>80</b><span>双拼 · 字/分</span></div>
+          <div class="sp-arrow">×130%</div>
+          <div class="sp-col hi"><b>100</b><span>音形 · 字/分</span></div>
+        </div>
+        <p class="sp-note">简单鹤同属「双拼 + 形码」音形路线，落在同一档；且实测重码略低于小鹤音形（前 3000 字 87 vs 88），
+        代价是四码不自动上屏、多一次确认。速度数字引自小鹤官网，属其官方测算。</p>
+      </div>
+
+      <div class="perf-claim">
+        <h3>低重码，性能优秀</h3>
+        <p>简单鹤的单字性能相当扎实：<strong>前 1500 字全码仅 18 个重码字，前 3000 字 87 个，首选准确率 99.87%</strong>，
+        与四码形码方案处于同一水平；而它只要求记住 97 个乱序字根。</p>
+        <a class="perf-more" href="#assess">了解更多 →</a>
+      </div>
+
+      <h3 class="arena-subhead">前 3000 常用字 · 单字实测（七种方案）</h3>
 <div class="tbl-scroll">
       <table class="tier-table compare-table wide">
         <thead>
@@ -2385,8 +2445,7 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
         <tbody>
           <tr class="self-row"><td>简单鹤（音形 · 97 字根）</td><td data-label="首选准确率">99.87%</td><td data-label="平均位次">1.001</td><td data-label="平均码长">4.00</td><td data-label="全码重码">87</td><td data-label="学习难度"><span class="lv lv-2">中</span></td></tr>
                               <tr><td>虎码（形码 · 241 字根）</td><td data-label="首选准确率">99.95%</td><td data-label="平均位次">1.000</td><td data-label="平均码长">4.00</td><td data-label="全码重码">116</td><td data-label="学习难度"><span class="lv lv-4">高</span></td></tr>
-          <tr><td>小鹤音形（音形 · 部件+小字）</td><td data-label="首选准确率">99.66%</td><td data-label="平均位次">1.004</td><td data-label="平均码长">4.00</td><td data-label="全码重码">88</td><td data-label="学习难度"><span class="lv lv-2">中</span></td></tr>
-          <tr><td>魔然（双拼+辅助码 · 部首制）</td><td data-label="首选准确率">99.64%</td><td data-label="平均位次">1.004</td><td data-label="平均码长">3.49</td><td data-label="全码重码">224</td><td data-label="学习难度"><span class="lv lv-3">中高</span></td></tr>
+          <tr><td>小鹤音形（音形 · 88 部件根）</td><td data-label="首选准确率">99.66%</td><td data-label="平均位次">1.004</td><td data-label="平均码长">4.00</td><td data-label="全码重码">88</td><td data-label="学习难度"><span class="lv lv-2">中</span></td></tr>
           <tr><td>小鹤双拼（纯双拼 · 0 字根）</td><td data-label="首选准确率">84.37%</td><td data-label="平均位次">1.425</td><td data-label="平均码长">2.00</td><td data-label="全码重码">2602</td><td data-label="学习难度"><span class="lv lv-1">低</span></td></tr>
           <tr><td>自然码双拼（纯双拼 · 0 字根）</td><td data-label="首选准确率">84.37%</td><td data-label="平均位次">1.425</td><td data-label="平均码长">2.00</td><td data-label="全码重码">2602</td><td data-label="学习难度"><span class="lv lv-1">低</span></td></tr>
           <tr><td>全拼 26 键（0 字根）</td><td data-label="首选准确率">84.43%</td><td data-label="平均位次">1.425</td><td data-label="平均码长">2.65</td><td data-label="全码重码">2601</td><td data-label="学习难度"><span class="lv lv-0">极低</span></td></tr>
@@ -2402,7 +2461,6 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
 
         <div class="ab-row"><span class="ab-name">虎码（形码 4 码）</span><span class="ab-track"><i class="ab-fill" style="width:99.95%"></i></span><span class="ab-val">99.95%</span></div>
         <div class="ab-row"><span class="ab-name">小鹤音形（音形 4 码）</span><span class="ab-track"><i class="ab-fill" style="width:99.66%"></i></span><span class="ab-val">99.66%</span></div>
-        <div class="ab-row"><span class="ab-name">魔然（双拼 + 辅助码）</span><span class="ab-track"><i class="ab-fill" style="width:99.64%"></i></span><span class="ab-val">99.64%</span></div>
         <div class="ab-row"><span class="ab-name">小鹤双拼（纯双拼）</span><span class="ab-track"><i class="ab-fill" style="width:84.37%"></i></span><span class="ab-val">84.37%</span></div>
         <div class="ab-row"><span class="ab-name">自然码双拼（纯双拼）</span><span class="ab-track"><i class="ab-fill" style="width:84.37%"></i></span><span class="ab-val">84.37%</span></div>
         <div class="ab-row"><span class="ab-name">全拼 26 键</span><span class="ab-track"><i class="ab-fill" style="width:84.43%"></i></span><span class="ab-val">84.43%</span></div>
@@ -2427,9 +2485,9 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
 
       <p class="arena-note">
         测算口径：统一取本仓库 <code>jde.dict.yaml</code> 的字频权重作为评测集，各方案只提供自己的单字码，逐字比对同码单字（不含词组）。<br>
-        码表来源：小鹤音形 <code>cubercsl/rime-flypy</code>、魔然 <code>rimeinn/rime-moran</code>、虎码 <code>LukNg/Rime-tiger_code</code>，均为公开码表；全拼由同字频表还原。<br>
+        码表来源：小鹤音形 <code>cubercsl/rime-flypy</code>、虎码 <code>LukNg/Rime-tiger_code</code>，均为公开码表；全拼由同字频表还原。<br>
         关于自然码双拼：与所有纯双拼一样对拼音做一一映射，同音重码结构与同属双拼的方案完全一致，故与小鹤双拼指标相同。<br>
-        字根数量来源：简单鹤 97，取本仓库码表去重实测；虎码 241，官网原文「同源字根归并后一共 241 个字根」；小鹤音形为「部件 + 小字」两套字根表，官方未公布单一总数；魔然采用「部首 + 部件首字母」规则，无固定字根表。<br>学习难度按「是否需要重新记一套字根/辅助码规则」标注：全拼极低、双拼低、音形中、形码高。<br>提醒：本表只比「单字重码」，不含词组与整句；形码（如虎码）重码虽低，但要记两百多个字根，学习成本远高于音形。复算命令 <code>python3 scripts/measure.py</code>。
+        字根数量来源：简单鹤 97，取本仓库码表去重实测；虎码 241，官网原文「同源字根归并后一共 241 个字根」；小鹤音形 88 个部件字根（另有 6 个笔画字根与小字字根，官网 flypy.cc/help 逐键列出）。<br>学习难度按「是否需要重新记一套字根/辅助码规则」标注：全拼极低、双拼低、音形中、形码高。<br>提醒：本表只比「单字重码」，不含词组与整句；形码（如虎码）重码虽低，但要记两百多个字根，学习成本远高于音形。复算命令 <code>python3 scripts/measure.py</code>。
       </p>
     </section>
 
