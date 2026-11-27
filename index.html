@@ -2009,35 +2009,46 @@ body[data-route="practice"] .container {
 .doc-card .doc-meta { font-size: 12px; color: var(--ink-faint); margin-bottom: 14px; }
 .doc-card .doc-meta a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: 2px; }
 .doc-card .doc-lead { margin: 0 0 16px; font-size: 13.5px; line-height: 1.8; color: var(--ink-soft); }
-.doc-card details { border-top: 1px solid var(--line); padding-top: 14px; }
-.doc-card summary {
-  cursor: pointer; list-style: none; font-size: 13px; font-weight: 600;
-  color: var(--accent); display: flex; align-items: center; justify-content: space-between;
-}
-.doc-card summary::-webkit-details-marker { display: none; }
-.doc-card summary::after { content: "＋"; font-size: 15px; line-height: 1; }
-.doc-card details[open] summary::after { content: "－"; }
-.doc-body { padding-top: 16px; font-size: 13.5px; line-height: 1.85; color: var(--ink-soft); }
-.doc-body h4 {
-  margin: 20px 0 8px; font-size: 13px; font-weight: 700; color: var(--ink);
-  letter-spacing: 0.04em;
-}
-.doc-body h4:first-child { margin-top: 0; }
-.doc-body p { margin: 0 0 10px; }
-.doc-body strong { color: var(--ink); }
-.doc-body ul { margin: 0 0 12px; padding-left: 18px; }
-.doc-body li { margin-bottom: 5px; }
-.doc-body .quote {
-  margin: 12px 0; padding: 10px 14px; border-left: 2px solid var(--accent);
-  background: var(--bg); border-radius: 0 8px 8px 0; font-size: 13px;
-}
-.doc-body .code-list { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-soft); }
-.doc-body code { font-family: var(--font-mono); font-size: 12.5px; background: var(--surface-2); padding: 1px 5px; border-radius: 4px; color: var(--ink); }
 .doc-count { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-bottom: clamp(24px, 3vw, 36px); }
 .doc-count .dc-item { background: var(--surface); padding: 22px 14px; text-align: center; }
 .doc-count .dc-num { font-family: var(--font-mono); font-size: clamp(22px, 2.6vw, 30px); font-weight: 700; line-height: 1; }
 .doc-count .dc-lbl { margin-top: 8px; font-size: 12px; color: var(--ink-faint); letter-spacing: 0.04em; }
 @media (max-width: 860px) { .doc-grid { grid-template-columns: 1fr; } }
+/* 文档阅读页 */
+.doc-open {
+  margin-top: 4px; border: 0; background: transparent; padding: 0;
+  font-size: 13px; font-weight: 600; color: var(--accent); cursor: pointer;
+}
+.doc-open:hover { text-decoration: underline; text-underline-offset: 3px; }
+.doc-reader { max-width: 760px; margin: 0 auto; }
+.doc-crumb { font-size: 12.5px; color: var(--ink-faint); margin-bottom: clamp(20px, 3vw, 32px); display: flex; gap: 8px; align-items: center; }
+.doc-crumb a { color: var(--ink-soft); }
+.doc-crumb a:hover { color: var(--accent); }
+.doc-reader .doc-title {
+  margin: 0 0 12px; font-family: var(--font-serif); font-weight: 600;
+  font-size: clamp(26px, 3.4vw, 40px); line-height: 1.3; letter-spacing: 0.01em;
+}
+.doc-reader .doc-lead {
+  margin: 18px 0 0; padding-bottom: 22px; border-bottom: 1px solid var(--line);
+  font-size: 15px; line-height: 1.85; color: var(--ink-soft);
+}
+.doc-reader .doc-body { margin-top: 26px; font-size: 15px; line-height: 1.95; color: var(--ink-soft); }
+.doc-reader .doc-body h4 {
+  margin: 34px 0 10px; font-size: 15px; font-weight: 700; color: var(--ink);
+  letter-spacing: 0.02em;
+}
+.doc-reader .doc-body h4:first-child { margin-top: 0; }
+.doc-reader .doc-body p { margin: 0 0 14px; }
+.doc-reader .doc-body ul { margin: 0 0 16px; padding-left: 20px; }
+.doc-reader .doc-body li { margin-bottom: 7px; }
+.doc-reader .doc-body .quote {
+  margin: 18px 0; padding: 14px 18px; border-left: 2px solid var(--accent);
+  background: var(--surface); border-radius: 0 8px 8px 0; font-size: 14px; color: var(--ink);
+}
+.doc-reader .doc-body .code-list { font-family: var(--font-mono); font-size: 13px; color: var(--ink-soft); line-height: 2; }
+.doc-reader .doc-body code { font-family: var(--font-mono); font-size: 13px; background: var(--surface-2); padding: 1px 6px; border-radius: 4px; color: var(--ink); }
+.doc-pager { display: flex; justify-content: space-between; gap: 12px; margin-top: clamp(36px, 5vw, 60px); padding-top: 22px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+.doc-pager .btn:disabled { opacity: 0.4; cursor: default; }
 </style>
 </head>
 <body>
@@ -2842,7 +2853,7 @@ body[data-route="practice"] .container {
 
   </section>
 
-  <!-- ==================== VIEW: 进阶文档 ==================== -->
+  <!-- ==================== VIEW: 进阶文档（列表） ==================== -->
   <section class="view" id="view-docs">
     <div class="section-head">
       <div>
@@ -2853,21 +2864,43 @@ body[data-route="practice"] .container {
     </div>
 
     <div class="doc-count">
-      <div class="dc-item"><div class="dc-num">3</div><div class="dc-lbl">篇深度文档</div></div>
+      <div class="dc-item"><div class="dc-num">4</div><div class="dc-lbl">篇深度文档</div></div>
       <div class="dc-item"><div class="dc-num">6</div><div class="dc-lbl">类不宜打词的词性</div></div>
       <div class="dc-item"><div class="dc-num">13</div><div class="dc-lbl">个高重码音节</div></div>
     </div>
 
     <div class="doc-grid">
-      <article class="doc-card">
+      <article class="doc-card" data-doc="manual">
         <div class="doc-kicker">Manual · 打词</div>
         <h3>音形无上秘籍：打词与挂接</h3>
         <div class="doc-meta">作者 深白 · 整理自 <a href="https://flauver.github.io/jdh/secret_manual.html" target="_blank" rel="noopener noreferrer">flauver.github.io/jdh/secret_manual.html</a></div>
         <p class="doc-lead">音码打词为什么顺、挂接到底解决什么问题，以及一套能直接照做的「强规范打词」规则。</p>
-        <details>
-          <summary>展开全文</summary>
-          <div class="doc-body">
-            <h4>为什么用音码</h4>
+        <button class="doc-open" type="button" data-doc="manual">阅读全文 →</button>
+      </article>
+      <article class="doc-card" data-doc="philosophy">
+        <div class="doc-kicker">Philosophy · 取舍</div>
+        <h3>简单鹤设计哲学</h3>
+        <div class="doc-meta">作者 深白 · 整理自 <a href="https://flauver.github.io/jdh/secret_manual.html" target="_blank" rel="noopener noreferrer">flauver.github.io/jdh/secret_manual.html</a></div>
+        <p class="doc-lead">为什么是四码单字的次选、为什么坚持统一、为什么字根要乱序——每一条都在为「不用想」让路。</p>
+        <button class="doc-open" type="button" data-doc="philosophy">阅读全文 →</button>
+      </article>
+      <article class="doc-card" data-doc="checklist">
+        <div class="doc-kicker">Practice · 实践</div>
+        <h3>打词与拆单的取舍清单</h3>
+        <div class="doc-meta">整理自上述两篇 · 供日常自查</div>
+        <p class="doc-lead">把「什么时候打词、什么时候拆开」压成一张可以随时对照的清单。</p>
+        <button class="doc-open" type="button" data-doc="checklist">阅读全文 →</button>
+      </article>
+      <article class="doc-card" data-doc="shortcuts">
+        <div class="doc-kicker">Reference · 速查</div>
+        <h3>常用操作速查</h3>
+        <div class="doc-meta">整理自本文档站与上游文档</div>
+        <p class="doc-lead">装好之后最快的上手方式，全在这几行里。</p>
+        <button class="doc-open" type="button" data-doc="shortcuts">阅读全文 →</button>
+      </article>
+    </div>
+
+<template id="doc-tpl-manual"><h4>为什么用音码</h4>
             <p>相比形码打词，<strong>音码的思维更顺畅</strong>。虽然纯音码重码不堪，但音是可以预判的——你大概知道要打什么音，再靠形码收敛。</p>
 
             <h4>为什么挂接</h4>
@@ -2903,20 +2936,8 @@ body[data-route="practice"] .container {
             <ul>
               <li>不要打<strong>三码三字词</strong>，位置不够。</li>
               <li>小词库是自掘坟墓——多记一堆「不在词库里」的东西，还失去了容错机会。挂接保底更划算。</li>
-            </ul>
-          </div>
-        </details>
-      </article>
-
-      <article class="doc-card">
-        <div class="doc-kicker">Philosophy · 取舍</div>
-        <h3>简单鹤设计哲学</h3>
-        <div class="doc-meta">作者 深白 · 整理自 <a href="https://flauver.github.io/jdh/secret_manual.html" target="_blank" rel="noopener noreferrer">flauver.github.io/jdh/secret_manual.html</a></div>
-        <p class="doc-lead">为什么是四码单字的次选、为什么坚持统一、为什么字根要乱序——每一条都在为「不用想」让路。</p>
-        <details>
-          <summary>展开全文</summary>
-          <div class="doc-body">
-            <h4>四码单字留次选</h4>
+            </ul></template>
+<template id="doc-tpl-philosophy"><h4>四码单字留次选</h4>
             <p>四码单字给出次选，是为了<strong>增加确定性</strong>。多一个分号不值一提，换来的是打之前不用犹豫。</p>
 
             <h4>统一，胜过局部最优</h4>
@@ -2926,20 +2947,8 @@ body[data-route="practice"] .container {
 
             <h4>为什么字根必须乱序</h4>
             <p>乱序不只是性能考虑，更是体验上对「小字音托字根」的碾压。</p>
-            <p>有小字的方案，拆几乎每个生字时都要想一遍「这个部件是不是小字」，严重干扰思维。与其日后吃无尽的苦，不如开始的时候吃一点苦。</p>
-          </div>
-        </details>
-      </article>
-
-      <article class="doc-card">
-        <div class="doc-kicker">Practice · 实践</div>
-        <h3>打词与拆单的取舍清单</h3>
-        <div class="doc-meta">整理自上述两篇 · 供日常自查</div>
-        <p class="doc-lead">把「什么时候打词、什么时候拆开」压成一张可以随时对照的清单。</p>
-        <details>
-          <summary>展开全文</summary>
-          <div class="doc-body">
-            <h4>优先拆单</h4>
+            <p>有小字的方案，拆几乎每个生字时都要想一遍「这个部件是不是小字」，严重干扰思维。与其日后吃无尽的苦，不如开始的时候吃一点苦。</p></template>
+<template id="doc-tpl-checklist"><h4>优先拆单</h4>
             <ul>
               <li>助词、副词、量词、数字、代词（见打词篇的六类清单）</li>
               <li>能从中拆出一简的组合词，例如「挺瘦」「很少」</li>
@@ -2958,20 +2967,8 @@ body[data-route="practice"] .container {
             <p>yi shi / ji shi / shi shi / qi shi / yi zhi 这一族，先有意识，能拆就拆，别硬碰硬。</p>
 
             <h4>一句话总结</h4>
-            <div class="quote">只打「确认是首选」的词；好拆的就拆，不好拆的才打词并盯候选。</div>
-          </div>
-        </details>
-      </article>
-
-      <article class="doc-card">
-        <div class="doc-kicker">Reference · 速查</div>
-        <h3>常用操作速查</h3>
-        <div class="doc-meta">整理自本文档站与上游文档</div>
-        <p class="doc-lead">装好之后最快的上手方式，全在这几行里。</p>
-        <details>
-          <summary>展开全文</summary>
-          <div class="doc-body">
-            <h4>桌面端（小狼毫 / 鼠须管）</h4>
+            <div class="quote">只打「确认是首选」的词；好拆的就拆，不好拆的才打词并盯候选。</div></template>
+<template id="doc-tpl-shortcuts"><h4>桌面端（小狼毫 / 鼠须管）</h4>
             <ul>
               <li><code>Ctrl + ~</code>：切换到简单鹤方案</li>
               <li><code>Ctrl + I</code>：临时显示/隐藏拆分提示</li>
@@ -2988,10 +2985,29 @@ body[data-route="practice"] .container {
             <ul>
               <li>本站「练习工坊」的字根助记 / 拆字实战 / 简码训练</li>
               <li>字根与规则页的 26 键交互字根图</li>
-            </ul>
-          </div>
-        </details>
+            </ul></template>
+  </section>
+
+  <!-- ==================== VIEW: 文档阅读页 ==================== -->
+  <section class="view" id="view-doc">
+    <div class="doc-reader">
+      <nav class="doc-crumb" aria-label="路径">
+        <a href="#docs" data-doc-back>进阶文档</a>
+        <span>/</span>
+        <span id="docCrumb">正文</span>
+      </nav>
+      <article>
+        <div class="doc-kicker" id="docKicker"></div>
+        <h1 class="doc-title" id="docTitle"></h1>
+        <div class="doc-meta" id="docMeta"></div>
+        <div class="doc-lead" id="docLead"></div>
+        <div class="doc-body" id="docBody"></div>
       </article>
+      <div class="doc-pager">
+        <button class="btn btn-outline btn-sm" id="docPrev" type="button">← 上一篇</button>
+        <a class="btn btn-outline btn-sm" href="#docs" data-doc-back>返回文档列表</a>
+        <button class="btn btn-outline btn-sm" id="docNext" type="button">下一篇 →</button>
+      </div>
     </div>
   </section>
 
@@ -3931,6 +3947,46 @@ function renderRoadmap() {
   syncOverviewCounters();
 }
 
+const DOC_ORDER = ['manual', 'philosophy', 'checklist', 'shortcuts'];
+
+function openDoc(id) {
+  const idx = DOC_ORDER.indexOf(id);
+  if (idx < 0) return;
+  const card = document.querySelector('#view-docs .doc-card[data-doc="' + id + '"]');
+  const tpl = $('doc-tpl-' + id);
+  if (!card || !tpl) return;
+  $('docKicker').textContent = card.querySelector('.doc-kicker').textContent;
+  $('docTitle').textContent = card.querySelector('h3').textContent;
+  $('docMeta').innerHTML = card.querySelector('.doc-meta').innerHTML;
+  $('docLead').innerHTML = card.querySelector('.doc-lead').innerHTML;
+  $('docBody').innerHTML = tpl.innerHTML;
+  $('docCrumb').textContent = card.querySelector('h3').textContent;
+  $('docPrev').disabled = idx === 0;
+  $('docNext').disabled = idx === DOC_ORDER.length - 1;
+  $('docPrev').onclick = idx > 0 ? () => goDoc(DOC_ORDER[idx - 1]) : null;
+  $('docNext').onclick = idx < DOC_ORDER.length - 1 ? () => goDoc(DOC_ORDER[idx + 1]) : null;
+  switchRoute('doc');
+  document.title = card.querySelector('h3').textContent.replace(/<[^>]+>/g, '') + ' · 简单鹤文档';
+  window.scrollTo({ top: 0, behavior: 'auto' });
+}
+
+function goDoc(id) {
+  location.hash = 'doc/' + id;
+}
+
+function routeFromHash() {
+  const h = (location.hash || '').replace(/^#/, '');
+  if (h.startsWith('doc/')) {
+    const id = h.slice(4);
+    if (DOC_ORDER.includes(id)) { openDoc(id); return; }
+  }
+  if (h === 'docs') { switchRoute('docs'); return; }
+  const map = { home: 'home', roadmap: 'roadmap', guide: 'guide', practice: 'practice', ecosystem: 'ecosystem' };
+  if (map[h]) switchRoute(map[h]);
+}
+
+window.addEventListener('hashchange', routeFromHash);
+
 function handleJumpString(str) {
   const [route, sub] = str.split(':');
   switchRoute(route, sub);
@@ -4824,7 +4880,13 @@ function bindEvents() {
   $('pracSkipToggleBtn').addEventListener('click', () => setSkipSp(!STATE.skipSp));
   $('heroPrimaryBtn').addEventListener('click', () => switchRoute(STATE.skipSp ? 'practice' : 'roadmap', STATE.skipSp ? 'zigen' : undefined));
 
-  document.querySelectorAll('.nav-btn, .dock-btn').forEach(b => b.addEventListener('click', () => switchRoute(b.dataset.route)));
+  document.querySelectorAll('.nav-btn, .dock-btn').forEach(b => b.addEventListener('click', () => {
+    const r = b.dataset.route;
+    if (r === 'docs' || ['home', 'roadmap', 'guide', 'practice', 'ecosystem'].includes(r)) {
+      if (location.hash.slice(1) === r || (r === 'home' && !location.hash)) switchRoute(r);
+      else location.hash = r;
+    } else switchRoute(r);
+  }));
   document.querySelectorAll('[data-jump]').forEach(b => b.addEventListener('click', () => handleJumpString(b.dataset.jump)));
 
   $('guideTabs').querySelectorAll('.subtab').forEach(b => b.addEventListener('click', () => switchSubTab('guideTabs', 'view-guide', b.dataset.sub)));
@@ -4961,6 +5023,13 @@ function bindEvents() {
     } else fallbackCopy(txt);
   });
 
+  document.querySelectorAll('#view-docs [data-doc]').forEach(el => {
+    el.addEventListener('click', () => goDoc(el.dataset.doc));
+  });
+  document.querySelectorAll('[data-doc-back]').forEach(el => {
+    el.addEventListener('click', (e) => { e.preventDefault(); history.pushState(null, '', '#docs'); switchRoute('docs'); });
+  });
+
   document.addEventListener('keydown', e => {
     if (document.querySelector('.mask.on')) { if (e.key === 'Escape') closeMasks(); return; }
     const tag = (document.activeElement && document.activeElement.tagName) || '';
@@ -4994,6 +5063,7 @@ function fallbackCopy(txt) {
 /* ==================== 15. 启动 ==================== */
 applyTheme();
 applySkipSpUi();
+if (location.hash) routeFromHash();
 renderDemo();
 renderRoadmap();
 renderVisualZigenChart();
