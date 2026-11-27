@@ -1867,7 +1867,7 @@ body[data-route="home"] > .site-footer {
 }
 body[data-route="home"] #view-home.active {
   display: block;
-  height: calc(100dvh - var(--top-bar-h));
+  height: var(--slide-h, calc(100dvh - var(--top-bar-h)));
   overflow-y: auto;
   overflow-x: hidden;
   scroll-snap-type: y mandatory;
@@ -1881,8 +1881,8 @@ body[data-route="home"] #view-home.active::-webkit-scrollbar {
 }
 
 .snap-slide {
-  height: calc(100dvh - var(--top-bar-h));
-  min-height: calc(100dvh - var(--top-bar-h));
+  height: var(--slide-h, calc(100dvh - var(--top-bar-h)));
+  min-height: var(--slide-h, calc(100dvh - var(--top-bar-h)));
   scroll-snap-align: start;
   scroll-snap-stop: always;
   display: flex;
@@ -3072,10 +3072,10 @@ body[data-route="home"] .snap-dots {
   .hero-grid .hw-key b { font-size: 15px; }
 }
 
-/* 极矮横屏兜底（避免横屏手机截断） */
-@media (max-height: 540px) {
+/* 仅在极矮横屏手机下放宽吸附，竖屏手机（含 Edge 双底栏/大字体）始终保持整屏强制对齐 */
+@media (max-height: 500px) and (orientation: landscape) {
   body[data-route="home"] #view-home.active { scroll-snap-type: y proximity; }
-  .snap-slide { height: auto; min-height: calc(100dvh - var(--top-bar-h)); overflow: visible; padding-top: 24px; padding-bottom: 24px; }
+  .snap-slide { height: auto; min-height: var(--slide-h, calc(100dvh - var(--top-bar-h))); overflow: visible; padding-top: 20px; padding-bottom: 20px; }
 }
 
 </style>
@@ -5065,9 +5065,36 @@ function initScrollReveal(scopeEl) {
 
 function syncTopBarHeight() {
   const hdr = document.querySelector('.site-header');
-  if (!hdr) return;
-  const h = Math.round(hdr.getBoundingClientRect().height);
+  const h = hdr ? Math.round(hdr.getBoundingClientRect().height) : 64;
   if (h > 0) document.documentElement.style.setProperty('--top-bar-h', h + 'px');
+  const vh = Math.round((window.visualViewport && window.visualViewport.height) || window.innerHeight || 0);
+  const avail = Math.max(320, vh - h);
+  document.documentElement.style.setProperty('--slide-h', avail + 'px');
+
+  // 针对 Edge 双底栏 / 安卓大字体等极矮竖屏：若某屏内容超出可用高度，自动等比微缩以保证零裁切、不卡中间
+  const isLandscapeShort = window.matchMedia('(max-height: 500px) and (orientation: landscape)').matches;
+  const slides = document.querySelectorAll('#view-home .snap-slide');
+  slides.forEach(sl => {
+    const inner = sl.querySelector('.snap-inner');
+    if (!inner) return;
+    sl.style.justifyContent = '';
+    inner.style.transform = '';
+    inner.style.transformOrigin = '';
+    inner.style.marginTop = '';
+    if (isLandscapeShort) return;
+    const cs = getComputedStyle(sl);
+    const padY = (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0);
+    const maxH = avail - padY - 4;
+    const realH = inner.scrollHeight;
+    if (realH > maxH && maxH > 200) {
+      const ratio = Math.max(0.68, maxH / realH);
+      sl.style.justifyContent = 'flex-start';
+      inner.style.transformOrigin = 'top center';
+      inner.style.transform = 'scale(' + ratio.toFixed(3) + ')';
+      const extra = Math.max(0, (maxH - realH * ratio) / 2);
+      inner.style.marginTop = extra.toFixed(1) + 'px';
+    }
+  });
 }
 
 function syncSnapFit() {
@@ -5097,6 +5124,9 @@ function initScrollCue() {
 
   scroller.addEventListener('scroll', updateDots, { passive: true });
   window.addEventListener('resize', () => { syncTopBarHeight(); updateDots(); }, { passive: true });
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', () => { syncTopBarHeight(); updateDots(); }, { passive: true });
+  }
 
   dots.forEach((d, i) => d.addEventListener('click', () => goSlide(i)));
   document.querySelectorAll('[data-next-slide]').forEach(btn => {
