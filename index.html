@@ -2125,6 +2125,41 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
   .compare-table tr.self-row td:first-child { background: var(--bg); }
   .compare-table td:first-child { white-space: nowrap; }
 }
+/* 首屏 + 试打台合并双栏 */
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.06fr);
+  gap: clamp(24px, 4vw, 60px);
+  align-items: center;
+  width: 100%;
+}
+.hero-grid .hero-editorial { text-align: left; align-items: flex-start; max-width: none; margin: 0; }
+.hero-grid .hero-editorial .hero-title { font-size: clamp(38px, 4.4vw, 62px); }
+.hero-grid .hero-editorial .hero-sub { margin: 0 0 26px; max-width: 34em; }
+.hero-grid .stage-frame { margin: 0; max-width: none; }
+.hero-grid .showcase { padding: clamp(18px, 2.4vw, 30px) clamp(16px, 2.6vw, 34px); }
+@media (max-width: 1000px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 26px; }
+  .hero-grid .hero-editorial { text-align: center; align-items: center; }
+  .hero-grid .hero-editorial .hero-sub { margin-left: auto; margin-right: auto; }
+}
+@media (max-width: 700px) { .hero-grid .hero-editorial .hero-title { font-size: clamp(30px, 8.6vw, 40px); } }
+/* 下滑提示 */
+.scroll-cue {
+  position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 16px; border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: var(--glass);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  color: var(--ink-soft); font-size: 12.5px; font-weight: 600; cursor: pointer;
+  z-index: 45; transition: opacity 0.3s, transform 0.3s;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.1);
+}
+.scroll-cue svg { animation: cueBob 1.6s ease-in-out infinite; }
+@keyframes cueBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+.scroll-cue.hide { opacity: 0; pointer-events: none; transform: translateX(-50%) translateY(12px); }
+@media (prefers-reduced-motion: reduce) { .scroll-cue svg { animation: none; } }
 </style>
 </head>
 <body>
@@ -2169,7 +2204,12 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
 
   <!-- ==================== VIEW 1: 概览（第一眼：靠谱、高端、想试一下） ==================== -->
   <section class="view active" id="view-home">
-    <div class="snap-block">
+    <button class="scroll-cue" id="scrollCue" type="button" aria-label="向下查看更多">
+      <span>向下滑动，查看更多</span>
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="snap-block hero-block">
+    <div class="hero-grid">
     <div class="hero-editorial">
       <div class="hero-badge"><i></i><span>简单鹤 · 轻羽落键，意到字成</span></div>
       <h1 class="hero-title" aria-label="极简音形，为盲打而生"><span class="kchar" style="--i:0">极</span><span class="kchar" style="--i:1">简</span><span class="kchar" style="--i:2">音</span><span class="kchar" style="--i:3">形</span><br><span class="grad"><span class="kchar" style="--i:4">为</span><span class="kchar" style="--i:5">盲</span><span class="kchar" style="--i:6">打</span><span class="kchar" style="--i:7">而</span><span class="kchar" style="--i:8">生</span></span></h1>
@@ -2196,8 +2236,6 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
     </div>
 
     <!-- 交互试打台：5秒感受四码直出 -->
-    </div>
-    <div class="snap-block">
     <div class="stage-frame">
       <div class="showcase">
         <div class="showcase-top">
@@ -2215,6 +2253,7 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
 
     </div>
     <div class="snap-block">
+    </div>
     <!-- 四个设计原则 -->
     <div class="section-head">
       <div>
@@ -2324,19 +2363,17 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
         <a class="btn btn-outline btn-sm" href="#doc/commit">看详解 →</a>
       </div>
 
-      <h3 class="arena-subhead">前 3000 常用字 · 单字实测（十种方案）</h3>
+      <h3 class="arena-subhead">前 3000 常用字 · 单字实测（八种方案）</h3>
 <div class="tbl-scroll">
       <table class="tier-table compare-table wide">
         <thead>
-          <tr></tr>
+          <tr><th>方案</th><th>首选准确率</th><th>平均候选位次</th><th>平均码长</th><th>全码重码字数</th><th>学习难度</th></tr>
         </thead>
         <tbody>
           <tr class="self-row"><td>简单鹤（音形 · 97 字根）</td><td data-label="首选准确率">99.87%</td><td data-label="平均位次">1.001</td><td data-label="平均码长">4.00</td><td data-label="全码重码">87</td><td data-label="学习难度"><span class="lv lv-2">中</span></td></tr>
-          <tr><td>仓颉 5 代（形码 · 24 字根）</td><td data-label="首选准确率">100.00%</td><td data-label="平均位次">1.000</td><td data-label="平均码长">3.41</td><td data-label="全码重码">2</td><td data-label="学习难度"><span class="lv lv-4">高</span></td></tr>
-          <tr><td>五笔 86（形码 · 130 字根）</td><td data-label="首选准确率">99.88%</td><td data-label="平均位次">1.001</td><td data-label="平均码长">3.72</td><td data-label="全码重码">66</td><td data-label="学习难度"><span class="lv lv-4">高</span></td></tr>
-          <tr><td>虎码（形码 · 241 字根）</td><td data-label="首选准确率">99.95%</td><td data-label="平均位次">1.000</td><td data-label="平均码长">4.00</td><td data-label="全码重码">116</td><td data-label="学习难度"><span class="lv lv-4">高</span></td></tr>
-          <tr><td>小鹤音形（音形 · 约 30 字根）</td><td data-label="首选准确率">99.66%</td><td data-label="平均位次">1.004</td><td data-label="平均码长">4.00</td><td data-label="全码重码">88</td><td data-label="学习难度"><span class="lv lv-2">中</span></td></tr>
-          <tr><td>魔然（双拼+辅助码 · 无字根表）</td><td data-label="首选准确率">99.64%</td><td data-label="平均位次">1.004</td><td data-label="平均码长">3.49</td><td data-label="全码重码">224</td><td data-label="学习难度"><span class="lv lv-3">中高</span></td></tr>
+                              <tr><td>虎码（形码 · 241 字根）</td><td data-label="首选准确率">99.95%</td><td data-label="平均位次">1.000</td><td data-label="平均码长">4.00</td><td data-label="全码重码">116</td><td data-label="学习难度"><span class="lv lv-4">高</span></td></tr>
+          <tr><td>小鹤音形（音形 · 部件+小字）</td><td data-label="首选准确率">99.66%</td><td data-label="平均位次">1.004</td><td data-label="平均码长">4.00</td><td data-label="全码重码">88</td><td data-label="学习难度"><span class="lv lv-2">中</span></td></tr>
+          <tr><td>魔然（双拼+辅助码 · 部首制）</td><td data-label="首选准确率">99.64%</td><td data-label="平均位次">1.004</td><td data-label="平均码长">3.49</td><td data-label="全码重码">224</td><td data-label="学习难度"><span class="lv lv-3">中高</span></td></tr>
           <tr><td>小鹤双拼（纯双拼 · 0 字根）</td><td data-label="首选准确率">84.37%</td><td data-label="平均位次">1.425</td><td data-label="平均码长">2.00</td><td data-label="全码重码">2602</td><td data-label="学习难度"><span class="lv lv-1">低</span></td></tr>
           <tr><td>自然码双拼（纯双拼 · 0 字根）</td><td data-label="首选准确率">84.37%</td><td data-label="平均位次">1.425</td><td data-label="平均码长">2.00</td><td data-label="全码重码">2602</td><td data-label="学习难度"><span class="lv lv-1">低</span></td></tr>
           <tr><td>全拼 26 键（0 字根）</td><td data-label="首选准确率">84.43%</td><td data-label="平均位次">1.425</td><td data-label="平均码长">2.65</td><td data-label="全码重码">2601</td><td data-label="学习难度"><span class="lv lv-0">极低</span></td></tr>
@@ -2349,8 +2386,7 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
         <div class="arena-bars">
           <h3 class="arena-subhead">首选准确率对比</h3>
         <div class="ab-row self"><span class="ab-name">简单鹤（音形 4 码）</span><span class="ab-track"><i class="ab-fill" style="width:99.87%"></i></span><span class="ab-val">99.87%</span></div>
-        <div class="ab-row"><span class="ab-name">仓颉 5 代（形码）</span><span class="ab-track"><i class="ab-fill" style="width:100.00%"></i></span><span class="ab-val">100.00%</span></div>
-        <div class="ab-row"><span class="ab-name">五笔 86（形码）</span><span class="ab-track"><i class="ab-fill" style="width:99.88%"></i></span><span class="ab-val">99.88%</span></div>
+
         <div class="ab-row"><span class="ab-name">虎码（形码 4 码）</span><span class="ab-track"><i class="ab-fill" style="width:99.95%"></i></span><span class="ab-val">99.95%</span></div>
         <div class="ab-row"><span class="ab-name">小鹤音形（音形 4 码）</span><span class="ab-track"><i class="ab-fill" style="width:99.66%"></i></span><span class="ab-val">99.66%</span></div>
         <div class="ab-row"><span class="ab-name">魔然（双拼 + 辅助码）</span><span class="ab-track"><i class="ab-fill" style="width:99.64%"></i></span><span class="ab-val">99.64%</span></div>
@@ -2376,9 +2412,9 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
 
       <p class="arena-note">
         测算口径：统一取本仓库 <code>jde.dict.yaml</code> 的字频权重作为评测集，各方案只提供自己的单字码，逐字比对同码单字（不含词组）。<br>
-        码表来源：小鹤音形 <code>cubercsl/rime-flypy</code>、魔然 <code>rimeinn/rime-moran</code>、虎码 <code>LukNg/Rime-tiger_code</code>、五笔 <code>rime/rime-wubi</code>、仓颉 <code>rime/rime-cangjie</code>，均为公开码表；全拼由同字频表还原。<br>
+        码表来源：小鹤音形 <code>cubercsl/rime-flypy</code>、魔然 <code>rimeinn/rime-moran</code>、虎码 <code>LukNg/Rime-tiger_code</code>，均为公开码表；全拼由同字频表还原。<br>
         关于自然码双拼：与所有纯双拼一样对拼音做一一映射，同音重码结构与同属双拼的方案完全一致，故与小鹤双拼指标相同。<br>
-        字根数量：简单鹤 97（官方）、虎码 241（官网）、五笔 86 约 130、仓颉 24 个基本字根、小鹤音形约 30；魔然采用「部首 + 部件首字母」规则，不依赖固定字根表。<br>学习难度按「是否需要重新记一套字根/辅助码规则」标注：全拼极低、双拼低、音形中、形码高。<br>提醒：本表只比「单字重码」，不含词组与整句；形码（仓颉、五笔、虎码）重码虽低，但要记上百个字根，成本远高于音形。复算命令 <code>python3 scripts/measure.py</code>。
+        字根数量来源：简单鹤 97，取本仓库码表去重实测；虎码 241，官网原文「同源字根归并后一共 241 个字根」；小鹤音形为「部件 + 小字」两套字根表，官方未公布单一总数；魔然采用「部首 + 部件首字母」规则，无固定字根表。<br>学习难度按「是否需要重新记一套字根/辅助码规则」标注：全拼极低、双拼低、音形中、形码高。<br>提醒：本表只比「单字重码」，不含词组与整句；形码（如虎码）重码虽低，但要记两百多个字根，学习成本远高于音形。复算命令 <code>python3 scripts/measure.py</code>。
       </p>
     </section>
 
@@ -3831,6 +3867,23 @@ function initScrollReveal(scopeEl) {
   });
 }
 
+function initScrollCue() {
+  const cue = $('scrollCue');
+  if (!cue) return;
+  const upd = () => {
+    const hide = currentRoute !== 'home' || window.scrollY > 80;
+    cue.classList.toggle('hide', hide);
+  };
+  window.addEventListener('scroll', upd, { passive: true });
+  window.addEventListener('resize', upd, { passive: true });
+  cue.addEventListener('click', () => {
+    const blocks = document.querySelectorAll('#view-home > .snap-block');
+    if (blocks[1]) blocks[1].scrollIntoView({ behavior: 'smooth' });
+  });
+  window.__scrollCueUpdate = upd;
+  upd();
+}
+
 function applyTheme() {
   document.documentElement.setAttribute('data-theme', STATE.theme);
   $('themeBtn').textContent = STATE.theme === 'dark' ? '☀' : '◐';
@@ -3842,6 +3895,7 @@ function switchRoute(route, subTarget) {
   currentRoute = route;
   document.body.dataset.route = route;
   document.documentElement.classList.toggle('snap-home', route === 'home');
+  if (window.__scrollCueUpdate) window.__scrollCueUpdate();
   if (route === 'practice') {
     document.body.dataset.practiceSub = currentPracticeSub;
   } else {
@@ -5187,6 +5241,7 @@ function fallbackCopy(txt) {
 /* ==================== 15. 启动 ==================== */
 applyTheme();
 applySkipSpUi();
+initScrollCue();
 if (location.hash) routeFromHash();
 renderDemo();
 renderRoadmap();
