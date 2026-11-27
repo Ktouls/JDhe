@@ -1852,20 +1852,20 @@ body[data-route="practice"] .container {
   display: inline-block;
 }
 
-/* ==================== 首页全屏强制吸附容器 ==================== */
-body[data-route="home"] {
+/* ==================== 全站通用整屏强制吸附容器（概览 / 字根与规则 / 下载安装 / 单字测评） ==================== */
+body.is-snap-route {
   overflow: hidden;
   height: 100dvh;
 }
-body[data-route="home"] .container {
+body.is-snap-route .container {
   max-width: none;
   padding: 0;
   margin: 0;
 }
-body[data-route="home"] > .site-footer {
+body.is-snap-route > .site-footer {
   display: none;
 }
-body[data-route="home"] #view-home.active {
+.view.snap-view.active {
   display: block;
   height: var(--slide-h, calc(100dvh - var(--top-bar-h)));
   overflow-y: auto;
@@ -1876,7 +1876,22 @@ body[data-route="home"] #view-home.active {
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
-body[data-route="home"] #view-home.active::-webkit-scrollbar {
+.view.snap-view.active::-webkit-scrollbar {
+  display: none;
+}
+/* 允许特定子面板（如飞键简词搜索长列表）临时恢复自由滚动 */
+.view.snap-view.active.free-scroll {
+  scroll-snap-type: none;
+  padding: clamp(14px, 2.4vw, 28px) var(--pad-x) 48px;
+}
+.view.snap-view.active.free-scroll .snap-slide {
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+  padding: 0;
+  display: block;
+}
+.view.snap-view.active.free-scroll .snap-slide + .snap-slide::before {
   display: none;
 }
 
@@ -1906,7 +1921,7 @@ body[data-route="home"] #view-home.active::-webkit-scrollbar {
   opacity: 0.65;
   pointer-events: none;
 }
-#view-home .sr-item {
+.snap-view .sr-item {
   opacity: 1 !important;
   transform: none !important;
   transition: none !important;
@@ -1948,7 +1963,7 @@ body[data-route="home"] #view-home.active::-webkit-scrollbar {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
-body[data-route="home"] .snap-dots {
+body.is-snap-route .snap-dots {
   display: flex;
 }
 .snap-dot {
@@ -1970,7 +1985,7 @@ body[data-route="home"] .snap-dots {
   background: var(--accent);
 }
 @media (max-width: 960px) {
-  body[data-route="home"] .snap-dots {
+  body.is-snap-route .snap-dots {
     right: 6px;
     gap: 7px;
     padding: 6px 3px;
@@ -2006,7 +2021,7 @@ body[data-route="home"] .snap-dots {
 @keyframes cueBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
 @media (prefers-reduced-motion: reduce) {
   .slide-next-hint svg { animation: none; }
-  body[data-route="home"] #view-home.active { scroll-behavior: auto; }
+  .view.snap-view.active { scroll-behavior: auto; }
 }
 
 /* 末屏内嵌页脚 */
@@ -2019,6 +2034,594 @@ body[data-route="home"] .snap-dots {
   line-height: 1.7;
   color: var(--ink-faint);
 }
+/* 字根与规则：紧凑顶部切换栏，把 26 键键盘稳稳留在第一屏正中 */
+.guide-compact-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  flex-wrap: wrap;
+  margin-bottom: clamp(12px, 1.8dvh, 20px);
+}
+.guide-compact-title {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.guide-compact-title h2 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(22px, 2.4vw, 30px);
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.guide-compact-title .serif-accent { color: var(--ink-soft); font-weight: 400; }
+.guide-compact-title span.gc-sub { font-size: 13px; color: var(--ink-faint); }
+.guide-compact-bar .subtabs { margin: 0; }
+.snap-view .subpanel { display: none; }
+.snap-view .subpanel.active { display: block; }
+#view-guide .zg-chart-bar { margin-bottom: clamp(10px, 1.5dvh, 18px); }
+#view-guide .card { padding: clamp(16px, 2.2vw, 28px); }
+#view-guide .flow-bridge { margin-top: clamp(16px, 2.4dvh, 28px); }
+#view-guide .motto-card { margin-bottom: clamp(14px, 2dvh, 22px); padding: clamp(14px, 1.8vw, 22px); }
+#view-guide .grid-3 { gap: clamp(10px, 1.6vw, 18px); margin-bottom: 0; }
+#view-guide .grid-3 .card { padding: clamp(14px, 1.8vw, 22px); }
+#view-ecosystem .dl-primary-grid { margin-bottom: 0; }
+#view-ecosystem .eco-subhead { margin: 0 0 clamp(14px, 2dvh, 22px); text-align: center; }
+#view-assess .assess-table th,
+#view-assess .assess-table td { padding: clamp(6px, 1dvh, 10px) 14px; font-size: 13px; }
+#view-assess .assess-notes { margin-top: 0; }
+
+@media (max-width: 540px) {
+  .guide-compact-bar { gap: 8px; margin-bottom: 8px; }
+  .guide-compact-title h2 { font-size: 20px; }
+  .guide-compact-title span.gc-sub { display: none; }
+  #view-guide .card { padding: 12px 12px; }
+  #view-guide .zg-chart-bar h3 { font-size: 16px !important; }
+  #view-guide .zg-chart-bar p { font-size: 11.5px !important; }
+  #view-guide .zg-detail-bar { padding: 10px 12px; font-size: 12px; margin-top: 10px; }
+  #view-ecosystem .dl-primary-grid { gap: 8px; }
+  #view-ecosystem .dl-card { padding: 12px 14px; gap: 8px; }
+  #view-ecosystem .dl-card h3 { font-size: 16px; margin: 4px 0; }
+  #view-ecosystem .dl-card p { font-size: 12px; line-height: 1.45; }
+  #view-ecosystem .clean-details { margin-top: 8px; padding-top: 8px; }
+  #view-ecosystem .eco-mini-grid { gap: 8px; }
+  #view-ecosystem .eco-mini-card { padding: 11px 13px; gap: 6px; }
+  #view-ecosystem .eco-mini-card h3 { font-size: 14.5px; }
+  #view-ecosystem .eco-mini-card p { font-size: 11.5px; line-height: 1.42; }
+  #view-assess .assess-table th,
+  #view-assess .assess-table td { padding: 5px 10px; font-size: 11.5px; }
+  #view-assess .assess-notes { gap: 8px; }
+  #view-assess .an-card { padding: 10px 13px; }
+  #view-assess .an-card h4 { font-size: 13.5px; margin-bottom: 4px; }
+  #view-assess .an-card p { font-size: 11.5px; line-height: 1.45; }
+}
+
+/* ==================== 简单鹤 · 拆分查询（对标 tiger-code.com/search，宣纸松烟风格） ==================== */
+.cf-search-wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  width: 100%;
+}
+.cf-hero {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  padding: clamp(22px, 3.2vw, 38px) clamp(18px, 3vw, 36px);
+  text-align: center;
+  margin-bottom: clamp(18px, 2.4vw, 26px);
+}
+.cf-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-faint);
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.cf-kicker i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; }
+.cf-hero h3 {
+  margin: 0 0 8px;
+  font-family: var(--font-serif);
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.25;
+}
+.cf-hero h3 .serif-accent { color: var(--ink-soft); font-weight: 400; }
+.cf-hero p.cf-sub {
+  margin: 0 auto 20px;
+  max-width: 52ch;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  text-wrap: balance;
+}
+.cf-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 600px;
+  margin: 0 auto 14px;
+  padding: 6px;
+  border-radius: 999px;
+  background: var(--bg);
+  border: 1px solid var(--line-strong);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.cf-bar:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.cf-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  padding: 8px 14px;
+  font-size: 15.5px;
+  color: var(--ink);
+  outline: none;
+  font-family: var(--font-sans);
+}
+.cf-input::placeholder { color: var(--ink-faint); }
+.cf-clear {
+  border: 0;
+  background: transparent;
+  color: var(--ink-faint);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+.cf-clear.show { display: inline-flex; }
+.cf-clear:hover { background: var(--surface-2); color: var(--ink); }
+.cf-samples {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+.cf-sample-btn {
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink-soft);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: border-color 0.16s, color 0.16s, background 0.16s;
+}
+.cf-sample-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* 简词命中条 */
+.cf-word-hit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  background: var(--accent-soft);
+  border: 1px solid rgba(194, 59, 50, 0.24);
+  margin-bottom: 16px;
+  font-size: 13.5px;
+  color: var(--ink);
+}
+.cf-word-codes { display: flex; gap: 6px; flex-wrap: wrap; }
+.cf-code-pill {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  letter-spacing: 0.04em;
+}
+.cf-code-pill .c-sp { color: var(--blue); }
+.cf-code-pill .c-sh { color: var(--accent); }
+
+/* 单字拆分结果卡片网格 */
+.cf-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 1.8vw, 18px);
+}
+.cf-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: clamp(16px, 2vw, 22px);
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  transition: border-color 0.18s;
+}
+.cf-card:hover { border-color: var(--line-strong); }
+.cf-glyph {
+  width: 68px;
+  min-height: 76px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 4px;
+}
+.cf-glyph .cg-ch {
+  font-family: var(--font-serif);
+  font-size: 38px;
+  font-weight: 600;
+  line-height: 1.05;
+  color: var(--ink);
+}
+.cf-glyph .cg-py {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  margin-top: 4px;
+}
+.cf-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cf-roots-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.cf-root-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 10px;
+  background: var(--bg);
+  border: 1px solid var(--line-strong);
+  cursor: pointer;
+  transition: border-color 0.16s, background 0.16s;
+}
+.cf-root-chip:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.cf-root-chip .cr-lbl { font-size: 11px; color: var(--ink-faint); }
+.cf-root-chip .cr-glyph {
+  font-family: 'JdhChai', var(--font-serif);
+  font-size: 20px;
+  line-height: 1;
+  color: var(--ink);
+}
+.cf-root-chip .cr-key {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+.cf-plus { color: var(--ink-faint); font-size: 14px; }
+.cf-codes-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.cf-codes-lbl { font-size: 11.5px; color: var(--ink-faint); margin-right: 2px; }
+.cf-empty {
+  text-align: center;
+  padding: clamp(32px, 5vw, 56px) 20px;
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--line-strong);
+  background: var(--surface);
+  color: var(--ink-faint);
+}
+.cf-empty h4 {
+  margin: 0 0 6px;
+  font-family: var(--font-serif);
+  font-size: 18px;
+  color: var(--ink);
+  font-weight: 600;
+}
+.cf-empty p { margin: 0; font-size: 13.5px; line-height: 1.7; }
+
+@media (max-width: 720px) {
+  .cf-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 540px) {
+  #guideTabs .subtab { font-size: 11px; padding: 7px 1px; }
+  .cf-hero { padding: 18px 14px; border-radius: 18px; }
+  .cf-card { padding: 14px; gap: 12px; }
+  .cf-glyph { width: 56px; min-height: 64px; }
+  .cf-glyph .cg-ch { font-size: 30px; }
+}
+
+/* ==================== 练习工坊 · 养生练习（跟打练习 + 循环练习 + 末字拆分提示） ==================== */
+.hl-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.hl-top {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: clamp(14px, 2vw, 20px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.hl-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 14px;
+  flex-wrap: wrap;
+}
+.hl-mode-seg {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  gap: 2px;
+}
+.hl-mode-btn {
+  border: 0;
+  background: transparent;
+  color: var(--ink-soft);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.16s, color 0.16s;
+}
+.hl-mode-btn.active {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(26, 24, 22, 0.08), 0 0 0 1px var(--line);
+}
+.hl-pools {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.hl-pools-lbl {
+  font-size: 12px;
+  color: var(--ink-faint);
+  margin-right: 2px;
+}
+.hl-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.hl-stat {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  text-align: center;
+}
+.hl-stat b {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: clamp(18px, 2vw, 22px);
+  line-height: 1.1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.hl-stat span {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+/* 主打字卡片 */
+.hl-stage {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  padding: clamp(16px, 2.4vw, 28px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.hl-text-box {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: clamp(16px, 2.2vw, 24px);
+  font-family: var(--font-serif);
+  font-size: clamp(22px, 2.6vw, 28px);
+  line-height: 1.85;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+  user-select: none;
+  word-break: break-all;
+}
+.hl-ch {
+  display: inline-block;
+  padding: 0 2px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.hl-ch:hover { background: var(--surface-2); }
+.hl-ch.ok { color: var(--ok); }
+.hl-ch.bad { color: var(--bad); background: var(--bad-soft); }
+.hl-ch.cur {
+  color: var(--ink);
+  background: var(--accent-soft);
+  box-shadow: inset 0 -2px 0 var(--accent);
+  font-weight: 600;
+}
+
+/* 当前字 / 最后一字拆分防忘提示条 */
+.hl-hint-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 14px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  min-height: 52px;
+  transition: opacity 0.25s ease, border-color 0.2s ease;
+}
+.hl-hint-bar.is-last {
+  border-color: rgba(194, 59, 50, 0.34);
+  background: var(--accent-soft);
+}
+.hl-hint-bar.is-muted .hl-hint-detail {
+  opacity: 0;
+  pointer-events: none;
+}
+.hl-hint-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.hl-hint-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.hl-hint-bar.is-last .hl-hint-badge {
+  color: var(--accent);
+  border-color: rgba(194, 59, 50, 0.3);
+}
+.hl-hint-detail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  transition: opacity 0.25s ease;
+}
+.hl-hint-char {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.hl-hint-roots {
+  font-family: 'JdhChai', var(--font-serif);
+  font-size: 15px;
+  color: var(--ink-soft);
+}
+.hl-hint-roots b {
+  font-family: var(--font-mono);
+  color: var(--accent);
+  font-size: 12.5px;
+  margin-left: 2px;
+}
+
+.hl-input-row {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.hl-input {
+  flex: 1;
+  min-width: 200px;
+  border: 1.5px solid var(--line-strong);
+  background: var(--bg);
+  color: var(--ink);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  font-size: 17px;
+  font-family: var(--font-sans);
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+.hl-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.hl-input::placeholder { color: var(--ink-faint); font-size: 14px; }
+
+.hl-history {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: clamp(14px, 2vw, 20px);
+}
+.hl-history-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.hl-history-head h4 { margin: 0; font-size: 14.5px; font-weight: 700; color: var(--ink); }
+.hl-hist-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  min-width: 480px;
+}
+.hl-hist-table th, .hl-hist-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  white-space: nowrap;
+}
+.hl-hist-table th:first-child, .hl-hist-table td:first-child { text-align: left; }
+.hl-hist-table thead th { color: var(--ink-faint); font-weight: 600; font-size: 11.5px; }
+.hl-hist-table tbody tr:last-child td { border-bottom: 0; }
+
+@media (max-width: 540px) {
+  #practiceTabs .subtab { font-size: 11px; padding: 7px 1px; }
+  .hl-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .hl-stat { padding: 8px 8px; }
+  .hl-text-box { padding: 14px 12px; font-size: 20px; line-height: 1.75; }
+  .hl-hint-bar { padding: 8px 10px; }
+  .hl-input { font-size: 16px; padding: 10px 12px; }
+}
+
 .slide-footer a {
   color: var(--ink-soft);
   text-decoration: underline;
@@ -3074,13 +3677,13 @@ body[data-route="home"] .snap-dots {
 
 /* 仅在极矮横屏手机下放宽吸附，竖屏手机（含 Edge 双底栏/大字体）始终保持整屏强制对齐 */
 @media (max-height: 500px) and (orientation: landscape) {
-  body[data-route="home"] #view-home.active { scroll-snap-type: y proximity; }
+  .view.snap-view.active { scroll-snap-type: y proximity; }
   .snap-slide { height: auto; min-height: var(--slide-h, calc(100dvh - var(--top-bar-h))); overflow: visible; padding-top: 20px; padding-bottom: 20px; }
 }
 
 </style>
 </head>
-<body data-route="home">
+<body data-route="home" class="is-snap-route">
 <header class="site-header">
   <div class="header-inner">
     <button class="brand" id="brandHome" type="button" aria-label="简单鹤首页">
@@ -3121,18 +3724,7 @@ body[data-route="home"] .snap-dots {
 <main class="container">
 
   <!-- ==================== VIEW 1: 概览（第一眼：靠谱、高端、想试一下） ==================== -->
-  <section class="view active" id="view-home">
-
-    <!-- 右侧分屏指示点 -->
-    <nav class="snap-dots" id="snapDots" aria-label="首页分屏导航">
-      <button class="snap-dot active" type="button" data-slide="0" aria-label="第 1 屏：概览与指尖试打" title="概览与试打"></button>
-      <button class="snap-dot" type="button" data-slide="1" aria-label="第 2 屏：四个设计原则" title="设计原则"></button>
-      <button class="snap-dot" type="button" data-slide="2" aria-label="第 3 屏：遗忘曲线与学习节奏" title="记忆曲线"></button>
-      <button class="snap-dot" type="button" data-slide="3" aria-label="第 4 屏：核心实测与效率换算" title="性能与速度"></button>
-      <button class="snap-dot" type="button" data-slide="4" aria-label="第 5 屏：七种方案横向对比" title="方案对比"></button>
-      <button class="snap-dot" type="button" data-slide="5" aria-label="第 6 屏：准确率与分档重码" title="数据实测"></button>
-      <button class="snap-dot" type="button" data-slide="6" aria-label="第 7 屏：在线练习工坊" title="在线练习"></button>
-    </nav>
+  <section class="view snap-view active" id="view-home">
 
     <!-- ==================== SLIDE 1: 首屏 + 5秒试打台 ==================== -->
     <div class="snap-slide" id="slide-hero">
@@ -3621,172 +4213,205 @@ body[data-route="home"] .snap-dots {
   </section>
 
   <!-- ==================== VIEW 3: 字根与规则（清晰速查，拒绝文字墙） ==================== -->
-  <section class="view" id="view-guide">
-    <div class="section-head">
-      <div>
-        <div class="sec-eyebrow"><span>字根与规则</span></div>
-        <h2>一张键图，<span class="serif-accent">六条直觉。</span></h2>
-        <p>点选任意键帽即可放大并专练；细微辨析均已收纳，需要时随时翻阅。</p>
+  <section class="view snap-view" id="view-guide">
+
+    <!-- ==================== GUIDE SLIDE 1: 键盘/规则主舞台（打开即居中，无需手动微调滚动） ==================== -->
+    <div class="snap-slide" id="guide-slide-main">
+      <div class="snap-inner">
+        <div class="guide-compact-bar">
+          <div class="guide-compact-title">
+            <h2>一张键图，<span class="serif-accent">六条直觉。</span></h2>
+            <span class="gc-sub">点选任意键帽放大查看并一键专练</span>
+          </div>
+          <div class="subtabs" id="guideTabs">
+            <button class="subtab active" data-sub="g-chart" type="button">字根键图</button>
+            <button class="subtab" data-sub="g-search" type="button">拆分查询</button>
+            <button class="subtab" data-sub="g-split" type="button">拆分规则</button>
+            <button class="subtab" data-sub="g-wuli" type="button">飞键简词</button>
+            <button class="subtab" data-sub="g-sp" type="button" id="guideSpTab">双拼键位</button>
+          </div>
+        </div>
+
+        <!-- Guide 0: 26 键字根图（整屏居中） -->
+        <div class="subpanel active" id="g-chart">
+          <div class="card">
+            <div class="zg-chart-bar">
+              <div>
+                <h3 style="margin:0 0 4px;font-size:18px">简单鹤 26 键完整字根图</h3>
+                <p style="margin:0;font-size:13px;color:var(--ink-soft)">共 97 个去重字根。点击任意键帽可放大查看，并一键进入该键专练。</p>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn btn-outline btn-sm" id="toggleZonesBtn" type="button">指法分区色：关</button>
+                <button class="btn btn-dark btn-sm" id="exportSvgBtn" type="button">下载高清 SVG</button>
+              </div>
+            </div>
+
+            <div class="zg-kb-scroll">
+              <div class="zg-kb" id="zgVisualKb"></div>
+            </div>
+
+            <div class="zg-detail-bar" id="zgVisualDetail"></div>
+          </div>
+        </div>
+
+        <!-- Guide 0.5: 简单鹤拆分查询（离线 21,138 字全库即时查） -->
+        <div class="subpanel" id="g-search">
+          <div class="cf-search-wrap">
+            <div class="cf-hero">
+              <div class="cf-kicker"><i></i><span>简单鹤 · 拆分查询</span></div>
+              <h3>每一个字，<span class="serif-accent">都有迹可循。</span></h3>
+              <p class="cf-sub">输入任意汉字、词语或整句话，即时查看首末字根拆分、四码全码与容错编码（内置 21,138 字离线全库）。</p>
+              <div class="cf-bar">
+                <input class="cf-input" id="cfSearchInput" type="text" autocomplete="off" placeholder="输入要查询的汉字或词语，例如：简单鹤、魑魅魍魉…">
+                <button class="cf-clear" id="cfClearBtn" type="button" aria-label="清空输入">✕</button>
+                <button class="btn btn-primary btn-sm" id="cfSearchBtn" type="button">查询</button>
+              </div>
+              <div class="cf-samples">
+                <span>输入即查询 · 试一试：</span>
+                <button class="cf-sample-btn" type="button" data-cf-q="简单鹤">简单鹤</button>
+                <button class="cf-sample-btn" type="button" data-cf-q="由平虫">由平虫</button>
+                <button class="cf-sample-btn" type="button" data-cf-q="轻羽落键">轻羽落键</button>
+                <button class="cf-sample-btn" type="button" data-cf-q="魑魅魍魉">魑魅魍魉</button>
+                <button class="cf-sample-btn" type="button" data-cf-q="我们">我们</button>
+              </div>
+            </div>
+
+            <div id="cfWordHits"></div>
+            <div id="cfResults">
+              <div class="cf-empty">
+                <h4>从一个汉字开始</h4>
+                <p>查询结果会在这里即时展示。遇到生僻字或拿不准怎么拆的字，输入进来就能看到标准首末字根与全码；点击字根可直达对应键位。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guide 1: 拆分规则（口诀 + 6 条核心规则居中） -->
+        <div class="subpanel" id="g-split">
+          <div class="motto-card">
+            <div class="motto-kicker"><i></i>核心拆分口诀</div>
+            <div class="motto-text">
+              笔顺优先（无笔画粘连的口可无视笔顺），首末取大，相交也拆，插隔也取，字根字重复，禾取丿八。
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag tag-blue">规则 01</span>
+              <h3 style="margin:10px 0 6px;font-size:17px">笔顺优先</h3>
+              <p style="margin:0;font-size:13.5px;color:var(--ink-soft)">按规范笔顺取首字根和末字根。<strong>无笔画粘连的口</strong>可无视笔顺。</p>
+            </div>
+            <div class="card">
+              <span class="tag tag-blue">规则 02</span>
+              <h3 style="margin:10px 0 6px;font-size:17px">首末取大</h3>
+              <p style="margin:0;font-size:13.5px;color:var(--ink-soft)">优先取覆盖笔画更多的大字根，让拆字保持整体直觉、不碎裂。</p>
+            </div>
+            <div class="card">
+              <span class="tag tag-ok">规则 03</span>
+              <h3 style="margin:10px 0 6px;font-size:17px">相交也拆</h3>
+              <p style="margin:0;font-size:13.5px;color:var(--ink-soft)">笔画相交也拆开取根。例字：<strong>由 = <span class="chai">日</span>(v) + <span class="chai">丨</span>(p)</strong>。</p>
+            </div>
+            <div class="card">
+              <span class="tag tag-ok">规则 04</span>
+              <h3 style="margin:10px 0 6px;font-size:17px">插隔也取</h3>
+              <p style="margin:0;font-size:13.5px;color:var(--ink-soft)">笔画被穿插隔开依然取根。例字：<strong>平 = <span class="chai">一</span>(d) + <span class="chai">十</span>(s)</strong>。</p>
+            </div>
+            <div class="card">
+              <span class="tag tag-amber">规则 05</span>
+              <h3 style="margin:10px 0 6px;font-size:17px">字根字重复</h3>
+              <p style="margin:0;font-size:13.5px;color:var(--ink-soft)">单字本身即是字根时重复该键。例字：<strong>虫 = <span class="chai">虫</span>(f) + <span class="chai">虫</span>(f)</strong>。</p>
+            </div>
+            <div class="card">
+              <span class="tag tag-amber">规则 06</span>
+              <h3 style="margin:10px 0 6px;font-size:17px">禾取丿八</h3>
+              <p style="margin:0;font-size:13.5px;color:var(--ink-soft)">「禾」按 <span class="chai">丿</span>(u) 与 <span class="chai">八</span>(f) 处理，记住一条即可通吃禾字旁。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guide 2: 飞键与简词（自动切为自由滚动长列表） -->
+        <div class="subpanel" id="g-wuli">
+          <div class="card" style="margin-bottom:16px;padding:16px 20px">
+            <p style="margin:0;font-size:14px;color:var(--ink-soft)">
+              <strong>原则：</strong>除 <strong>qo / xo</strong> 两个飞键建议记住外，其余简词均保留完整全码且<strong>不出简让全</strong>，忘了就打全码，随用随熟。
+            </p>
+          </div>
+          <div class="filter-bar">
+            <input class="search-input" id="wuliSearch" type="search" placeholder="搜索编码或词语，例如：qo、就是、一起、手机...">
+            <div class="chip-group" id="wuliChips">
+              <button class="chip active" data-cat="all" type="button">全部</button>
+              <button class="chip" data-cat="fly" type="button">必记飞键</button>
+              <button class="chip" data-cat="single" type="button">无理单字</button>
+              <button class="chip" data-cat="y" type="button">y 开头超高频</button>
+              <button class="chip" data-cat="e" type="button">e 开头与尾一</button>
+              <button class="chip" data-cat="scz" type="button">s/c/z/实无理</button>
+              <button class="chip" data-cat="extra" type="button">高频常用</button>
+            </div>
+          </div>
+          <div class="code-grid" id="wuliGrid"></div>
+        </div>
+
+        <!-- Guide 3: 小鹤双拼 26 键位图（整屏居中） -->
+        <div class="subpanel" id="g-sp">
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px">
+              <div>
+                <h3 style="margin:0 0 4px;font-size:18px">小鹤双拼 26 键位图</h3>
+                <p style="margin:0;font-size:13px;color:var(--ink-soft)">声母 + 韵母 = 任意音节两键搞定，点击键帽查看示例。</p>
+              </div>
+              <button class="btn btn-primary btn-sm" data-jump="practice:sp" type="button">去做双拼热身 →</button>
+            </div>
+            <div class="sp-kb-scroll"><div class="sp-kb" id="spGuideKb"></div></div>
+            <div class="sp-detail" id="spGuideDetail"></div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="subtabs" id="guideTabs">
-      <button class="subtab active" data-sub="g-chart" type="button">字根键图</button>
-      <button class="subtab" data-sub="g-split" type="button">拆分规则</button>
-      <button class="subtab" data-sub="g-wuli" type="button">飞键简词</button>
-      <button class="subtab" data-sub="g-sp" type="button" id="guideSpTab">双拼键位</button>
-    </div>
-
-    <!-- Guide 0: 26 键字根图 -->
-    <div class="subpanel active" id="g-chart">
-      <div class="card">
-        <div class="zg-chart-bar">
+    <!-- ==================== GUIDE SLIDE 2: 进阶辨析、容错说明与下一步 ==================== -->
+    <div class="snap-slide" id="guide-slide-notes">
+      <div class="snap-inner">
+        <div class="section-head" style="margin-bottom:clamp(14px,2dvh,24px)">
           <div>
-            <h3 style="margin:0 0 4px;font-size:19px">简单鹤 26 键完整字根图</h3>
-            <p style="margin:0;font-size:13.5px;color:var(--ink-soft)">共 97 个去重字根。点击任意键帽可放大查看，并一键进入该键专练。</p>
-          </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn btn-outline btn-sm" id="toggleZonesBtn" type="button">指法分区色：关</button>
-            <button class="btn btn-dark btn-sm" id="exportSvgBtn" type="button">下载高清 SVG</button>
+            <div class="sec-eyebrow"><span>细微辨析与补充</span></div>
+            <h2>把容易混淆的几处，<span class="serif-accent">一次说清。</span></h2>
           </div>
         </div>
 
-        <div class="zg-kb-scroll">
-          <div class="zg-kb" id="zgVisualKb"></div>
-        </div>
-
-        <div class="zg-detail-bar" id="zgVisualDetail"></div>
-
-        <details class="clean-details">
-          <summary>字根细微辨析（7 条）</summary>
-          <div class="clean-details-body">
-            <ol>
-              <li>键位 <strong>H</strong> 的笔画“点”类包括了笔画“捺（乀）”（如“哀”的末形）。</li>
-              <li>键位 <strong>D</strong> 的笔画“横”类包括了笔画“提（㇀）”（如“刁”的末形）。</li>
-              <li>键位 <strong>P</strong> 的笔画“竖”类包括了笔画“竖钩”（如“手”的末形）。</li>
-              <li>键位 <strong>R</strong> 的笔画“折”类包括了各种折撇、折钩、横折钩、竖折钩、折折钩等（如“乃”的首形）。</li>
-              <li>键位 <strong>N</strong> 的字根“囗”是框（如“圆”和“黑”的首形），而键位 <strong>O</strong> 的“口”是 kǒu（如“员”、“史”和“哟”的首形）。</li>
-              <li>键位 <strong>H</strong> 的字根“釆”并非采集的采字，而是“番”字的上部。</li>
-              <li>键位 <strong>Z</strong> 的字根“艹”是草字头（如“花”的首形），并非“廾”，类似“弄”的末形取“竖”。</li>
+        <div class="grid-2" style="margin-bottom:0">
+          <div class="card">
+            <h3 style="margin:0 0 10px;font-size:16.5px">字根细微辨析（7 条）</h3>
+            <ol style="margin:0;padding-left:18px;font-size:13px;line-height:1.72;color:var(--ink-soft)">
+              <li><strong>H</strong>「点」含捺（乀，如「哀」末形）；<strong>D</strong>「横」含提（㇀，如「刁」末形）。</li>
+              <li><strong>P</strong>「竖」含竖钩（如「手」末形）；<strong>R</strong>「折」含各类折撇/折钩（如「乃」首形）。</li>
+              <li><strong>N</strong>「囗」是框（圆、黑首形），<strong>O</strong>「口」是 kǒu（员、史首形）。</li>
+              <li><strong>H</strong>「釆」指「番」的上部，并非「采」；<strong>Z</strong>「艹」指草字头，并非「廾」。</li>
             </ol>
           </div>
-        </details>
-      </div>
-    </div>
 
-    <!-- Guide 1: 拆分规则 -->
-    <div class="subpanel" id="g-split">
-      <div class="motto-card">
-        <div class="motto-kicker"><i></i>核心拆分口诀</div>
-        <div class="motto-text">
-          笔顺优先（无笔画粘连的口可无视笔顺），首末取大，相交也拆，插隔也取，字根字重复，禾取丿八。
+          <div class="card">
+            <h3 style="margin:0 0 10px;font-size:16.5px">容错机制 · 固词/动词 · 双拼易混</h3>
+            <div style="display:grid;gap:8px;font-size:13px;color:var(--ink-soft);line-height:1.68">
+              <div><strong style="color:var(--ink)">贴心容错：</strong>内置大量直觉拆法容错，记不清细枝末节也能直接上屏。</div>
+              <div><strong style="color:var(--ink)">固词 vs 动词：</strong>默认「固词」前 4 码固定顺序；按 <code>Ctrl + ~</code> 可切动词动态调频。</div>
+              <div><strong style="color:var(--ink)">双拼易混 4 组：</strong>in=<b>B</b> / ing=<b>K</b>；<b>V</b>=zh 或 ui/ü；L=<b>iang/uang</b>、N=<b>iao</b>；ü 常作 u。</div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="grid-3">
-        <div class="card">
-          <span class="tag tag-blue">规则 01</span>
-          <h3 style="margin:14px 0 8px;font-size:18px">笔顺优先</h3>
-          <p style="margin:0;font-size:14.5px;color:var(--ink-soft)">按规范笔顺取首字根和末字根。<strong>无笔画粘连的口</strong>可无视笔顺。</p>
-        </div>
-        <div class="card">
-          <span class="tag tag-blue">规则 02</span>
-          <h3 style="margin:14px 0 8px;font-size:18px">首末取大</h3>
-          <p style="margin:0;font-size:14.5px;color:var(--ink-soft)">优先取覆盖笔画更多的大字根，让拆字保持整体直觉、不碎裂。</p>
-        </div>
-        <div class="card">
-          <span class="tag tag-ok">规则 03</span>
-          <h3 style="margin:14px 0 8px;font-size:18px">相交也拆</h3>
-          <p style="margin:0;font-size:14.5px;color:var(--ink-soft)">笔画相交也拆开取根。例字：<strong>由 = <span class="chai">日</span>(v) + <span class="chai">丨</span>(p)</strong>。</p>
-        </div>
-        <div class="card">
-          <span class="tag tag-ok">规则 04</span>
-          <h3 style="margin:14px 0 8px;font-size:18px">插隔也取</h3>
-          <p style="margin:0;font-size:14.5px;color:var(--ink-soft)">笔画被穿插隔开依然取根。例字：<strong>平 = <span class="chai">一</span>(d) + <span class="chai">十</span>(s)</strong>。</p>
-        </div>
-        <div class="card">
-          <span class="tag tag-amber">规则 05</span>
-          <h3 style="margin:14px 0 8px;font-size:18px">字根字重复</h3>
-          <p style="margin:0;font-size:14.5px;color:var(--ink-soft)">单字本身即是字根时重复该键。例字：<strong>虫 = <span class="chai">虫</span>(f) + <span class="chai">虫</span>(f)</strong>。</p>
-        </div>
-        <div class="card">
-          <span class="tag tag-amber">规则 06</span>
-          <h3 style="margin:14px 0 8px;font-size:18px">禾取丿八</h3>
-          <p style="margin:0;font-size:14.5px;color:var(--ink-soft)">「禾」按 <span class="chai">丿</span>(u) 与 <span class="chai">八</span>(f) 处理，记住一条即可通吃禾字旁。</p>
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <h3 style="margin:0 0 8px;font-size:17px">贴心容错机制</h3>
-          <p style="margin:0;font-size:14.5px;color:var(--ink-soft)">简单鹤内置大量贴心容错，直觉拆法往往都能直接上屏，不必担心记错细枝末节。</p>
-        </div>
-        <div class="card">
-          <h3 style="margin:0 0 8px;font-size:17px">固词 vs 动词模式</h3>
-          <p style="margin:0;font-size:14.5px;color:var(--ink-soft)"><strong>固词（默认）：</strong>前 4 码固定顺序，盲打确定性极高。<br><strong>动词：</strong>4 码动态调频，按 <code>Ctrl + ~</code> 随时切换。</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Guide 2: 飞键与简词 -->
-    <div class="subpanel" id="g-wuli">
-      <div class="card" style="margin-bottom:20px;padding:18px 22px">
-        <p style="margin:0;font-size:14px;color:var(--ink-soft)">
-          <strong>原则：</strong>除 <strong>qo / xo</strong> 两个飞键建议记住外，其余简词均保留完整全码且<strong>不出简让全</strong>，忘了就打全码，随用随熟。
-        </p>
-      </div>
-      <div class="filter-bar">
-        <input class="search-input" id="wuliSearch" type="search" placeholder="搜索编码或词语，例如：qo、就是、一起、手机...">
-        <div class="chip-group" id="wuliChips">
-          <button class="chip active" data-cat="all" type="button">全部</button>
-          <button class="chip" data-cat="fly" type="button">必记飞键</button>
-          <button class="chip" data-cat="single" type="button">无理单字</button>
-          <button class="chip" data-cat="y" type="button">y 开头超高频</button>
-          <button class="chip" data-cat="e" type="button">e 开头与尾一</button>
-          <button class="chip" data-cat="scz" type="button">s/c/z/实无理</button>
-          <button class="chip" data-cat="extra" type="button">高频常用</button>
-        </div>
-      </div>
-      <div class="code-grid" id="wuliGrid"></div>
-    </div>
-
-    <!-- Guide 3: 小鹤双拼键位 -->
-    <div class="subpanel" id="g-sp">
-      <div class="card" style="margin-bottom:22px">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <div class="flow-bridge">
           <div>
-            <h3 style="margin:0 0 4px;font-size:18px">小鹤双拼 26 键位图</h3>
-            <p style="margin:0;font-size:13.5px;color:var(--ink-soft)">声母 + 韵母 = 任意音节两键搞定，点击键帽查看示例。</p>
+            <div class="fb-kicker">NEXT STEP · 03 → 04</div>
+            <h3>规则够用了，去敲几分钟吧</h3>
+            <p>不必背完再开始，边敲边记才是最快的方式。</p>
           </div>
-          <button class="btn btn-primary btn-sm" data-jump="practice:sp" type="button">去做双拼热身 →</button>
-        </div>
-        <div class="sp-kb-scroll"><div class="sp-kb" id="spGuideKb"></div></div>
-        <div class="sp-detail" id="spGuideDetail"></div>
-      </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <h3 style="margin:0 0 12px;font-size:16.5px">易混淆的 4 组键位</h3>
-          <div style="display:grid;gap:12px;font-size:14px;color:var(--ink-soft);line-height:1.75">
-            <div><strong style="color:var(--ink)">1. in 在 B，ing 在 K：</strong>「拼」=<span class="mono">pb</span>，「平」=<span class="mono">pk</span>。</div>
-            <div><strong style="color:var(--ink)">2. V 的双重角色：</strong>首键 <b>zh</b>，次键 <b>ui / ü</b>（如「追」=<span class="mono">vv</span>）。</div>
-            <div><strong style="color:var(--ink)">3. L 与 N 长韵母：</strong>L = <b>iang/uang</b>（「亮」=<span class="mono">ll</span>），N = <b>iao</b>（「料」=<span class="mono">ln</span>）。</div>
-            <div><strong style="color:var(--ink)">4. ü 系列常写作 u：</strong>「学(xue)」=<span class="mono">xt</span>，「云(yun)」=<span class="mono">yy</span>。</div>
+          <div class="flow-bridge-actions">
+            <button class="btn btn-primary" data-jump="practice:zigen" type="button">进入练习工坊 →</button>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="flow-bridge">
-      <div>
-        <div class="fb-kicker">NEXT STEP · 03 → 04</div>
-        <h3>规则够用了，去敲几分钟吧</h3>
-        <p>不必背完再开始，边敲边记才是最快的方式。</p>
-      </div>
-      <div class="flow-bridge-actions">
-        <button class="btn btn-primary" data-jump="practice:zigen" type="button">进入练习工坊 →</button>
-      </div>
-    </div>
   </section>
 
   <!-- ==================== VIEW 4: 练习工坊（第三步：沉浸、舒适、键盘完整呈现） ==================== -->
@@ -3802,6 +4427,7 @@ body[data-route="home"] .snap-dots {
         <button class="subtab" data-sub="p-table" type="button">字根速查</button>
         <button class="subtab" data-sub="p-split" type="button">拆字实战</button>
         <button class="subtab" data-sub="p-short" type="button">简码训练</button>
+        <button class="subtab" data-sub="p-health" type="button">养生练习</button>
         <button class="subtab" data-sub="p-sp" type="button" id="pracSpTab">双拼热身</button>
       </div>
 
@@ -3928,6 +4554,89 @@ body[data-route="home"] .snap-dots {
     </div>
 
     <!-- Practice D: 小鹤双拼热身 -->
+    <!-- Practice H: 养生练习（跟打练习 + 循环练习 + 当前字/最后一字拆分提示） -->
+    <div class="subpanel" id="p-health">
+      <div class="hl-wrap">
+        <div class="hl-top">
+          <div class="hl-row">
+            <div class="hl-mode-seg" id="hlModeSeg" role="tablist" aria-label="养生练习模式">
+              <button class="hl-mode-btn active" type="button" data-hl-mode="type">跟打练习</button>
+              <button class="hl-mode-btn" type="button" data-hl-mode="cycle">循环练习</button>
+            </div>
+
+            <div class="hl-pools" id="hlHintModeChips">
+              <span class="hl-pools-lbl">拆分提示：</span>
+              <button class="chip active" type="button" data-hl-hint="always">常显</button>
+              <button class="chip" type="button" data-hl-hint="stall">停顿 2 秒防忘</button>
+              <button class="chip" type="button" data-hl-hint="off">纯盲打</button>
+            </div>
+          </div>
+
+          <div class="hl-row">
+            <div class="hl-pools" id="hlPoolChips">
+              <span class="hl-pools-lbl">练习字集（可多选）：</span>
+              <button class="chip active" type="button" data-hl-pool="top500">前 500</button>
+              <button class="chip" type="button" data-hl-pool="mid500">中 500</button>
+              <button class="chip" type="button" data-hl-pool="bot500">后 500</button>
+              <button class="chip" type="button" data-hl-pool="top3000">前 3000</button>
+              <button class="chip" type="button" data-hl-pool="prose">流畅短句</button>
+            </div>
+
+            <div class="hl-pools" id="hlLenChips">
+              <span class="hl-pools-lbl">每段字数：</span>
+              <button class="chip" type="button" data-hl-len="10">10</button>
+              <button class="chip active" type="button" data-hl-len="20">20</button>
+              <button class="chip" type="button" data-hl-len="30">30</button>
+              <button class="chip" type="button" data-hl-len="50">50</button>
+            </div>
+          </div>
+
+          <div class="hl-stats" id="hlStats">
+            <div class="hl-stat"><b id="hlStat1">0.0</b><span id="hlStat1Lbl">速度（字/分）</span></div>
+            <div class="hl-stat"><b id="hlStat2">0.00</b><span id="hlStat2Lbl">击键（次/秒）</span></div>
+            <div class="hl-stat"><b id="hlStat3">—</b><span id="hlStat3Lbl">正确率</span></div>
+            <div class="hl-stat"><b id="hlStat4">0 / 20</b><span id="hlStat4Lbl">本段进度</span></div>
+          </div>
+        </div>
+
+        <div class="hl-stage">
+          <div class="hl-text-box" id="hlTextBox" aria-label="目标跟打文本（点击任意字可查拆分）"></div>
+
+          <!-- 当前待打字 / 段尾最后一字实时拆分提示条 -->
+          <div class="hl-hint-bar" id="hlHintBar">
+            <div class="hl-hint-left">
+              <span class="hl-hint-badge" id="hlHintBadge">当前待打</span>
+              <div class="hl-hint-detail" id="hlHintDetail"></div>
+            </div>
+            <span style="font-size:11.5px;color:var(--ink-faint)">点击上方任意字也可随时查拆</span>
+          </div>
+
+          <div class="hl-input-row">
+            <input class="hl-input" id="hlInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="切换你的简单鹤输入法，直接在这里跟打上屏…">
+            <button class="btn btn-outline btn-sm" id="hlRetryBtn" type="button">重打本段</button>
+            <button class="btn btn-primary btn-sm" id="hlNextBtn" type="button">换一段 →</button>
+          </div>
+        </div>
+
+        <div class="hl-history" id="hlHistoryBox">
+          <div class="hl-history-head">
+            <h4>最近跟打记录</h4>
+            <button class="btn btn-outline btn-sm" id="hlClearHistBtn" type="button">清空记录</button>
+          </div>
+          <div class="tbl-scroll" style="box-shadow:none">
+            <table class="hl-hist-table">
+              <thead>
+                <tr><th>段号</th><th>速度</th><th>击键</th><th>正确率</th><th>字数</th><th>用时</th><th>练习字集</th></tr>
+              </thead>
+              <tbody id="hlHistBody">
+                <tr><td colspan="7" style="text-align:center;color:var(--ink-faint);padding:16px">完成一段跟打练习后，成绩会自动记录在这里</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="subpanel" id="p-sp">
       <div class="hud">
         <div class="chip-group" id="spModeChips">
@@ -3973,7 +4682,9 @@ body[data-route="home"] .snap-dots {
   </section>
 
   <!-- ==================== VIEW 5: 下载安装（第四步：清爽分端、渐进披露、零文字墙） ==================== -->
-  <section class="view" id="view-ecosystem">
+  <section class="view snap-view" id="view-ecosystem">
+    <div class="snap-slide" id="eco-slide-dl">
+      <div class="snap-inner">
     <div class="section-head">
       <div>
         <div class="sec-eyebrow"><span>下载与安装</span></div>
@@ -4051,6 +4762,11 @@ body[data-route="home"] .snap-dots {
       </div>
     </div>
 
+      </div>
+    </div>
+
+    <div class="snap-slide" id="eco-slide-tools">
+      <div class="snap-inner">
     <!-- 次级区：实用工具与社区 -->
     <h3 class="eco-subhead">实用工具与社区</h3>
     <div class="eco-mini-grid">
@@ -4060,7 +4776,8 @@ body[data-route="home"] .snap-dots {
           <p>遇到生僻字拿不准怎么拆时，输入汉字即可在线查看简单鹤标准拆法。</p>
         </div>
         <div class="eco-mini-actions">
-          <a class="btn btn-outline btn-sm" href="https://chaifen.app/" target="_blank" rel="noopener noreferrer">打开 chaifen.app ↗</a>
+          <button class="btn btn-primary btn-sm" type="button" data-jump="guide:g-search">本站离线拆字查询 →</button>
+          <a class="btn btn-outline btn-sm" href="https://chaifen.app/" target="_blank" rel="noopener noreferrer">chaifen.app ↗</a>
         </div>
       </div>
 
@@ -4107,6 +4824,8 @@ body[data-route="home"] .snap-dots {
       </div>
     </div>
 
+      </div>
+    </div>
   </section>
 
   <!-- ==================== VIEW: 进阶文档（列表） ==================== -->
@@ -4292,7 +5011,9 @@ body[data-route="home"] .snap-dots {
   </section>
 
   <!-- ==================== VIEW: 单字测评 ==================== -->
-  <section class="view" id="view-assess">
+  <section class="view snap-view" id="view-assess">
+    <div class="snap-slide" id="assess-slide-hero">
+      <div class="snap-inner">
     <div class="section-head">
       <div>
         <div class="sec-eyebrow"><span>单字测评</span></div>
@@ -4308,6 +5029,12 @@ body[data-route="home"] .snap-dots {
       <div class="ms-item"><div class="ms-num">1.75<i>键</i></div><div class="ms-lbl">出简平均码长</div></div>
     </div>
 
+        <div class="slide-actions" style="margin-top:8px"><button class="btn btn-outline btn-sm" type="button" data-next-slide="1">下滑查看 12 档完整数据 ↓</button></div>
+      </div>
+    </div>
+
+    <div class="snap-slide" id="assess-slide-table">
+      <div class="snap-inner">
     <h3 class="arena-subhead">分档重码与码长</h3>
     <div class="tbl-scroll-hint">左右滑动查看完整数据 →</div>
     <div class="tbl-scroll">
@@ -4336,6 +5063,12 @@ body[data-route="home"] .snap-dots {
       </table>
     </div>
 
+      </div>
+    </div>
+
+    <div class="snap-slide" id="assess-slide-notes">
+      <div class="snap-inner">
+        <div class="section-head" style="margin-bottom:clamp(14px,2dvh,24px)"><div><div class="sec-eyebrow"><span>测评方法</span></div><h2>数据怎么来的，<span class="serif-accent">完全透明。</span></h2></div></div>
     <div class="assess-notes">
       <div class="an-card">
         <h4>全码与出简，为什么重码差这么多</h4>
@@ -4362,8 +5095,11 @@ body[data-route="home"] .snap-dots {
     <p class="arena-foot-note">
       本页只测单字（不含词组与整句）；词组性能另见「性能实测」区的多方案对照。数据由脚本从本仓库码表直接计算，复算命令 <code>python3 scripts/assess.py</code>。
     </p>
+      </div>
+    </div>
   </section>
 
+<nav class="snap-dots" id="snapDots" aria-label="分屏导航"></nav>
 </main>
 
 <footer class="site-footer">
@@ -5063,6 +5799,20 @@ function initScrollReveal(scopeEl) {
   });
 }
 
+const SNAP_ROUTES = new Set(['home', 'guide', 'ecosystem', 'assess']);
+let activeSnapScroller = null;
+let snapWheelLock = false;
+let snapScrollRaf = 0;
+
+function getActiveSnapView() {
+  return document.querySelector('.view.snap-view.active');
+}
+
+function getVisibleSlides(scroller) {
+  if (!scroller || scroller.classList.contains('free-scroll')) return [];
+  return [...scroller.querySelectorAll(':scope > .snap-slide')];
+}
+
 function syncTopBarHeight() {
   const hdr = document.querySelector('.site-header');
   const h = hdr ? Math.round(hdr.getBoundingClientRect().height) : 64;
@@ -5071,11 +5821,13 @@ function syncTopBarHeight() {
   const avail = Math.max(320, vh - h);
   document.documentElement.style.setProperty('--slide-h', avail + 'px');
 
-  // 针对 Edge 双底栏 / 安卓大字体等极矮竖屏：若某屏内容超出可用高度，自动等比微缩以保证零裁切、不卡中间
+  const scroller = getActiveSnapView();
+  if (!scroller || scroller.classList.contains('free-scroll')) return;
+
   const isLandscapeShort = window.matchMedia('(max-height: 500px) and (orientation: landscape)').matches;
-  const slides = document.querySelectorAll('#view-home .snap-slide');
+  const slides = getVisibleSlides(scroller);
   slides.forEach(sl => {
-    const inner = sl.querySelector('.snap-inner');
+    const inner = sl.querySelector(':scope > .snap-inner');
     if (!inner) return;
     sl.style.justifyContent = '';
     inner.style.transform = '';
@@ -5101,83 +5853,129 @@ function syncSnapFit() {
   syncTopBarHeight();
 }
 
-function initScrollCue() {
-  const scroller = $('view-home');
-  const slides = scroller ? [...scroller.querySelectorAll('.snap-slide')] : [];
-  const dots = [...document.querySelectorAll('#snapDots .snap-dot')];
-  if (!scroller || !slides.length) return;
-
-  const goSlide = (idx) => {
-    const clamped = Math.max(0, Math.min(slides.length - 1, idx));
-    slides[clamped].scrollIntoView({ behavior: 'smooth', block: 'start' });
+function smoothSnapTo(scroller, targetTop, duration = 540) {
+  if (!scroller) return;
+  if (snapScrollRaf) cancelAnimationFrame(snapScrollRaf);
+  const startTop = scroller.scrollTop;
+  const diff = targetTop - startTop;
+  if (Math.abs(diff) < 2) return;
+  const t0 = performance.now();
+  scroller.style.scrollSnapType = 'none';
+  scroller.style.scrollBehavior = 'auto';
+  const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
+  const step = (now) => {
+    const p = Math.min(1, (now - t0) / duration);
+    scroller.scrollTop = startTop + diff * easeOutQuart(p);
+    if (p < 1) {
+      snapScrollRaf = requestAnimationFrame(step);
+    } else {
+      scroller.scrollTop = targetTop;
+      scroller.style.scrollSnapType = '';
+      scroller.style.scrollBehavior = '';
+      if (window.__updateSnapDots) window.__updateSnapDots();
+    }
   };
+  snapScrollRaf = requestAnimationFrame(step);
+}
 
-  const getActiveIdx = () => {
-    const h = scroller.clientHeight || 1;
-    return Math.max(0, Math.min(slides.length - 1, Math.round(scroller.scrollTop / h)));
-  };
-
-  const updateDots = () => {
-    const active = getActiveIdx();
-    dots.forEach((d, i) => d.classList.toggle('active', i === active));
-  };
-
-  scroller.addEventListener('scroll', updateDots, { passive: true });
-  window.addEventListener('resize', () => { syncTopBarHeight(); updateDots(); }, { passive: true });
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', () => { syncTopBarHeight(); updateDots(); }, { passive: true });
+function rebuildSnapDots() {
+  const dotsNav = $('snapDots');
+  const scroller = getActiveSnapView();
+  if (!dotsNav) return;
+  const slides = getVisibleSlides(scroller);
+  if (slides.length <= 1) {
+    dotsNav.innerHTML = '';
+    dotsNav.style.display = 'none';
+    return;
   }
+  dotsNav.style.display = '';
+  dotsNav.innerHTML = '';
+  slides.forEach((sl, idx) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'snap-dot' + (idx === 0 ? ' active' : '');
+    b.setAttribute('aria-label', '第 ' + (idx + 1) + ' 屏');
+    b.addEventListener('click', () => {
+      smoothSnapTo(scroller, idx * scroller.clientHeight, 540);
+    });
+    dotsNav.appendChild(b);
+  });
+  updateSnapDots();
+}
 
-  dots.forEach((d, i) => d.addEventListener('click', () => goSlide(i)));
-  document.querySelectorAll('[data-next-slide]').forEach(btn => {
-    btn.addEventListener('click', () => goSlide(Number(btn.dataset.nextSlide || 1)));
+function updateSnapDots() {
+  const scroller = getActiveSnapView();
+  const dotsNav = $('snapDots');
+  if (!scroller || !dotsNav) return;
+  const slides = getVisibleSlides(scroller);
+  if (!slides.length) return;
+  const h = scroller.clientHeight || 1;
+  const active = Math.max(0, Math.min(slides.length - 1, Math.round(scroller.scrollTop / h)));
+  dotsNav.querySelectorAll('.snap-dot').forEach((d, i) => d.classList.toggle('active', i === active));
+}
+
+function initScrollCue() {
+  window.__updateSnapDots = updateSnapDots;
+
+  // 为所有 .snap-view 绑定滚轮缓动与进度点同步
+  document.querySelectorAll('.view.snap-view').forEach(scroller => {
+    scroller.addEventListener('scroll', () => {
+      if (scroller === getActiveSnapView()) updateSnapDots();
+    }, { passive: true });
+
+    scroller.addEventListener('wheel', (e) => {
+      if (scroller !== getActiveSnapView() || scroller.classList.contains('free-scroll')) return;
+      if (Math.abs(e.deltaY) < 8 || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+      if (e.target && e.target.closest('.tbl-scroll')) {
+        const box = e.target.closest('.tbl-scroll');
+        if (box.scrollWidth > box.clientWidth && Math.abs(e.deltaX) > 4) return;
+      }
+      // 如果内部有展开的 <details> 超出视口，不抢占滚动
+      e.preventDefault();
+      if (snapWheelLock) return;
+      const slides = getVisibleSlides(scroller);
+      if (slides.length <= 1) return;
+      const h = scroller.clientHeight || 1;
+      const cur = Math.max(0, Math.min(slides.length - 1, Math.round(scroller.scrollTop / h)));
+      const dir = e.deltaY > 0 ? 1 : -1;
+      const next = Math.max(0, Math.min(slides.length - 1, cur + dir));
+      if (next === cur) return;
+      snapWheelLock = true;
+      smoothSnapTo(scroller, next * h, 540);
+      setTimeout(() => { snapWheelLock = false; }, 600);
+    }, { passive: false });
   });
 
-  // 柔和缓动翻屏：解决 PC 滚轮一次跳动过快的问题（移动端保持原生触摸回弹）
-  let wheelLock = false;
-  let scrollAnimRaf = 0;
-  const smoothScrollTo = (targetTop, duration = 560) => {
-    if (scrollAnimRaf) cancelAnimationFrame(scrollAnimRaf);
-    const startTop = scroller.scrollTop;
-    const diff = targetTop - startTop;
-    if (Math.abs(diff) < 2) return;
-    const t0 = performance.now();
-    // 临时关闭 CSS snap 防止与缓动帧冲突，动画结束立刻恢复 mandatory 对齐
-    scroller.style.scrollSnapType = 'none';
-    scroller.style.scrollBehavior = 'auto';
-    const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
-    const step = (now) => {
-      const p = Math.min(1, (now - t0) / duration);
-      scroller.scrollTop = startTop + diff * easeOutQuart(p);
-      if (p < 1) {
-        scrollAnimRaf = requestAnimationFrame(step);
-      } else {
-        scroller.scrollTop = targetTop;
-        scroller.style.scrollSnapType = '';
-        scroller.style.scrollBehavior = '';
-        updateDots();
-      }
-    };
-    scrollAnimRaf = requestAnimationFrame(step);
-  };
+  // 所有 [data-next-slide] 按钮通用翻屏
+  document.querySelectorAll('[data-next-slide]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const scroller = getActiveSnapView();
+      if (!scroller) return;
+      const idx = Number(btn.dataset.nextSlide || 1);
+      smoothSnapTo(scroller, idx * scroller.clientHeight, 540);
+    });
+  });
 
-  scroller.addEventListener('wheel', (e) => {
-    if (currentRoute !== 'home') return;
-    if (Math.abs(e.deltaY) < 8 || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
-    if (e.target && e.target.closest('.tbl-scroll')) {
-      const box = e.target.closest('.tbl-scroll');
-      if (box.scrollWidth > box.clientWidth && Math.abs(e.deltaX) > 4) return;
+  // 键盘上下键 / PageDown / PageUp 翻屏（在所有 snap-view 生效，不干扰输入框与试打台）
+  window.addEventListener('keydown', (e) => {
+    const scroller = getActiveSnapView();
+    if (!scroller || scroller.classList.contains('free-scroll')) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const tag = (e.target && e.target.tagName) || '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+    if (document.querySelector('.mask.show')) return;
+    const slides = getVisibleSlides(scroller);
+    if (slides.length <= 1) return;
+    const h = scroller.clientHeight || 1;
+    const cur = Math.max(0, Math.min(slides.length - 1, Math.round(scroller.scrollTop / h)));
+    if (e.key === 'PageDown' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      smoothSnapTo(scroller, Math.min(slides.length - 1, cur + 1) * h, 540);
+    } else if (e.key === 'PageUp' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      smoothSnapTo(scroller, Math.max(0, cur - 1) * h, 540);
     }
-    e.preventDefault();
-    if (wheelLock) return;
-    const dir = e.deltaY > 0 ? 1 : -1;
-    const cur = getActiveIdx();
-    const next = Math.max(0, Math.min(slides.length - 1, cur + dir));
-    if (next === cur) return;
-    wheelLock = true;
-    smoothScrollTo(next * scroller.clientHeight, 560);
-    setTimeout(() => { wheelLock = false; }, 620);
-  }, { passive: false });
+  });
 
   // 横向对比表：悬停 / 点选方案实时展示特点简评
   const cmpTable = $('compareTable');
@@ -5196,22 +5994,6 @@ function initScrollCue() {
       tr.addEventListener('click', () => showTip(tr));
     });
   }
-
-  // PC 键盘上下方向键 / PageDown / PageUp 翻屏（不干扰试打台字母键）
-  window.addEventListener('keydown', (e) => {
-    if (currentRoute !== 'home') return;
-    if (e.metaKey || e.ctrlKey || e.altKey) return;
-    const tag = (e.target && e.target.tagName) || '';
-    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
-    if (document.querySelector('.mask.show')) return;
-    if (e.key === 'PageDown' || e.key === 'ArrowDown') {
-      e.preventDefault();
-      goSlide(getActiveIdx() + 1);
-    } else if (e.key === 'PageUp' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      goSlide(getActiveIdx() - 1);
-    }
-  });
 
   // 艾宾浩斯遗忘曲线：滑入第 3 屏自动触发绘制动效 + 重播 + 节点交互
   const ebWrap = $('ebWrap');
@@ -5232,14 +6014,15 @@ function initScrollCue() {
     ebWrap.classList.add('is-playing');
     ebPlayed = true;
   };
+  const homeScroller = $('view-home');
   if (ebWrap) {
     const ebSlide = $('slide-memory');
-    if (ebSlide && 'IntersectionObserver' in window) {
+    if (ebSlide && homeScroller && 'IntersectionObserver' in window) {
       const ebObs = new IntersectionObserver((entries) => {
         entries.forEach(en => {
           if (en.isIntersecting && !ebPlayed) playEb();
         });
-      }, { root: scroller, threshold: 0.4 });
+      }, { root: homeScroller, threshold: 0.4 });
       ebObs.observe(ebSlide);
     } else {
       playEb();
@@ -5260,9 +6043,448 @@ function initScrollCue() {
     });
   }
 
+  // ==================== 简单鹤 · 离线拆分查询引擎（21,138 字 + 简词全库） ====================
+  const escapeHtml = (str) => String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const cfInput = $('cfSearchInput');
+  const cfBtn = $('cfSearchBtn');
+  const cfClear = $('cfClearBtn');
+  const cfResults = $('cfResults');
+  const cfWordHits = $('cfWordHits');
+
+  const getDictMap = () => {
+    if (window.__cfDictMap && window.__cfDictMapSize === CUSTOM_DICT.length) return window.__cfDictMap;
+    const m = new Map();
+    for (let i = 0; i < CUSTOM_DICT.length; i++) {
+      m.set(CUSTOM_DICT[i].ch, CUSTOM_DICT[i]);
+    }
+    window.__cfDictMap = m;
+    window.__cfDictMapSize = CUSTOM_DICT.length;
+    return m;
+  };
+
+  const renderChaifenSearch = (rawQuery) => {
+    if (!cfResults || !cfWordHits) return;
+    const text = (rawQuery || '').trim();
+    if (cfClear) cfClear.classList.toggle('show', text.length > 0);
+    if (!text) {
+      cfWordHits.innerHTML = '';
+      cfResults.innerHTML = '<div class="cf-empty"><h4>从一个汉字开始</h4><p>查询结果会在这里即时展示。遇到生僻字或拿不准怎么拆的字，输入进来就能看到标准首末字根与全码；点击字根可直达对应键位。</p></div>';
+      return;
+    }
+
+    // 1. 若输入词组（2-8 字），顺带检索内置二简/三简词库
+    const cleanWord = text.replace(/[^\u3400-\u9fff]/g, '');
+    const wordMatches = [];
+    if (cleanWord.length >= 2 && cleanWord.length <= 8) {
+      if (typeof CUSTOM_SHORT_2 !== 'undefined') {
+        const hit2 = CUSTOM_SHORT_2.find(x => x.word === cleanWord);
+        if (hit2) wordMatches.push({ label: '二简词', codes: hit2.codes });
+      }
+      if (typeof CUSTOM_SHORT_3 !== 'undefined') {
+        const hit3 = CUSTOM_SHORT_3.find(x => x.word === cleanWord);
+        if (hit3) wordMatches.push({ label: '三简词', codes: hit3.codes });
+      }
+    }
+    if (wordMatches.length) {
+      cfWordHits.innerHTML = '<div class="cf-word-hit"><div><strong>词组简码命中：</strong>「' + escapeHtml(cleanWord) + '」</div><div class="cf-word-codes">' +
+        wordMatches.map(m => m.codes.map(c => '<span class="cf-code-pill">' + escapeHtml(m.label) + ' · <span class="c-sh">' + escapeHtml(c) + '</span></span>').join('')).join('') +
+        '</div></div>';
+    } else {
+      cfWordHits.innerHTML = '';
+    }
+
+    // 2. 提取全部汉字逐字去重拆解（最多展示 36 字）
+    const chars = [...new Set([...text].filter(ch => /[\u3400-\u9fff]/.test(ch)))].slice(0, 36);
+    if (!chars.length) {
+      cfResults.innerHTML = '<div class="cf-empty"><h4>未检测到汉字</h4><p>请输入简体或繁体汉字（可一次输入单个字、词语或一整句话）。</p></div>';
+      return;
+    }
+
+    const dMap = getDictMap();
+    const cardsHtml = chars.map(ch => {
+      const cf = CHAIFEN[ch]; // [r1, k1, r2, k2]
+      const entry = dMap.get(ch);
+      const codes = entry && entry.codes ? entry.codes : [];
+      const py = entry && entry.py ? entry.py : (codes[0] ? codes[0].slice(0, 2) : '');
+      const rootsHtml = cf
+        ? '<button class="cf-root-chip" type="button" data-cf-key="' + escapeHtml(cf[1].toUpperCase()) + '" title="点击查看 ' + escapeHtml(cf[1].toUpperCase()) + ' 键字根">' +
+            '<span class="cr-lbl">首根</span><span class="cr-glyph">' + escapeHtml(cf[0]) + '</span><span class="cr-key">' + escapeHtml(cf[1].toUpperCase()) + '</span>' +
+          '</button>' +
+          '<span class="cf-plus">+</span>' +
+          '<button class="cf-root-chip" type="button" data-cf-key="' + escapeHtml(cf[3].toUpperCase()) + '" title="点击查看 ' + escapeHtml(cf[3].toUpperCase()) + ' 键字根">' +
+            '<span class="cr-lbl">末根</span><span class="cr-glyph">' + escapeHtml(cf[2]) + '</span><span class="cr-key">' + escapeHtml(cf[3].toUpperCase()) + '</span>' +
+          '</button>'
+        : '<span style="font-size:12.5px;color:var(--ink-faint)">暂未收录拆分图示</span>';
+
+      const codesHtml = codes.length
+        ? '<div class="cf-codes-row"><span class="cf-codes-lbl">四码全码</span>' +
+            codes.slice(0, 6).map(c => '<span class="cf-code-pill"><span class="c-sp">' + escapeHtml(c.slice(0, 2)) + '</span><span class="c-sh">' + escapeHtml(c.slice(2)) + '</span></span>').join('') +
+          '</div>'
+        : (cf ? '<div class="cf-codes-row"><span class="cf-codes-lbl">形码后两键</span><span class="cf-code-pill"><span class="c-sh">' + escapeHtml(cf[1] + cf[3]) + '</span></span></div>'
+              : '<div class="cf-codes-row"><span class="cf-codes-lbl">内置码表未收录此字</span></div>');
+
+      return '<article class="cf-card">' +
+        '<div class="cf-glyph"><span class="cg-ch">' + escapeHtml(ch) + '</span>' + (py ? '<span class="cg-py">' + escapeHtml(py) + '</span>' : '') + '</div>' +
+        '<div class="cf-info"><div class="cf-roots-row">' + rootsHtml + '</div>' + codesHtml + '</div>' +
+      '</article>';
+    }).join('');
+
+    cfResults.innerHTML = '<div class="cf-grid">' + cardsHtml + '</div>';
+    cfResults.querySelectorAll('[data-cf-key]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const k = btn.dataset.cfKey;
+        if (k && typeof activeChartKey !== 'undefined') {
+          activeChartKey = k;
+          switchSubTab('guideTabs', 'view-guide', 'g-chart');
+        }
+      });
+    });
+  };
+
+  if (cfInput) {
+    cfInput.addEventListener('input', () => renderChaifenSearch(cfInput.value));
+    cfInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); renderChaifenSearch(cfInput.value); }
+    });
+  }
+  if (cfBtn && cfInput) cfBtn.addEventListener('click', () => renderChaifenSearch(cfInput.value));
+  if (cfClear && cfInput) {
+    cfClear.addEventListener('click', () => {
+      cfInput.value = '';
+      renderChaifenSearch('');
+      cfInput.focus();
+    });
+  }
+  document.querySelectorAll('[data-cf-q]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!cfInput) return;
+      cfInput.value = btn.dataset.cfQ || '';
+      renderChaifenSearch(cfInput.value);
+    });
+  });
+
+  // ==================== 养生练习引擎（跟打练习 + 循环练习 + 最后一字防忘提示） ====================
+  const HL_STORAGE_KEY = 'jdh_health_v1';
+  const HL_PROSE = [
+    '轻羽落键，意到字成。不盯候选栏，让思绪与指尖同频。',
+    '小鹤双拼定音，九十七个字根定形，四码只筛选不上屏，保留纯双拼流畅手感。',
+    '笔顺优先，首末取大，相交也拆，插隔也取，字根字重复，禾取撇八。',
+    '打字如写字，贵在节奏连贯、从容不迫，每天练习一刻钟，自然形成肌肉记忆。',
+    '春风拂过宣纸，松烟墨落笔成行。少记一半字根，稳居音形第一梯队。',
+    '遇到生僻字不必慌张，拆出首末两大字根，四键落定便能一眼直出。',
+    '单字落三码，四码首选留给常用词组，长短句衔接顺手不断档。',
+    '循序渐进，不死背口诀，按艾宾浩斯遗忘曲线的节奏短时复习最省力。'
+  ];
+
+  const loadHealthStore = () => {
+    try {
+      const raw = JSON.parse(localStorage.getItem(HL_STORAGE_KEY) || '{}');
+      const today = new Date().toISOString().slice(0, 10);
+      return {
+        todayDate: raw.todayDate === today ? today : today,
+        todayCount: raw.todayDate === today ? (raw.todayCount || 0) : 0,
+        totalCount: raw.totalCount || 0,
+        records: Array.isArray(raw.records) ? raw.records.slice(0, 20) : []
+      };
+    } catch (e) {
+      return { todayDate: new Date().toISOString().slice(0, 10), todayCount: 0, totalCount: 0, records: [] };
+    }
+  };
+  const saveHealthStore = (st) => {
+    try { localStorage.setItem(HL_STORAGE_KEY, JSON.stringify(st)); } catch (e) {}
+  };
+
+  let hlStore = loadHealthStore();
+  let hlMode = 'type';      // 'type' | 'cycle'
+  let hlHintMode = 'always'; // 'always' | 'stall' | 'off'
+  let hlPools = new Set(['top500']);
+  let hlLen = 20;
+  let hlTarget = '';
+  let hlStartTs = 0;
+  let hlKeystrokes = 0;
+  let hlBackspaces = 0;
+  let hlComposing = false;
+  let hlCycleStreak = 0;
+  let hlStallTimer = null;
+  let hlInspectedChar = null;
+  let hlSegNo = hlStore.records.length;
+
+  const hlTextBox = $('hlTextBox');
+  const hlInput = $('hlInput');
+  const hlHintBar = $('hlHintBar');
+  const hlHintBadge = $('hlHintBadge');
+  const hlHintDetail = $('hlHintDetail');
+  const hlHistBody = $('hlHistBody');
+  const hlHistoryBox = $('hlHistoryBox');
+  const hlLenChips = $('hlLenChips');
+
+  const getHealthCharPool = () => {
+    const dictChars = (CUSTOM_DICT && CUSTOM_DICT.length)
+      ? CUSTOM_DICT.map(x => x.ch)
+      : SPLIT_BANK.map(x => x.ch);
+    const out = [];
+    if (hlPools.has('top500')) out.push(...dictChars.slice(0, 500));
+    if (hlPools.has('mid500')) out.push(...dictChars.slice(500, 1000));
+    if (hlPools.has('bot500')) out.push(...dictChars.slice(1000, 1500));
+    if (hlPools.has('top3000')) out.push(...dictChars.slice(0, 3000));
+    if (!out.length) out.push(...dictChars.slice(0, 500));
+    return [...new Set(out)];
+  };
+
+  const buildHealthText = () => {
+    if (hlMode === 'type' && hlPools.size === 1 && hlPools.has('prose')) {
+      const s = HL_PROSE[Math.floor(Math.random() * HL_PROSE.length)];
+      return s.replace(/[，。、！？；：“”（）\s]/g, '').slice(0, hlLen);
+    }
+    if (hlPools.has('prose') && Math.random() < 0.35 && hlMode === 'type') {
+      const joined = HL_PROSE.slice().sort(() => Math.random() - 0.5).join('').replace(/[，。、！？；：“”（）\s]/g, '');
+      return joined.slice(0, hlLen);
+    }
+    const pool = getHealthCharPool();
+    const count = hlMode === 'cycle' ? 14 : hlLen;
+    let res = '';
+    for (let i = 0; i < count; i++) {
+      res += pool[Math.floor(Math.random() * pool.length)];
+    }
+    return res;
+  };
+
+  const renderCharHint = (ch, badgeText, isLast, forceShow) => {
+    if (!hlHintBar || !hlHintBadge || !hlHintDetail) return;
+    hlHintBar.classList.toggle('is-last', Boolean(isLast));
+    hlHintBadge.textContent = badgeText;
+    if (!ch) {
+      hlHintDetail.innerHTML = '<span style="font-size:13px;color:var(--ok);font-weight:600">本段已完成！按「换一段」或直接继续下一组</span>';
+      hlHintBar.classList.remove('is-muted');
+      return;
+    }
+    const dMap = getDictMap();
+    const cf = CHAIFEN[ch];
+    const entry = dMap.get(ch);
+    const codes = entry && entry.codes ? entry.codes : [];
+    const rootPart = cf
+      ? '<span class="hl-hint-roots">' + escapeHtml(cf[0]) + '<b>' + escapeHtml(cf[1].toUpperCase()) + '</b> + ' + escapeHtml(cf[2]) + '<b>' + escapeHtml(cf[3].toUpperCase()) + '</b></span>'
+      : '';
+    const codePart = codes.length
+      ? codes.slice(0, 3).map(c => '<span class="cf-code-pill" style="padding:2px 8px;font-size:12px"><span class="c-sp">' + escapeHtml(c.slice(0, 2)) + '</span><span class="c-sh">' + escapeHtml(c.slice(2)) + '</span></span>').join('')
+      : (cf ? '<span class="cf-code-pill" style="padding:2px 8px;font-size:12px"><span class="c-sh">' + escapeHtml(cf[1] + cf[3]) + '</span></span>' : '');
+    hlHintDetail.innerHTML = '<span class="hl-hint-char">' + escapeHtml(ch) + '</span>' + rootPart + codePart;
+
+    if (forceShow || hlHintMode === 'always') {
+      hlHintBar.classList.remove('is-muted');
+    } else {
+      hlHintBar.classList.add('is-muted');
+    }
+  };
+
+  const scheduleStallHint = (ch, badgeText, isLast) => {
+    if (hlStallTimer) clearTimeout(hlStallTimer);
+    if (hlHintMode === 'stall' && ch) {
+      hlStallTimer = setTimeout(() => {
+        if (hlHintBar) hlHintBar.classList.remove('is-muted');
+      }, 1800);
+    }
+  };
+
+  const renderHealthHistory = () => {
+    if (!hlHistBody) return;
+    if (!hlStore.records.length) {
+      hlHistBody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--ink-faint);padding:16px">完成一段跟打练习后，成绩会自动记录在这里</td></tr>';
+      return;
+    }
+    hlHistBody.innerHTML = hlStore.records.map(r =>
+      '<tr><td>#' + r.seg + '</td><td><strong>' + r.wpm + '</strong> 字/分</td><td>' + r.kps + '</td><td>' + r.acc + '%</td><td>' + r.len + '</td><td>' + r.sec + 's</td><td>' + escapeHtml(r.pool) + '</td></tr>'
+    ).join('');
+  };
+
+  const renderHealthState = () => {
+    if (!hlTextBox || !hlInput) return;
+    const typed = hlInput.value || '';
+    const targetArr = [...hlTarget];
+    const typedArr = [...typed];
+    const curIdx = Math.min(typedArr.length, targetArr.length);
+
+    let okCount = 0;
+    hlTextBox.innerHTML = targetArr.map((ch, i) => {
+      let cls = 'hl-ch';
+      if (i < typedArr.length) {
+        if (typedArr[i] === ch) { cls += ' ok'; okCount++; }
+        else cls += ' bad';
+      } else if (i === curIdx) {
+        cls += ' cur';
+      }
+      return '<span class="' + cls + '" data-hl-ch="' + escapeHtml(ch) + '">' + escapeHtml(ch) + '</span>';
+    }).join('');
+
+    hlTextBox.querySelectorAll('.hl-ch').forEach(sp => {
+      sp.addEventListener('click', () => {
+        const c = sp.dataset.hlCh;
+        hlInspectedChar = c;
+        renderCharHint(c, '点查拆分', false, true);
+      });
+    });
+
+    // 更新当前待打字（含段尾最后一字醒目标记！）
+    const isLastChar = curIdx === targetArr.length - 1 && targetArr.length > 0;
+    const curChar = curIdx < targetArr.length ? targetArr[curIdx] : '';
+    const badge = isLastChar ? '段尾最后一字 · 防忘提示' : ('第 ' + (curIdx + 1) + ' / ' + targetArr.length + ' 字');
+    if (!hlInspectedChar) {
+      renderCharHint(curChar, badge, isLastChar, false);
+      scheduleStallHint(curChar, badge, isLastChar);
+    }
+
+    // 更新顶部数据面板
+    if (hlMode === 'type') {
+      const elapsed = hlStartTs ? Math.max(0.2, (performance.now() - hlStartTs) / 1000) : 0;
+      const wpm = elapsed > 0 ? (okCount / elapsed * 60).toFixed(1) : '0.0';
+      const kps = elapsed > 0 ? (hlKeystrokes / elapsed).toFixed(2) : '0.00';
+      const acc = typedArr.length ? Math.round(okCount / typedArr.length * 100) + '%' : '—';
+      $('hlStat1').textContent = wpm; $('hlStat1Lbl').textContent = '速度（字/分）';
+      $('hlStat2').textContent = kps; $('hlStat2Lbl').textContent = '击键（次/秒）';
+      $('hlStat3').textContent = acc; $('hlStat3Lbl').textContent = '正确率';
+      $('hlStat4').textContent = Math.min(typedArr.length, targetArr.length) + ' / ' + targetArr.length;
+      $('hlStat4Lbl').textContent = '本段进度';
+    } else {
+      $('hlStat1').textContent = String(hlStore.todayCount); $('hlStat1Lbl').textContent = '今日已打（字）';
+      $('hlStat2').textContent = String(hlStore.totalCount); $('hlStat2Lbl').textContent = '累计总计（字）';
+      $('hlStat3').textContent = String(hlCycleStreak); $('hlStat3Lbl').textContent = '当前连对';
+      $('hlStat4').textContent = Math.min(typedArr.length, targetArr.length) + ' / ' + targetArr.length;
+      $('hlStat4Lbl').textContent = '本组进度';
+    }
+
+    // 判断本段/本组完成
+    if (!hlComposing && targetArr.length > 0 && typedArr.length >= targetArr.length) {
+      if (hlMode === 'type') {
+        const elapsed = hlStartTs ? Math.max(0.5, (performance.now() - hlStartTs) / 1000) : 1;
+        const wpm = (okCount / elapsed * 60).toFixed(1);
+        const kps = (hlKeystrokes / elapsed).toFixed(2);
+        const acc = Math.round(okCount / targetArr.length * 100);
+        hlSegNo += 1;
+        const poolLabel = [...hlPools].map(k => ({ top500: '前500', mid500: '中500', bot500: '后500', top3000: '前3000', prose: '短句' }[k] || k)).join('+');
+        hlStore.records.unshift({ seg: hlSegNo, wpm, kps, acc, len: targetArr.length, sec: elapsed.toFixed(1), pool: poolLabel });
+        hlStore.records = hlStore.records.slice(0, 20);
+        hlStore.todayCount += okCount;
+        hlStore.totalCount += okCount;
+        saveHealthStore(hlStore);
+        renderHealthHistory();
+        if (typeof showToast === 'function') showToast('本段完成！速度 ' + wpm + ' 字/分 · 正确率 ' + acc + '%');
+        setTimeout(() => startHealthRound(true), 420);
+      } else {
+        hlStore.todayCount += okCount;
+        hlStore.totalCount += okCount;
+        hlCycleStreak += okCount;
+        saveHealthStore(hlStore);
+        startHealthRound(true);
+      }
+    }
+  };
+
+  const startHealthRound = (newText) => {
+    if (hlStallTimer) clearTimeout(hlStallTimer);
+    hlInspectedChar = null;
+    if (newText || !hlTarget) hlTarget = buildHealthText();
+    hlStartTs = 0;
+    hlKeystrokes = 0;
+    hlBackspaces = 0;
+    if (hlInput) {
+      hlInput.value = '';
+    }
+    if (hlLenChips) hlLenChips.style.display = hlMode === 'type' ? '' : 'none';
+    if (hlHistoryBox) hlHistoryBox.style.display = hlMode === 'type' ? '' : 'none';
+    renderHealthState();
+  };
+
+  window.__initHealthPractice = () => {
+    renderHealthHistory();
+    if (!hlTarget) startHealthRound(true);
+    else renderHealthState();
+  };
+
+  if (hlInput) {
+    hlInput.addEventListener('compositionstart', () => { hlComposing = true; });
+    hlInput.addEventListener('compositionend', () => {
+      hlComposing = false;
+      hlInspectedChar = null;
+      if (!hlStartTs && hlInput.value.length) hlStartTs = performance.now();
+      renderHealthState();
+    });
+    hlInput.addEventListener('keydown', (e) => {
+      if (!hlStartTs && e.key.length === 1) hlStartTs = performance.now();
+      if (e.key === 'Backspace') hlBackspaces++;
+      else if (e.key.length === 1) hlKeystrokes++;
+    });
+    hlInput.addEventListener('input', () => {
+      hlInspectedChar = null;
+      if (!hlStartTs && hlInput.value.length) hlStartTs = performance.now();
+      if (!hlComposing) renderHealthState();
+    });
+  }
+
+  document.querySelectorAll('[data-hl-mode]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      hlMode = btn.dataset.hlMode || 'type';
+      document.querySelectorAll('[data-hl-mode]').forEach(b => b.classList.toggle('active', b === btn));
+      startHealthRound(true);
+      if (hlInput) hlInput.focus();
+    });
+  });
+
+  document.querySelectorAll('[data-hl-hint]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      hlHintMode = btn.dataset.hlHint || 'always';
+      document.querySelectorAll('[data-hl-hint]').forEach(b => b.classList.toggle('active', b === btn));
+      hlInspectedChar = null;
+      renderHealthState();
+    });
+  });
+
+  document.querySelectorAll('[data-hl-pool]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const p = btn.dataset.hlPool;
+      if (hlPools.has(p)) {
+        if (hlPools.size > 1) hlPools.delete(p);
+      } else {
+        hlPools.add(p);
+      }
+      document.querySelectorAll('[data-hl-pool]').forEach(b => b.classList.toggle('active', hlPools.has(b.dataset.hlPool)));
+      startHealthRound(true);
+    });
+  });
+
+  document.querySelectorAll('[data-hl-len]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      hlLen = Number(btn.dataset.hlLen || 20);
+      document.querySelectorAll('[data-hl-len]').forEach(b => b.classList.toggle('active', b === btn));
+      startHealthRound(true);
+    });
+  });
+
+  if ($('hlRetryBtn')) $('hlRetryBtn').addEventListener('click', () => { startHealthRound(false); if (hlInput) hlInput.focus(); });
+  if ($('hlNextBtn')) $('hlNextBtn').addEventListener('click', () => { startHealthRound(true); if (hlInput) hlInput.focus(); });
+  if ($('hlClearHistBtn')) $('hlClearHistBtn').addEventListener('click', () => {
+    hlStore.records = [];
+    hlSegNo = 0;
+    saveHealthStore(hlStore);
+    renderHealthHistory();
+  });
+
+  window.addEventListener('resize', () => { syncTopBarHeight(); updateSnapDots(); }, { passive: true });
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', () => { syncTopBarHeight(); updateSnapDots(); }, { passive: true });
+  }
+
+  document.body.classList.toggle('is-snap-route', SNAP_ROUTES.has(currentRoute));
   syncTopBarHeight();
-  updateDots();
-  window.__scrollCueUpdate = () => { syncTopBarHeight(); updateDots(); };
+  rebuildSnapDots();
+  window.__scrollCueUpdate = () => {
+    document.body.classList.toggle('is-snap-route', SNAP_ROUTES.has(currentRoute));
+    const sc = getActiveSnapView();
+    if (sc) sc.scrollTop = 0;
+    requestAnimationFrame(() => {
+      syncTopBarHeight();
+      rebuildSnapDots();
+    });
+  };
 }
 
 function applyTheme() {
@@ -5309,7 +6531,19 @@ function switchSubTab(tabBarId, containerId, targetId) {
   wrap.querySelectorAll('.subpanel').forEach(p => p.classList.toggle('active', p.id === targetId));
   if (tabBarId === 'guideTabs' && targetId === 'g-chart') { renderVisualZigenChart(); requestAnimationFrame(syncScaledKeyboards); }
   if (tabBarId === 'guideTabs' && targetId === 'g-sp') { requestAnimationFrame(syncScaledKeyboards); }
+  if (tabBarId === 'guideTabs') {
+    const vg = $('view-guide');
+    if (vg) {
+      vg.classList.toggle('free-scroll', targetId === 'g-wuli' || targetId === 'g-search');
+      if (targetId === 'g-search') {
+        setTimeout(() => { const inp = $('cfSearchInput'); if (inp) inp.focus(); }, 60);
+      }
+      vg.scrollTop = 0;
+    }
+    requestAnimationFrame(() => { syncTopBarHeight(); rebuildSnapDots(); });
+  }
   if (tabBarId === 'practiceTabs') {
+    if (targetId === 'p-health' && window.__initHealthPractice) window.__initHealthPractice();
     currentPracticeSub = targetId;
     document.body.dataset.practiceSub = targetId;
     if (targetId === 'p-table') renderZigenTable();
@@ -5541,6 +6775,7 @@ function routeFromHash() {
     const id = h.slice(4);
     if (DOC_ORDER.includes(id)) { openDoc(id); return; }
   }
+  if (h === 'search') { switchRoute('guide', 'g-search'); return; }
   if (h === 'docs') { switchRoute('docs'); return; }
   if (ROUTES.includes(h)) { switchRoute(h); }
 }
