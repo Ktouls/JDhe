@@ -1800,14 +1800,27 @@ body[data-route="practice"] .container {
   .sr-item { opacity: 1; transform: none; transition: none; }
   .btn, .nav-dot-slider, .track-thumb, .subtab-thumb, .progress-fill, .vkey { transition: none !important; }
 }
-/* ==================== 性能对照、记忆曲线、进阶文档与响应式统一优化 ==================== */
+/* ==================== 全屏分屏吸附（PC + 移动端自适应）与统一排版 ==================== */
 
-/* 首屏及各分页顶部留白与标题断行平衡 */
+:root {
+  --top-bar-h: 64px;
+}
+@media (max-width: 1100px) and (min-width: 821px) {
+  :root { --top-bar-h: 60px; }
+}
+@media (max-width: 820px) {
+  :root { --top-bar-h: 98px; }
+}
+@media (max-width: 540px) {
+  :root { --top-bar-h: 92px; }
+}
+
+/* 通用标题平衡与子页面顶部留白 */
 .view > .section-head:first-child {
   margin-top: clamp(8px, 1.8vw, 22px);
 }
 .section-head {
-  margin: clamp(56px, 6.5vw, 88px) auto clamp(28px, 3.4vw, 44px);
+  margin: clamp(48px, 6vw, 80px) auto clamp(24px, 3vw, 40px);
 }
 .section-head h2,
 .section-head p,
@@ -1821,23 +1834,183 @@ body[data-route="practice"] .container {
   display: inline-block;
 }
 
-/* 首页区块自然流式间距（移除破坏阅读节奏的强制 100svh 分屏吸附） */
-#view-home > .snap-block {
-  display: block;
+/* ==================== 首页全屏强制吸附容器 ==================== */
+body[data-route="home"] {
+  overflow: hidden;
+  height: 100dvh;
+}
+body[data-route="home"] .container {
+  max-width: none;
   padding: 0;
+  margin: 0;
 }
-#view-home > .snap-block.hero-block {
-  padding: clamp(16px, 2.8vw, 38px) 0 clamp(16px, 2.5vw, 32px);
+body[data-route="home"] > .site-footer {
+  display: none;
 }
-#view-home > .snap-block:last-child {
-  padding-bottom: clamp(12px, 2vw, 24px);
+body[data-route="home"] #view-home.active {
+  display: block;
+  height: calc(100dvh - var(--top-bar-h));
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+body[data-route="home"] #view-home.active::-webkit-scrollbar {
+  display: none;
 }
 
-/* 首屏 + 试打台双栏布局（确保 4 枚键帽单行不折行） */
+.snap-slide {
+  height: calc(100dvh - var(--top-bar-h));
+  min-height: calc(100dvh - var(--top-bar-h));
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: clamp(14px, 2.4dvh, 32px) var(--pad-x);
+  box-sizing: border-box;
+}
+.snap-slide + .snap-slide::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(var(--container-max), calc(100% - 2 * var(--pad-x)));
+  height: 1px;
+  background: var(--line);
+  opacity: 0.65;
+  pointer-events: none;
+}
+#view-home .sr-item {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+.snap-inner {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.snap-slide .section-head {
+  margin: 0 auto clamp(18px, 2.6dvh, 34px);
+}
+.snap-slide .section-head h2 {
+  font-size: clamp(26px, 3vw, 40px);
+}
+.snap-slide .section-head p {
+  margin-top: clamp(8px, 1.1dvh, 14px);
+  font-size: clamp(13.5px, 1.25vw, 15.5px);
+  line-height: 1.72;
+}
+
+/* 右侧分屏进度指示点（PC & 平板） */
+.snap-dots {
+  position: fixed;
+  right: clamp(12px, 1.8vw, 24px);
+  top: calc(var(--top-bar-h) + (100dvh - var(--top-bar-h)) / 2);
+  transform: translateY(-50%);
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 40;
+  padding: 8px 5px;
+  border-radius: 999px;
+  background: var(--glass);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+body[data-route="home"] .snap-dots {
+  display: flex;
+}
+.snap-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--line-strong);
+  cursor: pointer;
+  transition: height 0.24s ease, background 0.24s ease, transform 0.2s ease;
+}
+.snap-dot:hover {
+  background: var(--ink-soft);
+  transform: scale(1.15);
+}
+.snap-dot.active {
+  height: 22px;
+  background: var(--accent);
+}
+@media (max-width: 960px) {
+  body[data-route="home"] .snap-dots {
+    right: 6px;
+    gap: 7px;
+    padding: 6px 3px;
+    background: transparent;
+    border: 0;
+    backdrop-filter: none;
+  }
+  .snap-dot { width: 5px; height: 5px; }
+  .snap-dot.active { height: 15px; }
+}
+
+/* 首屏底部轻盈下滑引导（非 fixed，嵌在第一屏底部，绝不遮挡任何卡片） */
+.slide-next-hint {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(10px, 1.8dvh, 20px);
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: transparent;
+  color: var(--ink-faint);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 12px;
+  border-radius: 999px;
+  transition: color 0.18s;
+}
+.slide-next-hint:hover { color: var(--ink); }
+.slide-next-hint svg { animation: cueBob 1.8s ease-in-out infinite; }
+@keyframes cueBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
+@media (prefers-reduced-motion: reduce) {
+  .slide-next-hint svg { animation: none; }
+  body[data-route="home"] #view-home.active { scroll-behavior: auto; }
+}
+
+/* 末屏内嵌页脚 */
+.slide-footer {
+  margin-top: clamp(18px, 2.8dvh, 36px);
+  padding-top: clamp(12px, 1.8dvh, 20px);
+  border-top: 1px solid var(--line);
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--ink-faint);
+}
+.slide-footer a {
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ==================== Slide 1: 首屏 + 试打台 ==================== */
 .hero-grid {
   display: grid;
   grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
-  gap: clamp(24px, 3.6vw, 52px);
+  gap: clamp(22px, 3.6vw, 52px);
   align-items: center;
   width: 100%;
 }
@@ -1847,238 +2020,448 @@ body[data-route="practice"] .container {
   max-width: none;
   margin: 0;
 }
+.hero-grid .hero-badge { margin-bottom: clamp(12px, 1.8dvh, 22px); }
 .hero-grid .hero-editorial .hero-title {
-  font-size: clamp(38px, 4.3vw, 60px);
+  font-size: clamp(36px, 4.2vw, 58px);
+  margin-bottom: clamp(12px, 1.8dvh, 20px);
 }
 .hero-grid .hero-editorial .hero-sub {
-  margin: 0 0 26px;
+  margin: 0 0 clamp(16px, 2.2dvh, 26px);
   max-width: 34em;
   text-wrap: pretty;
+  font-size: clamp(14.5px, 1.3vw, 17px);
+  line-height: 1.75;
 }
-.hero-grid .hero-ctas,
-.hero-grid .hero-status {
+.hero-grid .hero-ctas {
   justify-content: flex-start;
+  margin-bottom: clamp(14px, 2dvh, 24px);
 }
+.hero-grid .track-switch { margin-bottom: clamp(10px, 1.4dvh, 18px); }
+.hero-grid .hero-status { justify-content: flex-start; }
 .hero-grid .stage-frame {
   margin: 0;
   max-width: none;
   width: 100%;
 }
 .hero-grid .showcase {
-  padding: clamp(20px, 2.2vw, 28px) clamp(18px, 2.4vw, 28px);
+  padding: clamp(16px, 2.2vw, 26px) clamp(16px, 2.2vw, 26px);
 }
 .hero-grid .showcase-top {
-  margin-bottom: 20px;
-  padding-bottom: 14px;
+  margin-bottom: clamp(14px, 1.8dvh, 20px);
+  padding-bottom: 12px;
 }
 .hero-grid .showcase-body {
-  grid-template-columns: 112px minmax(0, 1fr);
-  gap: clamp(16px, 2vw, 24px);
+  grid-template-columns: 108px minmax(0, 1fr);
+  gap: clamp(14px, 1.8vw, 22px);
   align-items: center;
 }
 .hero-grid .demo-glyph-box {
   min-width: 0;
-  width: 112px;
-  padding: 20px 10px;
+  width: 108px;
+  padding: 18px 10px;
   border-radius: 16px;
 }
-.hero-grid .demo-glyph-box .big-hz {
-  font-size: 60px;
-}
-.hero-grid .demo-right {
-  min-width: 0;
-  gap: 14px;
-}
-.hero-grid .hw-keys {
-  flex-wrap: nowrap;
-  gap: 8px;
-}
+.hero-grid .demo-glyph-box .big-hz { font-size: 56px; }
+.hero-grid .demo-right { min-width: 0; gap: 12px; }
+.hero-grid .hw-keys { flex-wrap: nowrap; gap: 8px; }
 .hero-grid .hw-key {
-  width: 58px;
-  height: 66px;
+  width: 56px;
+  height: 64px;
   border-radius: 12px;
   flex-shrink: 0;
 }
-.hero-grid .hw-key b {
-  font-size: 21px;
-}
-.hero-grid .hw-key.k-sound small {
-  font-size: 11.5px;
-}
-.hero-grid .hw-key.k-shape small {
-  font-size: 13px;
-}
-.hero-grid .hw-plus {
-  font-size: 16px;
-  margin: 0;
-  flex-shrink: 0;
-}
-.hero-grid .demo-meta {
-  font-size: 14px;
-  line-height: 1.75;
-}
+.hero-grid .hw-key b { font-size: 20px; }
+.hero-grid .hw-key.k-sound small { font-size: 11px; }
+.hero-grid .hw-key.k-shape small { font-size: 12.5px; }
+.hero-grid .hw-plus { font-size: 15px; margin: 0; flex-shrink: 0; }
+.hero-grid .demo-meta { font-size: 13.5px; line-height: 1.7; }
 
 @media (max-width: 1140px) and (min-width: 1001px) {
-  .hero-grid {
-    grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
-    gap: 24px;
-  }
-  .hero-grid .showcase-body {
-    grid-template-columns: 98px minmax(0, 1fr);
-    gap: 14px;
-  }
-  .hero-grid .demo-glyph-box {
-    width: 98px;
-    padding: 16px 8px;
-  }
-  .hero-grid .demo-glyph-box .big-hz {
-    font-size: 52px;
-  }
-  .hero-grid .hw-key {
-    width: 50px;
-    height: 58px;
-  }
-  .hero-grid .hw-key b {
-    font-size: 19px;
-  }
+  .hero-grid { grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr); gap: 22px; }
+  .hero-grid .showcase-body { grid-template-columns: 94px minmax(0, 1fr); gap: 12px; }
+  .hero-grid .demo-glyph-box { width: 94px; padding: 14px 8px; }
+  .hero-grid .demo-glyph-box .big-hz { font-size: 48px; }
+  .hero-grid .hw-key { width: 48px; height: 56px; }
+  .hero-grid .hw-key b { font-size: 18px; }
 }
 
 @media (max-width: 1000px) {
-  .hero-grid {
-    grid-template-columns: 1fr;
-    gap: 28px;
-  }
-  .hero-grid .hero-editorial {
-    text-align: center;
-    align-items: center;
-  }
-  .hero-grid .hero-editorial .hero-sub {
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .hero-grid .hero-ctas,
-  .hero-grid .hero-status {
-    justify-content: center;
-  }
-  .hero-grid .showcase-body {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
+  .hero-grid { grid-template-columns: 1fr; gap: clamp(14px, 2dvh, 22px); }
+  .hero-grid .hero-editorial { text-align: center; align-items: center; }
+  .hero-grid .hero-editorial .hero-sub { margin-left: auto; margin-right: auto; }
+  .hero-grid .hero-ctas, .hero-grid .hero-status { justify-content: center; }
+  .hero-grid .showcase-body { grid-template-columns: 1fr; gap: 12px; }
   .hero-grid .demo-glyph-box {
     width: 100%;
     flex-direction: row;
     justify-content: flex-start;
-    gap: 16px;
-    padding: 14px 18px;
+    gap: 14px;
+    padding: 10px 14px;
   }
-  .hero-grid .demo-glyph-box .big-hz {
-    font-size: 46px;
-  }
-  .hero-grid .demo-glyph-box .big-py {
-    margin-top: 0;
-  }
+  .hero-grid .demo-glyph-box .big-hz { font-size: 38px; }
+  .hero-grid .demo-glyph-box .big-py { margin-top: 0; font-size: 13px; }
 }
 
-@media (max-width: 540px) {
-  .hero-grid .hero-editorial .hero-title {
-    font-size: clamp(32px, 8.8vw, 40px);
-  }
-  .section-head h2 {
-    font-size: clamp(23px, 6.2vw, 30px);
-  }
-  .hero-grid .showcase {
-    padding: 18px 14px;
-  }
-  .hero-grid .hw-keys {
-    gap: 6px;
-  }
-  .hero-grid .hw-key {
-    width: 52px;
-    height: 60px;
-  }
-  .hero-grid .hw-key b {
-    font-size: 19px;
-  }
+/* ==================== Slide 2: 四个设计原则（紧凑卡片网格，PC/手机一屏稳稳放下） ==================== */
+.principles-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 1.8vw, 22px);
+}
+.principle-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: clamp(16px, 2.2vw, 26px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(10px, 1.4dvh, 16px);
+}
+.principle-card .pc-num {
+  font-family: var(--font-mono);
+  font-size: clamp(22px, 2.4vw, 30px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.principle-card .pc-num span {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-faint);
+  margin-left: 8px;
+  letter-spacing: 0;
+}
+.principle-card h3 {
+  margin: 6px 0 4px;
+  font-family: var(--font-serif);
+  font-size: clamp(16px, 1.6vw, 20px);
+  font-weight: 600;
+  color: var(--ink);
+}
+.principle-card p {
+  margin: 0;
+  font-size: clamp(12.5px, 1.1vw, 14px);
+  line-height: 1.68;
+  color: var(--ink-soft);
 }
 
-@media (max-width: 390px) {
-  .hero-grid .hw-keys {
-    gap: 5px;
-  }
-  .hero-grid .hw-key {
-    width: 46px;
-    height: 54px;
-  }
-  .hero-grid .hw-key b {
-    font-size: 17px;
-  }
+/* ==================== Slide 3: 记忆曲线（艾宾浩斯 · 重绘高定动效 + 深浅双色适配） ==================== */
+:root {
+  --eb-fill-top: 0.14;
+  --eb-gray-fill-top: 0.09;
+  --eb-grid: rgba(26, 24, 22, 0.08);
+  --eb-axis: rgba(26, 24, 22, 0.18);
+  --eb-pill-bg: rgba(194, 59, 50, 0.09);
+  --eb-pill-border: rgba(194, 59, 50, 0.24);
+  --eb-glow: drop-shadow(0 4px 12px rgba(194, 59, 50, 0.18));
+}
+:root[data-theme="dark"] {
+  --eb-fill-top: 0.24;
+  --eb-gray-fill-top: 0.12;
+  --eb-grid: rgba(243, 241, 236, 0.08);
+  --eb-axis: rgba(243, 241, 236, 0.22);
+  --eb-pill-bg: rgba(224, 90, 82, 0.16);
+  --eb-pill-border: rgba(224, 90, 82, 0.36);
+  --eb-glow: drop-shadow(0 0 10px rgba(224, 90, 82, 0.42));
 }
 
-/* 记忆曲线（艾宾浩斯） */
 .eb-wrap {
   display: grid;
-  grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
-  gap: clamp(22px, 3vw, 42px);
-  align-items: center;
+  grid-template-columns: minmax(0, 1.72fr) minmax(0, 1fr);
+  gap: clamp(18px, 2.8vw, 38px);
+  align-items: stretch;
   border: 1px solid var(--line);
   background: var(--surface);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  padding: clamp(20px, 2.8vw, 34px);
+  padding: clamp(16px, 2.4vw, 30px);
 }
+.eb-stage {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+}
+.eb-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.eb-legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.eb-leg-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.eb-leg-line {
+  width: 18px;
+  height: 2.5px;
+  border-radius: 99px;
+  background: var(--accent);
+}
+.eb-leg-line.dashed {
+  height: 0;
+  background: transparent;
+  border-top: 2px dashed var(--ink-faint);
+}
+.eb-replay {
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink-soft);
+  border-radius: 999px;
+  padding: 4px 11px;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: border-color 0.18s, color 0.18s, background 0.18s;
+}
+.eb-replay:hover {
+  border-color: var(--line-strong);
+  color: var(--ink);
+  background: var(--surface-2);
+}
+
 .eb-chart {
   width: 100%;
   height: auto;
   display: block;
   overflow: visible;
+  max-height: 41dvh;
 }
-.eb-chart .eb-tick { font-family: var(--font-mono); font-size: 12px; fill: var(--ink-faint); }
-.eb-chart .eb-val { font-family: var(--font-mono); font-size: 13px; font-weight: 700; fill: var(--accent); }
-.eb-chart .eb-val.gray { fill: var(--ink-faint); }
-.eb-chart .eb-name { font-size: 12.5px; fill: var(--ink-soft); }
-.eb-chart .eb-title { font-size: 13px; font-weight: 600; fill: var(--ink); letter-spacing: 0.02em; }
-.eb-chart .eb-rev { font-size: 10.5px; fill: var(--accent); font-weight: 600; }
-.eb-chart .eb-label { font-size: 12px; fill: var(--ink); font-weight: 600; }
-.eb-chart .eb-label.gray { fill: var(--ink-faint); font-weight: 500; }
-.eb-side { display: flex; flex-direction: column; gap: 16px; }
-.eb-big b {
+.eb-chart .eb-tick { font-family: var(--font-mono); font-size: 11.5px; fill: var(--ink-faint); }
+.eb-chart .eb-name { font-size: 12px; fill: var(--ink-soft); font-weight: 500; }
+.eb-chart .eb-val { font-family: var(--font-mono); font-size: 12.5px; font-weight: 700; fill: var(--accent); }
+.eb-chart .eb-val.gray { fill: var(--ink-faint); font-weight: 600; }
+.eb-chart .eb-rev-text { font-size: 10.5px; fill: var(--accent); font-weight: 600; letter-spacing: 0.02em; }
+
+/* 曲线绘制与呼吸动效 */
+.eb-curve-gray {
+  fill: none;
+  stroke: var(--ink-faint);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 5 5;
+  opacity: 0;
+}
+.eb-area-gray {
+  opacity: 0;
+}
+.eb-curve-accent {
+  fill: none;
+  stroke: url(#ebLineGrad);
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: var(--eb-glow);
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+}
+.eb-area-accent {
+  opacity: 0;
+}
+.eb-stem {
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+  opacity: 0;
+}
+.eb-node {
+  cursor: pointer;
+  outline: none;
+}
+.eb-node-vis {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0.4);
+}
+.eb-node-ring {
+  fill: var(--surface);
+  stroke: var(--accent);
+  stroke-width: 2.4;
+  transition: transform 0.2s ease, stroke-width 0.2s ease;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.eb-node-core {
+  fill: var(--accent);
+}
+.eb-node:hover .eb-node-ring,
+.eb-node:focus-visible .eb-node-ring,
+.eb-node.active .eb-node-ring {
+  transform: scale(1.28);
+  stroke-width: 2.8;
+}
+.eb-pulse {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.eb-badge-g {
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+.eb-pill-rect {
+  fill: var(--eb-pill-bg);
+  stroke: var(--eb-pill-border);
+  stroke-width: 1;
+}
+
+/* 激活态动效（进入第 3 屏自动触发） */
+.eb-wrap.is-playing .eb-curve-gray {
+  animation: ebFadeIn 0.85s ease 0.08s forwards;
+}
+.eb-wrap.is-playing .eb-area-gray {
+  animation: ebFadeIn 0.9s ease 0.2s forwards;
+}
+.eb-wrap.is-playing .eb-curve-accent {
+  animation: ebDraw 1.65s cubic-bezier(0.22, 1, 0.36, 1) 0.22s forwards;
+}
+.eb-wrap.is-playing .eb-area-accent {
+  animation: ebFadeIn 1.0s ease 0.65s forwards;
+}
+.eb-wrap.is-playing .eb-stem {
+  animation: ebStemIn 0.55s ease var(--d, 0.5s) forwards;
+}
+.eb-wrap.is-playing .eb-node-vis {
+  animation: ebPopIn 0.48s cubic-bezier(0.34, 1.56, 0.64, 1) var(--d, 0.5s) forwards;
+}
+.eb-wrap.is-playing .eb-pulse {
+  animation: ebPulse 2.8s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--d, 0.5s) + 0.35s) infinite;
+}
+.eb-wrap.is-playing .eb-badge-g {
+  animation: ebFadeIn 0.55s ease 1.45s forwards;
+}
+
+@keyframes ebDraw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes ebFadeIn {
+  to { opacity: 1; }
+}
+@keyframes ebStemIn {
+  to { opacity: 0.26; }
+}
+@keyframes ebPopIn {
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes ebPulse {
+  0% { opacity: 0.55; transform: scale(1); }
+  70% { opacity: 0; transform: scale(2.55); }
+  100% { opacity: 0; transform: scale(2.55); }
+}
+
+.eb-caption {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  font-size: 12px;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.5;
+}
+.eb-caption .eb-cap-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--eb-pill-bg);
+  padding: 2px 7px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+/* 右侧数据对比面板 */
+.eb-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(12px, 1.8dvh, 18px);
+  padding-left: clamp(0px, 1.4vw, 18px);
+  border-left: 1px solid var(--line);
+}
+.eb-kpis {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.eb-kpi {
+  padding: 14px 12px;
+  border-radius: 14px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+}
+.eb-kpi.hi {
+  background: var(--eb-pill-bg);
+  border-color: var(--eb-pill-border);
+}
+.eb-kpi b {
   display: block;
   font-family: var(--font-mono);
-  font-size: clamp(36px, 4.2vw, 54px);
+  font-size: clamp(26px, 3vw, 38px);
   line-height: 1;
   color: var(--ink);
   letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
 }
-.eb-big span { display: block; margin-top: 8px; font-size: 13.5px; color: var(--ink-soft); }
-.eb-vs { display: flex; flex-direction: column; gap: 8px; font-size: 13.5px; color: var(--ink-soft); line-height: 1.6; }
-.eb-vs .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; }
-.eb-vs .dot.gray { background: var(--ink-faint); opacity: 0.65; }
+.eb-kpi.hi b { color: var(--accent); }
+.eb-kpi span {
+  display: block;
+  margin-top: 6px;
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  line-height: 1.35;
+}
+.eb-vs { display: flex; flex-direction: column; gap: 7px; font-size: 13px; color: var(--ink-soft); line-height: 1.55; }
+.eb-vs .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 7px; vertical-align: 1px; }
+.eb-vs .dot.gray { background: var(--ink-faint); opacity: 0.7; }
 .eb-vs .dot.red { background: var(--accent); }
 .eb-note {
   margin: 0;
-  padding-top: 14px;
+  padding-top: 12px;
   border-top: 1px solid var(--line);
-  font-size: 13px;
-  line-height: 1.8;
-  color: var(--ink-faint);
-}
-@media (max-width: 900px) {
-  .eb-wrap { grid-template-columns: 1fr; }
-}
-
-/* 性能实测区 */
-.arena {
-  padding: 0 0 clamp(12px, 2vw, 24px);
-}
-.arena .arena-subhead {
-  margin: clamp(28px, 3vw, 40px) 0 14px;
   font-size: 12.5px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  line-height: 1.72;
   color: var(--ink-faint);
 }
 
-/* 顶部硬指标条（圆角卡片风格统一） */
+@media (max-width: 900px) {
+  .eb-wrap { grid-template-columns: 1fr; gap: 14px; }
+  .eb-side { padding-left: 0; border-left: 0; padding-top: 12px; border-top: 1px solid var(--line); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .eb-curve-gray, .eb-area-gray, .eb-area-accent, .eb-badge-g { opacity: 1 !important; animation: none !important; }
+  .eb-curve-accent { stroke-dashoffset: 0 !important; animation: none !important; }
+  .eb-stem { opacity: 0.26 !important; animation: none !important; }
+  .eb-node-vis { opacity: 1 !important; transform: none !important; animation: none !important; }
+  .eb-pulse { display: none !important; }
+}
+
+/* ==================== Slide 4/5/6: 性能实测、指标条、速度换算与对比表 ==================== */
 .metric-strip {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -2087,98 +2470,53 @@ body[data-route="practice"] .container {
   background: var(--surface);
   box-shadow: var(--shadow-card);
   overflow: hidden;
-  margin-bottom: clamp(20px, 2.6vw, 30px);
+  margin-bottom: clamp(14px, 2dvh, 24px);
 }
 .metric-strip .ms-item {
-  padding: clamp(20px, 2.4vw, 28px) 14px;
+  padding: clamp(14px, 2dvh, 24px) 10px;
   text-align: center;
   border-left: 1px solid var(--line);
 }
 .metric-strip .ms-item:first-child { border-left: 0; }
 .metric-strip .ms-num {
   font-family: var(--font-mono);
-  font-size: clamp(24px, 3vw, 36px);
+  font-size: clamp(22px, 2.8vw, 34px);
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
   color: var(--ink);
 }
-.metric-strip .ms-num i {
-  font-style: normal;
-  font-size: 0.38em;
-  color: var(--ink-faint);
-  margin-left: 3px;
-  letter-spacing: 0;
-}
-.metric-strip .ms-lbl {
-  margin-top: 8px;
-  font-size: 12.5px;
-  color: var(--ink-faint);
-  line-height: 1.45;
-}
+.metric-strip .ms-num i { font-style: normal; font-size: 0.38em; color: var(--ink-faint); margin-left: 2px; }
+.metric-strip .ms-lbl { margin-top: 6px; font-size: 12px; color: var(--ink-faint); line-height: 1.4; }
 
-/* 关键差异块 & 性能主张（清爽卡片，无奇怪弯角粗红边） */
-.key-diff {
-  display: flex;
-  align-items: center;
-  gap: clamp(14px, 2vw, 24px);
-  padding: clamp(18px, 2.2vw, 26px) clamp(18px, 2.4vw, 28px);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  box-shadow: var(--shadow-card);
-  margin-bottom: clamp(20px, 2.6vw, 30px);
-  flex-wrap: wrap;
-}
-.key-diff .kd-tag {
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  color: var(--accent);
-  background: var(--accent-soft);
-  border: 1px solid rgba(194, 59, 50, 0.22);
-  border-radius: 999px;
-  padding: 4px 12px;
-  white-space: nowrap;
-}
-.key-diff .kd-main { flex: 1; min-width: 240px; }
-.key-diff h3 { margin: 0 0 6px; font-size: 16px; font-weight: 700; color: var(--ink); }
-.key-diff p { margin: 0; font-size: 13.5px; line-height: 1.8; color: var(--ink-soft); }
-@media (max-width: 720px) {
-  .key-diff { flex-direction: column; align-items: flex-start; }
-  .key-diff .kd-main { min-width: 0; width: 100%; }
-}
-
-/* 速度换算卡片 */
 .speed-card {
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: var(--surface);
   box-shadow: var(--shadow-card);
-  padding: clamp(20px, 2.4vw, 28px);
-  margin-bottom: clamp(20px, 2.6vw, 30px);
+  padding: clamp(16px, 2.2dvh, 26px) clamp(16px, 2.4vw, 28px);
+  margin-bottom: clamp(14px, 2dvh, 22px);
 }
 .sp-head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12px 16px;
+  gap: 8px 16px;
   flex-wrap: wrap;
-  margin-bottom: 20px;
+  margin-bottom: clamp(12px, 1.8dvh, 18px);
 }
-.sp-head h3 { margin: 0 0 6px; font-size: 16.5px; font-weight: 700; color: var(--ink); }
-.sp-head p { margin: 0; font-size: 13.5px; color: var(--ink-soft); }
+.sp-head h3 { margin: 0 0 4px; font-size: clamp(15px, 1.5vw, 17px); font-weight: 700; color: var(--ink); }
+.sp-head p { margin: 0; font-size: 13px; color: var(--ink-soft); }
 .sp-cols {
   display: grid;
   grid-template-columns: 1fr auto 1fr auto 1fr;
   align-items: center;
-  gap: clamp(8px, 1.6vw, 20px);
+  gap: clamp(6px, 1.4vw, 18px);
 }
 .sp-col {
   text-align: center;
-  padding: 16px 12px;
+  padding: clamp(10px, 1.6dvh, 16px) 8px;
   border-radius: 14px;
   background: var(--bg);
   border: 1px solid var(--line);
@@ -2190,52 +2528,37 @@ body[data-route="practice"] .container {
 .sp-col b {
   display: block;
   font-family: var(--font-mono);
-  font-size: clamp(24px, 3vw, 34px);
+  font-size: clamp(22px, 2.8vw, 32px);
   line-height: 1;
   color: var(--ink);
 }
 .sp-col.hi b { color: var(--accent); }
-.sp-col span { display: block; margin-top: 6px; font-size: 12px; color: var(--ink-faint); }
-.sp-arrow { font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); white-space: nowrap; }
+.sp-col span { display: block; margin-top: 5px; font-size: 11.5px; color: var(--ink-faint); }
+.sp-arrow { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-faint); white-space: nowrap; }
 .sp-note {
-  margin: 18px 0 0;
-  padding-top: 14px;
+  margin: clamp(10px, 1.6dvh, 16px) 0 0;
+  padding-top: clamp(10px, 1.4dvh, 14px);
   border-top: 1px solid var(--line);
-  font-size: 12.5px;
-  line-height: 1.8;
+  font-size: 12px;
+  line-height: 1.72;
   color: var(--ink-faint);
 }
-@media (max-width: 620px) {
-  .sp-cols { grid-template-columns: 1fr; gap: 8px; }
-  .sp-arrow { justify-self: center; }
-}
-
-.perf-claim {
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  box-shadow: var(--shadow-card);
-  padding: clamp(20px, 2.4vw, 28px);
-  margin-bottom: clamp(24px, 3vw, 34px);
-}
-.perf-claim h3 {
-  margin: 0 0 10px;
-  font-family: var(--font-serif);
-  font-size: clamp(19px, 2.2vw, 24px);
-  font-weight: 600;
-  color: var(--ink);
-}
-.perf-claim p { margin: 0 0 12px; font-size: 14px; line-height: 1.85; color: var(--ink-soft); }
-.perf-claim p strong { color: var(--ink); }
 .perf-more { font-size: 13px; font-weight: 600; color: var(--accent); text-decoration: none; white-space: nowrap; }
 .perf-more:hover { text-decoration: underline; text-underline-offset: 3px; }
+.slide-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 
-/* 表格容器与移动端横向滚动提示 */
+/* 表格与横向滚动提示 */
 .tbl-scroll-hint {
   display: none;
-  font-size: 12px;
+  font-size: 11.5px;
   color: var(--ink-faint);
-  margin: -6px 0 10px;
+  margin: 0 0 8px;
   text-align: right;
 }
 .tbl-scroll {
@@ -2250,33 +2573,24 @@ body[data-route="practice"] .container {
 .tier-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
+  font-size: 13.5px;
   margin: 0;
 }
-.tier-table th,
-.tier-table td {
-  padding: 13px 16px;
+.tier-table th, .tier-table td {
+  padding: clamp(9px, 1.3dvh, 13px) 14px;
   border-bottom: 1px solid var(--line);
   text-align: right;
   white-space: nowrap;
 }
-.tier-table th:first-child,
-.tier-table td:first-child {
-  text-align: left;
-  color: var(--ink-soft);
-}
+.tier-table th:first-child, .tier-table td:first-child { text-align: left; color: var(--ink-soft); }
 .tier-table thead th {
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--ink-faint);
   background: var(--bg);
   border-bottom: 1px solid var(--line-strong);
 }
-.tier-table tbody td:last-child {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-}
+.tier-table tbody td:last-child { font-family: var(--font-mono); font-weight: 700; font-variant-numeric: tabular-nums; }
 .tier-table tbody tr:last-child td { border-bottom: 0; }
 .tier-table.compare-table { min-width: 680px; }
 .tier-table.assess-table { min-width: 560px; }
@@ -2287,46 +2601,69 @@ body[data-route="practice"] .container {
 .tier-table tbody tr:hover td { background: var(--bg); }
 .tier-table tbody tr.self-row:hover td { background: var(--accent-soft); }
 
-/* 性能对照双栏面板（左右视觉等高对齐） */
+.cmp-footnote {
+  margin-top: clamp(10px, 1.6dvh, 16px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--ink-faint);
+  line-height: 1.6;
+}
+.cmp-footnote code {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--surface-2);
+  padding: 1px 5px;
+  border-radius: 4px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* Slide 6: 准确率柱状图 + 分档重码双栏 */
+.arena-subhead {
+  margin: 0 0 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+}
 .arena-split {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-  gap: clamp(18px, 2.4vw, 28px);
+  gap: clamp(14px, 2.2vw, 26px);
   align-items: stretch;
-  margin-top: clamp(22px, 2.8vw, 32px);
-  margin-bottom: clamp(22px, 2.8vw, 32px);
 }
 .arena-panel {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  padding: clamp(18px, 2.2vw, 26px);
+  padding: clamp(14px, 2vw, 24px);
   display: flex;
   flex-direction: column;
-}
-.arena-panel .arena-subhead {
-  margin: 0 0 14px;
 }
 .arena-bars { width: 100%; margin: 0; }
 .arena-bars .ab-row {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 9px 0;
+  gap: 12px;
+  padding: clamp(6px, 0.9dvh, 9px) 0;
   border-bottom: 1px dashed var(--line);
 }
 .arena-bars .ab-row:last-of-type { border-bottom: 0; }
 .arena-bars .ab-name {
-  flex: 0 0 96px;
-  font-size: 13px;
+  flex: 0 0 92px;
+  font-size: 12.5px;
   color: var(--ink-soft);
   text-align: left;
   white-space: nowrap;
 }
 .arena-bars .ab-track {
   flex: 1;
-  min-width: 60px;
+  min-width: 50px;
   height: 7px;
   background: var(--surface-2);
   border-radius: 99px;
@@ -2344,78 +2681,41 @@ body[data-route="practice"] .container {
 .arena-bars .ab-row.self .ab-name { color: var(--ink); font-weight: 700; }
 .arena-bars .ab-row.self .ab-val { color: var(--accent); }
 .arena-bars .ab-val {
-  flex: 0 0 58px;
+  flex: 0 0 56px;
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 700;
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-.arena-panel .ab-cap, .arena-bars .ab-cap {
+.arena-panel .ab-cap,
+.arena-bars .ab-cap {
   margin-top: auto;
-  padding-top: 12px;
+  padding-top: 10px;
   text-align: right;
   font-size: 11.5px;
   color: var(--ink-faint);
 }
-.arena-panel .tier-table {
-  font-size: 13.5px;
-}
+.arena-panel .tier-table { font-size: 13px; }
 .arena-panel .tier-table th,
-.arena-panel .tier-table td {
-  padding: 12px 10px;
-}
-.arena-panel .tier-table thead th {
-  background: transparent;
-}
+.arena-panel .tier-table td { padding: 10px 8px; }
+.arena-panel .tier-table thead th { background: transparent; }
 .arena-panel-foot {
   margin-top: auto;
-  padding-top: 18px;
+  padding-top: 14px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-/* 测算口径说明（左对齐可折叠，清爽不堆砌） */
-.arena-details {
-  margin-top: 12px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
-  background: var(--surface);
-  padding: 14px 18px;
-}
-.arena-details summary {
-  font-size: 13px;
-  color: var(--ink-soft);
-}
-.arena-note {
-  margin: 0;
-  font-size: 12.5px;
-  line-height: 1.9;
-  color: var(--ink-soft);
-  text-align: left;
-}
-.arena-note code {
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  background: var(--surface-2);
-  padding: 1px 6px;
-  border-radius: 4px;
-  color: var(--ink);
-  white-space: nowrap;
-}
-.arena-note-list {
-  margin: 0;
-  padding-left: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
 .arena-foot-note {
-  margin: clamp(20px, 2.6vw, 28px) 0 0;
+  margin: clamp(18px, 2.4vw, 28px) 0 0;
   padding: 14px 18px;
   border-radius: var(--radius-md);
   background: var(--surface);
   border: 1px solid var(--line);
   font-size: 12.5px;
-  line-height: 1.85;
+  line-height: 1.8;
   color: var(--ink-faint);
   text-align: left;
 }
@@ -2429,46 +2729,6 @@ body[data-route="practice"] .container {
   white-space: nowrap;
 }
 
-@media (max-width: 900px) {
-  .arena-split { grid-template-columns: 1fr; }
-}
-@media (max-width: 720px) {
-  .metric-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .metric-strip .ms-item:nth-child(3) { border-left: 0; }
-  .metric-strip .ms-item:nth-child(n+3) { border-top: 1px solid var(--line); }
-  .tbl-scroll-hint { display: block; }
-  .tier-table.compare-table th,
-  .tier-table.compare-table td,
-  .tier-table.assess-table th,
-  .tier-table.assess-table td {
-    padding: 11px 12px;
-    font-size: 12.5px;
-  }
-  .tier-table.compare-table th:first-child,
-  .tier-table.compare-table td:first-child,
-  .tier-table.assess-table th:first-child,
-  .tier-table.assess-table td:first-child {
-    position: sticky;
-    left: 0;
-    z-index: 2;
-    background: var(--surface);
-    box-shadow: 1px 0 0 var(--line), 6px 0 10px -6px rgba(0, 0, 0, 0.08);
-  }
-  .tier-table.compare-table thead th:first-child,
-  .tier-table.assess-table thead th:first-child {
-    background: var(--bg);
-  }
-  .tier-table.compare-table tr.self-row td:first-child,
-  .tier-table.assess-table tr.self-row td:first-child {
-    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
-  }
-}
-@media (max-width: 540px) {
-  .arena-bars .ab-row { gap: 10px; }
-  .arena-bars .ab-name { flex: 0 0 80px; font-size: 12px; }
-  .arena-bars .ab-val { flex: 0 0 52px; font-size: 12px; }
-}
-
 /* 学习难度 & 类型标签 */
 .lv { display: inline-block; min-width: 34px; text-align: center; padding: 2px 8px; border-radius: 99px; font-size: 11.5px; font-weight: 600; }
 .lv-0 { background: rgba(37, 111, 70, 0.12); color: #256f46; }
@@ -2478,7 +2738,7 @@ body[data-route="practice"] .container {
 .lv-4 { background: rgba(196, 60, 53, 0.14); color: #c43c35; }
 .type-tag { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 11.5px; background: var(--surface-2); color: var(--ink-soft); white-space: nowrap; }
 
-/* ==================== 进阶文档 ==================== */
+/* ==================== 进阶文档 & 单字测评分页 ==================== */
 .doc-count {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2489,30 +2749,11 @@ body[data-route="practice"] .container {
   overflow: hidden;
   margin-bottom: clamp(22px, 2.8vw, 32px);
 }
-.doc-count .dc-item {
-  padding: clamp(16px, 2vw, 24px) 10px;
-  text-align: center;
-  border-left: 1px solid var(--line);
-}
+.doc-count .dc-item { padding: clamp(16px, 2vw, 24px) 10px; text-align: center; border-left: 1px solid var(--line); }
 .doc-count .dc-item:first-child { border-left: 0; }
-.doc-count .dc-num {
-  font-family: var(--font-mono);
-  font-size: clamp(22px, 2.6vw, 30px);
-  font-weight: 700;
-  line-height: 1;
-  color: var(--ink);
-}
-.doc-count .dc-lbl {
-  margin-top: 8px;
-  font-size: 12px;
-  color: var(--ink-faint);
-  line-height: 1.4;
-}
-.doc-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(16px, 2vw, 24px);
-}
+.doc-count .dc-num { font-family: var(--font-mono); font-size: clamp(22px, 2.6vw, 30px); font-weight: 700; line-height: 1; color: var(--ink); }
+.doc-count .dc-lbl { margin-top: 8px; font-size: 12px; color: var(--ink-faint); line-height: 1.4; }
+.doc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2vw, 24px); }
 .doc-card {
   background: var(--surface);
   border: 1px solid var(--line);
@@ -2524,132 +2765,193 @@ body[data-route="practice"] .container {
   transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 .doc-card:hover { border-color: var(--line-strong); transform: translateY(-2px); }
-.doc-card .doc-kicker {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-  margin-bottom: 10px;
-}
-.doc-card h3 {
-  margin: 0 0 8px;
-  font-family: var(--font-serif);
-  font-size: clamp(18px, 1.9vw, 21px);
-  font-weight: 600;
-  line-height: 1.38;
-  color: var(--ink);
-}
+.doc-card .doc-kicker { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 10px; }
+.doc-card h3 { margin: 0 0 8px; font-family: var(--font-serif); font-size: clamp(18px, 1.9vw, 21px); font-weight: 600; line-height: 1.38; color: var(--ink); }
 .doc-card .doc-meta { font-size: 12px; color: var(--ink-faint); margin-bottom: 12px; word-break: break-word; }
 .doc-card .doc-meta a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: 2px; }
 .doc-card .doc-lead { margin: 0 0 18px; font-size: 13.5px; line-height: 1.8; color: var(--ink-soft); flex: 1; }
-@media (max-width: 860px) { .doc-grid { grid-template-columns: 1fr; } }
-@media (max-width: 540px) {
-  .doc-count .dc-lbl { font-size: 11px; }
-}
-
-/* 文档阅读页 */
-.doc-open {
-  align-self: flex-start;
-  margin-top: auto;
-  border: 0;
-  background: transparent;
-  padding: 0;
-  font-size: 13.5px;
-  font-weight: 600;
-  color: var(--accent);
-  cursor: pointer;
-}
+.doc-open { align-self: flex-start; margin-top: auto; border: 0; background: transparent; padding: 0; font-size: 13.5px; font-weight: 600; color: var(--accent); cursor: pointer; }
 .doc-open:hover { text-decoration: underline; text-underline-offset: 3px; }
-.doc-reader {
-  max-width: 760px;
-  margin: clamp(8px, 1.8vw, 20px) auto 0;
-}
-.doc-crumb {
-  font-size: 13px;
-  color: var(--ink-faint);
-  margin-bottom: clamp(18px, 2.6vw, 28px);
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: wrap;
-}
+.doc-reader { max-width: 760px; margin: clamp(8px, 1.8vw, 20px) auto 0; }
+.doc-crumb { font-size: 13px; color: var(--ink-faint); margin-bottom: clamp(18px, 2.6vw, 28px); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .doc-crumb a { color: var(--ink-soft); }
 .doc-crumb a:hover { color: var(--accent); }
-.doc-reader .doc-title {
-  margin: 0 0 12px;
-  font-family: var(--font-serif);
-  font-weight: 600;
-  font-size: clamp(24px, 3.2vw, 38px);
-  line-height: 1.3;
-  letter-spacing: 0.01em;
-  color: var(--ink);
-}
-.doc-reader .doc-lead {
-  margin: 16px 0 0;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--line);
-  font-size: 15px;
-  line-height: 1.85;
-  color: var(--ink-soft);
-}
+.doc-reader .doc-title { margin: 0 0 12px; font-family: var(--font-serif); font-weight: 600; font-size: clamp(24px, 3.2vw, 38px); line-height: 1.3; color: var(--ink); }
+.doc-reader .doc-lead { margin: 16px 0 0; padding-bottom: 20px; border-bottom: 1px solid var(--line); font-size: 15px; line-height: 1.85; color: var(--ink-soft); }
 .doc-reader .doc-body { margin-top: 24px; font-size: 15px; line-height: 1.95; color: var(--ink-soft); }
-.doc-reader .doc-body h4 {
-  margin: 32px 0 10px;
-  font-size: 15.5px;
-  font-weight: 700;
-  color: var(--ink);
-  letter-spacing: 0.02em;
-}
+.doc-reader .doc-body h4 { margin: 32px 0 10px; font-size: 15.5px; font-weight: 700; color: var(--ink); }
 .doc-reader .doc-body h4:first-child { margin-top: 0; }
 .doc-reader .doc-body p { margin: 0 0 14px; }
 .doc-reader .doc-body ul { margin: 0 0 16px; padding-left: 20px; }
 .doc-reader .doc-body li { margin-bottom: 7px; }
-.doc-reader .doc-body .quote {
-  margin: 18px 0;
-  padding: 14px 18px;
-  border-left: 3px solid var(--accent);
-  background: var(--surface);
-  border-radius: 0 10px 10px 0;
-  font-size: 14px;
-  color: var(--ink);
-}
+.doc-reader .doc-body .quote { margin: 18px 0; padding: 14px 18px; border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 10px 10px 0; font-size: 14px; color: var(--ink); }
 .doc-reader .doc-body .code-list { font-family: var(--font-mono); font-size: 13px; color: var(--ink-soft); line-height: 2; }
 .doc-reader .doc-body code { font-family: var(--font-mono); font-size: 13px; background: var(--surface-2); padding: 1px 6px; border-radius: 4px; color: var(--ink); }
-.doc-pager {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: clamp(32px, 4.5vw, 52px);
-  padding-top: 22px;
-  border-top: 1px solid var(--line);
-  flex-wrap: wrap;
-}
+.doc-pager { display: flex; justify-content: space-between; gap: 10px; margin-top: clamp(32px, 4.5vw, 52px); padding-top: 22px; border-top: 1px solid var(--line); flex-wrap: wrap; }
 .doc-pager .btn:disabled { opacity: 0.4; cursor: default; }
-
-/* 单字测评 */
 .assess-table tbody td { font-variant-numeric: tabular-nums; }
-.assess-notes {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(14px, 2vw, 22px);
-  margin-top: clamp(24px, 3vw, 36px);
-}
-.an-card {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card);
-  padding: clamp(18px, 2.2vw, 26px);
-}
+.assess-notes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 2vw, 22px); margin-top: clamp(24px, 3vw, 36px); }
+.an-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); padding: clamp(18px, 2.2vw, 26px); }
 .an-card h4 { margin: 0 0 8px; font-size: 15px; font-weight: 700; color: var(--ink); }
 .an-card p { margin: 0; font-size: 13.5px; line-height: 1.85; color: var(--ink-soft); }
 .an-card code { font-family: var(--font-mono); font-size: 12px; background: var(--surface-2); padding: 1px 5px; border-radius: 4px; color: var(--ink); white-space: nowrap; }
-@media (max-width: 760px) { .assess-notes { grid-template-columns: 1fr; } }
+
+/* ==================== 响应式精调：确保每屏在手机端 100% 装下不截断 ==================== */
+@media (max-width: 900px) {
+  .arena-split { grid-template-columns: 1fr; gap: 12px; }
+}
+@media (max-width: 860px) {
+  .doc-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+  .assess-notes { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .metric-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .metric-strip .ms-item:nth-child(3) { border-left: 0; }
+  .metric-strip .ms-item:nth-child(n+3) { border-top: 1px solid var(--line); }
+  .tbl-scroll-hint { display: block; }
+  .tier-table.compare-table th, .tier-table.compare-table td,
+  .tier-table.assess-table th, .tier-table.assess-table td {
+    padding: 9px 11px;
+    font-size: 12px;
+  }
+  .tier-table.compare-table th:first-child, .tier-table.compare-table td:first-child,
+  .tier-table.assess-table th:first-child, .tier-table.assess-table td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background: var(--surface);
+    box-shadow: 1px 0 0 var(--line), 6px 0 10px -6px rgba(0, 0, 0, 0.08);
+  }
+  .tier-table.compare-table thead th:first-child,
+  .tier-table.assess-table thead th:first-child { background: var(--bg); }
+  .tier-table.compare-table tr.self-row td:first-child,
+  .tier-table.assess-table tr.self-row td:first-child {
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  }
+}
+
+@media (max-width: 540px) {
+  .snap-slide {
+    padding: 12px 14px;
+  }
+  .snap-slide .section-head {
+    margin: 0 auto 12px;
+  }
+  .snap-slide .sec-eyebrow {
+    margin-bottom: 4px;
+    font-size: 11.5px;
+  }
+  .snap-slide .section-head h2 {
+    font-size: clamp(21px, 5.8vw, 26px);
+    line-height: 1.22;
+  }
+  .snap-slide .section-head p {
+    margin-top: 6px;
+    font-size: 12.5px;
+    line-height: 1.55;
+  }
+  .slide-next-hint { display: none; }
+
+  /* Slide 1 手机端紧凑首屏：标题 + 试打台完整落在一屏内 */
+  .hero-grid { gap: 12px; }
+  .hero-grid .hero-badge { margin-bottom: 8px; padding: 3px 10px; font-size: 11.5px; }
+  .hero-grid .hero-editorial .hero-title { font-size: clamp(28px, 8vw, 34px); margin-bottom: 8px; line-height: 1.15; }
+  .hero-grid .hero-editorial .hero-sub { font-size: 13px; line-height: 1.55; margin-bottom: 12px; }
+  .hero-grid .hero-ctas { gap: 8px; margin-bottom: 10px; }
+  .hero-grid .hero-ctas .btn { padding: 8px 16px; font-size: 13px; }
+  .hero-grid .hero-ctas .text-link-btn { font-size: 12.5px; }
+  .hero-grid .track-switch { margin-bottom: 6px; }
+  .hero-grid .hero-status { font-size: 11.5px; gap: 14px; }
+  .hero-grid .showcase { padding: 12px 12px 10px; }
+  .hero-grid .showcase-top { margin-bottom: 10px; padding-bottom: 8px; gap: 8px; }
+  .hero-grid .showcase-kicker { font-size: 12px; }
+  .hero-grid .demo-glyph-box { padding: 8px 12px; gap: 12px; border-radius: 12px; }
+  .hero-grid .demo-glyph-box .big-hz { font-size: 34px; }
+  .hero-grid .demo-right { gap: 8px; }
+  .hero-grid .hw-keys { gap: 6px; }
+  .hero-grid .hw-key { width: 50px; height: 54px; border-radius: 10px; }
+  .hero-grid .hw-key b { font-size: 18px; }
+  .hero-grid .demo-meta { font-size: 12px; line-height: 1.5; }
+  .hero-grid .try-status { margin-top: 2px; font-size: 11.5px; }
+  .hero-grid .hero-step-pill { padding: 8px 4px; font-size: 11px; }
+
+  /* Slide 2 手机端 4 原则紧凑排版 */
+  .principles-grid { grid-template-columns: 1fr; gap: 8px; }
+  .principle-card { padding: 11px 14px; gap: 4px; border-radius: 14px; }
+  .principle-card .pc-num { font-size: 18px; }
+  .principle-card h3 { font-size: 14.5px; margin: 2px 0 2px; }
+  .principle-card p { font-size: 12px; line-height: 1.48; }
+  .principle-card .arch-inline-demo { display: none; }
+
+  /* Slide 3 手机端遗忘曲线紧凑 */
+  .eb-wrap { padding: 12px 14px; gap: 10px; }
+  .eb-toolbar { margin-bottom: 4px; }
+  .eb-legend { gap: 10px; font-size: 11px; }
+  .eb-replay { padding: 3px 9px; font-size: 11px; }
+  .eb-caption { margin-top: 6px; padding: 6px 10px; font-size: 11px; }
+  .eb-side { padding-top: 10px; gap: 8px; }
+  .eb-kpi { padding: 10px 10px; border-radius: 12px; }
+  .eb-kpi b { font-size: 24px; }
+  .eb-kpi span { font-size: 10.5px; margin-top: 4px; }
+  .eb-vs { font-size: 11.5px; gap: 4px; }
+  .eb-note { font-size: 11px; padding-top: 8px; line-height: 1.5; }
+
+  /* Slide 4 手机端硬指标 + 速度横排3格（省高度！） */
+  .metric-strip { margin-bottom: 10px; }
+  .metric-strip .ms-item { padding: 11px 8px; }
+  .metric-strip .ms-num { font-size: 21px; }
+  .metric-strip .ms-lbl { font-size: 11px; margin-top: 4px; }
+  .speed-card { padding: 12px 14px; margin-bottom: 10px; }
+  .sp-head { margin-bottom: 10px; }
+  .sp-head h3 { font-size: 14.5px; }
+  .sp-head p { font-size: 12px; }
+  .sp-cols { grid-template-columns: 1fr auto 1fr auto 1fr; gap: 4px; }
+  .sp-col { padding: 10px 4px; border-radius: 10px; }
+  .sp-col b { font-size: 20px; }
+  .sp-col span { font-size: 10px; margin-top: 3px; }
+  .sp-arrow { font-size: 10px; }
+  .sp-note { font-size: 11px; line-height: 1.5; margin-top: 10px; padding-top: 8px; }
+
+  /* Slide 6 手机端双面板紧凑 */
+  .arena-panel { padding: 12px 14px; border-radius: 14px; }
+  .arena-subhead { margin-bottom: 6px; font-size: 11.5px; }
+  .arena-bars .ab-row { gap: 8px; padding: 4px 0; }
+  .arena-bars .ab-name { flex: 0 0 74px; font-size: 11.5px; }
+  .arena-bars .ab-val { flex: 0 0 48px; font-size: 11.5px; }
+  .arena-panel .ab-cap { font-size: 10.5px; padding-top: 6px; }
+  .arena-panel .tier-table { font-size: 12px; }
+  .arena-panel .tier-table th, .arena-panel .tier-table td { padding: 6px 6px; }
+  .arena-panel-foot { padding-top: 10px; }
+  .arena-panel-foot .btn { padding: 6px 12px; font-size: 12px; }
+
+  /* Slide 7 手机端练习工坊 3 卡片紧凑 */
+  #slide-practice .prac-row { gap: 10px; }
+  #slide-practice .prac-tile { padding: 12px 14px; gap: 8px; border-radius: 14px; }
+  #slide-practice .prac-tile .pt-idx { font-size: 10.5px; margin-bottom: 2px; }
+  #slide-practice .prac-tile h3 { font-size: 15.5px; margin-bottom: 2px; }
+  #slide-practice .prac-tile p { font-size: 12px; }
+  #slide-practice .prac-tile .btn { padding: 6px 12px; font-size: 12px; }
+  .slide-footer { margin-top: 12px; padding-top: 10px; font-size: 10.5px; line-height: 1.5; }
+  .doc-count .dc-lbl { font-size: 11px; }
+}
+
+@media (max-width: 390px) {
+  .hero-grid .hw-keys { gap: 4px; }
+  .hero-grid .hw-key { width: 44px; height: 50px; }
+  .hero-grid .hw-key b { font-size: 16.5px; }
+}
+
+/* 极矮横屏兜底（避免横屏手机截断） */
+@media (max-height: 540px) {
+  body[data-route="home"] #view-home.active { scroll-snap-type: y proximity; }
+  .snap-slide { height: auto; min-height: calc(100dvh - var(--top-bar-h)); overflow: visible; padding-top: 24px; padding-bottom: 24px; }
+}
 
 </style>
 </head>
-<body>
+<body data-route="home">
 <header class="site-header">
   <div class="header-inner">
     <button class="brand" id="brandHome" type="button" aria-label="简单鹤首页">
@@ -2691,294 +2993,456 @@ body[data-route="practice"] .container {
 
   <!-- ==================== VIEW 1: 概览（第一眼：靠谱、高端、想试一下） ==================== -->
   <section class="view active" id="view-home">
-    <div class="snap-block hero-block">
-    <div class="hero-grid">
-    <div class="hero-editorial">
-      <div class="hero-badge"><i></i><span>简单鹤 · 轻羽落键，意到字成</span></div>
-      <h1 class="hero-title" aria-label="极简音形，为盲打而生"><span class="kchar" style="--i:0">极</span><span class="kchar" style="--i:1">简</span><span class="kchar" style="--i:2">音</span><span class="kchar" style="--i:3">形</span><br><span class="grad"><span class="kchar" style="--i:4">为</span><span class="kchar" style="--i:5">盲</span><span class="kchar" style="--i:6">打</span><span class="kchar" style="--i:7">而</span><span class="kchar" style="--i:8">生</span></span></h1>
-      <p class="hero-sub">
-        小鹤双拼定音，97 个字根定形。<br>不盯候选栏，让思绪与指尖同频。
-      </p>
 
-      <div class="hero-ctas">
-        <button class="btn btn-primary" id="heroPrimaryBtn" type="button">开始学习 →</button>
-        <button class="btn btn-outline" data-jump="guide:g-chart" type="button">浏览字根图</button>
-        <button class="text-link-btn" data-jump="ecosystem" type="button">下载客户端 <span>→</span></button>
-      </div>
+    <!-- 右侧分屏指示点 -->
+    <nav class="snap-dots" id="snapDots" aria-label="首页分屏导航">
+      <button class="snap-dot active" type="button" data-slide="0" aria-label="第 1 屏：概览与指尖试打" title="概览与试打"></button>
+      <button class="snap-dot" type="button" data-slide="1" aria-label="第 2 屏：四个设计原则" title="设计原则"></button>
+      <button class="snap-dot" type="button" data-slide="2" aria-label="第 3 屏：遗忘曲线与学习节奏" title="记忆曲线"></button>
+      <button class="snap-dot" type="button" data-slide="3" aria-label="第 4 屏：核心实测与效率换算" title="性能与速度"></button>
+      <button class="snap-dot" type="button" data-slide="4" aria-label="第 5 屏：七种方案横向对比" title="方案对比"></button>
+      <button class="snap-dot" type="button" data-slide="5" aria-label="第 6 屏：准确率与分档重码" title="数据实测"></button>
+      <button class="snap-dot" type="button" data-slide="6" aria-label="第 7 屏：在线练习工坊" title="在线练习"></button>
+    </nav>
 
-      <div class="track-switch" id="trackSwitch" role="group" aria-label="选择你的起步方式">
-        <span class="track-thumb" id="trackThumb" aria-hidden="true"></span>
-        <button class="track-opt active" id="trackZero" type="button">零基础 · 从双拼学起</button>
-        <button class="track-opt" id="trackSkip" type="button">已会双拼 · 直奔字根</button>
-      </div>
+    <!-- ==================== SLIDE 1: 首屏 + 5秒试打台 ==================== -->
+    <div class="snap-slide" id="slide-hero">
+      <div class="snap-inner">
+        <div class="hero-grid">
+          <div class="hero-editorial">
+            <div class="hero-badge"><i></i><span>简单鹤 · 轻羽落键，意到字成</span></div>
+            <h1 class="hero-title" aria-label="极简音形，为盲打而生"><span class="kchar" style="--i:0">极</span><span class="kchar" style="--i:1">简</span><span class="kchar" style="--i:2">音</span><span class="kchar" style="--i:3">形</span><br><span class="grad"><span class="kchar" style="--i:4">为</span><span class="kchar" style="--i:5">盲</span><span class="kchar" style="--i:6">打</span><span class="kchar" style="--i:7">而</span><span class="kchar" style="--i:8">生</span></span></h1>
+            <p class="hero-sub">
+              小鹤双拼定音，97 个字根定形。<br>四码只筛选不上屏，留住双拼的流畅，拿走形码的精准。
+            </p>
 
-      <div class="hero-status">
-        <span>字根掌握 <b id="homeMastered">0 / 97</b></span>
-        <span>上手进度 <b id="homeRoadmapPct">0 / 5</b></span>
-      </div>
-    </div>
+            <div class="hero-ctas">
+              <button class="btn btn-primary" id="heroPrimaryBtn" type="button">开始学习 →</button>
+              <button class="btn btn-outline" data-jump="guide:g-chart" type="button">浏览字根图</button>
+              <button class="text-link-btn" data-jump="ecosystem" type="button">下载客户端 <span>→</span></button>
+            </div>
 
-    <!-- 交互试打台：5秒感受四码直出 -->
-    <div class="stage-frame">
-      <div class="showcase">
-        <div class="showcase-top">
-          <div class="showcase-kicker">指尖初体验 · 试着依次敲出下方 4 个键</div>
-          <div class="demo-pills" id="demoChars"></div>
-        </div>
-        <div class="showcase-body" id="demoStage"></div>
-      </div>
-      <div class="hero-steps" id="heroSteps">
-        <button class="hero-step-pill active" data-step-idx="0" type="button"><span class="snum">01</span><span>两键定音</span></button>
-        <button class="hero-step-pill" data-step-idx="1" type="button"><span class="snum">02</span><span>两键定形</span></button>
-        <button class="hero-step-pill" data-step-idx="2" type="button"><span class="snum">03</span><span>四码直出</span></button>
-      </div>
-    </div>
+            <div class="track-switch" id="trackSwitch" role="group" aria-label="选择你的起步方式">
+              <span class="track-thumb" id="trackThumb" aria-hidden="true"></span>
+              <button class="track-opt active" id="trackZero" type="button">零基础 · 从双拼学起</button>
+              <button class="track-opt" id="trackSkip" type="button">已会双拼 · 直奔字根</button>
+            </div>
 
-    </div>
-    </div>
-    <div class="snap-block">
-    <!-- 四个设计原则 -->
-    <div class="section-head">
-      <div>
-        <div class="sec-eyebrow"><span>为什么是简单鹤</span></div>
-        <h2>轻盈上手，<span class="serif-accent">久打不倦。</span></h2>
-      </div>
-      <p>删繁就简，只留下真正顺手的设计，让注意力回到表达本身。</p>
-    </div>
+            <div class="hero-status">
+              <span>字根掌握 <b id="homeMastered">0 / 97</b></span>
+              <span>上手进度 <b id="homeRoadmapPct">0 / 5</b></span>
+            </div>
+          </div>
 
-    <div class="arch-grid">
-      <div class="arch-cell">
-        <div>
-          <div class="arch-num">97<span>个字根 · 约 1 小时入门</span></div>
-          <h3>不背口诀，敲着就熟</h3>
-          <p>间隔重复式练习，敲着就形成条件反射。</p>
-        </div>
-        <div class="arch-inline-demo">
-          <span class="arch-chip"><strong>Q</strong> <span class="chai">鱼 户 走</span></span>
-          <span class="arch-chip"><strong>W</strong> <span class="chai">木 付 田</span></span>
-          <span class="arch-chip hi"><strong>E</strong> <span class="chai">人 丝 夫</span></span>
+          <!-- 交互试打台：5秒感受四码直出 -->
+          <div class="stage-frame">
+            <div class="showcase">
+              <div class="showcase-top">
+                <div class="showcase-kicker">指尖初体验 · 依次敲出下方 4 个键</div>
+                <div class="demo-pills" id="demoChars"></div>
+              </div>
+              <div class="showcase-body" id="demoStage"></div>
+            </div>
+            <div class="hero-steps" id="heroSteps">
+              <button class="hero-step-pill active" data-step-idx="0" type="button"><span class="snum">01</span><span>两键定音</span></button>
+              <button class="hero-step-pill" data-step-idx="1" type="button"><span class="snum">02</span><span>两键定形</span></button>
+              <button class="hero-step-pill" data-step-idx="2" type="button"><span class="snum">03</span><span>四码直出</span></button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="arch-cell">
-        <div>
-          <div class="arch-num">0<span>小字负担</span></div>
-          <h3>没有小字，一眼可拆</h3>
-          <p>笔顺优先、首末取大，生僻字一眼可拆。</p>
-        </div>
-        <div class="arch-inline-demo">
-          <span class="arch-chip"><strong>由</strong></span>
-          <span class="arch-chip">首形 <strong>日 · V</strong></span>
-          <span class="arch-chip hi">末形 <strong>丨 · P</strong></span>
-        </div>
-      </div>
-
-      <div class="arch-cell">
-        <div>
-          <div class="arch-num">低重<span>轻松盲打</span></div>
-          <h3>低重离散，安心盲打</h3>
-          <p>乱序排布，同音字离散，几乎不用选重。</p>
-        </div>
-      </div>
-
-      <div class="arch-cell">
-        <div>
-          <div class="arch-num">3+4<span>字词分流</span></div>
-          <h3>字词分流，节奏连贯</h3>
-          <p>单字落三码，四码首选留给词组。</p>
-        </div>
-        <div class="arch-inline-demo">
-          <span class="arch-chip hi"><strong>1. 简单鹤</strong></span>
-          <span class="arch-chip">2. 简</span>
-          <span class="arch-chip">3. 剪</span>
-        </div>
-      </div>
+      <button class="slide-next-hint" type="button" data-next-slide="1" aria-label="滑动到下一屏">
+        <span>下滑探索</span>
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
     </div>
 
-    </div>
-    <div class="snap-block">
-    <!-- 记忆曲线 -->
-    <div class="section-head">
-      <div>
-        <div class="sec-eyebrow"><span>记得住，才算学会</span></div>
-        <h2>两天记熟字根，<span class="serif-accent">一周顺手盲打。</span></h2>
-      </div>
-      <p>97 个字根不靠死记。按艾宾浩斯遗忘曲线的节奏复习，每天几分钟就够了。</p>
-    </div>
-
-    <div class="eb-wrap">
-      <svg class="eb-chart" viewBox="0 0 760 360" role="img" aria-label="遗忘曲线：不复习 7 天掉到 24%，按1/2/4/7天复习稳定在 90% 以上"><line x1="58" y1="280.0" x2="698" y2="280.0" stroke="var(--line)"/><text x="48" y="284.0" text-anchor="end" class="eb-tick">0%</text><line x1="58" y1="224.0" x2="698" y2="224.0" stroke="var(--line)"/><text x="48" y="228.0" text-anchor="end" class="eb-tick">25%</text><line x1="58" y1="168.0" x2="698" y2="168.0" stroke="var(--line)"/><text x="48" y="172.0" text-anchor="end" class="eb-tick">50%</text><line x1="58" y1="112.0" x2="698" y2="112.0" stroke="var(--line)"/><text x="48" y="116.0" text-anchor="end" class="eb-tick">75%</text><line x1="58" y1="56.0" x2="698" y2="56.0" stroke="var(--line)"/><text x="48" y="60.0" text-anchor="end" class="eb-tick">100%</text><polyline points="76.0,56.0 80.4,182.0 84.8,185.6 89.2,189.2 93.5,192.9 97.9,196.5 102.3,199.5 106.7,199.9 111.1,200.4 115.5,200.9 119.9,201.3 124.2,201.8 128.6,202.3 133.0,202.8 137.4,203.2 141.8,203.7 146.2,204.2 150.6,204.7 154.9,205.1 159.3,205.6 163.7,206.1 168.1,206.6 172.5,207.2 176.9,207.8 181.3,208.3 185.6,208.9 190.0,209.4 194.4,210.0 198.8,210.6 203.2,211.1 207.6,211.7 212.0,212.2 216.3,212.8 220.7,213.4 225.1,213.9 229.5,214.5 233.9,215.0 238.3,215.6 242.7,216.2 247.0,216.7 251.4,217.3 255.8,217.4 260.2,217.4 264.6,217.5 269.0,217.6 273.4,217.7 277.7,217.8 282.1,217.9 286.5,218.0 290.9,218.0 295.3,218.1 299.7,218.2 304.1,218.3 308.4,218.4 312.8,218.5 317.2,218.5 321.6,218.6 326.0,218.7 330.4,218.8 334.8,218.9 339.1,219.0 343.5,219.0 347.9,219.1 352.3,219.2 356.7,219.3 361.1,219.4 365.5,219.5 369.8,219.5 374.2,219.6 378.6,219.7 383.0,219.8 387.4,219.9 391.8,220.0 396.2,220.1 400.5,220.1 404.9,220.2 409.3,220.3 413.7,220.4 418.1,220.5 422.5,220.6 426.9,220.6 431.2,220.7 435.6,220.8 440.0,220.9 444.4,221.0 448.8,221.1 453.2,221.1 457.6,221.2 461.9,221.3 466.3,221.4 470.7,221.5 475.1,221.6 479.5,221.6 483.9,221.7 488.3,221.8 492.6,221.9 497.0,222.0 501.4,222.1 505.8,222.2 510.2,222.2 514.6,222.3 519.0,222.4 523.3,222.5 527.7,222.6 532.1,222.7 536.5,222.7 540.9,222.8 545.3,222.9 549.7,223.0 554.0,223.1 558.4,223.2 562.8,223.2 567.2,223.3 571.6,223.4 576.0,223.5 580.4,223.6 584.7,223.7 589.1,223.7 593.5,223.8 597.9,223.9 602.3,224.0 606.7,224.1 611.1,224.2 615.4,224.3 619.8,224.4 624.2,224.6 628.6,224.7 633.0,224.8 637.4,224.9 641.8,225.0 646.1,225.1 650.5,225.2 654.9,225.3 659.3,225.5 663.7,225.6 668.1,225.7 672.5,225.8 676.8,225.9 681.2,226.0 685.6,226.1 690.0,226.2" fill="none" stroke="var(--ink-faint)" stroke-width="2.2" stroke-dasharray="6 5"/><polyline points="76.0,56.0 163.7,56.0 168.1,68.9 172.5,71.1 176.9,71.4 181.3,71.6 185.6,71.8 190.0,72.1 194.4,72.3 198.8,72.5 203.2,72.7 207.6,73.0 212.0,73.2 216.3,73.2 220.7,73.3 225.1,73.3 229.5,73.3 233.9,73.4 238.3,73.4 242.7,73.4 247.0,73.4 251.4,73.5 251.4,56.0 260.2,69.6 269.0,71.2 277.7,71.5 286.5,71.8 295.3,72.0 304.1,72.3 312.8,72.6 321.6,72.9 330.4,73.1 339.1,73.2 347.9,73.3 356.7,73.3 365.5,73.3 374.2,73.4 383.0,73.4 391.8,73.4 400.5,73.5 409.3,73.5 418.1,73.5 426.9,73.6 426.9,56.0 440.0,69.3 453.2,71.2 466.3,71.4 479.5,71.7 492.6,71.9 505.8,72.2 519.0,72.4 532.1,72.7 545.3,72.9 558.4,73.2 571.6,73.2 584.7,73.3 597.9,73.3 611.1,73.3 624.2,73.4 637.4,73.4 650.5,73.4 663.7,73.5 676.8,73.5 690.0,73.5 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0" fill="none" stroke="var(--ink)" stroke-width="2.4"/><line x1="58" y1="280" x2="698" y2="280" stroke="var(--line-strong)" stroke-width="1.2"/><line x1="76.0" y1="280" x2="76.0" y2="286" stroke="var(--line-strong)"/><text x="76.0" y="306" text-anchor="middle" class="eb-name">当天</text><line x1="163.7" y1="280" x2="163.7" y2="286" stroke="var(--line-strong)"/><text x="163.7" y="306" text-anchor="middle" class="eb-name">第1天</text><line x1="251.4" y1="280" x2="251.4" y2="286" stroke="var(--line-strong)"/><text x="251.4" y="306" text-anchor="middle" class="eb-name">第2天</text><line x1="426.9" y1="280" x2="426.9" y2="286" stroke="var(--line-strong)"/><text x="426.9" y="306" text-anchor="middle" class="eb-name">第4天</text><line x1="690.0" y1="280" x2="690.0" y2="286" stroke="var(--line-strong)"/><text x="690.0" y="306" text-anchor="middle" class="eb-name">第7天</text><circle cx="163.7" cy="56.0" r="4" fill="var(--accent)"/><text x="163.7" y="44.0" text-anchor="middle" class="eb-rev">复习</text><circle cx="251.4" cy="56.0" r="4" fill="var(--accent)"/><text x="251.4" y="44.0" text-anchor="middle" class="eb-rev">复习</text><circle cx="426.9" cy="56.0" r="4" fill="var(--accent)"/><text x="426.9" y="44.0" text-anchor="middle" class="eb-rev">复习</text><circle cx="690.0" cy="56.0" r="4" fill="var(--accent)"/><text x="690.0" y="44.0" text-anchor="middle" class="eb-rev">复习</text><text x="684.0" y="214.2" text-anchor="end" class="eb-val gray">24%</text><text x="684.0" y="99.0" text-anchor="end" class="eb-val">90%+</text><text x="374.2" y="206.0" text-anchor="middle" class="eb-label gray">不复习</text><text x="339.0" y="99.0" text-anchor="middle" class="eb-label strong">按 1/2/4/7 天复习</text></svg>
-      <div class="eb-side">
-        <div class="eb-big"><b>24%</b><span>不复习的话，第 7 天只剩这么多</span></div>
-        <div class="eb-vs">
-          <div><i class="dot gray"></i>不复习：7 天后只剩 24%</div>
-          <div><i class="dot red"></i>第 1 / 2 / 4 / 7 天各复习一次：稳定在 90% 以上</div>
-        </div>
-        <p class="eb-note">练习器按这张表自动安排：答对拉长间隔，答错立刻重排。两天过一遍，一周形成手感。</p>
-      </div>
-    </div>
-
-    </div>
-    <div class="snap-block">
-    <!-- 性能对照（实测 · 多方案） -->
-    <div class="section-head">
-      <div>
-        <div class="sec-eyebrow"><span>性能实测</span></div>
-        <h2>七条路线，<span class="serif-accent">摆在同一张表上。</span></h2>
-      </div>
-      <p>取同一张字频表，把音形、形码、双拼、全拼七种方案逐字测算，只看单字表现。</p>
-    </div>
-
-    <section class="arena" id="arena" aria-label="性能实测">
-      <div class="metric-strip">
-        <div class="ms-item"><div class="ms-num">99.87<i>%</i></div><div class="ms-lbl">前 3000 字首选准确率</div></div>
-        <div class="ms-item"><div class="ms-num">1.001<i>位</i></div><div class="ms-lbl">平均候选位次</div></div>
-        <div class="ms-item"><div class="ms-num">87<i>字</i></div><div class="ms-lbl">前 3000 字全码重码</div></div>
-        <div class="ms-item"><div class="ms-num">最少<i>档</i></div><div class="ms-lbl">4 码方案中重码最低</div></div>
-      </div>
-
-      <div class="key-diff">
-        <div class="kd-tag">关键差异</div>
-        <div class="kd-main">
-          <h3>简单鹤四码不上屏，双拼手感完整保留</h3>
-          <p>小鹤音形等方案四码打完即上屏，后两码的形码一旦和正常双拼的拼音码重叠，就可能上错字、打断节奏。简单鹤四码只筛选、不自动上屏，你可以纯当双拼打，形码想用再用。</p>
-        </div>
-        <a class="btn btn-outline btn-sm" href="#doc/commit">看详解 →</a>
-      </div>
-
-      <div class="speed-card">
-        <div class="sp-head">
+    <!-- ==================== SLIDE 2: 四个设计原则 ==================== -->
+    <div class="snap-slide" id="slide-principles">
+      <div class="snap-inner">
+        <div class="section-head">
           <div>
-            <h3>日常 4 击/秒，能打多少个字</h3>
-            <p>按小鹤音形官网公布的换算口径：每上一个层级约提升 30%。</p>
+            <div class="sec-eyebrow"><span>为什么是简单鹤</span></div>
+            <h2>轻盈上手，<span class="serif-accent">久打不倦。</span></h2>
           </div>
-          <a class="perf-more" href="https://flypy.cc/" target="_blank" rel="noopener noreferrer">小鹤官网 ↗</a>
+          <p>删掉一切多余规则，只保留真正影响盲打手感的四个核心取舍。</p>
         </div>
-        <div class="sp-cols">
-          <div class="sp-col"><b>60</b><span>全拼 · 字/分</span></div>
-          <div class="sp-arrow">×130%</div>
-          <div class="sp-col"><b>80</b><span>双拼 · 字/分</span></div>
-          <div class="sp-arrow">×130%</div>
-          <div class="sp-col hi"><b>100</b><span>音形 · 字/分</span></div>
-        </div>
-        <p class="sp-note">简单鹤同属「双拼 + 形码」音形路线，落在同一档；且实测重码略低于小鹤音形（前 3000 字 87 vs 88），
-        代价是四码不自动上屏、多一次确认。速度数字引自小鹤官网，属其官方测算。</p>
-      </div>
 
-      <div class="perf-claim">
-        <h3>低重码，性能优秀</h3>
-        <p>简单鹤的单字性能相当扎实：<strong>前 1500 字全码仅 18 个重码字，前 3000 字 87 个，首选准确率 99.87%</strong>，
-        与四码形码方案处于同一水平；而它只要求记住 97 个乱序字根。</p>
-        <a class="perf-more" href="#assess">了解更多 →</a>
-      </div>
-
-      <h3 class="arena-subhead">前 3000 常用字 · 单字实测（七种方案）</h3>
-      <div class="tbl-scroll-hint">左右滑动查看完整数据 →</div>
-      <div class="tbl-scroll">
-      <table class="tier-table compare-table wide">
-        <thead>
-          <tr><th>方案</th><th>类型</th><th>字根数</th><th>首选准确率</th><th>平均候选位次</th><th>平均码长</th><th>全码重码字数</th><th>学习难度</th></tr>
-        </thead>
-        <tbody>
-          <tr class="self-row"><td>简单鹤</td><td data-label="类型"><span class="type-tag">音形</span></td><td data-label="字根数">97</td><td data-label="首选准确率">99.87%</td><td data-label="平均位次">1.001</td><td data-label="平均码长">4.00</td><td data-label="全码重码">87</td><td data-label="学习难度"><span class="lv lv-2">中</span></td></tr>
-          <tr><td>虎码</td><td data-label="类型"><span class="type-tag">形码</span></td><td data-label="字根数">241</td><td data-label="首选准确率">99.95%</td><td data-label="平均位次">1.000</td><td data-label="平均码长">4.00</td><td data-label="全码重码">116</td><td data-label="学习难度"><span class="lv lv-4">高</span></td></tr>
-          <tr><td>小鹤音形</td><td data-label="类型"><span class="type-tag">音形</span></td><td data-label="字根数">94 + 237 小字</td><td data-label="首选准确率">99.66%</td><td data-label="平均位次">1.004</td><td data-label="平均码长">4.00</td><td data-label="全码重码">88</td><td data-label="学习难度"><span class="lv lv-2">中</span></td></tr>
-          <tr><td>小鹤双拼</td><td data-label="类型"><span class="type-tag">双拼</span></td><td data-label="字根数">0</td><td data-label="首选准确率">84.37%</td><td data-label="平均位次">1.425</td><td data-label="平均码长">2.00</td><td data-label="全码重码">2602</td><td data-label="学习难度"><span class="lv lv-1">低</span></td></tr>
-          <tr><td>自然码双拼</td><td data-label="类型"><span class="type-tag">双拼</span></td><td data-label="字根数">0</td><td data-label="首选准确率">84.37%</td><td data-label="平均位次">1.425</td><td data-label="平均码长">2.00</td><td data-label="全码重码">2602</td><td data-label="学习难度"><span class="lv lv-1">低</span></td></tr>
-          <tr><td>全拼 26 键</td><td data-label="类型"><span class="type-tag">全拼</span></td><td data-label="字根数">0</td><td data-label="首选准确率">84.43%</td><td data-label="平均位次">1.425</td><td data-label="平均码长">2.65</td><td data-label="全码重码">2601</td><td data-label="学习难度"><span class="lv lv-0">极低</span></td></tr>
-          <tr><td>全拼 9 键</td><td data-label="类型"><span class="type-tag">全拼</span></td><td data-label="字根数">0</td><td data-label="首选准确率">77.06%</td><td data-label="平均位次">1.959</td><td data-label="平均码长">2.65</td><td data-label="全码重码">2787</td><td data-label="学习难度"><span class="lv lv-0">极低</span></td></tr>
-        </tbody>
-      </table>
-      </div>
-
-      <div class="arena-split">
-        <div class="arena-panel">
-          <h3 class="arena-subhead">首选准确率对比</h3>
-          <div class="arena-bars">
-        <div class="ab-row self"><span class="ab-name">简单鹤</span><span class="ab-track"><i class="ab-fill" style="width:99.87%"></i></span><span class="ab-val">99.87%</span></div>
-
-        <div class="ab-row"><span class="ab-name">虎码</span><span class="ab-track"><i class="ab-fill" style="width:99.95%"></i></span><span class="ab-val">99.95%</span></div>
-        <div class="ab-row"><span class="ab-name">小鹤音形</span><span class="ab-track"><i class="ab-fill" style="width:99.66%"></i></span><span class="ab-val">99.66%</span></div>
-        <div class="ab-row"><span class="ab-name">小鹤双拼</span><span class="ab-track"><i class="ab-fill" style="width:84.37%"></i></span><span class="ab-val">84.37%</span></div>
-        <div class="ab-row"><span class="ab-name">自然码双拼</span><span class="ab-track"><i class="ab-fill" style="width:84.37%"></i></span><span class="ab-val">84.37%</span></div>
-        <div class="ab-row"><span class="ab-name">全拼 26 键</span><span class="ab-track"><i class="ab-fill" style="width:84.43%"></i></span><span class="ab-val">84.43%</span></div>
-        <div class="ab-row"><span class="ab-name">全拼 9 键</span><span class="ab-track"><i class="ab-fill" style="width:77.06%"></i></span><span class="ab-val">77.06%</span></div>
+        <div class="principles-grid">
+          <div class="principle-card">
+            <div>
+              <div class="pc-num">97<span>去重字根 · 约 1 小时入门</span></div>
+              <h3>不背口诀，敲着就熟</h3>
+              <p>97 个乱序字根把同音字彻底离散；配合间隔重复练习，直接用手指记住位置。</p>
+            </div>
+            <div class="arch-inline-demo">
+              <span class="arch-chip"><strong>Q</strong> <span class="chai">鱼 户 走</span></span>
+              <span class="arch-chip"><strong>W</strong> <span class="chai">木 付 田</span></span>
+              <span class="arch-chip hi"><strong>E</strong> <span class="chai">人 丝 夫</span></span>
+            </div>
           </div>
-          <div class="ab-cap">条长 = 前 3000 常用字的单字首选准确率</div>
+
+          <div class="principle-card">
+            <div>
+              <div class="pc-num">0<span>小字字根负担</span></div>
+              <h3>没有小字，一眼可拆</h3>
+              <p>笔顺优先、首末取大，不必纠结「这个部件算不算小字」，遇到生僻字也能直接拆。</p>
+            </div>
+            <div class="arch-inline-demo">
+              <span class="arch-chip"><strong>由</strong></span>
+              <span class="arch-chip">首形 <strong>日 · V</strong></span>
+              <span class="arch-chip hi">末形 <strong>丨 · P</strong></span>
+            </div>
+          </div>
+
+          <div class="principle-card">
+            <div>
+              <div class="pc-num">不上屏<span>保留纯双拼手感</span></div>
+              <h3>四码只筛选，不抢节奏</h3>
+              <p>四码打完不强制顶屏，绝不因后两码撞拼音而误上错字——平时可纯当双拼打，形码想用再用。</p>
+            </div>
+            <div class="arch-inline-demo">
+              <span class="arch-chip hi">双拼照打</span>
+              <span class="arch-chip">形码可选</span>
+              <span class="arch-chip"><a href="#doc/commit" style="color:var(--accent);font-weight:600">看详解 →</a></span>
+            </div>
+          </div>
+
+          <div class="principle-card">
+            <div>
+              <div class="pc-num">3 + 4<span>字词自然分流</span></div>
+              <h3>单字落三码，四码留给词</h3>
+              <p>高频单字三键出简，四码首选位留给常用词组，连续输入节奏顺畅不断档。</p>
+            </div>
+            <div class="arch-inline-demo">
+              <span class="arch-chip hi"><strong>1. 简单鹤</strong></span>
+              <span class="arch-chip">2. 简</span>
+              <span class="arch-chip">3. 剪</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 3: 艾宾浩斯遗忘曲线 ==================== -->
+    <div class="snap-slide" id="slide-memory">
+      <div class="snap-inner">
+        <div class="section-head">
+          <div>
+            <div class="sec-eyebrow"><span>记得住，才算学会</span></div>
+            <h2>两天记熟字根，<span class="serif-accent">一周顺手盲打。</span></h2>
+          </div>
+          <p>按艾宾浩斯遗忘曲线的节奏短时复习，每天一刻钟，把字根交到指尖条件反射里。</p>
         </div>
 
-        <div class="arena-panel">
-          <h3 class="arena-subhead">简单鹤 · 分档重码</h3>
-          <table class="tier-table">
-            <thead><tr><th>字集范围</th><th>重码字数</th><th>首选准确率</th></tr></thead>
+        <div class="eb-wrap" id="ebWrap">
+          <div class="eb-stage">
+            <div class="eb-toolbar">
+              <div class="eb-legend">
+                <span class="eb-leg-item"><i class="eb-leg-line"></i>按 1 / 2 / 4 / 7 天复习</span>
+                <span class="eb-leg-item"><i class="eb-leg-line dashed"></i>不复习自然遗忘</span>
+              </div>
+              <button class="eb-replay" id="ebReplayBtn" type="button" aria-label="重播遗忘曲线动画">↻ 重播曲线</button>
+            </div>
+
+            <svg class="eb-chart" viewBox="0 0 760 326" role="img" aria-label="艾宾浩斯遗忘曲线：不复习 7 天后留存约 24%，按第 1、2、4、7 天间隔复习稳守 90% 以上">
+              <defs>
+                <linearGradient id="ebAreaAccent" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="var(--accent)" stop-opacity="var(--eb-fill-top)"/>
+                  <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/>
+                </linearGradient>
+                <linearGradient id="ebAreaGray" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="var(--ink-faint)" stop-opacity="var(--eb-gray-fill-top)"/>
+                  <stop offset="100%" stop-color="var(--ink-faint)" stop-opacity="0"/>
+                </linearGradient>
+                <linearGradient id="ebLineGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="var(--ink)"/>
+                  <stop offset="35%" stop-color="var(--accent)"/>
+                  <stop offset="100%" stop-color="var(--accent)"/>
+                </linearGradient>
+              </defs>
+
+              <!-- 网格与 Y 轴刻度 -->
+              <line x1="60" y1="266" x2="712" y2="266" stroke="var(--eb-axis)" stroke-width="1.2"/>
+              <text x="50" y="270" text-anchor="end" class="eb-tick">0%</text>
+              <line x1="60" y1="212" x2="712" y2="212" stroke="var(--eb-grid)" stroke-dasharray="3 4"/>
+              <text x="50" y="216" text-anchor="end" class="eb-tick">25%</text>
+              <line x1="60" y1="158" x2="712" y2="158" stroke="var(--eb-grid)" stroke-dasharray="3 4"/>
+              <text x="50" y="162" text-anchor="end" class="eb-tick">50%</text>
+              <line x1="60" y1="104" x2="712" y2="104" stroke="var(--eb-grid)" stroke-dasharray="3 4"/>
+              <text x="50" y="108" text-anchor="end" class="eb-tick">75%</text>
+              <line x1="60" y1="50" x2="712" y2="50" stroke="var(--eb-grid)" stroke-dasharray="3 4"/>
+              <text x="50" y="54" text-anchor="end" class="eb-tick">100%</text>
+
+              <!-- X 轴时间刻度 -->
+              <line x1="76" y1="266" x2="76" y2="272" stroke="var(--eb-axis)"/>
+              <text x="76" y="292" text-anchor="middle" class="eb-name">当天</text>
+              <line x1="166" y1="266" x2="166" y2="272" stroke="var(--eb-axis)"/>
+              <text x="166" y="292" text-anchor="middle" class="eb-name">第1天</text>
+              <line x1="256" y1="266" x2="256" y2="272" stroke="var(--eb-axis)"/>
+              <text x="256" y="292" text-anchor="middle" class="eb-name">第2天</text>
+              <line x1="436" y1="266" x2="436" y2="272" stroke="var(--eb-axis)"/>
+              <text x="436" y="292" text-anchor="middle" class="eb-name">第4天</text>
+              <line x1="696" y1="266" x2="696" y2="272" stroke="var(--eb-axis)"/>
+              <text x="696" y="292" text-anchor="middle" class="eb-name">第7天</text>
+
+              <!-- 面积柔和填充 -->
+              <path class="eb-area-gray" d="M 76 50 C 82 140, 96 178, 128 192 C 180 206, 290 212, 436 215 C 546 217, 632 218, 696 219 L 696 266 L 76 266 Z" fill="url(#ebAreaGray)"/>
+              <path class="eb-area-accent" d="M 76 50 C 98 76, 128 92, 166 98 L 166 50 C 192 65, 222 76, 256 80 L 256 50 C 308 62, 368 68, 436 71 L 436 50 C 516 58, 604 63, 696 65 L 696 50 L 696 266 L 76 266 Z" fill="url(#ebAreaAccent)"/>
+
+              <!-- 复习节点垂直虚线 -->
+              <line class="eb-stem" style="--d:0.52s" x1="166" y1="56" x2="166" y2="266"/>
+              <line class="eb-stem" style="--d:0.84s" x1="256" y1="56" x2="256" y2="266"/>
+              <line class="eb-stem" style="--d:1.18s" x1="436" y1="56" x2="436" y2="266"/>
+              <line class="eb-stem" style="--d:1.52s" x1="696" y1="56" x2="696" y2="266"/>
+
+              <!-- 不复习自然遗忘曲线 -->
+              <path class="eb-curve-gray" d="M 76 50 C 82 140, 96 178, 128 192 C 180 206, 290 212, 436 215 C 546 217, 632 218, 696 219"/>
+
+              <!-- 间隔复习主曲线（平滑衰减 + 复习拉回，逐次更平缓） -->
+              <path class="eb-curve-accent" pathLength="1000" d="M 76 50 C 98 76, 128 92, 166 98 L 166 50 C 192 65, 222 76, 256 80 L 256 50 C 308 62, 368 68, 436 71 L 436 50 C 516 58, 604 63, 696 65 L 696 50"/>
+
+              <!-- 4 个可交互复习节点 -->
+              <g class="eb-node" tabindex="0" data-eb-idx="0">
+                <g class="eb-node-vis" style="--d:0.52s">
+                  <circle class="eb-pulse" style="--d:0.52s" cx="166" cy="50" r="6"/>
+                  <circle class="eb-node-ring" cx="166" cy="50" r="6"/>
+                  <circle class="eb-node-core" cx="166" cy="50" r="2.5"/>
+                  <text x="166" y="34" text-anchor="middle" class="eb-rev-text">第1次复习</text>
+                </g>
+              </g>
+              <g class="eb-node" tabindex="0" data-eb-idx="1">
+                <g class="eb-node-vis" style="--d:0.84s">
+                  <circle class="eb-pulse" style="--d:0.84s" cx="256" cy="50" r="6"/>
+                  <circle class="eb-node-ring" cx="256" cy="50" r="6"/>
+                  <circle class="eb-node-core" cx="256" cy="50" r="2.5"/>
+                  <text x="256" y="34" text-anchor="middle" class="eb-rev-text">第2次复习</text>
+                </g>
+              </g>
+              <g class="eb-node" tabindex="0" data-eb-idx="2">
+                <g class="eb-node-vis" style="--d:1.18s">
+                  <circle class="eb-pulse" style="--d:1.18s" cx="436" cy="50" r="6"/>
+                  <circle class="eb-node-ring" cx="436" cy="50" r="6"/>
+                  <circle class="eb-node-core" cx="436" cy="50" r="2.5"/>
+                  <text x="436" y="34" text-anchor="middle" class="eb-rev-text">第3次复习</text>
+                </g>
+              </g>
+              <g class="eb-node active" tabindex="0" data-eb-idx="3">
+                <g class="eb-node-vis" style="--d:1.52s">
+                  <circle class="eb-pulse" style="--d:1.52s" cx="696" cy="50" r="6"/>
+                  <circle class="eb-node-ring" cx="696" cy="50" r="6"/>
+                  <circle class="eb-node-core" cx="696" cy="50" r="2.5"/>
+                  <text x="696" y="34" text-anchor="middle" class="eb-rev-text">稳固留存</text>
+                </g>
+              </g>
+
+              <!-- 终点数据徽章（零重叠） -->
+              <g class="eb-badge-g">
+                <rect class="eb-pill-rect" x="634" y="82" width="62" height="24" rx="12"/>
+                <text x="665" y="98.5" text-anchor="middle" class="eb-val">90%+</text>
+                <text x="694" y="206" text-anchor="end" class="eb-val gray">24%</text>
+              </g>
+            </svg>
+
+            <div class="eb-caption" id="ebCaption">
+              <span class="eb-cap-tag" id="ebCapTag">第 7 天 · 稳固</span>
+              <span id="ebCapText">点击或悬停曲线上的复习节点，查看每次复习如何把遗忘曲线压平。</span>
+            </div>
+          </div>
+
+          <div class="eb-side">
+            <div class="eb-kpis">
+              <div class="eb-kpi hi">
+                <b id="ebStatHigh">90%+</b>
+                <span>按节奏复习 · 第 7 天</span>
+              </div>
+              <div class="eb-kpi">
+                <b id="ebStatLow">24%</b>
+                <span>不复习 · 第 7 天留存</span>
+              </div>
+            </div>
+            <div class="eb-vs">
+              <div><i class="dot red"></i>第 1 / 2 / 4 / 7 天各练几分钟，衰减越来越平缓</div>
+              <div><i class="dot gray"></i>若不复习，首日即大幅遗忘，7 天后仅剩约 24%</div>
+            </div>
+            <p class="eb-note">内置练习工坊按这套曲线自动调度：答对拉长间隔，答错即刻重排，两天过完字根，一周形成手感。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 4: 硬核指标 + 效率换算 ==================== -->
+    <div class="snap-slide" id="slide-metrics">
+      <div class="snap-inner">
+        <div class="section-head">
+          <div>
+            <div class="sec-eyebrow"><span>硬核性能</span></div>
+            <h2>低重码，<span class="serif-accent">直追四码形码。</span></h2>
+          </div>
+          <p>基于本仓库官方字频表全量实测：仅靠 97 个字根，就把单字重码压到音形第一梯队。</p>
+        </div>
+
+        <div class="metric-strip">
+          <div class="ms-item"><div class="ms-num">99.87<i>%</i></div><div class="ms-lbl">前 3000 字首选准确率</div></div>
+          <div class="ms-item"><div class="ms-num">18<i>字</i></div><div class="ms-lbl">前 1500 字全码重码</div></div>
+          <div class="ms-item"><div class="ms-num">1.001<i>位</i></div><div class="ms-lbl">前 3000 字平均位次</div></div>
+          <div class="ms-item"><div class="ms-num">1.75<i>键</i></div><div class="ms-lbl">前 1500 字出简码长</div></div>
+        </div>
+
+        <div class="speed-card">
+          <div class="sp-head">
+            <div>
+              <h3>日常 4 击/秒，能打多少个字</h3>
+              <p>引自小鹤音形官网换算口径：每升级一个层级，输出效率约提升 30%。</p>
+            </div>
+            <a class="perf-more" href="https://flypy.cc/" target="_blank" rel="noopener noreferrer">小鹤官网 ↗</a>
+          </div>
+          <div class="sp-cols">
+            <div class="sp-col"><b>60</b><span>全拼 · 字/分</span></div>
+            <div class="sp-arrow">×130%</div>
+            <div class="sp-col"><b>80</b><span>双拼 · 字/分</span></div>
+            <div class="sp-arrow">×130%</div>
+            <div class="sp-col hi"><b>100</b><span>音形 · 字/分</span></div>
+          </div>
+          <p class="sp-note">简单鹤同属「双拼 + 形码」音形路线；实测前 3000 字全码重码略低于小鹤音形（87 vs 88），代价是四码不自动上屏、多一次确认，换来的是绝不误上错字的顺畅双拼节奏。</p>
+        </div>
+
+        <div class="slide-actions">
+          <a class="btn btn-outline btn-sm" href="#assess">查看 12 档单字测评 →</a>
+          <a class="perf-more" href="#doc/commit">为什么四码不上屏 →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 5: 七种方案横向实测表 ==================== -->
+    <div class="snap-slide" id="slide-compare">
+      <div class="snap-inner">
+        <div class="section-head">
+          <div>
+            <div class="sec-eyebrow"><span>横向实测</span></div>
+            <h2>七条路线，<span class="serif-accent">摆在同一张表上。</span></h2>
+          </div>
+          <p>同一张字频表逐字测算前 3000 常用单字（不含词组），兼顾精准度与学习门槛。</p>
+        </div>
+
+        <div class="tbl-scroll-hint">左右滑动查看完整数据 →</div>
+        <div class="tbl-scroll">
+          <table class="tier-table compare-table">
+            <thead>
+              <tr><th>方案</th><th>类型</th><th>字根数</th><th>首选准确率</th><th>平均位次</th><th>平均码长</th><th>全码重码</th><th>学习难度</th></tr>
+            </thead>
             <tbody>
-              <tr><td>前 1500 高频字</td><td>18</td><td>99.90%</td></tr>
-              <tr><td>前 3000 常用字</td><td>87</td><td>99.87%</td></tr>
-              <tr><td>前 4000 字</td><td>178</td><td>99.86%</td></tr>
+              <tr class="self-row"><td>简单鹤</td><td><span class="type-tag">音形</span></td><td>97</td><td>99.87%</td><td>1.001</td><td>4.00</td><td>87</td><td><span class="lv lv-2">中</span></td></tr>
+              <tr><td>虎码</td><td><span class="type-tag">形码</span></td><td>241</td><td>99.95%</td><td>1.000</td><td>4.00</td><td>116</td><td><span class="lv lv-4">高</span></td></tr>
+              <tr><td>小鹤音形</td><td><span class="type-tag">音形</span></td><td>94 + 237 小字</td><td>99.66%</td><td>1.004</td><td>4.00</td><td>88</td><td><span class="lv lv-2">中</span></td></tr>
+              <tr><td>小鹤双拼</td><td><span class="type-tag">双拼</span></td><td>0</td><td>84.37%</td><td>1.425</td><td>2.00</td><td>2602</td><td><span class="lv lv-1">低</span></td></tr>
+              <tr><td>自然码双拼</td><td><span class="type-tag">双拼</span></td><td>0</td><td>84.37%</td><td>1.425</td><td>2.00</td><td>2602</td><td><span class="lv lv-1">低</span></td></tr>
+              <tr><td>全拼 26 键</td><td><span class="type-tag">全拼</span></td><td>0</td><td>84.43%</td><td>1.425</td><td>2.65</td><td>2601</td><td><span class="lv lv-0">极低</span></td></tr>
+              <tr><td>全拼 9 键</td><td><span class="type-tag">全拼</span></td><td>0</td><td>77.06%</td><td>1.959</td><td>2.65</td><td>2787</td><td><span class="lv lv-0">极低</span></td></tr>
             </tbody>
           </table>
-          <div class="arena-panel-foot">
-            <a class="btn btn-outline btn-sm" href="#assess">查看完整单字测评 →</a>
+        </div>
+
+        <div class="cmp-footnote">
+          <span>口径：统一采用仓库 <code>jde.dict.yaml</code> 字频权重，公开码表逐字复算，复现命令 <code>python3 scripts/measure.py</code>。</span>
+          <a class="perf-more" href="#assess">完整测评与口径说明 →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 6: 首选率柱状图 + 分档重码 ==================== -->
+    <div class="snap-slide" id="slide-bars">
+      <div class="snap-inner">
+        <div class="section-head">
+          <div>
+            <div class="sec-eyebrow"><span>数据说话</span></div>
+            <h2>少记一半字根，<span class="serif-accent">稳居第一梯队。</span></h2>
+          </div>
+          <p>告别动辄两百余个字根的记忆门槛，前 1500 高频字全码仅 18 个重码。</p>
+        </div>
+
+        <div class="arena-split">
+          <div class="arena-panel">
+            <h3 class="arena-subhead">前 3000 字 · 单字首选准确率</h3>
+            <div class="arena-bars">
+              <div class="ab-row self"><span class="ab-name">简单鹤</span><span class="ab-track"><i class="ab-fill" style="width:99.87%"></i></span><span class="ab-val">99.87%</span></div>
+              <div class="ab-row"><span class="ab-name">虎码</span><span class="ab-track"><i class="ab-fill" style="width:99.95%"></i></span><span class="ab-val">99.95%</span></div>
+              <div class="ab-row"><span class="ab-name">小鹤音形</span><span class="ab-track"><i class="ab-fill" style="width:99.66%"></i></span><span class="ab-val">99.66%</span></div>
+              <div class="ab-row"><span class="ab-name">小鹤双拼</span><span class="ab-track"><i class="ab-fill" style="width:84.37%"></i></span><span class="ab-val">84.37%</span></div>
+              <div class="ab-row"><span class="ab-name">自然码双拼</span><span class="ab-track"><i class="ab-fill" style="width:84.37%"></i></span><span class="ab-val">84.37%</span></div>
+              <div class="ab-row"><span class="ab-name">全拼 26 键</span><span class="ab-track"><i class="ab-fill" style="width:84.43%"></i></span><span class="ab-val">84.43%</span></div>
+              <div class="ab-row"><span class="ab-name">全拼 9 键</span><span class="ab-track"><i class="ab-fill" style="width:77.06%"></i></span><span class="ab-val">77.06%</span></div>
+            </div>
+            <div class="ab-cap">纯单字测算，按官方字频加权</div>
+          </div>
+
+          <div class="arena-panel">
+            <h3 class="arena-subhead">简单鹤 · 分档重码表现</h3>
+            <table class="tier-table">
+              <thead><tr><th>字集范围</th><th>重码字数</th><th>首选准确率</th></tr></thead>
+              <tbody>
+                <tr><td>前 1500 高频字</td><td>18</td><td>99.90%</td></tr>
+                <tr><td>前 3000 常用字</td><td>87</td><td>99.87%</td></tr>
+                <tr><td>前 4000 字</td><td>178</td><td>99.86%</td></tr>
+              </tbody>
+            </table>
+            <div class="arena-panel-foot">
+              <a class="btn btn-outline btn-sm" href="#assess">查看前 8000 字全表 →</a>
+              <a class="btn btn-soft btn-sm" href="#docs">阅读进阶文档</a>
+            </div>
           </div>
         </div>
       </div>
-
-      <details class="clean-details arena-details">
-        <summary>展开测算口径、码表来源与复算说明</summary>
-        <div class="clean-details-body arena-note">
-          <ul class="arena-note-list">
-            <li><strong>测算口径：</strong>统一取本仓库 <code>jde.dict.yaml</code> 的字频权重作为评测集，各方案只提供自己的单字码，逐字比对同码单字（不含词组）。</li>
-            <li><strong>码表来源：</strong>小鹤音形 <code>cubercsl/rime-flypy</code>、虎码 <code>LukNg/Rime-tiger_code</code>，均为公开码表；全拼由同字频表还原。</li>
-            <li><strong>关于自然码双拼：</strong>与所有纯双拼一样对拼音做一一映射，同音重码结构与同属双拼的方案完全一致，故与小鹤双拼指标相同。</li>
-            <li><strong>字根数量来源：</strong>简单鹤 97，取本仓库码表去重实测；虎码 241，官网原文「同源字根归并后一共 241 个字根」；小鹤音形按官网 flypy.cc/help 逐键统计 = 6 笔画 + 88 部件（这 94 个必须掌握）+ 237 个小字字根（按小字规则推导、官方称免记忆）；简单鹤 97 个全部需要掌握，但没有小字这一层。</li>
-            <li><strong>学习难度与提醒：</strong>按「是否需要重新记一套字根/辅助码规则」标注（全拼极低、双拼低、音形中、形码高）。本表只比「单字重码」，不含词组与整句；形码（如虎码）重码虽低，但要记两百多个字根，学习成本远高于音形。复算命令：<code>python3 scripts/measure.py</code>。</li>
-          </ul>
-        </div>
-      </details>
-    </section>
-
-    </div>
-    <div class="snap-block">
-    <!-- 练习模块预览 -->
-    <div class="section-head">
-      <div>
-        <div class="sec-eyebrow"><span>在线练习工坊</span></div>
-        <h2>无需安装，<span class="serif-accent">打开即练。</span></h2>
-      </div>
-      <p>内置 20,877 个单字四码与 23,153 个常用简词，随时练出手感。</p>
     </div>
 
-    <div class="prac-row">
-      <div class="prac-tile" id="homeCardSp">
-        <div>
-          <div class="pt-idx" id="homeCardSpTag">STEP 01 · 双拼基础</div>
-          <h3>双拼热身</h3>
-          <p>特殊声母与易混韵母。</p>
+    <!-- ==================== SLIDE 7: 在线练习工坊 + 页脚 ==================== -->
+    <div class="snap-slide" id="slide-practice">
+      <div class="snap-inner">
+        <div class="section-head">
+          <div>
+            <div class="sec-eyebrow"><span>在线练习工坊</span></div>
+            <h2>无需安装，<span class="serif-accent">打开即练。</span></h2>
+          </div>
+          <p>内置 20,877 个单字四码、1,220 个二简词与 21,933 个三简词，随时随地练出手感。</p>
         </div>
-        <div><button class="btn btn-soft btn-sm" data-jump="practice:sp" type="button">进入双拼热身 →</button></div>
-      </div>
-      <div class="prac-tile">
-        <div>
-          <div class="pt-idx">STEP 02 · 核心记忆</div>
-          <h3>字根助记</h3>
-          <p>3 键起步，自动多练生疏字根。</p>
+
+        <div class="prac-row">
+          <div class="prac-tile" id="homeCardSp">
+            <div>
+              <div class="pt-idx" id="homeCardSpTag">STEP 01 · 双拼基础</div>
+              <h3>双拼热身</h3>
+              <p>先理清特殊声母与易混韵母，打牢前两码基础。</p>
+            </div>
+            <div><button class="btn btn-soft btn-sm" data-jump="practice:sp" type="button">进入双拼热身 →</button></div>
+          </div>
+          <div class="prac-tile">
+            <div>
+              <div class="pt-idx">STEP 02 · 核心记忆</div>
+              <h3>字根助记</h3>
+              <p>3 键起步、渐进解锁，生疏字根自动加练。</p>
+            </div>
+            <div><button class="btn btn-soft btn-sm" data-jump="practice:zigen" type="button">启动字根练习 →</button></div>
+          </div>
+          <div class="prac-tile">
+            <div>
+              <div class="pt-idx">STEP 03 · 实战提速</div>
+              <h3>拆字与简码</h3>
+              <p>从高频千字到全量词库，练出连贯盲打节奏。</p>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-soft btn-sm" data-jump="practice:split" type="button">拆字实战 →</button>
+              <button class="btn btn-outline btn-sm" data-jump="practice:short" type="button">简码训练</button>
+            </div>
+          </div>
         </div>
-        <div><button class="btn btn-soft btn-sm" data-jump="practice:zigen" type="button">启动字根练习 →</button></div>
-      </div>
-      <div class="prac-tile">
-        <div>
-          <div class="pt-idx">STEP 03 · 实战提速</div>
-          <h3>拆字与简码</h3>
-          <p>常用千字到全词库。</p>
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-soft btn-sm" data-jump="practice:split" type="button">拆字实战 →</button>
-          <button class="btn btn-outline btn-sm" data-jump="practice:short" type="button">简码训练</button>
+
+        <div class="slide-footer">
+          简单鹤 · 轻羽落键，意到字成 · 资料整理自 <a href="https://flauver.github.io/jdh/" target="_blank" rel="noopener noreferrer">flauver.github.io/jdh</a>、<a href="https://github.com/rimeinn/rime-JDhe" target="_blank" rel="noopener noreferrer">rime-JDhe</a>、<a href="https://github.com/Fun10165/rime-JDhe-win" target="_blank" rel="noopener noreferrer">rime-JDhe-win</a> 与 <a href="https://github.com/Ktouls/rime-JDhe-CyIME" target="_blank" rel="noopener noreferrer">rime-JDhe-CyIME</a>
         </div>
       </div>
     </div>
 
-      </div>
   </section>
 
   <!-- ==================== VIEW 2: 上手路径（第二眼：路径清晰，我能学会） ==================== -->
@@ -4459,24 +4923,112 @@ function initScrollReveal(scopeEl) {
   });
 }
 
-function syncSnapFit() { /* 自然流式排版，不再强制 100svh 分屏吸附 */ }
+function syncTopBarHeight() {
+  const hdr = document.querySelector('.site-header');
+  if (!hdr) return;
+  const h = Math.round(hdr.getBoundingClientRect().height);
+  if (h > 0) document.documentElement.style.setProperty('--top-bar-h', h + 'px');
+}
+
+function syncSnapFit() {
+  syncTopBarHeight();
+}
 
 function initScrollCue() {
-  const cue = $('scrollCue');
-  if (!cue) return;
-  const upd = () => {
-    const hide = currentRoute !== 'home' || window.scrollY > 80;
-    cue.classList.toggle('hide', hide);
+  const scroller = $('view-home');
+  const slides = scroller ? [...scroller.querySelectorAll('.snap-slide')] : [];
+  const dots = [...document.querySelectorAll('#snapDots .snap-dot')];
+  if (!scroller || !slides.length) return;
+
+  const goSlide = (idx) => {
+    const clamped = Math.max(0, Math.min(slides.length - 1, idx));
+    slides[clamped].scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
-  window.addEventListener('scroll', upd, { passive: true });
-  window.addEventListener('resize', () => { syncSnapFit(); upd(); }, { passive: true });
-  syncSnapFit();
-  cue.addEventListener('click', () => {
-    const blocks = document.querySelectorAll('#view-home > .snap-block');
-    if (blocks[1]) blocks[1].scrollIntoView({ behavior: 'smooth' });
+
+  const getActiveIdx = () => {
+    const h = scroller.clientHeight || 1;
+    return Math.max(0, Math.min(slides.length - 1, Math.round(scroller.scrollTop / h)));
+  };
+
+  const updateDots = () => {
+    const active = getActiveIdx();
+    dots.forEach((d, i) => d.classList.toggle('active', i === active));
+  };
+
+  scroller.addEventListener('scroll', updateDots, { passive: true });
+  window.addEventListener('resize', () => { syncTopBarHeight(); updateDots(); }, { passive: true });
+
+  dots.forEach((d, i) => d.addEventListener('click', () => goSlide(i)));
+  document.querySelectorAll('[data-next-slide]').forEach(btn => {
+    btn.addEventListener('click', () => goSlide(Number(btn.dataset.nextSlide || 1)));
   });
-  window.__scrollCueUpdate = upd;
-  upd();
+
+  // PC 键盘上下方向键 / PageDown / PageUp 翻屏（不干扰试打台字母键）
+  window.addEventListener('keydown', (e) => {
+    if (currentRoute !== 'home') return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const tag = (e.target && e.target.tagName) || '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+    if (document.querySelector('.mask.show')) return;
+    if (e.key === 'PageDown' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      goSlide(getActiveIdx() + 1);
+    } else if (e.key === 'PageUp' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      goSlide(getActiveIdx() - 1);
+    }
+  });
+
+  // 艾宾浩斯遗忘曲线：滑入第 3 屏自动触发绘制动效 + 重播 + 节点交互
+  const ebWrap = $('ebWrap');
+  const ebReplayBtn = $('ebReplayBtn');
+  const ebCapTag = $('ebCapTag');
+  const ebCapText = $('ebCapText');
+  const ebNotes = [
+    ['第 1 天 · 第 1 次复习', '趁记忆刚要滑坡前拉回 100%，打断首日急速遗忘。'],
+    ['第 2 天 · 第 2 次复习', '留存率已高于首日（约 86%），再次强化后衰减明显变缓。'],
+    ['第 4 天 · 第 3 次复习', '间隔拉长到 2 天仍保持 90% 左右，字根键位开始形成条件反射。'],
+    ['第 7 天 · 稳固留存', '97 个字根稳定在 90% 以上，日常盲打不再需要回想字根表。']
+  ];
+  let ebPlayed = false;
+  const playEb = () => {
+    if (!ebWrap) return;
+    ebWrap.classList.remove('is-playing');
+    void ebWrap.offsetWidth;
+    ebWrap.classList.add('is-playing');
+    ebPlayed = true;
+  };
+  if (ebWrap) {
+    const ebSlide = $('slide-memory');
+    if (ebSlide && 'IntersectionObserver' in window) {
+      const ebObs = new IntersectionObserver((entries) => {
+        entries.forEach(en => {
+          if (en.isIntersecting && !ebPlayed) playEb();
+        });
+      }, { root: scroller, threshold: 0.4 });
+      ebObs.observe(ebSlide);
+    } else {
+      playEb();
+    }
+    if (ebReplayBtn) ebReplayBtn.addEventListener('click', playEb);
+    const ebNodes = [...ebWrap.querySelectorAll('.eb-node')];
+    const selectEbNode = (idx) => {
+      ebNodes.forEach((n, i) => n.classList.toggle('active', i === idx));
+      if (ebCapTag && ebCapText && ebNotes[idx]) {
+        ebCapTag.textContent = ebNotes[idx][0];
+        ebCapText.textContent = ebNotes[idx][1];
+      }
+    };
+    ebNodes.forEach((n, i) => {
+      n.addEventListener('mouseenter', () => selectEbNode(i));
+      n.addEventListener('focus', () => selectEbNode(i));
+      n.addEventListener('click', () => selectEbNode(i));
+    });
+  }
+
+  syncTopBarHeight();
+  updateDots();
+  window.__scrollCueUpdate = () => { syncTopBarHeight(); updateDots(); };
 }
 
 function applyTheme() {
