@@ -1900,7 +1900,6 @@ body.is-snap-route > .site-footer {
   #view-assess.snap-view.active {
     scroll-snap-type: y proximity;
   }
-  #view-roadmap .snap-slide,
   #view-ecosystem .snap-slide,
   #view-guide #guide-slide-notes,
   #view-assess #assess-slide-notes {
@@ -2170,15 +2169,90 @@ body.is-snap-route .snap-dots {
 #view-assess .assess-table th,
 #view-assess .assess-table td { padding: clamp(6px, 1dvh, 10px) 14px; font-size: 13px; }
 #view-assess .assess-notes { margin-top: 0; }
+/* 手机端上手路径：每页一个 Step，整屏强制对齐、一眼分清 */
+@media (max-width: 720px) {
+  #view-roadmap .snap-slide {
+    padding: 12px 14px;
+  }
+  #view-roadmap .section-head {
+    margin: 0 auto 8px !important;
+  }
+  #view-roadmap .section-head h2 {
+    font-size: 22px;
+  }
+  #view-roadmap .section-head p {
+    font-size: 12px;
+    margin-top: 4px;
+  }
+  #view-roadmap .roadmap-bar {
+    padding: 10px 14px;
+    gap: 8px 12px;
+    margin-bottom: 10px !important;
+    border-radius: 14px;
+  }
+  #view-roadmap #roadmapPercent {
+    font-size: 22px !important;
+  }
+  #view-roadmap .step-card {
+    padding: 14px 14px;
+    gap: 10px;
+    border-radius: 16px;
+  }
+  #view-roadmap .step-body h3 {
+    font-size: 15.5px;
+  }
+  #view-roadmap .step-body p {
+    font-size: 12.5px;
+    line-height: 1.55;
+  }
+  #view-roadmap .step-tips {
+    font-size: 12px;
+    line-height: 1.55;
+    margin-top: 6px;
+  }
+  #view-roadmap .flow-bridge {
+    margin-top: 12px !important;
+    padding: 14px 16px;
+    gap: 10px;
+    border-radius: 16px;
+  }
+  #view-roadmap .flow-bridge h3 {
+    font-size: 16px;
+  }
+  #view-roadmap .flow-bridge p {
+    font-size: 12px;
+  }
+}
 
 @media (max-width: 540px) {
   .guide-compact-bar { gap: 8px; margin-bottom: 8px; }
   .guide-compact-title h2 { font-size: 20px; }
   .guide-compact-title span.gc-sub { display: none; }
-  #view-guide .card { padding: 12px 12px; }
-  #view-guide .zg-chart-bar h3 { font-size: 16px !important; }
-  #view-guide .zg-chart-bar p { font-size: 11.5px !important; }
-  #view-guide .zg-detail-bar { padding: 10px 12px; font-size: 12px; margin-top: 10px; }
+  #view-guide .card { padding: 10px 12px; }
+  #view-guide .zg-chart-bar { margin-bottom: 8px; gap: 6px; }
+  #view-guide .zg-chart-bar h3 { font-size: 15.5px !important; margin-bottom: 2px !important; }
+  #view-guide .zg-chart-bar p { font-size: 11px !important; line-height: 1.4; }
+  #view-guide .zg-chart-bar .btn { padding: 5px 10px; font-size: 11.5px; }
+  #view-guide .zg-detail-bar {
+    padding: 8px 10px;
+    font-size: 11.5px;
+    margin-top: 8px;
+    gap: 8px;
+    border-radius: 14px;
+  }
+  #view-guide .zg-detail-glyphs {
+    font-size: 18px;
+    line-height: 1.3;
+    gap: 6px;
+  }
+  #view-guide .zg-detail-chip {
+    padding: 3px 8px;
+    border-radius: 8px;
+  }
+  #view-guide .zg-detail-bar .btn {
+    padding: 5px 12px;
+    font-size: 12px;
+  }
   #view-ecosystem .dl-primary-grid { gap: 8px; }
   #view-ecosystem .dl-card { padding: 12px 14px; gap: 8px; }
   #view-ecosystem .dl-card h3 { font-size: 16px; margin: 4px 0; }
@@ -4417,25 +4491,25 @@ body.is-snap-route .snap-dots {
   <!-- ==================== VIEW 2: 上手路径（第二眼：路径清晰，我能学会） ==================== -->
   <section class="view snap-view" id="view-roadmap">
 
-    <!-- ==================== ROADMAP SLIDE 1: 总览进度 + 起步阶段（Step 01-02） ==================== -->
+    <!-- SLIDE 1: 总览进度 + Step 01（PC 含 Step 01-02；手机端仅 Step 01） -->
     <div class="snap-slide" id="rm-slide-1">
       <div class="snap-inner">
-        <div class="section-head" style="margin-bottom:clamp(14px,2dvh,22px)">
+        <div class="section-head" style="margin-bottom:clamp(12px,1.8dvh,20px)">
           <div>
             <div class="sec-eyebrow"><span>学习路线</span></div>
             <h2>五步上手，<span class="serif-accent">循序成诵。</span></h2>
             <p>不死背口诀，每天一刻钟，把规律交给指尖去记。</p>
           </div>
-          <button class="btn btn-outline btn-sm" id="rmSkipToggleBtn" type="button" style="margin-top:10px">已会双拼，跳过第 1 步</button>
+          <button class="btn btn-outline btn-sm" id="rmSkipToggleBtn" type="button" style="margin-top:8px">已会双拼，跳过第 1 步</button>
         </div>
 
-        <div class="roadmap-bar" style="margin-bottom:clamp(12px,1.8dvh,20px)">
-          <div style="min-width:110px">
-            <div style="font-size:12px;color:var(--ink-faint)">当前完成度</div>
+        <div class="roadmap-bar" style="margin-bottom:clamp(10px,1.6dvh,18px)">
+          <div style="min-width:96px">
+            <div style="font-size:11.5px;color:var(--ink-faint)">当前完成度</div>
             <div style="font-size:28px;font-weight:700;letter-spacing:-0.03em;line-height:1.15" id="roadmapPercent">0%</div>
           </div>
           <div class="progress-track"><div class="progress-fill" id="roadmapFill" style="width:0%"></div></div>
-          <div style="display:flex;gap:18px;font-size:13.5px;color:var(--ink-soft);flex-wrap:wrap">
+          <div style="display:flex;gap:14px;font-size:13px;color:var(--ink-soft);flex-wrap:wrap">
             <span>已完成 <b id="roadmapBadge" style="color:var(--ink)">0 / 5</b></span>
             <span>字根 <b id="rmZigen" style="color:var(--ink)">0/97</b></span>
             <span>拆字 <b id="rmSplit" style="color:var(--ink)">0/167</b></span>
@@ -4446,12 +4520,22 @@ body.is-snap-route .snap-dots {
       </div>
     </div>
 
-    <!-- ==================== ROADMAP SLIDE 2: 巩固进阶（Step 03-04） ==================== -->
+    <!-- SLIDE M2 (仅手机端显示: Step 02) -->
+    <div class="snap-slide" id="rm-slide-m2" style="display:none">
+      <div class="snap-inner">
+        <div class="section-head" style="margin-bottom:12px">
+          <div><div class="sec-eyebrow"><span>STEP 02</span></div><h2>敲熟字根，<span class="serif-accent">指尖成癖。</span></h2></div>
+        </div>
+        <div class="step-list" id="roadmapListM2"></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2 (PC: Step 03-04; 手机端: Step 03) -->
     <div class="snap-slide" id="rm-slide-2">
       <div class="snap-inner">
-        <div class="section-head" style="margin-bottom:clamp(14px,2dvh,24px)">
+        <div class="section-head" style="margin-bottom:clamp(12px,1.8dvh,22px)">
           <div>
-            <div class="sec-eyebrow"><span>中段巩固</span></div>
+            <div class="sec-eyebrow"><span id="rmSlide2Eyebrow">中段巩固</span></div>
             <h2>拆字成句，<span class="serif-accent">手眼合一。</span></h2>
           </div>
         </div>
@@ -4459,10 +4543,20 @@ body.is-snap-route .snap-dots {
       </div>
     </div>
 
-    <!-- ==================== ROADMAP SLIDE 3: 实战提速（Step 05 + 下一步） ==================== -->
+    <!-- SLIDE M4 (仅手机端显示: Step 04) -->
+    <div class="snap-slide" id="rm-slide-m4" style="display:none">
+      <div class="snap-inner">
+        <div class="section-head" style="margin-bottom:12px">
+          <div><div class="sec-eyebrow"><span>STEP 04</span></div><h2>简码提速，<span class="serif-accent">连贯成章。</span></h2></div>
+        </div>
+        <div class="step-list" id="roadmapListM4"></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3 (PC & 手机端: Step 05 + 下一步) -->
     <div class="snap-slide" id="rm-slide-3">
       <div class="snap-inner">
-        <div class="section-head" style="margin-bottom:clamp(14px,2dvh,24px)">
+        <div class="section-head" style="margin-bottom:clamp(12px,1.8dvh,22px)">
           <div>
             <div class="sec-eyebrow"><span>最后一步</span></div>
             <h2>日常实战，<span class="serif-accent">轻羽盲打。</span></h2>
@@ -4470,7 +4564,7 @@ body.is-snap-route .snap-dots {
         </div>
         <div class="step-list" id="roadmapList3"></div>
 
-        <div class="flow-bridge" style="margin-top:clamp(18px,2.8dvh,32px)">
+        <div class="flow-bridge" style="margin-top:clamp(14px,2.4dvh,28px)">
           <div>
             <div class="fb-kicker">NEXT STEP · 02 → 03</div>
             <h3>先看一眼字根图与六条规则</h3>
@@ -6091,7 +6185,7 @@ function getActiveSnapView() {
 
 function getVisibleSlides(scroller) {
   if (!scroller || scroller.classList.contains('free-scroll')) return [];
-  return [...scroller.querySelectorAll(':scope > .snap-slide')];
+  return [...scroller.querySelectorAll(':scope > .snap-slide')].filter(el => el.style.display !== 'none');
 }
 
 function syncTopBarHeight() {
@@ -6908,7 +7002,17 @@ function initScrollCue() {
     renderHealthHistory();
   });
 
-  window.addEventListener('resize', () => { syncTopBarHeight(); updateSnapDots(); }, { passive: true });
+  let lastRmMob = window.matchMedia('(max-width: 720px)').matches;
+  window.addEventListener('resize', () => {
+    const nowRmMob = window.matchMedia('(max-width: 720px)').matches;
+    if (nowRmMob !== lastRmMob) {
+      lastRmMob = nowRmMob;
+      if (typeof renderRoadmap === 'function') renderRoadmap();
+      rebuildSnapDots();
+    }
+    syncTopBarHeight();
+    updateSnapDots();
+  }, { passive: true });
   if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', () => { syncTopBarHeight(); updateSnapDots(); }, { passive: true });
   }
@@ -7134,9 +7238,15 @@ function renderDemo() {
 
 /* ==================== 8. 上手路径 ==================== */
 function renderRoadmap() {
+  const isMobRm = window.matchMedia('(max-width: 720px)').matches;
   const list = $('roadmapList'); list.innerHTML = '';
+  const listM2 = $('roadmapListM2'); if (listM2) listM2.innerHTML = '';
   const list2 = $('roadmapList2'); if (list2) list2.innerHTML = '';
+  const listM4 = $('roadmapListM4'); if (listM4) listM4.innerHTML = '';
   const list3 = $('roadmapList3'); if (list3) list3.innerHTML = '';
+  const slM2 = $('rm-slide-m2'); if (slM2) slM2.style.display = isMobRm ? '' : 'none';
+  const slM4 = $('rm-slide-m4'); if (slM4) slM4.style.display = isMobRm ? '' : 'none';
+  const eb2 = $('rmSlide2Eyebrow'); if (eb2) eb2.textContent = isMobRm ? 'STEP 03' : '中段巩固';
   let stepNum = 0;
   ROADMAP_STEPS.forEach((st, idx) => {
     const isSkipped = !!(st.isSp && STATE.skipSp);
@@ -7178,7 +7288,16 @@ function renderRoadmap() {
       const inlineSkip = card.querySelector('#inlineSkipSpBtn');
       if (inlineSkip) inlineSkip.addEventListener('click', () => setSkipSp(true));
     }
-    const targetList = (idx < 2) ? list : (idx < 4 && list2 ? list2 : (list3 || list));
+    let targetList = list;
+    if (isMobRm) {
+      if (idx === 0) targetList = list;
+      else if (idx === 1 && listM2) targetList = listM2;
+      else if (idx === 2 && list2) targetList = list2;
+      else if (idx === 3 && listM4) targetList = listM4;
+      else targetList = list3 || list;
+    } else {
+      targetList = (idx < 2) ? list : (idx < 4 && list2 ? list2 : (list3 || list));
+    }
     targetList.appendChild(card);
   });
   syncOverviewCounters();
