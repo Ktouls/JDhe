@@ -2445,7 +2445,7 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
         <tbody>
           <tr class="self-row"><td>简单鹤（音形 · 97 字根）</td><td data-label="首选准确率">99.87%</td><td data-label="平均位次">1.001</td><td data-label="平均码长">4.00</td><td data-label="全码重码">87</td><td data-label="学习难度"><span class="lv lv-2">中</span></td></tr>
                               <tr><td>虎码（形码 · 241 字根）</td><td data-label="首选准确率">99.95%</td><td data-label="平均位次">1.000</td><td data-label="平均码长">4.00</td><td data-label="全码重码">116</td><td data-label="学习难度"><span class="lv lv-4">高</span></td></tr>
-          <tr><td>小鹤音形（音形 · 88 部件根）</td><td data-label="首选准确率">99.66%</td><td data-label="平均位次">1.004</td><td data-label="平均码长">4.00</td><td data-label="全码重码">88</td><td data-label="学习难度"><span class="lv lv-2">中</span></td></tr>
+          <tr><td>小鹤音形（音形 · 94 必记 + 237 小字）</td><td data-label="首选准确率">99.66%</td><td data-label="平均位次">1.004</td><td data-label="平均码长">4.00</td><td data-label="全码重码">88</td><td data-label="学习难度"><span class="lv lv-2">中</span></td></tr>
           <tr><td>小鹤双拼（纯双拼 · 0 字根）</td><td data-label="首选准确率">84.37%</td><td data-label="平均位次">1.425</td><td data-label="平均码长">2.00</td><td data-label="全码重码">2602</td><td data-label="学习难度"><span class="lv lv-1">低</span></td></tr>
           <tr><td>自然码双拼（纯双拼 · 0 字根）</td><td data-label="首选准确率">84.37%</td><td data-label="平均位次">1.425</td><td data-label="平均码长">2.00</td><td data-label="全码重码">2602</td><td data-label="学习难度"><span class="lv lv-1">低</span></td></tr>
           <tr><td>全拼 26 键（0 字根）</td><td data-label="首选准确率">84.43%</td><td data-label="平均位次">1.425</td><td data-label="平均码长">2.65</td><td data-label="全码重码">2601</td><td data-label="学习难度"><span class="lv lv-0">极低</span></td></tr>
@@ -2487,7 +2487,7 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
         测算口径：统一取本仓库 <code>jde.dict.yaml</code> 的字频权重作为评测集，各方案只提供自己的单字码，逐字比对同码单字（不含词组）。<br>
         码表来源：小鹤音形 <code>cubercsl/rime-flypy</code>、虎码 <code>LukNg/Rime-tiger_code</code>，均为公开码表；全拼由同字频表还原。<br>
         关于自然码双拼：与所有纯双拼一样对拼音做一一映射，同音重码结构与同属双拼的方案完全一致，故与小鹤双拼指标相同。<br>
-        字根数量来源：简单鹤 97，取本仓库码表去重实测；虎码 241，官网原文「同源字根归并后一共 241 个字根」；小鹤音形 88 个部件字根（另有 6 个笔画字根与小字字根，官网 flypy.cc/help 逐键列出）。<br>学习难度按「是否需要重新记一套字根/辅助码规则」标注：全拼极低、双拼低、音形中、形码高。<br>提醒：本表只比「单字重码」，不含词组与整句；形码（如虎码）重码虽低，但要记两百多个字根，学习成本远高于音形。复算命令 <code>python3 scripts/measure.py</code>。
+        字根数量来源：简单鹤 97，取本仓库码表去重实测；虎码 241，官网原文「同源字根归并后一共 241 个字根」；字根数量按官网 flypy.cc/help 逐键统计：小鹤音形 = 6 笔画 + 88 部件（这 94 个必须掌握）+ 237 个小字字根（按小字规则推导、官方称免记忆）；简单鹤 97 个全部需要掌握，但没有小字这一层。<br>学习难度按「是否需要重新记一套字根/辅助码规则」标注：全拼极低、双拼低、音形中、形码高。<br>提醒：本表只比「单字重码」，不含词组与整句；形码（如虎码）重码虽低，但要记两百多个字根，学习成本远高于音形。复算命令 <code>python3 scripts/measure.py</code>。
       </p>
     </section>
 
