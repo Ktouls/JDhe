@@ -24,7 +24,14 @@ code_re = re.compile(r"^[a-z]{1,4}$")
 
 char_freq = collections.Counter()
 single4, short2, short3 = {}, {}, {}
+single_all_ranked, word_all_ranked = {}, {}
 short_code_lookup = {}
+
+def rank_sym(idx):
+    if idx == 0: return "␣"
+    if idx == 1: return ";"
+    if idx == 2: return "'"
+    return str(idx + 1)
 
 for raw in (SRC / "jdh_dict_multi.txt").read_text(encoding="utf-8").splitlines():
     line = raw.strip()
@@ -39,8 +46,12 @@ for raw in (SRC / "jdh_dict_multi.txt").read_text(encoding="utf-8").splitlines()
     words = parts[1].strip().split()
     if len(code) == 2 and any(cjk_multi.match(w) for w in words):
         short_code_lookup[code] = {"words": [w for w in words if cjk_multi.match(w)]}
-    for w in words:
+    for r_idx, w in enumerate(words):
+        tagged = code + rank_sym(r_idx)
         if len(w) == 1 and cjk_single.match(w):
+            single_all_ranked.setdefault(w, [])
+            if tagged not in single_all_ranked[w]:
+                single_all_ranked[w].append(tagged)
             if len(code) == 1: char_freq[w] += 5000
             elif len(code) == 2: char_freq[w] += 1000
             elif len(code) == 3: char_freq[w] += 100
@@ -49,6 +60,9 @@ for raw in (SRC / "jdh_dict_multi.txt").read_text(encoding="utf-8").splitlines()
                 if code not in single4[w]:
                     single4[w].append(code)
         elif cjk_multi.match(w):
+            word_all_ranked.setdefault(w, [])
+            if tagged not in word_all_ranked[w]:
+                word_all_ranked[w].append(tagged)
             for ch in w:
                 char_freq[ch] += 1
             if len(code) == 2:
@@ -64,7 +78,17 @@ ranked_single4 = sorted(single4.items(), key=lambda kv: (-char_freq[kv[0]], kv[0
 s1 = "\n".join(f"{ch}:{','.join(cs)}" for ch, cs in ranked_single4)
 s2 = "\n".join(f"{w}:{','.join(cs)}" for w, cs in short2.items())
 s3 = "\n".join(f"{w}:{','.join(cs)}" for w, cs in short3.items())
-payload = s1 + "\n===\n" + s2 + "\n===\n" + s3
+# Section 4: 单字全部简码+全码（含选重位次 ␣ / ; / '），按码长升序排列
+s4 = "\n".join(
+    f"{ch}:{','.join(sorted(cs, key=lambda x: (len(x), x)))}"
+    for ch, cs in single_all_ranked.items()
+)
+# Section 5: 词组全部简码+四码全码（含选重位次 ␣ / ; / '）
+s5 = "\n".join(
+    f"{w}:{','.join(sorted(cs, key=lambda x: (len(x), x)))}"
+    for w, cs in word_all_ranked.items()
+)
+payload = "\n===\n".join([s1, s2, s3, s4, s5])
 dict_gz_b64 = base64.b64encode(gzip.compress(payload.encode("utf-8"), 9)).decode("ascii")
 
 out = (

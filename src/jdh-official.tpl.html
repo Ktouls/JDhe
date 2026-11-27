@@ -1891,6 +1891,103 @@ body.is-snap-route > .site-footer {
   padding: 0;
   display: block;
 }
+/* 字根与规则页：所有 5 个子标签保持完全一致的 100% 宽度与边距，杜绝左右留白忽大忽小 */
+#view-guide.free-scroll #guide-slide-notes {
+  margin-top: clamp(28px, 4vw, 48px);
+}
+@media (max-width: 720px) {
+  #view-ecosystem.snap-view.active,
+  #view-assess.snap-view.active {
+    scroll-snap-type: y proximity;
+  }
+  #view-roadmap .snap-slide,
+  #view-ecosystem .snap-slide,
+  #view-guide #guide-slide-notes,
+  #view-assess #assess-slide-notes {
+    height: auto;
+    min-height: var(--slide-h, calc(100dvh - var(--top-bar-h)));
+    overflow: visible;
+    padding-top: 16px;
+    padding-bottom: 24px;
+  }
+}
+
+/* 循环练习：禅意大字滚筒流（与跟打练习截然不同） */
+.hl-cycle-stage {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: clamp(18px, 3vw, 32px) clamp(12px, 2vw, 24px);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  border: 1px solid var(--line);
+}
+.hl-cycle-stage.active {
+  display: flex;
+}
+.hl-cycle-kicker {
+  font-size: 12px;
+  color: var(--ink-faint);
+  letter-spacing: 0.06em;
+}
+.hl-reel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 1.8vw, 18px);
+  width: 100%;
+  overflow: hidden;
+  padding: 6px 0;
+}
+.hl-reel-item {
+  font-family: var(--font-serif);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s ease, opacity 0.2s ease, border-color 0.2s ease;
+}
+.hl-reel-item.past {
+  font-size: clamp(20px, 2.4vw, 26px);
+  width: clamp(36px, 4.5vw, 48px);
+  height: clamp(42px, 5vw, 54px);
+  color: var(--ok);
+  opacity: 0.38;
+}
+.hl-reel-item.past.far {
+  opacity: 0.16;
+}
+.hl-reel-item.focus {
+  font-size: clamp(46px, 6vw, 68px);
+  font-weight: 600;
+  width: clamp(82px, 10vw, 112px);
+  height: clamp(88px, 11vw, 118px);
+  color: var(--ink);
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  box-shadow: 0 8px 24px var(--accent-soft);
+  transform: scale(1.02);
+}
+.hl-reel-item.next {
+  font-size: clamp(22px, 2.6vw, 30px);
+  width: clamp(40px, 5vw, 54px);
+  height: clamp(46px, 5.5vw, 60px);
+  color: var(--ink-soft);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  opacity: 0.82;
+}
+.hl-reel-item.next.n2 { opacity: 0.58; }
+.hl-reel-item.next.n3 { opacity: 0.36; }
+.hl-reel-item.next.n4 { opacity: 0.2; }
+@media (max-width: 540px) {
+  .hl-reel-item.past.far,
+  .hl-reel-item.next.n4 { display: none; }
+}
+
 .view.snap-view.active.free-scroll .snap-slide + .snap-slide::before {
   display: none;
 }
@@ -2258,6 +2355,150 @@ body.is-snap-route .snap-dots {
   transition: border-color 0.18s;
 }
 .cf-card:hover { border-color: var(--line-strong); }
+.cf-card-v2 {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: clamp(16px, 2.2vw, 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.18s;
+}
+.cf-card-v2:hover { border-color: var(--line-strong); }
+.cf-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.cf-char-main {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.cf-char-main .cg-big {
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 4.2vw, 46px);
+  font-weight: 600;
+  line-height: 1.05;
+  color: var(--ink);
+}
+.cf-char-main .cg-fullpy {
+  font-family: var(--font-mono);
+  font-size: clamp(15px, 1.6vw, 18px);
+  color: var(--ink-faint);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.cf-ver-tag {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--ink-faint);
+  opacity: 0.8;
+  white-space: nowrap;
+}
+.cf-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.cf-line-lbl {
+  font-size: 13.5px;
+  color: var(--ink-faint);
+  min-width: 42px;
+}
+.cf-rbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 7px;
+  border-radius: 9px;
+  background: var(--bg);
+  font-family: 'JdhChai', var(--font-serif);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.15s;
+}
+.cf-rbox:hover { transform: translateY(-1px); }
+.cf-rbox.r1 {
+  border: 1.5px solid var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+.cf-rbox.r2 {
+  border: 1.5px solid var(--blue);
+  color: var(--blue);
+  background: var(--blue-soft);
+}
+.cf-rkeys {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--ink-soft);
+  margin-left: 2px;
+}
+.cf-code-seq {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.cf-code-item {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 8px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  letter-spacing: 0.04em;
+}
+.cf-code-item.is-short {
+  background: var(--accent-soft);
+  border-color: rgba(194, 59, 50, 0.28);
+  color: var(--accent);
+}
+.cf-code-item .rk {
+  opacity: 0.65;
+  font-weight: 400;
+  margin-left: 1px;
+}
+.cf-word-card {
+  background: var(--surface);
+  border: 1px solid rgba(194, 59, 50, 0.26);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: clamp(16px, 2.2vw, 24px);
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cf-word-card .cw-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12.5px;
+  color: var(--ink-faint);
+}
+.cf-word-card .cw-word {
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 3.6vw, 38px);
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.15;
+}
 .cf-glyph {
   width: 68px;
   min-height: 76px;
@@ -4174,42 +4415,75 @@ body.is-snap-route .snap-dots {
   </section>
 
   <!-- ==================== VIEW 2: 上手路径（第二眼：路径清晰，我能学会） ==================== -->
-  <section class="view" id="view-roadmap">
-    <div class="section-head">
-      <div>
-        <div class="sec-eyebrow"><span>学习路线</span></div>
-        <h2>五步上手，<span class="serif-accent">循序成诵。</span></h2>
-        <p>不死背口诀，每天一刻钟，把规律交给指尖去记。</p>
+  <section class="view snap-view" id="view-roadmap">
+
+    <!-- ==================== ROADMAP SLIDE 1: 总览进度 + 起步阶段（Step 01-02） ==================== -->
+    <div class="snap-slide" id="rm-slide-1">
+      <div class="snap-inner">
+        <div class="section-head" style="margin-bottom:clamp(14px,2dvh,22px)">
+          <div>
+            <div class="sec-eyebrow"><span>学习路线</span></div>
+            <h2>五步上手，<span class="serif-accent">循序成诵。</span></h2>
+            <p>不死背口诀，每天一刻钟，把规律交给指尖去记。</p>
+          </div>
+          <button class="btn btn-outline btn-sm" id="rmSkipToggleBtn" type="button" style="margin-top:10px">已会双拼，跳过第 1 步</button>
+        </div>
+
+        <div class="roadmap-bar" style="margin-bottom:clamp(12px,1.8dvh,20px)">
+          <div style="min-width:110px">
+            <div style="font-size:12px;color:var(--ink-faint)">当前完成度</div>
+            <div style="font-size:28px;font-weight:700;letter-spacing:-0.03em;line-height:1.15" id="roadmapPercent">0%</div>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="roadmapFill" style="width:0%"></div></div>
+          <div style="display:flex;gap:18px;font-size:13.5px;color:var(--ink-soft);flex-wrap:wrap">
+            <span>已完成 <b id="roadmapBadge" style="color:var(--ink)">0 / 5</b></span>
+            <span>字根 <b id="rmZigen" style="color:var(--ink)">0/97</b></span>
+            <span>拆字 <b id="rmSplit" style="color:var(--ink)">0/167</b></span>
+          </div>
+        </div>
+
+        <div class="step-list" id="roadmapList"></div>
       </div>
-      <button class="btn btn-outline btn-sm" id="rmSkipToggleBtn" type="button">已会双拼，跳过第 1 步</button>
     </div>
 
-    <div class="roadmap-bar">
-      <div style="min-width:110px">
-        <div style="font-size:12px;color:var(--ink-faint)">当前完成度</div>
-        <div style="font-size:28px;font-weight:700;letter-spacing:-0.03em;line-height:1.15" id="roadmapPercent">0%</div>
-      </div>
-      <div class="progress-track"><div class="progress-fill" id="roadmapFill" style="width:0%"></div></div>
-      <div style="display:flex;gap:18px;font-size:13.5px;color:var(--ink-soft);flex-wrap:wrap">
-        <span>已完成 <b id="roadmapBadge" style="color:var(--ink)">0 / 5</b></span>
-        <span>字根 <b id="rmZigen" style="color:var(--ink)">0/97</b></span>
-        <span>拆字 <b id="rmSplit" style="color:var(--ink)">0/167</b></span>
+    <!-- ==================== ROADMAP SLIDE 2: 巩固进阶（Step 03-04） ==================== -->
+    <div class="snap-slide" id="rm-slide-2">
+      <div class="snap-inner">
+        <div class="section-head" style="margin-bottom:clamp(14px,2dvh,24px)">
+          <div>
+            <div class="sec-eyebrow"><span>中段巩固</span></div>
+            <h2>拆字成句，<span class="serif-accent">手眼合一。</span></h2>
+          </div>
+        </div>
+        <div class="step-list" id="roadmapList2"></div>
       </div>
     </div>
 
-    <div class="step-list" id="roadmapList"></div>
+    <!-- ==================== ROADMAP SLIDE 3: 实战提速（Step 05 + 下一步） ==================== -->
+    <div class="snap-slide" id="rm-slide-3">
+      <div class="snap-inner">
+        <div class="section-head" style="margin-bottom:clamp(14px,2dvh,24px)">
+          <div>
+            <div class="sec-eyebrow"><span>最后一步</span></div>
+            <h2>日常实战，<span class="serif-accent">轻羽盲打。</span></h2>
+          </div>
+        </div>
+        <div class="step-list" id="roadmapList3"></div>
 
-    <div class="flow-bridge">
-      <div>
-        <div class="fb-kicker">NEXT STEP · 02 → 03</div>
-        <h3>先看一眼字根图与六条规则</h3>
-        <p>花两分钟熟悉全局，再去练习工坊会顺手得多。</p>
-      </div>
-      <div class="flow-bridge-actions">
-        <button class="btn btn-primary" data-jump="guide:g-chart" type="button">浏览字根图与规则 →</button>
-        <button class="btn btn-outline" data-jump="practice:zigen" type="button">直接开练</button>
+        <div class="flow-bridge" style="margin-top:clamp(18px,2.8dvh,32px)">
+          <div>
+            <div class="fb-kicker">NEXT STEP · 02 → 03</div>
+            <h3>先看一眼字根图与六条规则</h3>
+            <p>花两分钟熟悉全局，再去练习工坊会顺手得多。</p>
+          </div>
+          <div class="flow-bridge-actions">
+            <button class="btn btn-primary" data-jump="guide:g-chart" type="button">浏览字根图与规则 →</button>
+            <button class="btn btn-outline" data-jump="practice:zigen" type="button">直接开练</button>
+          </div>
+        </div>
       </div>
     </div>
+
   </section>
 
   <!-- ==================== VIEW 3: 字根与规则（清晰速查，拒绝文字墙） ==================== -->
@@ -4600,7 +4874,14 @@ body.is-snap-route .snap-dots {
         </div>
 
         <div class="hl-stage">
+          <!-- 跟打模式：整段文本区 -->
           <div class="hl-text-box" id="hlTextBox" aria-label="目标跟打文本（点击任意字可查拆分）"></div>
+
+          <!-- 循环模式：禅意大字滚筒流（前瞻 4 字 + 中央焦点字，无计时压迫） -->
+          <div class="hl-cycle-stage" id="hlCycleStage" aria-label="循环练习大字滚筒">
+            <div class="hl-cycle-kicker">无限循环养生刷字 · 眼睛超前看右侧预告字，从容保持手感</div>
+            <div class="hl-reel" id="hlReel"></div>
+          </div>
 
           <!-- 当前待打字 / 段尾最后一字实时拆分提示条 -->
           <div class="hl-hint-bar" id="hlHintBar">
@@ -5799,7 +6080,7 @@ function initScrollReveal(scopeEl) {
   });
 }
 
-const SNAP_ROUTES = new Set(['home', 'guide', 'ecosystem', 'assess']);
+const SNAP_ROUTES = new Set(['home', 'roadmap', 'guide', 'ecosystem', 'assess']);
 let activeSnapScroller = null;
 let snapWheelLock = false;
 let snapScrollRaf = 0;
@@ -5821,25 +6102,34 @@ function syncTopBarHeight() {
   const avail = Math.max(320, vh - h);
   document.documentElement.style.setProperty('--slide-h', avail + 'px');
 
+  // 先无条件清空所有旧缩放，彻底杜绝切换标签后残留 0.68 缩小比例的 Bug
+  document.querySelectorAll('.view.snap-view > .snap-slide').forEach(sl => {
+    sl.style.justifyContent = '';
+    const inner = sl.querySelector(':scope > .snap-inner');
+    if (inner) {
+      inner.style.transform = '';
+      inner.style.transformOrigin = '';
+      inner.style.marginTop = '';
+    }
+  });
+
   const scroller = getActiveSnapView();
   if (!scroller || scroller.classList.contains('free-scroll')) return;
 
+  // 仅对首页（#view-home）的极端矮竖屏做轻微等比兜底（最低 0.80），绝不把字根/规则/下载卡片缩成窄条
+  if (scroller.id !== 'view-home') return;
   const isLandscapeShort = window.matchMedia('(max-height: 500px) and (orientation: landscape)').matches;
+  if (isLandscapeShort) return;
   const slides = getVisibleSlides(scroller);
   slides.forEach(sl => {
     const inner = sl.querySelector(':scope > .snap-inner');
     if (!inner) return;
-    sl.style.justifyContent = '';
-    inner.style.transform = '';
-    inner.style.transformOrigin = '';
-    inner.style.marginTop = '';
-    if (isLandscapeShort) return;
     const cs = getComputedStyle(sl);
     const padY = (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0);
     const maxH = avail - padY - 4;
     const realH = inner.scrollHeight;
     if (realH > maxH && maxH > 200) {
-      const ratio = Math.max(0.68, maxH / realH);
+      const ratio = Math.max(0.76, maxH / realH);
       sl.style.justifyContent = 'flex-start';
       inner.style.transformOrigin = 'top center';
       inner.style.transform = 'scale(' + ratio.toFixed(3) + ')';
@@ -6062,38 +6352,93 @@ function initScrollCue() {
     return m;
   };
 
+  // 小鹤双拼前两码 -> 标准全拼精准还原
+  const spToFullPinyin = (sp) => {
+    if (!sp || sp.length < 2) return '';
+    const a = sp[0].toLowerCase(), b = sp[1].toLowerCase();
+    const zeroMap = {
+      aa: 'a', ai: 'ai', an: 'an', ah: 'ang', ao: 'ao',
+      ee: 'e', ei: 'ei', en: 'en', eg: 'eng', er: 'er',
+      oo: 'o', ou: 'ou'
+    };
+    if (zeroMap[a + b]) return zeroMap[a + b];
+    const iniMap = { v: 'zh', i: 'ch', u: 'sh' };
+    const ini = iniMap[a] || a;
+    if (b === 'a') return ini + 'a';
+    if (b === 'e') return ini + 'e';
+    if (b === 'i') return ini + 'i';
+    if (b === 'u') return ini + 'u';
+    if (b === 'o') return ('bpmf'.includes(a) ? ini + 'o' : ini + 'uo');
+    if (b === 'q') return ini + 'iu';
+    if (b === 'w') return ini + 'ei';
+    if (b === 'r') return ini + 'uan';
+    if (b === 't') return ('nljqxy'.includes(a) ? ini + 'ue' : ini + 'ue');
+    if (b === 'y') return ini + 'un';
+    if (b === 'p') return ini + 'ie';
+    if (b === 's') return ('jqx'.includes(a) ? ini + 'iong' : ini + 'ong');
+    if (b === 'd') return ini + 'ai';
+    if (b === 'f') return ini + 'en';
+    if (b === 'g') return ini + 'eng';
+    if (b === 'h') return ini + 'ang';
+    if (b === 'j') return ini + 'an';
+    if (b === 'k') return ('gkhviu'.includes(a) ? ini + 'uai' : ini + 'ing');
+    if (b === 'l') return ('gkhviu'.includes(a) ? ini + 'uang' : ini + 'iang');
+    if (b === 'z') return ini + 'ou';
+    if (b === 'x') return ('gkhviu'.includes(a) ? ini + 'ua' : ini + 'ia');
+    if (b === 'c') return ini + 'ao';
+    if (b === 'v') return ('nl'.includes(a) ? ini + 'ü' : ini + 'ui');
+    if (b === 'b') return ini + 'in';
+    if (b === 'n') return ini + 'iao';
+    if (b === 'm') return ini + 'ian';
+    return sp;
+  };
+
+  const formatRankedCode = (tagged) => {
+    const m = tagged.match(/^([a-z]+)([^a-z]*)$/);
+    if (!m) return '<span class="cf-code-item">' + escapeHtml(tagged) + '</span>';
+    const [, code, rk] = m;
+    const isShort = code.length < 4;
+    return '<span class="cf-code-item' + (isShort ? ' is-short' : '') + '">' + escapeHtml(code) + '<span class="rk">' + escapeHtml(rk) + '</span></span>';
+  };
+
   const renderChaifenSearch = (rawQuery) => {
     if (!cfResults || !cfWordHits) return;
     const text = (rawQuery || '').trim();
     if (cfClear) cfClear.classList.toggle('show', text.length > 0);
     if (!text) {
       cfWordHits.innerHTML = '';
-      cfResults.innerHTML = '<div class="cf-empty"><h4>从一个汉字开始</h4><p>查询结果会在这里即时展示。遇到生僻字或拿不准怎么拆的字，输入进来就能看到标准首末字根与全码；点击字根可直达对应键位。</p></div>';
+      cfResults.innerHTML = '<div class="cf-empty"><h4>从一个汉字开始</h4><p>输入单字、词语或整句，即时查看全拼、首末字根拆分、单字简码与全码（含选重键 ␣ / ; / &#39;）。</p></div>';
       return;
     }
 
-    // 1. 若输入词组（2-8 字），顺带检索内置二简/三简词库
+    // 1. 词组编码卡片（含二简 / 三简 / 四码全码 + 选重符，对标简单鹤 9.3 查码卡）
     const cleanWord = text.replace(/[^\u3400-\u9fff]/g, '');
-    const wordMatches = [];
-    if (cleanWord.length >= 2 && cleanWord.length <= 8) {
+    const wordMap = window.JDH_WORD_RANKED;
+    let wordCodes = (cleanWord.length >= 2 && cleanWord.length <= 8 && wordMap) ? (wordMap.get(cleanWord) || []) : [];
+    if (!wordCodes.length && cleanWord.length >= 2 && cleanWord.length <= 8) {
       if (typeof CUSTOM_SHORT_2 !== 'undefined') {
-        const hit2 = CUSTOM_SHORT_2.find(x => x.word === cleanWord);
-        if (hit2) wordMatches.push({ label: '二简词', codes: hit2.codes });
+        const h2 = CUSTOM_SHORT_2.find(x => x.word === cleanWord);
+        if (h2) wordCodes.push(...h2.codes.map(c => c + '␣'));
       }
       if (typeof CUSTOM_SHORT_3 !== 'undefined') {
-        const hit3 = CUSTOM_SHORT_3.find(x => x.word === cleanWord);
-        if (hit3) wordMatches.push({ label: '三简词', codes: hit3.codes });
+        const h3 = CUSTOM_SHORT_3.find(x => x.word === cleanWord);
+        if (h3) wordCodes.push(...h3.codes.map(c => c + '␣'));
       }
     }
-    if (wordMatches.length) {
-      cfWordHits.innerHTML = '<div class="cf-word-hit"><div><strong>词组简码命中：</strong>「' + escapeHtml(cleanWord) + '」</div><div class="cf-word-codes">' +
-        wordMatches.map(m => m.codes.map(c => '<span class="cf-code-pill">' + escapeHtml(m.label) + ' · <span class="c-sh">' + escapeHtml(c) + '</span></span>').join('')).join('') +
-        '</div></div>';
+    if (wordCodes.length) {
+      cfWordHits.innerHTML =
+        '<article class="cf-word-card">' +
+          '<div class="cw-top"><span>字数：' + cleanWord.length + '</span><span class="cf-ver-tag">简单鹤 9.3</span></div>' +
+          '<div class="cw-word">' + escapeHtml(cleanWord) + '</div>' +
+          '<div class="cf-line"><span class="cf-line-lbl">编码：</span><div class="cf-code-seq">' +
+            wordCodes.slice(0, 8).map(formatRankedCode).join('') +
+          '</div></div>' +
+        '</article>';
     } else {
       cfWordHits.innerHTML = '';
     }
 
-    // 2. 提取全部汉字逐字去重拆解（最多展示 36 字）
+    // 2. 单字拆分卡片（含全拼 + 红蓝字根框 + 简码与四码全码 + 选重符）
     const chars = [...new Set([...text].filter(ch => /[\u3400-\u9fff]/.test(ch)))].slice(0, 36);
     if (!chars.length) {
       cfResults.innerHTML = '<div class="cf-empty"><h4>未检测到汉字</h4><p>请输入简体或繁体汉字（可一次输入单个字、词语或一整句话）。</p></div>';
@@ -6101,31 +6446,45 @@ function initScrollCue() {
     }
 
     const dMap = getDictMap();
+    const sMap = window.JDH_SINGLE_RANKED;
     const cardsHtml = chars.map(ch => {
-      const cf = CHAIFEN[ch]; // [r1, k1, r2, k2]
+      const cf = CHAIFEN[ch];
       const entry = dMap.get(ch);
-      const codes = entry && entry.codes ? entry.codes : [];
-      const py = entry && entry.py ? entry.py : (codes[0] ? codes[0].slice(0, 2) : '');
-      const rootsHtml = cf
-        ? '<button class="cf-root-chip" type="button" data-cf-key="' + escapeHtml(cf[1].toUpperCase()) + '" title="点击查看 ' + escapeHtml(cf[1].toUpperCase()) + ' 键字根">' +
-            '<span class="cr-lbl">首根</span><span class="cr-glyph">' + escapeHtml(cf[0]) + '</span><span class="cr-key">' + escapeHtml(cf[1].toUpperCase()) + '</span>' +
-          '</button>' +
-          '<span class="cf-plus">+</span>' +
-          '<button class="cf-root-chip" type="button" data-cf-key="' + escapeHtml(cf[3].toUpperCase()) + '" title="点击查看 ' + escapeHtml(cf[3].toUpperCase()) + ' 键字根">' +
-            '<span class="cr-lbl">末根</span><span class="cr-glyph">' + escapeHtml(cf[2]) + '</span><span class="cr-key">' + escapeHtml(cf[3].toUpperCase()) + '</span>' +
-          '</button>'
-        : '<span style="font-size:12.5px;color:var(--ink-faint)">暂未收录拆分图示</span>';
+      const rawCodes = entry && entry.codes ? entry.codes : [];
+      const rankedCodes = (sMap && sMap.get(ch)) ? sMap.get(ch) : rawCodes.map(c => c + '␣');
 
-      const codesHtml = codes.length
-        ? '<div class="cf-codes-row"><span class="cf-codes-lbl">四码全码</span>' +
-            codes.slice(0, 6).map(c => '<span class="cf-code-pill"><span class="c-sp">' + escapeHtml(c.slice(0, 2)) + '</span><span class="c-sh">' + escapeHtml(c.slice(2)) + '</span></span>').join('') +
+      // 提取去重全拼读音（支持多音字）
+      const pys = [];
+      for (const c of rawCodes) {
+        if (c.length >= 2) {
+          const full = spToFullPinyin(c.slice(0, 2));
+          if (full && !pys.includes(full)) pys.push(full);
+        }
+      }
+      if (!pys.length && entry && entry.py) pys.push(entry.py);
+      const pyStr = pys.slice(0, 3).join(' / ');
+
+      const rootsLine = cf
+        ? '<div class="cf-line"><span class="cf-line-lbl">拆分：</span>' +
+            '<button class="cf-rbox r1" type="button" data-cf-key="' + escapeHtml(cf[1].toUpperCase()) + '" title="点击查看 ' + escapeHtml(cf[1].toUpperCase()) + ' 键字根">' + escapeHtml(cf[0]) + '</button>' +
+            '<button class="cf-rbox r2" type="button" data-cf-key="' + escapeHtml(cf[3].toUpperCase()) + '" title="点击查看 ' + escapeHtml(cf[3].toUpperCase()) + ' 键字根">' + escapeHtml(cf[2]) + '</button>' +
+            '<span class="cf-rkeys">' + escapeHtml(cf[1] + ' ' + cf[3]) + '</span>' +
           '</div>'
-        : (cf ? '<div class="cf-codes-row"><span class="cf-codes-lbl">形码后两键</span><span class="cf-code-pill"><span class="c-sh">' + escapeHtml(cf[1] + cf[3]) + '</span></span></div>'
-              : '<div class="cf-codes-row"><span class="cf-codes-lbl">内置码表未收录此字</span></div>');
+        : '<div class="cf-line"><span class="cf-line-lbl">拆分：</span><span style="color:var(--ink-faint)">暂未收录拆分图示</span></div>';
 
-      return '<article class="cf-card">' +
-        '<div class="cf-glyph"><span class="cg-ch">' + escapeHtml(ch) + '</span>' + (py ? '<span class="cg-py">' + escapeHtml(py) + '</span>' : '') + '</div>' +
-        '<div class="cf-info"><div class="cf-roots-row">' + rootsHtml + '</div>' + codesHtml + '</div>' +
+      const codesLine = '<div class="cf-line"><span class="cf-line-lbl">编码：</span><div class="cf-code-seq">' +
+        (rankedCodes.length
+          ? rankedCodes.slice(0, 8).map(formatRankedCode).join('')
+          : '<span style="color:var(--ink-faint)">内置码表未收录</span>') +
+      '</div></div>';
+
+      return '<article class="cf-card-v2">' +
+        '<div class="cf-card-head">' +
+          '<div class="cf-char-main"><span class="cg-big">' + escapeHtml(ch) + '</span>' + (pyStr ? '<span class="cg-fullpy">' + escapeHtml(pyStr) + '</span>' : '') + '</div>' +
+          '<span class="cf-ver-tag">简单鹤 9.3</span>' +
+        '</div>' +
+        rootsLine +
+        codesLine +
       '</article>';
     }).join('');
 
@@ -6297,8 +6656,94 @@ function initScrollCue() {
     ).join('');
   };
 
+  let hlCyclePast = [];
+  let hlCycleQueue = [];
+
+  const fillCycleQueue = () => {
+    const pool = getHealthCharPool();
+    while (hlCycleQueue.length < 16) {
+      hlCycleQueue.push(pool[Math.floor(Math.random() * pool.length)]);
+    }
+  };
+
+  const renderCycleReel = () => {
+    const reel = $('hlReel');
+    if (!reel) return;
+    fillCycleQueue();
+    const p2 = hlCyclePast.length >= 2 ? hlCyclePast[hlCyclePast.length - 2] : '';
+    const p1 = hlCyclePast.length >= 1 ? hlCyclePast[hlCyclePast.length - 1] : '';
+    const cur = hlCycleQueue[0] || '';
+    const nexts = hlCycleQueue.slice(1, 5);
+    const items = [];
+    if (p2) items.push('<span class="hl-reel-item past far" data-hl-ch="' + escapeHtml(p2) + '">' + escapeHtml(p2) + '</span>');
+    else items.push('<span class="hl-reel-item past far"></span>');
+    if (p1) items.push('<span class="hl-reel-item past" data-hl-ch="' + escapeHtml(p1) + '">' + escapeHtml(p1) + '</span>');
+    else items.push('<span class="hl-reel-item past"></span>');
+    items.push('<span class="hl-reel-item focus" data-hl-ch="' + escapeHtml(cur) + '">' + escapeHtml(cur) + '</span>');
+    nexts.forEach((c, idx) => {
+      items.push('<span class="hl-reel-item next n' + (idx + 1) + '" data-hl-ch="' + escapeHtml(c) + '">' + escapeHtml(c) + '</span>');
+    });
+    reel.innerHTML = items.join('');
+    reel.querySelectorAll('[data-hl-ch]').forEach(sp => {
+      sp.addEventListener('click', () => {
+        const c = sp.dataset.hlCh;
+        if (!c) return;
+        hlInspectedChar = c;
+        renderCharHint(c, '点查拆分', false, true);
+      });
+    });
+
+    const badge = '当前焦点字 · 防忘提示';
+    if (!hlInspectedChar) {
+      renderCharHint(cur, badge, true, false);
+      scheduleStallHint(cur, badge, true);
+    }
+
+    $('hlStat1').textContent = String(hlStore.todayCount); $('hlStat1Lbl').textContent = '今日已打（字）';
+    $('hlStat2').textContent = String(hlStore.totalCount); $('hlStat2Lbl').textContent = '累计总计（字）';
+    $('hlStat3').textContent = String(hlCycleStreak); $('hlStat3Lbl').textContent = '当前连对';
+    $('hlStat4').textContent = '∞'; $('hlStat4Lbl').textContent = '无限养生循环';
+  };
+
   const renderHealthState = () => {
     if (!hlTextBox || !hlInput) return;
+    const cycleStage = $('hlCycleStage');
+
+    // 分流：循环模式使用「大字滚筒流」，逐字/连词消费即时滑动
+    if (hlMode === 'cycle') {
+      hlTextBox.style.display = 'none';
+      if (cycleStage) cycleStage.classList.add('active');
+      if (!hlComposing) {
+        const val = [...(hlInput.value || '')];
+        if (val.length) {
+          let consumed = 0;
+          for (const ch of val) {
+            if (ch === hlCycleQueue[0]) {
+              hlCyclePast.push(hlCycleQueue.shift());
+              if (hlCyclePast.length > 6) hlCyclePast.shift();
+              hlStore.todayCount += 1;
+              hlStore.totalCount += 1;
+              hlCycleStreak += 1;
+              consumed++;
+            } else if (/[\u3400-\u9fff]/.test(ch)) {
+              hlCycleStreak = 0;
+              consumed++;
+            }
+          }
+          if (consumed > 0) {
+            hlInput.value = '';
+            saveHealthStore(hlStore);
+          }
+        }
+      }
+      renderCycleReel();
+      return;
+    }
+
+    // 跟打模式：整段竞速文本 + 速度/击键/回改/成绩记录
+    hlTextBox.style.display = '';
+    if (cycleStage) cycleStage.classList.remove('active');
+
     const typed = hlInput.value || '';
     const targetArr = [...hlTarget];
     const typedArr = [...typed];
@@ -6333,64 +6778,59 @@ function initScrollCue() {
       scheduleStallHint(curChar, badge, isLastChar);
     }
 
-    // 更新顶部数据面板
-    if (hlMode === 'type') {
-      const elapsed = hlStartTs ? Math.max(0.2, (performance.now() - hlStartTs) / 1000) : 0;
-      const wpm = elapsed > 0 ? (okCount / elapsed * 60).toFixed(1) : '0.0';
-      const kps = elapsed > 0 ? (hlKeystrokes / elapsed).toFixed(2) : '0.00';
-      const acc = typedArr.length ? Math.round(okCount / typedArr.length * 100) + '%' : '—';
-      $('hlStat1').textContent = wpm; $('hlStat1Lbl').textContent = '速度（字/分）';
-      $('hlStat2').textContent = kps; $('hlStat2Lbl').textContent = '击键（次/秒）';
-      $('hlStat3').textContent = acc; $('hlStat3Lbl').textContent = '正确率';
-      $('hlStat4').textContent = Math.min(typedArr.length, targetArr.length) + ' / ' + targetArr.length;
-      $('hlStat4Lbl').textContent = '本段进度';
-    } else {
-      $('hlStat1').textContent = String(hlStore.todayCount); $('hlStat1Lbl').textContent = '今日已打（字）';
-      $('hlStat2').textContent = String(hlStore.totalCount); $('hlStat2Lbl').textContent = '累计总计（字）';
-      $('hlStat3').textContent = String(hlCycleStreak); $('hlStat3Lbl').textContent = '当前连对';
-      $('hlStat4').textContent = Math.min(typedArr.length, targetArr.length) + ' / ' + targetArr.length;
-      $('hlStat4Lbl').textContent = '本组进度';
-    }
+    const elapsed = hlStartTs ? Math.max(0.2, (performance.now() - hlStartTs) / 1000) : 0;
+    const wpm = elapsed > 0 ? (okCount / elapsed * 60).toFixed(1) : '0.0';
+    const kps = elapsed > 0 ? (hlKeystrokes / elapsed).toFixed(2) : '0.00';
+    const acc = typedArr.length ? Math.round(okCount / typedArr.length * 100) + '%' : '—';
+    $('hlStat1').textContent = wpm; $('hlStat1Lbl').textContent = '速度（字/分）';
+    $('hlStat2').textContent = kps; $('hlStat2Lbl').textContent = '击键（次/秒）';
+    $('hlStat3').textContent = acc; $('hlStat3Lbl').textContent = '正确率';
+    $('hlStat4').textContent = Math.min(typedArr.length, targetArr.length) + ' / ' + targetArr.length;
+    $('hlStat4Lbl').textContent = '本段进度';
 
-    // 判断本段/本组完成
     if (!hlComposing && targetArr.length > 0 && typedArr.length >= targetArr.length) {
-      if (hlMode === 'type') {
-        const elapsed = hlStartTs ? Math.max(0.5, (performance.now() - hlStartTs) / 1000) : 1;
-        const wpm = (okCount / elapsed * 60).toFixed(1);
-        const kps = (hlKeystrokes / elapsed).toFixed(2);
-        const acc = Math.round(okCount / targetArr.length * 100);
-        hlSegNo += 1;
-        const poolLabel = [...hlPools].map(k => ({ top500: '前500', mid500: '中500', bot500: '后500', top3000: '前3000', prose: '短句' }[k] || k)).join('+');
-        hlStore.records.unshift({ seg: hlSegNo, wpm, kps, acc, len: targetArr.length, sec: elapsed.toFixed(1), pool: poolLabel });
-        hlStore.records = hlStore.records.slice(0, 20);
-        hlStore.todayCount += okCount;
-        hlStore.totalCount += okCount;
-        saveHealthStore(hlStore);
-        renderHealthHistory();
-        if (typeof showToast === 'function') showToast('本段完成！速度 ' + wpm + ' 字/分 · 正确率 ' + acc + '%');
-        setTimeout(() => startHealthRound(true), 420);
-      } else {
-        hlStore.todayCount += okCount;
-        hlStore.totalCount += okCount;
-        hlCycleStreak += okCount;
-        saveHealthStore(hlStore);
-        startHealthRound(true);
-      }
+      const elapsedDone = hlStartTs ? Math.max(0.5, (performance.now() - hlStartTs) / 1000) : 1;
+      const wpmDone = (okCount / elapsedDone * 60).toFixed(1);
+      const kpsDone = (hlKeystrokes / elapsedDone).toFixed(2);
+      const accDone = Math.round(okCount / targetArr.length * 100);
+      hlSegNo += 1;
+      const poolLabel = [...hlPools].map(k => ({ top500: '前500', mid500: '中500', bot500: '后500', top3000: '前3000', prose: '短句' }[k] || k)).join('+');
+      hlStore.records.unshift({ seg: hlSegNo, wpm: wpmDone, kps: kpsDone, acc: accDone, len: targetArr.length, sec: elapsedDone.toFixed(1), pool: poolLabel });
+      hlStore.records = hlStore.records.slice(0, 20);
+      hlStore.todayCount += okCount;
+      hlStore.totalCount += okCount;
+      saveHealthStore(hlStore);
+      renderHealthHistory();
+      if (typeof showToast === 'function') showToast('本段完成！速度 ' + wpmDone + ' 字/分 · 正确率 ' + accDone + '%');
+      setTimeout(() => startHealthRound(true), 420);
     }
   };
 
   const startHealthRound = (newText) => {
     if (hlStallTimer) clearTimeout(hlStallTimer);
     hlInspectedChar = null;
-    if (newText || !hlTarget) hlTarget = buildHealthText();
+    if (hlMode === 'cycle') {
+      if (newText || !hlCycleQueue.length) {
+        hlCyclePast = [];
+        hlCycleQueue = [];
+        fillCycleQueue();
+      }
+    } else if (newText || !hlTarget) {
+      hlTarget = buildHealthText();
+    }
     hlStartTs = 0;
     hlKeystrokes = 0;
     hlBackspaces = 0;
     if (hlInput) {
       hlInput.value = '';
+      hlInput.placeholder = hlMode === 'cycle'
+        ? '直接打出中央大字，命中后滚筒自动左滑补字…'
+        : '切换你的简单鹤输入法，直接在这里跟打整段文本…';
     }
     if (hlLenChips) hlLenChips.style.display = hlMode === 'type' ? '' : 'none';
     if (hlHistoryBox) hlHistoryBox.style.display = hlMode === 'type' ? '' : 'none';
+    if ($('hlRetryBtn')) $('hlRetryBtn').style.display = hlMode === 'type' ? '' : 'none';
+    if ($('hlNextBtn')) $('hlNextBtn').textContent = hlMode === 'type' ? '换一段 →' : '换一批字 →';
     renderHealthState();
   };
 
@@ -6534,7 +6974,7 @@ function switchSubTab(tabBarId, containerId, targetId) {
   if (tabBarId === 'guideTabs') {
     const vg = $('view-guide');
     if (vg) {
-      vg.classList.toggle('free-scroll', targetId === 'g-wuli' || targetId === 'g-search');
+      vg.classList.toggle('free-scroll', targetId === 'g-wuli' || targetId === 'g-search' || targetId === 'g-split');
       if (targetId === 'g-search') {
         setTimeout(() => { const inp = $('cfSearchInput'); if (inp) inp.focus(); }, 60);
       }
@@ -6695,6 +7135,8 @@ function renderDemo() {
 /* ==================== 8. 上手路径 ==================== */
 function renderRoadmap() {
   const list = $('roadmapList'); list.innerHTML = '';
+  const list2 = $('roadmapList2'); if (list2) list2.innerHTML = '';
+  const list3 = $('roadmapList3'); if (list3) list3.innerHTML = '';
   let stepNum = 0;
   ROADMAP_STEPS.forEach((st, idx) => {
     const isSkipped = !!(st.isSp && STATE.skipSp);
@@ -6736,7 +7178,8 @@ function renderRoadmap() {
       const inlineSkip = card.querySelector('#inlineSkipSpBtn');
       if (inlineSkip) inlineSkip.addEventListener('click', () => setSkipSp(true));
     }
-    list.appendChild(card);
+    const targetList = (idx < 2) ? list : (idx < 4 && list2 ? list2 : (list3 || list));
+    targetList.appendChild(card);
   });
   syncOverviewCounters();
 }
@@ -7262,6 +7705,19 @@ async function loadEmbeddedDict() {
     };
     const sc2 = parseSec(parts[1], 'dict2', '内置全词库二简词');
     const sc3 = parseSec(parts[2], 'dict3', '内置全词库三简词');
+    const parseMapSec = (sec) => {
+      const m = new Map();
+      if (!sec) return m;
+      for (const line of sec.split('\n')) {
+        if (!line) continue;
+        const sep = line.indexOf(':');
+        if (sep <= 0) continue;
+        m.set(line.slice(0, sep), line.slice(sep + 1).split(',').filter(Boolean));
+      }
+      return m;
+    };
+    if (parts[3]) window.JDH_SINGLE_RANKED = parseMapSec(parts[3]);
+    if (parts[4]) window.JDH_WORD_RANKED = parseMapSec(parts[4]);
     if (dict.length) CUSTOM_DICT = dict;
     if (sc2.length) CUSTOM_SHORT_2 = sc2;
     if (sc3.length) CUSTOM_SHORT_3 = sc3;
