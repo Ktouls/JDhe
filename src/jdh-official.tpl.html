@@ -2130,6 +2130,18 @@ body.is-snap-route .snap-dots {
   line-height: 1.7;
   color: var(--ink-faint);
 }
+/* 锁定字根与规则页顶部标题+5标签栏高度：无论点哪个键帽、切哪个标签，顶部菜单栏 0px 跳动 */
+#view-guide #guide-slide-main {
+  justify-content: flex-start !important;
+  padding-top: clamp(14px, 2.2vw, 24px) !important;
+}
+#view-guide.free-scroll {
+  padding-top: clamp(14px, 2.2vw, 24px) !important;
+}
+#view-guide .zg-detail-bar {
+  min-height: 112px;
+  align-content: flex-start;
+}
 /* 字根与规则：紧凑顶部切换栏，把 26 键键盘稳稳留在第一屏正中 */
 .guide-compact-bar {
   display: flex;
