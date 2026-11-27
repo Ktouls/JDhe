@@ -1,0 +1,130 @@
+{
+  "简单鹤": [
+    {
+      "acc": 99.9013328959545,
+      "mean_rank": 1.000986671040455,
+      "code_len": 4.0,
+      "codes": 1960,
+      "collision_codes": 18,
+      "collision_extra": 18,
+      "tier": "前1500",
+      "n": 1500
+    },
+    {
+      "acc": 99.86963912668936,
+      "mean_rank": 1.0013211762964425,
+      "code_len": 4.0,
+      "codes": 3795,
+      "collision_codes": 80,
+      "collision_extra": 87,
+      "tier": "前3000",
+      "n": 3000
+    },
+    {
+      "acc": 99.85709972754225,
+      "mean_rank": 1.0014871921348674,
+      "code_len": 4.0,
+      "codes": 4971,
+      "collision_codes": 160,
+      "collision_extra": 178,
+      "tier": "前4000",
+      "n": 4000
+    }
+  ],
+  "简单鹤出简": [
+    {
+      "acc": 99.96397947464136,
+      "mean_rank": 1.0003602052535863,
+      "code_len": 1.745614205102736,
+      "codes": 3630,
+      "collision_codes": 52,
+      "collision_extra": 70,
+      "tier": "前1500",
+      "n": 1500
+    },
+    {
+      "acc": 99.93910862521308,
+      "mean_rank": 1.000620678402343,
+      "code_len": 1.7679154413955944,
+      "codes": 6647,
+      "collision_codes": 132,
+      "collision_extra": 157,
+      "tier": "前3000",
+      "n": 3000
+    },
+    {
+      "acc": 99.92707098237304,
+      "mean_rank": 1.0007755833889012,
+      "code_len": 1.7719329670045347,
+      "codes": 8389,
+      "collision_codes": 233,
+      "collision_extra": 272,
+      "tier": "前4000",
+      "n": 4000
+    }
+  ],
+  "全拼26键": [
+    {
+      "acc": 85.69111978280556,
+      "mean_rank": 1.3076055508001405,
+      "code_len": 2.6425884252883596,
+      "codes": 378,
+      "collision_codes": 297,
+      "collision_extra": 1122,
+      "tier": "前1500",
+      "n": 1500
+    },
+    {
+      "acc": 84.4284377917004,
+      "mean_rank": 1.4250818222873047,
+      "code_len": 2.649785926632041,
+      "codes": 399,
+      "collision_codes": 363,
+      "collision_extra": 2601,
+      "tier": "前3000",
+      "n": 3000
+    },
+    {
+      "acc": 84.22822366748349,
+      "mean_rank": 1.460266251450259,
+      "code_len": 2.6508488071441,
+      "codes": 404,
+      "collision_codes": 376,
+      "collision_extra": 3596,
+      "tier": "前4000",
+      "n": 4000
+    }
+  ],
+  "全拼9键": [
+    {
+      "acc": 78.23777918848539,
+      "mean_rank": 1.6929182044875506,
+      "code_len": 2.6425884252883596,
+      "codes": 208,
+      "collision_codes": 180,
+      "collision_extra": 1292,
+      "tier": "前1500",
+      "n": 1500
+    },
+    {
+      "acc": 77.06120417306624,
+      "mean_rank": 1.9585770231132293,
+      "code_len": 2.649785926632041,
+      "codes": 213,
+      "collision_codes": 201,
+      "collision_extra": 2787,
+      "tier": "前3000",
+      "n": 3000
+    },
+    {
+      "acc": 76.87750921831467,
+      "mean_rank": 2.036268958376595,
+      "code_len": 2.6508488071441,
+      "codes": 214,
+      "collision_codes": 205,
+      "collision_extra": 3786,
+      "tier": "前4000",
+      "n": 4000
+    }
+  ]
+}

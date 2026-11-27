@@ -34,3 +34,13 @@
 ```bash
 python3 -m http.server 8080
 ```
+## 性能实测
+
+`scripts/measure.py` 基于本仓库码表做单字测算，输出 `metrics.json`：
+
+- 字频取自 `src/jde.dict.yaml` 的权重；每字只与同码单字比较（不含词组）。
+- 指标：首选准确率、平均候选位次、全码重码。
+- 现状：简单鹤 三档（前 1500 / 3000 / 4000）、全拼 26 键、全拼 9 键。
+- 魔然、26 键 + 笔画筛选未纳入，因缺少可核对的公开码表。
+
+重跑：`python3 scripts/measure.py`
