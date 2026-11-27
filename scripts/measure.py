@@ -31,6 +31,8 @@ SOURCES = {
     "flypy": ("https://raw.githubusercontent.com/cubercsl/rime-flypy/master/flypy/flypydz.dict.yaml", "flypydz.dict.yaml"),
     "moran": ("https://raw.githubusercontent.com/LukNg/Rime-tiger_code/main/tools/data/moran/moran.chars.dict.yaml", "moran.chars.dict.yaml"),
     "tiger": ("https://raw.githubusercontent.com/LukNg/Rime-tiger_code/main/dicts/tiger_core.dict.yaml", "tiger_core.dict.yaml"),
+    "wubi": ("https://raw.githubusercontent.com/rime/rime-wubi/master/wubi86.dict.yaml", "wubi86.dict.yaml"),
+    "cangjie": ("https://raw.githubusercontent.com/rime/rime-cangjie/master/cangjie5.base.dict.yaml", "cangjie5.base.dict.yaml"),
 }
 
 
@@ -102,16 +104,36 @@ def load_simple(path, transform, pattern=r"[a-z]+"):
     return m
 
 
+def load_longest(path):
+    """每字取最长码作为全码（五笔/仓颉同一字有简码与全码）。"""
+    m = collections.defaultdict(set)
+    for ln in path.read_text(errors="ignore").splitlines():
+        p = ln.split("\t")
+        if len(p) < 2 or not CJK.match(p[0]) or not re.fullmatch(r"[a-z]+", p[1]):
+            continue
+        m[p[0]].add(p[1])
+    out = {}
+    for ch, codes in m.items():
+        longest = max(len(c) for c in codes)
+        out[ch] = {c for c in codes if len(c) == longest}
+    return out
+
+
 def build():
     fly = load_simple(fetch("flypy"), lambda c: c[:4] if len(c) >= 4 else "")
     mor = load_simple(fetch("moran"), lambda c: c.replace(";", ""))
     tig = load_simple(fetch("tiger"), lambda c: c.replace("[", "").replace("]", ""), r"[a-z0-9]+")
+
+    wubi = load_longest(fetch("wubi"))
+    cang = load_longest(fetch("cangjie"))
 
     return {
         "{{N}} 4 码": {c: our4.get(c, set()) for c in freq},
         "小鹤音形 4 码": {c: {x for x in fly.get(c, set()) if 3 <= len(x) <= 4} for c in freq},
         "魔然 3-4 码": {c: {x for x in mor.get(c, set()) if 3 <= len(x) <= 4} for c in freq},
         "虎码 4 码": {c: {x for x in tig.get(c, set()) if len(x) == 4} for c in freq},
+        "五笔 86": {c: wubi.get(c, set()) for c in freq},
+        "仓颉 5 代": {c: cang.get(c, set()) for c in freq},
         "小鹤双拼 2 码": {c: ({shuangpin[c]} if c in shuangpin else set()) for c in freq},
         "全拼 26 键": {c: ({fullpy[c]} if c in fullpy else set()) for c in freq},
         "全拼 9 键": {c: ({t9(fullpy[c])} if c in fullpy else set()) for c in freq},

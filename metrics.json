@@ -139,6 +139,76 @@
       "n": 4000
     }
   ],
+  "五笔 86": [
+    {
+      "acc": 99.92,
+      "mean_rank": 1.001,
+      "code_len": 3.72,
+      "collision_codes": 12,
+      "collision_extra": 13,
+      "covered": 1500,
+      "total_chars": 1500,
+      "tier": "前 1500 高频字",
+      "n": 1500
+    },
+    {
+      "acc": 99.88,
+      "mean_rank": 1.001,
+      "code_len": 3.72,
+      "collision_codes": 64,
+      "collision_extra": 66,
+      "covered": 3000,
+      "total_chars": 3000,
+      "tier": "前 3000 常用字",
+      "n": 3000
+    },
+    {
+      "acc": 99.86,
+      "mean_rank": 1.001,
+      "code_len": 3.72,
+      "collision_codes": 135,
+      "collision_extra": 148,
+      "covered": 4000,
+      "total_chars": 4000,
+      "tier": "前 4000 字",
+      "n": 4000
+    }
+  ],
+  "仓颉 5 代": [
+    {
+      "acc": 100.0,
+      "mean_rank": 1.0,
+      "code_len": 3.4,
+      "collision_codes": 0,
+      "collision_extra": 0,
+      "covered": 1500,
+      "total_chars": 1500,
+      "tier": "前 1500 高频字",
+      "n": 1500
+    },
+    {
+      "acc": 100.0,
+      "mean_rank": 1.0,
+      "code_len": 3.41,
+      "collision_codes": 2,
+      "collision_extra": 2,
+      "covered": 3000,
+      "total_chars": 3000,
+      "tier": "前 3000 常用字",
+      "n": 3000
+    },
+    {
+      "acc": 100.0,
+      "mean_rank": 1.0,
+      "code_len": 3.41,
+      "collision_codes": 4,
+      "collision_extra": 4,
+      "covered": 4000,
+      "total_chars": 4000,
+      "tier": "前 4000 字",
+      "n": 4000
+    }
+  ],
   "小鹤双拼 2 码": [
     {
       "acc": 85.63,
