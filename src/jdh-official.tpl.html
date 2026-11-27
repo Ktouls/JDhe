@@ -1917,6 +1917,14 @@ body[data-route="practice"] .container {
 .eb-chart .eb-val { font-family: var(--font-mono); font-size: 13px; font-weight: 700; fill: var(--accent); }
 .eb-chart .eb-name { font-size: 12.5px; fill: var(--ink-soft); }
 .eb-chart .eb-title { font-size: 13px; font-weight: 600; fill: var(--ink); letter-spacing: 0.02em; }
+.eb-chart .eb-val.gray { fill: var(--ink-faint); }
+.eb-chart .eb-rev { font-size: 10px; fill: var(--accent); }
+.eb-chart .eb-label { font-size: 12px; fill: var(--ink); font-weight: 600; }
+.eb-chart .eb-label.gray { fill: var(--ink-faint); font-weight: 400; }
+.eb-chart .eb-val.gray { fill: var(--ink-faint); }
+.eb-chart .eb-rev { font-size: 10px; fill: var(--accent); }
+.eb-chart .eb-label { font-size: 12px; fill: var(--ink); font-weight: 600; }
+.eb-chart .eb-label.gray { fill: var(--ink-faint); font-weight: 400; }
 .eb-side { display: flex; flex-direction: column; gap: 18px; }
 .eb-big b { display: block; font-family: var(--font-mono); font-size: clamp(38px, 4.4vw, 56px); line-height: 1; color: var(--ink); letter-spacing: -0.03em; }
 .eb-big span { display: block; margin-top: 6px; font-size: 13px; color: var(--ink-soft); }
@@ -2082,6 +2090,68 @@ body[data-route="practice"] .container {
 .lv-4 { background: rgba(196,60,53,.14); color: #c43c35; }
 .tbl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .tbl-scroll .compare-table { min-width: 560px; }
+/* ==================== 整页分屏吸附 ==================== */
+html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
+#view-home > .snap-block {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  scroll-snap-align: start;
+  padding-top: clamp(10px, 2vh, 28px);
+  padding-bottom: clamp(10px, 2vh, 28px);
+  box-sizing: border-box;
+}
+#view-home > .snap-block > .section-head { margin-top: 0; }
+@media (max-height: 620px) {
+  #view-home > .snap-block { min-height: auto; padding-top: 40px; padding-bottom: 40px; }
+}
+@media (prefers-reduced-motion: reduce) { html.snap-home { scroll-snap-type: none; } }
+/* 手机端：对比表改为卡片 */
+@media (max-width: 720px) {
+  .tbl-scroll { overflow: visible; }
+  .tbl-scroll .compare-table { min-width: 0; }
+  .compare-table thead { display: none; }
+  .compare-table, .compare-table tbody { display: block; }
+  .compare-table tbody tr {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 14px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    background: var(--surface);
+  }
+  .compare-table tbody tr.self-row { border-color: var(--accent); background: var(--bg); }
+  .compare-table tbody td {
+    border: 0 !important;
+    padding: 0;
+    text-align: left;
+    font-size: 13.5px;
+    font-family: var(--font-sans);
+    font-weight: 600;
+  }
+  .compare-table tbody td:first-child {
+    grid-column: 1 / -1;
+    font-size: 14.5px;
+    font-weight: 700;
+    padding-bottom: 9px;
+    border-bottom: 1px solid var(--line) !important;
+    margin-bottom: 2px;
+  }
+  .compare-table tbody td:not(:first-child)::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink-faint);
+    margin-bottom: 3px;
+    letter-spacing: 0.02em;
+  }
+  .compare-table tbody td:last-child { grid-column: auto; }
+}
 </style>
 </head>
 <body>
@@ -2126,6 +2196,7 @@ body[data-route="practice"] .container {
 
   <!-- ==================== VIEW 1: 概览（第一眼：靠谱、高端、想试一下） ==================== -->
   <section class="view active" id="view-home">
+    <div class="snap-block">
     <div class="hero-editorial">
       <div class="hero-badge"><i></i><span>简单鹤 · 轻羽落键，意到字成</span></div>
       <h1 class="hero-title" aria-label="极简音形，为盲打而生"><span class="kchar" style="--i:0">极</span><span class="kchar" style="--i:1">简</span><span class="kchar" style="--i:2">音</span><span class="kchar" style="--i:3">形</span><br><span class="grad"><span class="kchar" style="--i:4">为</span><span class="kchar" style="--i:5">盲</span><span class="kchar" style="--i:6">打</span><span class="kchar" style="--i:7">而</span><span class="kchar" style="--i:8">生</span></span></h1>
@@ -2152,6 +2223,8 @@ body[data-route="practice"] .container {
     </div>
 
     <!-- 交互试打台：5秒感受四码直出 -->
+    </div>
+    <div class="snap-block">
     <div class="stage-frame">
       <div class="showcase">
         <div class="showcase-top">
@@ -2167,6 +2240,8 @@ body[data-route="practice"] .container {
       </div>
     </div>
 
+    </div>
+    <div class="snap-block">
     <!-- 四个设计原则 -->
     <div class="section-head">
       <div>
@@ -2225,6 +2300,8 @@ body[data-route="practice"] .container {
       </div>
     </div>
 
+    </div>
+    <div class="snap-block">
     <!-- 记忆曲线 -->
     <div class="section-head">
       <div>
@@ -2235,17 +2312,19 @@ body[data-route="practice"] .container {
     </div>
 
     <div class="eb-wrap">
-      <svg class="eb-chart" viewBox="0 0 760 380" role="img" aria-label="艾宾浩斯遗忘曲线：20分钟剩58%，1天剩33%，6天剩25%"><line x1="50" y1="300.0" x2="700" y2="300.0" stroke="#e8e5de"/><text x="40" y="304.0" text-anchor="end" class="eb-tick">0%</text><line x1="50" y1="240.0" x2="700" y2="240.0" stroke="#e8e5de"/><text x="40" y="244.0" text-anchor="end" class="eb-tick">25%</text><line x1="50" y1="180.0" x2="700" y2="180.0" stroke="#e8e5de"/><text x="40" y="184.0" text-anchor="end" class="eb-tick">50%</text><line x1="50" y1="120.0" x2="700" y2="120.0" stroke="#e8e5de"/><text x="40" y="124.0" text-anchor="end" class="eb-tick">75%</text><line x1="50" y1="60.0" x2="700" y2="60.0" stroke="#e8e5de"/><text x="40" y="64.0" text-anchor="end" class="eb-tick">100%</text><polyline points="70.0,160.8 194.0,194.4 318.0,220.8 442.0,232.8 566.0,240.0 690.0,249.6" fill="none" stroke="#1a1816" stroke-width="2.5" stroke-linejoin="round"/><line x1="50" y1="300" x2="700" y2="300" stroke="#d6d2c9" stroke-width="1.2"/><circle cx="70.0" cy="160.8" r="5" fill="#c23b32"/><text x="70.0" y="144.8" text-anchor="middle" class="eb-val">58%</text><text x="70.0" y="330" text-anchor="middle" class="eb-name">20 分钟</text><circle cx="194.0" cy="194.4" r="5" fill="#c23b32"/><text x="194.0" y="178.4" text-anchor="middle" class="eb-val">44%</text><text x="194.0" y="330" text-anchor="middle" class="eb-name">1 小时</text><circle cx="318.0" cy="220.8" r="5" fill="#c23b32"/><text x="318.0" y="204.8" text-anchor="middle" class="eb-val">33%</text><text x="318.0" y="330" text-anchor="middle" class="eb-name">1 天</text><circle cx="442.0" cy="232.8" r="5" fill="#c23b32"/><text x="442.0" y="216.8" text-anchor="middle" class="eb-val">28%</text><text x="442.0" y="330" text-anchor="middle" class="eb-name">2 天</text><circle cx="566.0" cy="240.0" r="5" fill="#c23b32"/><text x="566.0" y="224.0" text-anchor="middle" class="eb-val">25%</text><text x="566.0" y="330" text-anchor="middle" class="eb-name">6 天</text><circle cx="690.0" cy="249.6" r="5" fill="#c23b32"/><text x="690.0" y="233.6" text-anchor="middle" class="eb-val">21%</text><text x="690.0" y="330" text-anchor="middle" class="eb-name">31 天</text><text x="50" y="36" class="eb-title">艾宾浩斯遗忘曲线 · 只学一次能记住多少</text></svg>
+      <svg class="eb-chart" viewBox="0 0 760 360" role="img" aria-label="遗忘曲线：不复习 7 天掉到 24%，按1/2/4/7天复习稳定在 90% 以上"><line x1="58" y1="280.0" x2="698" y2="280.0" stroke="#e8e5de"/><text x="48" y="284.0" text-anchor="end" class="eb-tick">0%</text><line x1="58" y1="224.0" x2="698" y2="224.0" stroke="#e8e5de"/><text x="48" y="228.0" text-anchor="end" class="eb-tick">25%</text><line x1="58" y1="168.0" x2="698" y2="168.0" stroke="#e8e5de"/><text x="48" y="172.0" text-anchor="end" class="eb-tick">50%</text><line x1="58" y1="112.0" x2="698" y2="112.0" stroke="#e8e5de"/><text x="48" y="116.0" text-anchor="end" class="eb-tick">75%</text><line x1="58" y1="56.0" x2="698" y2="56.0" stroke="#e8e5de"/><text x="48" y="60.0" text-anchor="end" class="eb-tick">100%</text><polyline points="76.0,56.0 80.4,182.0 84.8,185.6 89.2,189.2 93.5,192.9 97.9,196.5 102.3,199.5 106.7,199.9 111.1,200.4 115.5,200.9 119.9,201.3 124.2,201.8 128.6,202.3 133.0,202.8 137.4,203.2 141.8,203.7 146.2,204.2 150.6,204.7 154.9,205.1 159.3,205.6 163.7,206.1 168.1,206.6 172.5,207.2 176.9,207.8 181.3,208.3 185.6,208.9 190.0,209.4 194.4,210.0 198.8,210.6 203.2,211.1 207.6,211.7 212.0,212.2 216.3,212.8 220.7,213.4 225.1,213.9 229.5,214.5 233.9,215.0 238.3,215.6 242.7,216.2 247.0,216.7 251.4,217.3 255.8,217.4 260.2,217.4 264.6,217.5 269.0,217.6 273.4,217.7 277.7,217.8 282.1,217.9 286.5,218.0 290.9,218.0 295.3,218.1 299.7,218.2 304.1,218.3 308.4,218.4 312.8,218.5 317.2,218.5 321.6,218.6 326.0,218.7 330.4,218.8 334.8,218.9 339.1,219.0 343.5,219.0 347.9,219.1 352.3,219.2 356.7,219.3 361.1,219.4 365.5,219.5 369.8,219.5 374.2,219.6 378.6,219.7 383.0,219.8 387.4,219.9 391.8,220.0 396.2,220.1 400.5,220.1 404.9,220.2 409.3,220.3 413.7,220.4 418.1,220.5 422.5,220.6 426.9,220.6 431.2,220.7 435.6,220.8 440.0,220.9 444.4,221.0 448.8,221.1 453.2,221.1 457.6,221.2 461.9,221.3 466.3,221.4 470.7,221.5 475.1,221.6 479.5,221.6 483.9,221.7 488.3,221.8 492.6,221.9 497.0,222.0 501.4,222.1 505.8,222.2 510.2,222.2 514.6,222.3 519.0,222.4 523.3,222.5 527.7,222.6 532.1,222.7 536.5,222.7 540.9,222.8 545.3,222.9 549.7,223.0 554.0,223.1 558.4,223.2 562.8,223.2 567.2,223.3 571.6,223.4 576.0,223.5 580.4,223.6 584.7,223.7 589.1,223.7 593.5,223.8 597.9,223.9 602.3,224.0 606.7,224.1 611.1,224.2 615.4,224.3 619.8,224.4 624.2,224.6 628.6,224.7 633.0,224.8 637.4,224.9 641.8,225.0 646.1,225.1 650.5,225.2 654.9,225.3 659.3,225.5 663.7,225.6 668.1,225.7 672.5,225.8 676.8,225.9 681.2,226.0 685.6,226.1 690.0,226.2" fill="none" stroke="#b9b3a9" stroke-width="2.2" stroke-dasharray="6 5"/><polyline points="76.0,56.0 163.7,56.0 168.1,68.9 172.5,71.1 176.9,71.4 181.3,71.6 185.6,71.8 190.0,72.1 194.4,72.3 198.8,72.5 203.2,72.7 207.6,73.0 212.0,73.2 216.3,73.2 220.7,73.3 225.1,73.3 229.5,73.3 233.9,73.4 238.3,73.4 242.7,73.4 247.0,73.4 251.4,73.5 251.4,56.0 260.2,69.6 269.0,71.2 277.7,71.5 286.5,71.8 295.3,72.0 304.1,72.3 312.8,72.6 321.6,72.9 330.4,73.1 339.1,73.2 347.9,73.3 356.7,73.3 365.5,73.3 374.2,73.4 383.0,73.4 391.8,73.4 400.5,73.5 409.3,73.5 418.1,73.5 426.9,73.6 426.9,56.0 440.0,69.3 453.2,71.2 466.3,71.4 479.5,71.7 492.6,71.9 505.8,72.2 519.0,72.4 532.1,72.7 545.3,72.9 558.4,73.2 571.6,73.2 584.7,73.3 597.9,73.3 611.1,73.3 624.2,73.4 637.4,73.4 650.5,73.4 663.7,73.5 676.8,73.5 690.0,73.5 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0" fill="none" stroke="#1a1816" stroke-width="2.4"/><line x1="58" y1="280" x2="698" y2="280" stroke="#d6d2c9" stroke-width="1.2"/><line x1="76.0" y1="280" x2="76.0" y2="286" stroke="#d6d2c9"/><text x="76.0" y="306" text-anchor="middle" class="eb-name">当天</text><line x1="163.7" y1="280" x2="163.7" y2="286" stroke="#d6d2c9"/><text x="163.7" y="306" text-anchor="middle" class="eb-name">第1天</text><line x1="251.4" y1="280" x2="251.4" y2="286" stroke="#d6d2c9"/><text x="251.4" y="306" text-anchor="middle" class="eb-name">第2天</text><line x1="426.9" y1="280" x2="426.9" y2="286" stroke="#d6d2c9"/><text x="426.9" y="306" text-anchor="middle" class="eb-name">第4天</text><line x1="690.0" y1="280" x2="690.0" y2="286" stroke="#d6d2c9"/><text x="690.0" y="306" text-anchor="middle" class="eb-name">第7天</text><circle cx="163.7" cy="56.0" r="4" fill="var(--accent)"/><text x="163.7" y="44.0" text-anchor="middle" class="eb-rev">复习</text><circle cx="251.4" cy="56.0" r="4" fill="var(--accent)"/><text x="251.4" y="44.0" text-anchor="middle" class="eb-rev">复习</text><circle cx="426.9" cy="56.0" r="4" fill="var(--accent)"/><text x="426.9" y="44.0" text-anchor="middle" class="eb-rev">复习</text><circle cx="690.0" cy="56.0" r="4" fill="var(--accent)"/><text x="690.0" y="44.0" text-anchor="middle" class="eb-rev">复习</text><text x="684.0" y="214.2" text-anchor="end" class="eb-val gray">24%</text><text x="611.1" y="73.9" text-anchor="end" class="eb-val">90%+</text><text x="374.2" y="177.0" class="eb-label gray">不复习</text><text x="347.9" y="62.7" class="eb-label strong">按 1/2/4/7 天复习</text></svg>
       <div class="eb-side">
-        <div class="eb-big"><b>25%</b><span>学完第 6 天，只学一次只剩这么多</span></div>
+        <div class="eb-big"><b>24%</b><span>不复习的话，第 7 天只剩这么多</span></div>
         <div class="eb-vs">
-          <div><i class="dot gray"></i>不复习：一路掉到 21%</div>
+          <div><i class="dot gray"></i>不复习：7 天后只剩 24%</div>
           <div><i class="dot red"></i>第 1 / 2 / 4 / 7 天各复习一次：稳定在 90% 以上</div>
         </div>
         <p class="eb-note">练习器按这张表自动安排：答对拉长间隔，答错立刻重排。两天过一遍，一周形成手感。</p>
       </div>
     </div>
 
+    </div>
+    <div class="snap-block">
     <!-- 性能对照（实测 · 多方案） -->
     <div class="section-head">
       <div>
@@ -2276,19 +2355,19 @@ body[data-route="practice"] .container {
 <div class="tbl-scroll">
       <table class="tier-table compare-table wide">
         <thead>
-          <tr><th>方案</th><th>首选准确率</th><th>平均候选位次</th><th>平均码长</th><th>全码重码字数</th><th>学习难度</th></tr>
+          <tr></tr>
         </thead>
         <tbody>
-          <tr class="self-row"><td>简单鹤（音形 4 码）</td><td>99.87%</td><td>1.001</td><td>4.00</td><td>87</td><td><span class="lv lv-2">中</span></td></tr>
-          <tr><td>仓颉 5 代（形码）</td><td>100.00%</td><td>1.000</td><td>3.41</td><td>2</td><td><span class="lv lv-4">高</span></td></tr>
-          <tr><td>五笔 86（形码）</td><td>99.88%</td><td>1.001</td><td>3.72</td><td>66</td><td><span class="lv lv-4">高</span></td></tr>
-          <tr><td>虎码（形码 4 码）</td><td>99.95%</td><td>1.000</td><td>4.00</td><td>116</td><td><span class="lv lv-4">高</span></td></tr>
-          <tr><td>小鹤音形（音形 4 码）</td><td>99.66%</td><td>1.004</td><td>4.00</td><td>88</td><td><span class="lv lv-2">中</span></td></tr>
-          <tr><td>魔然（双拼 + 辅助码）</td><td>99.64%</td><td>1.004</td><td>3.49</td><td>224</td><td><span class="lv lv-3">中高</span></td></tr>
-          <tr><td>小鹤双拼（纯双拼）</td><td>84.37%</td><td>1.425</td><td>2.00</td><td>2602</td><td><span class="lv lv-1">低</span></td></tr>
-          <tr><td>自然码双拼（纯双拼）</td><td>84.37%</td><td>1.425</td><td>2.00</td><td>2602</td><td><span class="lv lv-1">低</span></td></tr>
-          <tr><td>全拼 26 键</td><td>84.43%</td><td>1.425</td><td>2.65</td><td>2601</td><td><span class="lv lv-0">极低</span></td></tr>
-          <tr><td>全拼 9 键</td><td>77.06%</td><td>1.959</td><td>2.65</td><td>2787</td><td><span class="lv lv-0">极低</span></td></tr>
+          <tr class="self-row"><td>简单鹤（音形 · 97 字根）</td><td data-label="首选准确率">99.87%</td><td data-label="平均位次">1.001</td><td data-label="平均码长">4.00</td><td data-label="全码重码">87</td><td data-label="学习难度"><span class="lv lv-2">中</span></td></tr>
+          <tr><td>仓颉 5 代（形码 · 24 字根）</td><td data-label="首选准确率">100.00%</td><td data-label="平均位次">1.000</td><td data-label="平均码长">3.41</td><td data-label="全码重码">2</td><td data-label="学习难度"><span class="lv lv-4">高</span></td></tr>
+          <tr><td>五笔 86（形码 · 130 字根）</td><td data-label="首选准确率">99.88%</td><td data-label="平均位次">1.001</td><td data-label="平均码长">3.72</td><td data-label="全码重码">66</td><td data-label="学习难度"><span class="lv lv-4">高</span></td></tr>
+          <tr><td>虎码（形码 · 241 字根）</td><td data-label="首选准确率">99.95%</td><td data-label="平均位次">1.000</td><td data-label="平均码长">4.00</td><td data-label="全码重码">116</td><td data-label="学习难度"><span class="lv lv-4">高</span></td></tr>
+          <tr><td>小鹤音形（音形 · 约 30 字根）</td><td data-label="首选准确率">99.66%</td><td data-label="平均位次">1.004</td><td data-label="平均码长">4.00</td><td data-label="全码重码">88</td><td data-label="学习难度"><span class="lv lv-2">中</span></td></tr>
+          <tr><td>魔然（双拼+辅助码 · 无字根表）</td><td data-label="首选准确率">99.64%</td><td data-label="平均位次">1.004</td><td data-label="平均码长">3.49</td><td data-label="全码重码">224</td><td data-label="学习难度"><span class="lv lv-3">中高</span></td></tr>
+          <tr><td>小鹤双拼（纯双拼 · 0 字根）</td><td data-label="首选准确率">84.37%</td><td data-label="平均位次">1.425</td><td data-label="平均码长">2.00</td><td data-label="全码重码">2602</td><td data-label="学习难度"><span class="lv lv-1">低</span></td></tr>
+          <tr><td>自然码双拼（纯双拼 · 0 字根）</td><td data-label="首选准确率">84.37%</td><td data-label="平均位次">1.425</td><td data-label="平均码长">2.00</td><td data-label="全码重码">2602</td><td data-label="学习难度"><span class="lv lv-1">低</span></td></tr>
+          <tr><td>全拼 26 键（0 字根）</td><td data-label="首选准确率">84.43%</td><td data-label="平均位次">1.425</td><td data-label="平均码长">2.65</td><td data-label="全码重码">2601</td><td data-label="学习难度"><span class="lv lv-0">极低</span></td></tr>
+          <tr><td>全拼 9 键（0 字根）</td><td data-label="首选准确率">77.06%</td><td data-label="平均位次">1.959</td><td data-label="平均码长">2.65</td><td data-label="全码重码">2787</td><td data-label="学习难度"><span class="lv lv-0">极低</span></td></tr>
         </tbody>
       </table>
       </div>
@@ -2326,10 +2405,12 @@ body[data-route="practice"] .container {
         测算口径：统一取本仓库 <code>jde.dict.yaml</code> 的字频权重作为评测集，各方案只提供自己的单字码，逐字比对同码单字（不含词组）。<br>
         码表来源：小鹤音形 <code>cubercsl/rime-flypy</code>、魔然 <code>rimeinn/rime-moran</code>、虎码 <code>LukNg/Rime-tiger_code</code>、五笔 <code>rime/rime-wubi</code>、仓颉 <code>rime/rime-cangjie</code>，均为公开码表；全拼由同字频表还原。<br>
         关于自然码双拼：与所有纯双拼一样对拼音做一一映射，同音重码结构与同属双拼的方案完全一致，故与小鹤双拼指标相同。<br>
-        学习难度按「是否需要重新记一套字根/辅助码规则」标注：全拼极低、双拼低、音形中、形码高。<br>提醒：本表只比「单字重码」，不含词组与整句；形码（仓颉、五笔、虎码）重码虽低，但要记上百个字根，成本远高于音形。复算命令 <code>python3 scripts/measure.py</code>。
+        字根数量：简单鹤 97（官方）、虎码 241（官网）、五笔 86 约 130、仓颉 24 个基本字根、小鹤音形约 30；魔然采用「部首 + 部件首字母」规则，不依赖固定字根表。<br>学习难度按「是否需要重新记一套字根/辅助码规则」标注：全拼极低、双拼低、音形中、形码高。<br>提醒：本表只比「单字重码」，不含词组与整句；形码（仓颉、五笔、虎码）重码虽低，但要记上百个字根，成本远高于音形。复算命令 <code>python3 scripts/measure.py</code>。
       </p>
     </section>
 
+    </div>
+    <div class="snap-block">
     <!-- 练习模块预览 -->
     <div class="section-head">
       <div>
@@ -2369,6 +2450,7 @@ body[data-route="practice"] .container {
       </div>
     </div>
 
+      </div>
   </section>
 
   <!-- ==================== VIEW 2: 上手路径（第二眼：路径清晰，我能学会） ==================== -->
@@ -3786,6 +3868,7 @@ function applyTheme() {
 function switchRoute(route, subTarget) {
   currentRoute = route;
   document.body.dataset.route = route;
+  document.documentElement.classList.toggle('snap-home', route === 'home');
   if (route === 'practice') {
     document.body.dataset.practiceSub = currentPracticeSub;
   } else {
