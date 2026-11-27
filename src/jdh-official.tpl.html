@@ -1800,253 +1800,805 @@ body[data-route="practice"] .container {
   .sr-item { opacity: 1; transform: none; transition: none; }
   .btn, .nav-dot-slider, .track-thumb, .subtab-thumb, .progress-fill, .vkey { transition: none !important; }
 }
-/* ==================== 页尾彩蛋：性能对照 ==================== */
-.arena {
-  padding: clamp(8px, 2vw, 20px) 0 clamp(20px, 3vw, 34px);
-}
-.arena-head { text-align: center; max-width: 720px; margin: 0 auto clamp(38px, 4.5vw, 58px); }
-.arena-kicker {
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-  margin-bottom: 16px;
-}
-.arena-title {
-  margin: 0 0 14px;
-  font-family: var(--font-serif);
-  font-weight: 600;
-  font-size: clamp(26px, 3.2vw, 40px);
-  line-height: 1.24;
-  letter-spacing: 0.01em;
-}
-.arena-sub { margin: 0; font-size: 14.5px; line-height: 1.8; color: var(--ink-soft); }
+/* ==================== 性能对照、记忆曲线、进阶文档与响应式统一优化 ==================== */
 
-.arena-hero {
-  text-align: center;
-  padding: clamp(30px, 4vw, 52px) 0 clamp(34px, 4.4vw, 56px);
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  margin-bottom: clamp(36px, 4.4vw, 56px);
+/* 首屏及各分页顶部留白与标题断行平衡 */
+.view > .section-head:first-child {
+  margin-top: clamp(8px, 1.8vw, 22px);
 }
-.arena-hero .ah-num {
-  font-family: var(--font-mono);
-  font-size: clamp(54px, 8vw, 104px);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.04em;
-  color: var(--ink);
-  font-variant-numeric: tabular-nums;
+.section-head {
+  margin: clamp(56px, 6.5vw, 88px) auto clamp(28px, 3.4vw, 44px);
 }
-.arena-hero .ah-num i { font-style: normal; font-size: 0.28em; color: var(--ink-faint); margin-left: 0.12em; }
-.arena-hero .ah-label { margin-top: 18px; font-size: 14px; color: var(--ink-soft); letter-spacing: 0.02em; }
-.arena-hero .draft {
+.section-head h2,
+.section-head p,
+.hero-title,
+.doc-card h3,
+.doc-count .dc-lbl,
+.metric-strip .ms-lbl {
+  text-wrap: balance;
+}
+.section-head h2 .serif-accent {
   display: inline-block;
-  margin-left: 8px;
-  padding: 1px 7px;
-  border: 1px solid var(--accent);
-  border-radius: 4px;
-  font-size: 11px;
-  color: var(--accent);
-  letter-spacing: 0.06em;
-  vertical-align: 1px;
 }
 
-.arena-grid {
+/* 首页区块自然流式间距（移除破坏阅读节奏的强制 100svh 分屏吸附） */
+#view-home > .snap-block {
+  display: block;
+  padding: 0;
+}
+#view-home > .snap-block.hero-block {
+  padding: clamp(16px, 2.8vw, 38px) 0 clamp(16px, 2.5vw, 32px);
+}
+#view-home > .snap-block:last-child {
+  padding-bottom: clamp(12px, 2vw, 24px);
+}
+
+/* 首屏 + 试打台双栏布局（确保 4 枚键帽单行不折行） */
+.hero-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
-  margin-bottom: clamp(36px, 4.4vw, 56px);
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: clamp(24px, 3.6vw, 52px);
+  align-items: center;
+  width: 100%;
 }
-.arena-col { background: var(--surface); padding: clamp(22px, 2.6vw, 34px) clamp(16px, 2vw, 26px); text-align: center; }
-.arena-col.self { background: var(--bg); }
-.arena-col .ac-name { font-size: 15px; font-weight: 600; letter-spacing: 0.02em; margin-bottom: 4px; }
-.arena-col.self .ac-name { color: var(--ink); }
-.arena-col .ac-tag { font-size: 11px; color: var(--ink-faint); letter-spacing: 0.06em; margin-bottom: 20px; min-height: 15px; }
-.arena-col.self .ac-tag { color: var(--accent); }
-.arena-col .ac-num {
-  font-family: var(--font-mono);
-  font-size: clamp(26px, 3vw, 38px);
-  font-weight: 700;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-  color: var(--ink-soft);
+.hero-grid .hero-editorial {
+  text-align: left;
+  align-items: flex-start;
+  max-width: none;
+  margin: 0;
 }
-.arena-col.self .ac-num { color: var(--ink); }
-.arena-col .ac-unit { font-size: 0.42em; color: var(--ink-faint); margin-left: 2px; }
-.arena-col .ac-metric { margin-top: 6px; font-size: 11.5px; color: var(--ink-faint); letter-spacing: 0.06em; }
-
-.arena-bars { max-width: 820px; margin: 0 auto clamp(30px, 3.6vw, 44px); }
-.arena-bars .ab-row { display: flex; align-items: center; gap: 16px; padding: 11px 0; border-bottom: 1px dashed var(--line); }
-.arena-bars .ab-row:last-child { border-bottom: 0; }
-.arena-bars .ab-name { flex: 0 0 132px; font-size: 13px; color: var(--ink-soft); text-align: right; }
-.arena-bars .ab-track { flex: 1; height: 6px; background: var(--surface-2); border-radius: 99px; overflow: hidden; }
-.arena-bars .ab-fill { display: block; height: 100%; border-radius: 99px; background: var(--line-strong); width: 0; transition: width 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s; }
-.arena-bars .ab-row.self .ab-fill { background: var(--accent); }
-.arena-bars .ab-row.self .ab-name { color: var(--ink); font-weight: 700; }
-.arena-bars .ab-row.self .ab-val { color: var(--accent); }
-.arena-bars .ab-val { flex: 0 0 62px; font-family: var(--font-mono); font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
-
-.arena-note {
-  max-width: 820px;
-  margin: 0 auto;
-  padding-top: 18px;
-  border-top: 1px solid var(--line);
+.hero-grid .hero-editorial .hero-title {
+  font-size: clamp(38px, 4.3vw, 60px);
+}
+.hero-grid .hero-editorial .hero-sub {
+  margin: 0 0 26px;
+  max-width: 34em;
+  text-wrap: pretty;
+}
+.hero-grid .hero-ctas,
+.hero-grid .hero-status {
+  justify-content: flex-start;
+}
+.hero-grid .stage-frame {
+  margin: 0;
+  max-width: none;
+  width: 100%;
+}
+.hero-grid .showcase {
+  padding: clamp(20px, 2.2vw, 28px) clamp(18px, 2.4vw, 28px);
+}
+.hero-grid .showcase-top {
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+}
+.hero-grid .showcase-body {
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: clamp(16px, 2vw, 24px);
+  align-items: center;
+}
+.hero-grid .demo-glyph-box {
+  min-width: 0;
+  width: 112px;
+  padding: 20px 10px;
+  border-radius: 16px;
+}
+.hero-grid .demo-glyph-box .big-hz {
+  font-size: 60px;
+}
+.hero-grid .demo-right {
+  min-width: 0;
+  gap: 14px;
+}
+.hero-grid .hw-keys {
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+.hero-grid .hw-key {
+  width: 58px;
+  height: 66px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+.hero-grid .hw-key b {
+  font-size: 21px;
+}
+.hero-grid .hw-key.k-sound small {
   font-size: 11.5px;
-  line-height: 1.9;
-  color: var(--ink-faint);
-  text-align: center;
+}
+.hero-grid .hw-key.k-shape small {
+  font-size: 13px;
+}
+.hero-grid .hw-plus {
+  font-size: 16px;
+  margin: 0;
+  flex-shrink: 0;
+}
+.hero-grid .demo-meta {
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+@media (max-width: 1140px) and (min-width: 1001px) {
+  .hero-grid {
+    grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+    gap: 24px;
+  }
+  .hero-grid .showcase-body {
+    grid-template-columns: 98px minmax(0, 1fr);
+    gap: 14px;
+  }
+  .hero-grid .demo-glyph-box {
+    width: 98px;
+    padding: 16px 8px;
+  }
+  .hero-grid .demo-glyph-box .big-hz {
+    font-size: 52px;
+  }
+  .hero-grid .hw-key {
+    width: 50px;
+    height: 58px;
+  }
+  .hero-grid .hw-key b {
+    font-size: 19px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .hero-grid .hero-editorial {
+    text-align: center;
+    align-items: center;
+  }
+  .hero-grid .hero-editorial .hero-sub {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-grid .hero-ctas,
+  .hero-grid .hero-status {
+    justify-content: center;
+  }
+  .hero-grid .showcase-body {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .hero-grid .demo-glyph-box {
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 16px;
+    padding: 14px 18px;
+  }
+  .hero-grid .demo-glyph-box .big-hz {
+    font-size: 46px;
+  }
+  .hero-grid .demo-glyph-box .big-py {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 540px) {
+  .hero-grid .hero-editorial .hero-title {
+    font-size: clamp(32px, 8.8vw, 40px);
+  }
+  .section-head h2 {
+    font-size: clamp(23px, 6.2vw, 30px);
+  }
+  .hero-grid .showcase {
+    padding: 18px 14px;
+  }
+  .hero-grid .hw-keys {
+    gap: 6px;
+  }
+  .hero-grid .hw-key {
+    width: 52px;
+    height: 60px;
+  }
+  .hero-grid .hw-key b {
+    font-size: 19px;
+  }
+}
+
+@media (max-width: 390px) {
+  .hero-grid .hw-keys {
+    gap: 5px;
+  }
+  .hero-grid .hw-key {
+    width: 46px;
+    height: 54px;
+  }
+  .hero-grid .hw-key b {
+    font-size: 17px;
+  }
 }
 
 /* 记忆曲线（艾宾浩斯） */
 .eb-wrap {
   display: grid;
-  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
-  gap: clamp(22px, 3vw, 44px);
+  grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+  gap: clamp(22px, 3vw, 42px);
   align-items: center;
   border: 1px solid var(--line);
   background: var(--surface);
   border-radius: var(--radius-lg);
-  padding: clamp(22px, 2.8vw, 36px);
+  box-shadow: var(--shadow-card);
+  padding: clamp(20px, 2.8vw, 34px);
 }
-.eb-chart { width: 100%; height: auto; overflow: visible; }
+.eb-chart {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
 .eb-chart .eb-tick { font-family: var(--font-mono); font-size: 12px; fill: var(--ink-faint); }
 .eb-chart .eb-val { font-family: var(--font-mono); font-size: 13px; font-weight: 700; fill: var(--accent); }
+.eb-chart .eb-val.gray { fill: var(--ink-faint); }
 .eb-chart .eb-name { font-size: 12.5px; fill: var(--ink-soft); }
 .eb-chart .eb-title { font-size: 13px; font-weight: 600; fill: var(--ink); letter-spacing: 0.02em; }
-.eb-chart .eb-val.gray { fill: var(--ink-faint); }
-.eb-chart .eb-rev { font-size: 10px; fill: var(--accent); }
+.eb-chart .eb-rev { font-size: 10.5px; fill: var(--accent); font-weight: 600; }
 .eb-chart .eb-label { font-size: 12px; fill: var(--ink); font-weight: 600; }
-.eb-chart .eb-label.gray { fill: var(--ink-faint); font-weight: 400; }
-.eb-chart .eb-val.gray { fill: var(--ink-faint); }
-.eb-chart .eb-rev { font-size: 10px; fill: var(--accent); }
-.eb-chart .eb-label { font-size: 12px; fill: var(--ink); font-weight: 600; }
-.eb-chart .eb-label.gray { fill: var(--ink-faint); font-weight: 400; }
-.eb-side { display: flex; flex-direction: column; gap: 18px; }
-.eb-big b { display: block; font-family: var(--font-mono); font-size: clamp(38px, 4.4vw, 56px); line-height: 1; color: var(--ink); letter-spacing: -0.03em; }
-.eb-big span { display: block; margin-top: 6px; font-size: 13px; color: var(--ink-soft); }
-.eb-vs { display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: var(--ink-soft); }
-.eb-vs .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 7px; vertical-align: 1px; }
-.eb-vs .dot.gray { background: #b9b3a9; }
+.eb-chart .eb-label.gray { fill: var(--ink-faint); font-weight: 500; }
+.eb-side { display: flex; flex-direction: column; gap: 16px; }
+.eb-big b {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: clamp(36px, 4.2vw, 54px);
+  line-height: 1;
+  color: var(--ink);
+  letter-spacing: -0.03em;
+}
+.eb-big span { display: block; margin-top: 8px; font-size: 13.5px; color: var(--ink-soft); }
+.eb-vs { display: flex; flex-direction: column; gap: 8px; font-size: 13.5px; color: var(--ink-soft); line-height: 1.6; }
+.eb-vs .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; }
+.eb-vs .dot.gray { background: var(--ink-faint); opacity: 0.65; }
 .eb-vs .dot.red { background: var(--accent); }
-.eb-note { margin: 0; padding-top: 14px; border-top: 1px solid var(--line); font-size: 12.5px; line-height: 1.8; color: var(--ink-faint); }
-@media (max-width: 900px) { .eb-wrap { grid-template-columns: 1fr; } }
+.eb-note {
+  margin: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--ink-faint);
+}
+@media (max-width: 900px) {
+  .eb-wrap { grid-template-columns: 1fr; }
+}
 
-/* 顶部硬指标 */
+/* 性能实测区 */
+.arena {
+  padding: 0 0 clamp(12px, 2vw, 24px);
+}
+.arena .arena-subhead {
+  margin: clamp(28px, 3vw, 40px) 0 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+}
+
+/* 顶部硬指标条（圆角卡片风格统一） */
 .metric-strip {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  margin-bottom: clamp(28px, 3.4vw, 44px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  margin-bottom: clamp(20px, 2.6vw, 30px);
 }
 .metric-strip .ms-item {
-  padding: clamp(20px, 2.4vw, 30px) 14px;
+  padding: clamp(20px, 2.4vw, 28px) 14px;
   text-align: center;
   border-left: 1px solid var(--line);
 }
 .metric-strip .ms-item:first-child { border-left: 0; }
 .metric-strip .ms-num {
   font-family: var(--font-mono);
-  font-size: clamp(26px, 3.2vw, 40px);
+  font-size: clamp(24px, 3vw, 36px);
   font-weight: 700;
-  line-height: 1;
+  line-height: 1.05;
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
+  color: var(--ink);
 }
-.metric-strip .ms-num i { font-style: normal; font-size: 0.36em; color: var(--ink-faint); margin-left: 3px; letter-spacing: 0; }
-.metric-strip .ms-lbl { margin-top: 9px; font-size: 12px; color: var(--ink-faint); letter-spacing: 0.04em; }
-
-/* 分档重码表 */
-.tier-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: clamp(26px, 3vw, 38px); }
-.tier-table caption {
-  caption-side: top;
-  text-align: left;
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+.metric-strip .ms-num i {
+  font-style: normal;
+  font-size: 0.38em;
   color: var(--ink-faint);
-  padding-bottom: 12px;
+  margin-left: 3px;
+  letter-spacing: 0;
 }
-.tier-table th, .tier-table td { padding: 13px 16px; border-bottom: 1px solid var(--line); text-align: right; }
-.tier-table th:first-child, .tier-table td:first-child { text-align: left; color: var(--ink-soft); }
-.tier-table thead th { font-size: 12.5px; font-weight: 600; color: var(--ink-faint); border-bottom: 1px solid var(--line-strong); }
-.tier-table tbody td:last-child { font-family: var(--font-mono); font-weight: 700; font-variant-numeric: tabular-nums; }
-.tier-table tbody tr:last-child td { border-bottom: 0; }
+.metric-strip .ms-lbl {
+  margin-top: 8px;
+  font-size: 12.5px;
+  color: var(--ink-faint);
+  line-height: 1.45;
+}
 
-@media (max-width: 980px) {
-  .curve-wrap { grid-template-columns: 1fr; }
+/* 关键差异块 & 性能主张（清爽卡片，无奇怪弯角粗红边） */
+.key-diff {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2vw, 24px);
+  padding: clamp(18px, 2.2vw, 26px) clamp(18px, 2.4vw, 28px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  margin-bottom: clamp(20px, 2.6vw, 30px);
+  flex-wrap: wrap;
+}
+.key-diff .kd-tag {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid rgba(194, 59, 50, 0.22);
+  border-radius: 999px;
+  padding: 4px 12px;
+  white-space: nowrap;
+}
+.key-diff .kd-main { flex: 1; min-width: 240px; }
+.key-diff h3 { margin: 0 0 6px; font-size: 16px; font-weight: 700; color: var(--ink); }
+.key-diff p { margin: 0; font-size: 13.5px; line-height: 1.8; color: var(--ink-soft); }
+@media (max-width: 720px) {
+  .key-diff { flex-direction: column; align-items: flex-start; }
+  .key-diff .kd-main { min-width: 0; width: 100%; }
+}
+
+/* 速度换算卡片 */
+.speed-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  padding: clamp(20px, 2.4vw, 28px);
+  margin-bottom: clamp(20px, 2.6vw, 30px);
+}
+.sp-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.sp-head h3 { margin: 0 0 6px; font-size: 16.5px; font-weight: 700; color: var(--ink); }
+.sp-head p { margin: 0; font-size: 13.5px; color: var(--ink-soft); }
+.sp-cols {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: clamp(8px, 1.6vw, 20px);
+}
+.sp-col {
+  text-align: center;
+  padding: 16px 12px;
+  border-radius: 14px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+}
+.sp-col.hi {
+  background: var(--accent-soft, rgba(196, 60, 53, 0.08));
+  border-color: rgba(194, 59, 50, 0.38);
+}
+.sp-col b {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1;
+  color: var(--ink);
+}
+.sp-col.hi b { color: var(--accent); }
+.sp-col span { display: block; margin-top: 6px; font-size: 12px; color: var(--ink-faint); }
+.sp-arrow { font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); white-space: nowrap; }
+.sp-note {
+  margin: 18px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: var(--ink-faint);
+}
+@media (max-width: 620px) {
+  .sp-cols { grid-template-columns: 1fr; gap: 8px; }
+  .sp-arrow { justify-self: center; }
+}
+
+.perf-claim {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  padding: clamp(20px, 2.4vw, 28px);
+  margin-bottom: clamp(24px, 3vw, 34px);
+}
+.perf-claim h3 {
+  margin: 0 0 10px;
+  font-family: var(--font-serif);
+  font-size: clamp(19px, 2.2vw, 24px);
+  font-weight: 600;
+  color: var(--ink);
+}
+.perf-claim p { margin: 0 0 12px; font-size: 14px; line-height: 1.85; color: var(--ink-soft); }
+.perf-claim p strong { color: var(--ink); }
+.perf-more { font-size: 13px; font-weight: 600; color: var(--accent); text-decoration: none; white-space: nowrap; }
+.perf-more:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* 表格容器与移动端横向滚动提示 */
+.tbl-scroll-hint {
+  display: none;
+  font-size: 12px;
+  color: var(--ink-faint);
+  margin: -6px 0 10px;
+  text-align: right;
+}
+.tbl-scroll {
+  position: relative;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+.tier-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 0;
+}
+.tier-table th,
+.tier-table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  white-space: nowrap;
+}
+.tier-table th:first-child,
+.tier-table td:first-child {
+  text-align: left;
+  color: var(--ink-soft);
+}
+.tier-table thead th {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-faint);
+  background: var(--bg);
+  border-bottom: 1px solid var(--line-strong);
+}
+.tier-table tbody td:last-child {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.tier-table tbody tr:last-child td { border-bottom: 0; }
+.tier-table.compare-table { min-width: 680px; }
+.tier-table.assess-table { min-width: 560px; }
+.tier-table.compare-table tbody td { font-family: var(--font-sans); font-weight: 500; }
+.tier-table.compare-table tbody td:last-child { font-family: var(--font-sans); }
+.tier-table tbody tr.self-row td { color: var(--ink); background: var(--accent-soft); }
+.tier-table tbody tr.self-row td:first-child { font-weight: 700; color: var(--accent); }
+.tier-table tbody tr:hover td { background: var(--bg); }
+.tier-table tbody tr.self-row:hover td { background: var(--accent-soft); }
+
+/* 性能对照双栏面板（左右视觉等高对齐） */
+.arena-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(18px, 2.4vw, 28px);
+  align-items: stretch;
+  margin-top: clamp(22px, 2.8vw, 32px);
+  margin-bottom: clamp(22px, 2.8vw, 32px);
+}
+.arena-panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: clamp(18px, 2.2vw, 26px);
+  display: flex;
+  flex-direction: column;
+}
+.arena-panel .arena-subhead {
+  margin: 0 0 14px;
+}
+.arena-bars { width: 100%; margin: 0; }
+.arena-bars .ab-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 9px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.arena-bars .ab-row:last-of-type { border-bottom: 0; }
+.arena-bars .ab-name {
+  flex: 0 0 96px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  text-align: left;
+  white-space: nowrap;
+}
+.arena-bars .ab-track {
+  flex: 1;
+  min-width: 60px;
+  height: 7px;
+  background: var(--surface-2);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.arena-bars .ab-fill {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  background: var(--line-strong);
+  width: 0;
+  transition: width 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
+}
+.arena-bars .ab-row.self .ab-fill { background: var(--accent); }
+.arena-bars .ab-row.self .ab-name { color: var(--ink); font-weight: 700; }
+.arena-bars .ab-row.self .ab-val { color: var(--accent); }
+.arena-bars .ab-val {
+  flex: 0 0 58px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.arena-panel .ab-cap, .arena-bars .ab-cap {
+  margin-top: auto;
+  padding-top: 12px;
+  text-align: right;
+  font-size: 11.5px;
+  color: var(--ink-faint);
+}
+.arena-panel .tier-table {
+  font-size: 13.5px;
+}
+.arena-panel .tier-table th,
+.arena-panel .tier-table td {
+  padding: 12px 10px;
+}
+.arena-panel .tier-table thead th {
+  background: transparent;
+}
+.arena-panel-foot {
+  margin-top: auto;
+  padding-top: 18px;
+}
+
+/* 测算口径说明（左对齐可折叠，清爽不堆砌） */
+.arena-details {
+  margin-top: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  padding: 14px 18px;
+}
+.arena-details summary {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.arena-note {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.9;
+  color: var(--ink-soft);
+  text-align: left;
+}
+.arena-note code {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  background: var(--surface-2);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.arena-note-list {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.arena-foot-note {
+  margin: clamp(20px, 2.6vw, 28px) 0 0;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  font-size: 12.5px;
+  line-height: 1.85;
+  color: var(--ink-faint);
+  text-align: left;
+}
+.arena-foot-note code {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  background: var(--surface-2);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .arena-split { grid-template-columns: 1fr; }
 }
 @media (max-width: 720px) {
-  .arena-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .metric-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .metric-strip .ms-item:nth-child(3) { border-left: 0; }
   .metric-strip .ms-item:nth-child(n+3) { border-top: 1px solid var(--line); }
+  .tbl-scroll-hint { display: block; }
+  .tier-table.compare-table th,
+  .tier-table.compare-table td,
+  .tier-table.assess-table th,
+  .tier-table.assess-table td {
+    padding: 11px 12px;
+    font-size: 12.5px;
+  }
+  .tier-table.compare-table th:first-child,
+  .tier-table.compare-table td:first-child,
+  .tier-table.assess-table th:first-child,
+  .tier-table.assess-table td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background: var(--surface);
+    box-shadow: 1px 0 0 var(--line), 6px 0 10px -6px rgba(0, 0, 0, 0.08);
+  }
+  .tier-table.compare-table thead th:first-child,
+  .tier-table.assess-table thead th:first-child {
+    background: var(--bg);
+  }
+  .tier-table.compare-table tr.self-row td:first-child,
+  .tier-table.assess-table tr.self-row td:first-child {
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  }
 }
-.tier-table.compare-table tbody td { font-family: var(--font-sans); font-weight: 600; }
-.tier-table.compare-table tbody td:last-child { font-family: var(--font-mono); }
-.tier-table tbody tr.self-row td { color: var(--ink); background: var(--bg); }
-.tier-table tbody tr.self-row td:first-child { font-weight: 700; }
-.arena-bars .ab-cap { margin-top: 12px; text-align: right; font-size: 11.5px; color: var(--ink-faint); letter-spacing: 0.04em; }
-.arena .arena-subhead {
-  margin: clamp(28px, 3vw, 40px) 0 14px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
+@media (max-width: 540px) {
+  .arena-bars .ab-row { gap: 10px; }
+  .arena-bars .ab-name { flex: 0 0 80px; font-size: 12px; }
+  .arena-bars .ab-val { flex: 0 0 52px; font-size: 12px; }
 }
-.arena-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(26px, 3.4vw, 52px); align-items: start; }
-.tier-table.wide { margin-top: 0; }
-.tier-table.wide thead th { padding-top: 4px; }
-.tier-table.wide tbody tr:hover td { background: var(--surface); }
-.arena-bars .ab-row { padding: 9px 0; }
-.arena-bars .ab-name { flex: 0 0 150px; }
-@media (max-width: 900px) { .arena-split { grid-template-columns: 1fr; } }
+
+/* 学习难度 & 类型标签 */
+.lv { display: inline-block; min-width: 34px; text-align: center; padding: 2px 8px; border-radius: 99px; font-size: 11.5px; font-weight: 600; }
+.lv-0 { background: rgba(37, 111, 70, 0.12); color: #256f46; }
+.lv-1 { background: rgba(37, 111, 70, 0.16); color: #256f46; }
+.lv-2 { background: rgba(161, 98, 7, 0.14); color: #a16207; }
+.lv-3 { background: rgba(196, 60, 53, 0.10); color: #b4530f; }
+.lv-4 { background: rgba(196, 60, 53, 0.14); color: #c43c35; }
+.type-tag { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 11.5px; background: var(--surface-2); color: var(--ink-soft); white-space: nowrap; }
+
 /* ==================== 进阶文档 ==================== */
-.doc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2vw, 24px); }
+.doc-count {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  margin-bottom: clamp(22px, 2.8vw, 32px);
+}
+.doc-count .dc-item {
+  padding: clamp(16px, 2vw, 24px) 10px;
+  text-align: center;
+  border-left: 1px solid var(--line);
+}
+.doc-count .dc-item:first-child { border-left: 0; }
+.doc-count .dc-num {
+  font-family: var(--font-mono);
+  font-size: clamp(22px, 2.6vw, 30px);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink);
+}
+.doc-count .dc-lbl {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--ink-faint);
+  line-height: 1.4;
+}
+.doc-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+}
 .doc-card {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  padding: clamp(22px, 2.6vw, 32px);
-  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: var(--shadow-card);
+  padding: clamp(20px, 2.4vw, 30px);
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
-.doc-card:hover { border-color: var(--line-strong); box-shadow: var(--shadow-card); }
-.doc-card .doc-kicker { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 10px; }
-.doc-card h3 { margin: 0 0 8px; font-family: var(--font-serif); font-size: clamp(18px, 2vw, 22px); font-weight: 600; line-height: 1.35; }
-.doc-card .doc-meta { font-size: 12px; color: var(--ink-faint); margin-bottom: 14px; }
+.doc-card:hover { border-color: var(--line-strong); transform: translateY(-2px); }
+.doc-card .doc-kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 10px;
+}
+.doc-card h3 {
+  margin: 0 0 8px;
+  font-family: var(--font-serif);
+  font-size: clamp(18px, 1.9vw, 21px);
+  font-weight: 600;
+  line-height: 1.38;
+  color: var(--ink);
+}
+.doc-card .doc-meta { font-size: 12px; color: var(--ink-faint); margin-bottom: 12px; word-break: break-word; }
 .doc-card .doc-meta a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: 2px; }
-.doc-card .doc-lead { margin: 0 0 16px; font-size: 13.5px; line-height: 1.8; color: var(--ink-soft); }
-.doc-count { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-bottom: clamp(24px, 3vw, 36px); }
-.doc-count .dc-item { background: var(--surface); padding: 22px 14px; text-align: center; }
-.doc-count .dc-num { font-family: var(--font-mono); font-size: clamp(22px, 2.6vw, 30px); font-weight: 700; line-height: 1; }
-.doc-count .dc-lbl { margin-top: 8px; font-size: 12px; color: var(--ink-faint); letter-spacing: 0.04em; }
+.doc-card .doc-lead { margin: 0 0 18px; font-size: 13.5px; line-height: 1.8; color: var(--ink-soft); flex: 1; }
 @media (max-width: 860px) { .doc-grid { grid-template-columns: 1fr; } }
+@media (max-width: 540px) {
+  .doc-count .dc-lbl { font-size: 11px; }
+}
+
 /* 文档阅读页 */
 .doc-open {
-  margin-top: 4px; border: 0; background: transparent; padding: 0;
-  font-size: 13px; font-weight: 600; color: var(--accent); cursor: pointer;
+  align-self: flex-start;
+  margin-top: auto;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--accent);
+  cursor: pointer;
 }
 .doc-open:hover { text-decoration: underline; text-underline-offset: 3px; }
-.doc-reader { max-width: 760px; margin: 0 auto; }
-.doc-crumb { font-size: 12.5px; color: var(--ink-faint); margin-bottom: clamp(20px, 3vw, 32px); display: flex; gap: 8px; align-items: center; }
+.doc-reader {
+  max-width: 760px;
+  margin: clamp(8px, 1.8vw, 20px) auto 0;
+}
+.doc-crumb {
+  font-size: 13px;
+  color: var(--ink-faint);
+  margin-bottom: clamp(18px, 2.6vw, 28px);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
 .doc-crumb a { color: var(--ink-soft); }
 .doc-crumb a:hover { color: var(--accent); }
 .doc-reader .doc-title {
-  margin: 0 0 12px; font-family: var(--font-serif); font-weight: 600;
-  font-size: clamp(26px, 3.4vw, 40px); line-height: 1.3; letter-spacing: 0.01em;
+  margin: 0 0 12px;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(24px, 3.2vw, 38px);
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  color: var(--ink);
 }
 .doc-reader .doc-lead {
-  margin: 18px 0 0; padding-bottom: 22px; border-bottom: 1px solid var(--line);
-  font-size: 15px; line-height: 1.85; color: var(--ink-soft);
+  margin: 16px 0 0;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--ink-soft);
 }
-.doc-reader .doc-body { margin-top: 26px; font-size: 15px; line-height: 1.95; color: var(--ink-soft); }
+.doc-reader .doc-body { margin-top: 24px; font-size: 15px; line-height: 1.95; color: var(--ink-soft); }
 .doc-reader .doc-body h4 {
-  margin: 34px 0 10px; font-size: 15px; font-weight: 700; color: var(--ink);
+  margin: 32px 0 10px;
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--ink);
   letter-spacing: 0.02em;
 }
 .doc-reader .doc-body h4:first-child { margin-top: 0; }
@@ -2054,157 +2606,47 @@ body[data-route="practice"] .container {
 .doc-reader .doc-body ul { margin: 0 0 16px; padding-left: 20px; }
 .doc-reader .doc-body li { margin-bottom: 7px; }
 .doc-reader .doc-body .quote {
-  margin: 18px 0; padding: 14px 18px; border-left: 2px solid var(--accent);
-  background: var(--surface); border-radius: 0 8px 8px 0; font-size: 14px; color: var(--ink);
+  margin: 18px 0;
+  padding: 14px 18px;
+  border-left: 3px solid var(--accent);
+  background: var(--surface);
+  border-radius: 0 10px 10px 0;
+  font-size: 14px;
+  color: var(--ink);
 }
 .doc-reader .doc-body .code-list { font-family: var(--font-mono); font-size: 13px; color: var(--ink-soft); line-height: 2; }
 .doc-reader .doc-body code { font-family: var(--font-mono); font-size: 13px; background: var(--surface-2); padding: 1px 6px; border-radius: 4px; color: var(--ink); }
-.doc-pager { display: flex; justify-content: space-between; gap: 12px; margin-top: clamp(36px, 5vw, 60px); padding-top: 22px; border-top: 1px solid var(--line); flex-wrap: wrap; }
-.doc-pager .btn:disabled { opacity: 0.4; cursor: default; }
-/* 关键差异块 */
-.key-diff {
-  display: flex; align-items: center; gap: clamp(14px, 2vw, 26px);
-  padding: clamp(18px, 2.2vw, 26px) clamp(18px, 2.4vw, 28px);
-  border: 1px solid var(--line-strong);
-  border-left: 3px solid var(--accent);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  margin-bottom: clamp(28px, 3.4vw, 44px);
+.doc-pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: clamp(32px, 4.5vw, 52px);
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
   flex-wrap: wrap;
 }
-.key-diff .kd-tag {
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em;
-  color: var(--accent); border: 1px solid var(--accent); border-radius: 4px;
-  padding: 3px 8px; white-space: nowrap;
-}
-.key-diff .kd-main { flex: 1; min-width: 240px; }
-.key-diff h3 { margin: 0 0 6px; font-size: 15.5px; font-weight: 700; color: var(--ink); }
-.key-diff p { margin: 0; font-size: 13px; line-height: 1.75; color: var(--ink-soft); }
-@media (max-width: 720px) { .key-diff { flex-direction: column; align-items: flex-start; } }
-/* 学习难度标记 */
-.lv { display: inline-block; min-width: 34px; padding: 1px 7px; border-radius: 99px; font-size: 11.5px; font-weight: 600; }
-.lv-0 { background: rgba(37,111,70,.12); color: #256f46; }
-.lv-1 { background: rgba(37,111,70,.16); color: #256f46; }
-.lv-2 { background: rgba(161,98,7,.14); color: #a16207; }
-.lv-3 { background: rgba(196,60,53,.10); color: #b4530f; }
-.lv-4 { background: rgba(196,60,53,.14); color: #c43c35; }
-.tbl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.tbl-scroll .compare-table { min-width: 560px; }
-/* ==================== 整页分屏吸附 ==================== */
-html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
-#view-home > .snap-block {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-top: clamp(14px, 2.4vh, 32px);
-  padding-bottom: clamp(14px, 2.4vh, 32px);
-  box-sizing: border-box;
-}
-/* 只有「内容能放进一屏」的区块才参与吸附，避免长区块被硬切 */
-#view-home > .snap-block.snap-fit {
-  min-height: 100vh;
-  min-height: 100svh;
-  scroll-snap-align: start;
-}
-#view-home > .snap-block.snap-fit > .section-head { margin-top: 0; }
-@media (prefers-reduced-motion: reduce) { html.snap-home { scroll-snap-type: none; } }
-/* 移动端：表格横向滚动，首列固定在左侧 */
-.tbl-scroll { position: relative; }
-@media (max-width: 720px) {
-  .tbl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 12px; border: 1px solid var(--line); }
-  .compare-table { min-width: 760px; margin: 0; }
-  .compare-table th, .compare-table td { padding: 12px 14px; font-size: 12.5px; }
-  .compare-table th:first-child, .compare-table td:first-child {
-    position: sticky;
-    left: 0;
-    z-index: 2;
-    background: var(--surface);
-    box-shadow: 1px 0 0 var(--line), 8px 0 12px -8px rgba(0, 0, 0, 0.08);
-  }
-  .compare-table thead th:first-child { background: var(--bg); }
-  .compare-table tr.self-row td:first-child { background: var(--bg); }
-  .compare-table td:first-child { white-space: nowrap; }
-}
-/* 首屏 + 试打台合并双栏 */
-.hero-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.06fr);
-  gap: clamp(24px, 4vw, 60px);
-  align-items: center;
-  width: 100%;
-}
-.hero-grid .hero-editorial { text-align: left; align-items: flex-start; max-width: none; margin: 0; }
-.hero-grid .hero-editorial .hero-title { font-size: clamp(38px, 4.4vw, 62px); }
-.hero-grid .hero-editorial .hero-sub { margin: 0 0 26px; max-width: 34em; }
-.hero-grid .stage-frame { margin: 0; max-width: none; }
-.hero-grid .showcase { padding: clamp(18px, 2.4vw, 30px) clamp(16px, 2.6vw, 34px); }
-@media (max-width: 1000px) {
-  .hero-grid { grid-template-columns: 1fr; gap: 26px; }
-  .hero-grid .hero-editorial { text-align: center; align-items: center; }
-  .hero-grid .hero-editorial .hero-sub { margin-left: auto; margin-right: auto; }
-}
-@media (max-width: 700px) { .hero-grid .hero-editorial .hero-title { font-size: clamp(30px, 8.6vw, 40px); } }
-/* 下滑提示 */
-.scroll-cue {
-  position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 8px 16px; border-radius: 999px;
-  border: 1px solid var(--line-strong);
-  background: var(--glass);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  color: var(--ink-soft); font-size: 12.5px; font-weight: 600; cursor: pointer;
-  z-index: 45; transition: opacity 0.3s, transform 0.3s;
-  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.1);
-}
-.scroll-cue svg { animation: cueBob 1.6s ease-in-out infinite; }
-@keyframes cueBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
-.scroll-cue.hide { opacity: 0; pointer-events: none; transform: translateX(-50%) translateY(12px); }
-@media (prefers-reduced-motion: reduce) { .scroll-cue svg { animation: none; } }
+.doc-pager .btn:disabled { opacity: 0.4; cursor: default; }
+
 /* 单字测评 */
-.assess-table tbody tr.self-row td { background: var(--bg); font-weight: 700; }
 .assess-table tbody td { font-variant-numeric: tabular-nums; }
-.assess-notes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 2vw, 22px); margin-top: clamp(28px, 3.4vw, 44px); }
-.an-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: clamp(18px, 2.2vw, 26px); }
-.an-card h4 { margin: 0 0 8px; font-size: 14.5px; font-weight: 700; color: var(--ink); }
-.an-card p { margin: 0; font-size: 13px; line-height: 1.85; color: var(--ink-soft); }
+.assess-notes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(14px, 2vw, 22px);
+  margin-top: clamp(24px, 3vw, 36px);
+}
+.an-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: clamp(18px, 2.2vw, 26px);
+}
+.an-card h4 { margin: 0 0 8px; font-size: 15px; font-weight: 700; color: var(--ink); }
+.an-card p { margin: 0; font-size: 13.5px; line-height: 1.85; color: var(--ink-soft); }
+.an-card code { font-family: var(--font-mono); font-size: 12px; background: var(--surface-2); padding: 1px 5px; border-radius: 4px; color: var(--ink); white-space: nowrap; }
 @media (max-width: 760px) { .assess-notes { grid-template-columns: 1fr; } }
-/* 性能主张 & 速度换算 */
-.perf-claim {
-  border: 1px solid var(--line);
-  border-left: 3px solid var(--accent);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  padding: clamp(20px, 2.4vw, 30px);
-  margin-bottom: clamp(24px, 3vw, 36px);
-}
-.perf-claim h3 { margin: 0 0 10px; font-family: var(--font-serif); font-size: clamp(19px, 2.2vw, 24px); font-weight: 600; }
-.perf-claim p { margin: 0 0 12px; font-size: 14px; line-height: 1.85; color: var(--ink-soft); }
-.perf-claim p strong { color: var(--ink); }
-.perf-more { font-size: 13px; font-weight: 700; color: var(--accent); text-decoration: none; }
-.perf-more:hover { text-decoration: underline; text-underline-offset: 3px; }
-.speed-card {
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  padding: clamp(20px, 2.4vw, 30px);
-  margin-bottom: clamp(24px, 3vw, 36px);
-}
-.sp-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
-.sp-head h3 { margin: 0 0 6px; font-size: 16.5px; font-weight: 700; }
-.sp-head p { margin: 0; font-size: 13px; color: var(--ink-soft); }
-.sp-cols { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: center; gap: clamp(8px, 1.6vw, 20px); }
-.sp-col { text-align: center; padding: 14px 10px; border-radius: 12px; background: var(--bg); border: 1px solid var(--line); }
-.sp-col.hi { background: var(--accent-soft, rgba(196,60,53,.08)); border-color: var(--accent); }
-.sp-col b { display: block; font-family: var(--font-mono); font-size: clamp(24px, 3vw, 34px); line-height: 1; color: var(--ink); }
-.sp-col.hi b { color: var(--accent); }
-.sp-col span { display: block; margin-top: 6px; font-size: 11.5px; color: var(--ink-faint); }
-.sp-arrow { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-faint); white-space: nowrap; }
-.sp-note { margin: 18px 0 0; padding-top: 14px; border-top: 1px solid var(--line); font-size: 12px; line-height: 1.8; color: var(--ink-faint); }
-@media (max-width: 620px) {
-  .sp-cols { grid-template-columns: 1fr; gap: 8px; }
-  .sp-arrow { justify-self: center; }
-}
-.type-tag { display: inline-block; padding: 1px 7px; border-radius: 4px; font-size: 11.5px; background: var(--surface-2); color: var(--ink-soft); white-space: nowrap; }
+
 </style>
 </head>
 <body>
@@ -2249,10 +2691,6 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
 
   <!-- ==================== VIEW 1: 概览（第一眼：靠谱、高端、想试一下） ==================== -->
   <section class="view active" id="view-home">
-    <button class="scroll-cue" id="scrollCue" type="button" aria-label="向下查看更多">
-      <span>向下滑动，查看更多</span>
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-    </button>
     <div class="snap-block hero-block">
     <div class="hero-grid">
     <div class="hero-editorial">
@@ -2297,8 +2735,8 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
     </div>
 
     </div>
-    <div class="snap-block">
     </div>
+    <div class="snap-block">
     <!-- 四个设计原则 -->
     <div class="section-head">
       <div>
@@ -2369,7 +2807,7 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
     </div>
 
     <div class="eb-wrap">
-      <svg class="eb-chart" viewBox="0 0 760 360" role="img" aria-label="遗忘曲线：不复习 7 天掉到 24%，按1/2/4/7天复习稳定在 90% 以上"><line x1="58" y1="280.0" x2="698" y2="280.0" stroke="#e8e5de"/><text x="48" y="284.0" text-anchor="end" class="eb-tick">0%</text><line x1="58" y1="224.0" x2="698" y2="224.0" stroke="#e8e5de"/><text x="48" y="228.0" text-anchor="end" class="eb-tick">25%</text><line x1="58" y1="168.0" x2="698" y2="168.0" stroke="#e8e5de"/><text x="48" y="172.0" text-anchor="end" class="eb-tick">50%</text><line x1="58" y1="112.0" x2="698" y2="112.0" stroke="#e8e5de"/><text x="48" y="116.0" text-anchor="end" class="eb-tick">75%</text><line x1="58" y1="56.0" x2="698" y2="56.0" stroke="#e8e5de"/><text x="48" y="60.0" text-anchor="end" class="eb-tick">100%</text><polyline points="76.0,56.0 80.4,182.0 84.8,185.6 89.2,189.2 93.5,192.9 97.9,196.5 102.3,199.5 106.7,199.9 111.1,200.4 115.5,200.9 119.9,201.3 124.2,201.8 128.6,202.3 133.0,202.8 137.4,203.2 141.8,203.7 146.2,204.2 150.6,204.7 154.9,205.1 159.3,205.6 163.7,206.1 168.1,206.6 172.5,207.2 176.9,207.8 181.3,208.3 185.6,208.9 190.0,209.4 194.4,210.0 198.8,210.6 203.2,211.1 207.6,211.7 212.0,212.2 216.3,212.8 220.7,213.4 225.1,213.9 229.5,214.5 233.9,215.0 238.3,215.6 242.7,216.2 247.0,216.7 251.4,217.3 255.8,217.4 260.2,217.4 264.6,217.5 269.0,217.6 273.4,217.7 277.7,217.8 282.1,217.9 286.5,218.0 290.9,218.0 295.3,218.1 299.7,218.2 304.1,218.3 308.4,218.4 312.8,218.5 317.2,218.5 321.6,218.6 326.0,218.7 330.4,218.8 334.8,218.9 339.1,219.0 343.5,219.0 347.9,219.1 352.3,219.2 356.7,219.3 361.1,219.4 365.5,219.5 369.8,219.5 374.2,219.6 378.6,219.7 383.0,219.8 387.4,219.9 391.8,220.0 396.2,220.1 400.5,220.1 404.9,220.2 409.3,220.3 413.7,220.4 418.1,220.5 422.5,220.6 426.9,220.6 431.2,220.7 435.6,220.8 440.0,220.9 444.4,221.0 448.8,221.1 453.2,221.1 457.6,221.2 461.9,221.3 466.3,221.4 470.7,221.5 475.1,221.6 479.5,221.6 483.9,221.7 488.3,221.8 492.6,221.9 497.0,222.0 501.4,222.1 505.8,222.2 510.2,222.2 514.6,222.3 519.0,222.4 523.3,222.5 527.7,222.6 532.1,222.7 536.5,222.7 540.9,222.8 545.3,222.9 549.7,223.0 554.0,223.1 558.4,223.2 562.8,223.2 567.2,223.3 571.6,223.4 576.0,223.5 580.4,223.6 584.7,223.7 589.1,223.7 593.5,223.8 597.9,223.9 602.3,224.0 606.7,224.1 611.1,224.2 615.4,224.3 619.8,224.4 624.2,224.6 628.6,224.7 633.0,224.8 637.4,224.9 641.8,225.0 646.1,225.1 650.5,225.2 654.9,225.3 659.3,225.5 663.7,225.6 668.1,225.7 672.5,225.8 676.8,225.9 681.2,226.0 685.6,226.1 690.0,226.2" fill="none" stroke="#b9b3a9" stroke-width="2.2" stroke-dasharray="6 5"/><polyline points="76.0,56.0 163.7,56.0 168.1,68.9 172.5,71.1 176.9,71.4 181.3,71.6 185.6,71.8 190.0,72.1 194.4,72.3 198.8,72.5 203.2,72.7 207.6,73.0 212.0,73.2 216.3,73.2 220.7,73.3 225.1,73.3 229.5,73.3 233.9,73.4 238.3,73.4 242.7,73.4 247.0,73.4 251.4,73.5 251.4,56.0 260.2,69.6 269.0,71.2 277.7,71.5 286.5,71.8 295.3,72.0 304.1,72.3 312.8,72.6 321.6,72.9 330.4,73.1 339.1,73.2 347.9,73.3 356.7,73.3 365.5,73.3 374.2,73.4 383.0,73.4 391.8,73.4 400.5,73.5 409.3,73.5 418.1,73.5 426.9,73.6 426.9,56.0 440.0,69.3 453.2,71.2 466.3,71.4 479.5,71.7 492.6,71.9 505.8,72.2 519.0,72.4 532.1,72.7 545.3,72.9 558.4,73.2 571.6,73.2 584.7,73.3 597.9,73.3 611.1,73.3 624.2,73.4 637.4,73.4 650.5,73.4 663.7,73.5 676.8,73.5 690.0,73.5 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0" fill="none" stroke="#1a1816" stroke-width="2.4"/><line x1="58" y1="280" x2="698" y2="280" stroke="#d6d2c9" stroke-width="1.2"/><line x1="76.0" y1="280" x2="76.0" y2="286" stroke="#d6d2c9"/><text x="76.0" y="306" text-anchor="middle" class="eb-name">当天</text><line x1="163.7" y1="280" x2="163.7" y2="286" stroke="#d6d2c9"/><text x="163.7" y="306" text-anchor="middle" class="eb-name">第1天</text><line x1="251.4" y1="280" x2="251.4" y2="286" stroke="#d6d2c9"/><text x="251.4" y="306" text-anchor="middle" class="eb-name">第2天</text><line x1="426.9" y1="280" x2="426.9" y2="286" stroke="#d6d2c9"/><text x="426.9" y="306" text-anchor="middle" class="eb-name">第4天</text><line x1="690.0" y1="280" x2="690.0" y2="286" stroke="#d6d2c9"/><text x="690.0" y="306" text-anchor="middle" class="eb-name">第7天</text><circle cx="163.7" cy="56.0" r="4" fill="var(--accent)"/><text x="163.7" y="44.0" text-anchor="middle" class="eb-rev">复习</text><circle cx="251.4" cy="56.0" r="4" fill="var(--accent)"/><text x="251.4" y="44.0" text-anchor="middle" class="eb-rev">复习</text><circle cx="426.9" cy="56.0" r="4" fill="var(--accent)"/><text x="426.9" y="44.0" text-anchor="middle" class="eb-rev">复习</text><circle cx="690.0" cy="56.0" r="4" fill="var(--accent)"/><text x="690.0" y="44.0" text-anchor="middle" class="eb-rev">复习</text><text x="684.0" y="214.2" text-anchor="end" class="eb-val gray">24%</text><text x="611.1" y="73.9" text-anchor="end" class="eb-val">90%+</text><text x="374.2" y="177.0" class="eb-label gray">不复习</text><text x="347.9" y="62.7" class="eb-label strong">按 1/2/4/7 天复习</text></svg>
+      <svg class="eb-chart" viewBox="0 0 760 360" role="img" aria-label="遗忘曲线：不复习 7 天掉到 24%，按1/2/4/7天复习稳定在 90% 以上"><line x1="58" y1="280.0" x2="698" y2="280.0" stroke="var(--line)"/><text x="48" y="284.0" text-anchor="end" class="eb-tick">0%</text><line x1="58" y1="224.0" x2="698" y2="224.0" stroke="var(--line)"/><text x="48" y="228.0" text-anchor="end" class="eb-tick">25%</text><line x1="58" y1="168.0" x2="698" y2="168.0" stroke="var(--line)"/><text x="48" y="172.0" text-anchor="end" class="eb-tick">50%</text><line x1="58" y1="112.0" x2="698" y2="112.0" stroke="var(--line)"/><text x="48" y="116.0" text-anchor="end" class="eb-tick">75%</text><line x1="58" y1="56.0" x2="698" y2="56.0" stroke="var(--line)"/><text x="48" y="60.0" text-anchor="end" class="eb-tick">100%</text><polyline points="76.0,56.0 80.4,182.0 84.8,185.6 89.2,189.2 93.5,192.9 97.9,196.5 102.3,199.5 106.7,199.9 111.1,200.4 115.5,200.9 119.9,201.3 124.2,201.8 128.6,202.3 133.0,202.8 137.4,203.2 141.8,203.7 146.2,204.2 150.6,204.7 154.9,205.1 159.3,205.6 163.7,206.1 168.1,206.6 172.5,207.2 176.9,207.8 181.3,208.3 185.6,208.9 190.0,209.4 194.4,210.0 198.8,210.6 203.2,211.1 207.6,211.7 212.0,212.2 216.3,212.8 220.7,213.4 225.1,213.9 229.5,214.5 233.9,215.0 238.3,215.6 242.7,216.2 247.0,216.7 251.4,217.3 255.8,217.4 260.2,217.4 264.6,217.5 269.0,217.6 273.4,217.7 277.7,217.8 282.1,217.9 286.5,218.0 290.9,218.0 295.3,218.1 299.7,218.2 304.1,218.3 308.4,218.4 312.8,218.5 317.2,218.5 321.6,218.6 326.0,218.7 330.4,218.8 334.8,218.9 339.1,219.0 343.5,219.0 347.9,219.1 352.3,219.2 356.7,219.3 361.1,219.4 365.5,219.5 369.8,219.5 374.2,219.6 378.6,219.7 383.0,219.8 387.4,219.9 391.8,220.0 396.2,220.1 400.5,220.1 404.9,220.2 409.3,220.3 413.7,220.4 418.1,220.5 422.5,220.6 426.9,220.6 431.2,220.7 435.6,220.8 440.0,220.9 444.4,221.0 448.8,221.1 453.2,221.1 457.6,221.2 461.9,221.3 466.3,221.4 470.7,221.5 475.1,221.6 479.5,221.6 483.9,221.7 488.3,221.8 492.6,221.9 497.0,222.0 501.4,222.1 505.8,222.2 510.2,222.2 514.6,222.3 519.0,222.4 523.3,222.5 527.7,222.6 532.1,222.7 536.5,222.7 540.9,222.8 545.3,222.9 549.7,223.0 554.0,223.1 558.4,223.2 562.8,223.2 567.2,223.3 571.6,223.4 576.0,223.5 580.4,223.6 584.7,223.7 589.1,223.7 593.5,223.8 597.9,223.9 602.3,224.0 606.7,224.1 611.1,224.2 615.4,224.3 619.8,224.4 624.2,224.6 628.6,224.7 633.0,224.8 637.4,224.9 641.8,225.0 646.1,225.1 650.5,225.2 654.9,225.3 659.3,225.5 663.7,225.6 668.1,225.7 672.5,225.8 676.8,225.9 681.2,226.0 685.6,226.1 690.0,226.2" fill="none" stroke="var(--ink-faint)" stroke-width="2.2" stroke-dasharray="6 5"/><polyline points="76.0,56.0 163.7,56.0 168.1,68.9 172.5,71.1 176.9,71.4 181.3,71.6 185.6,71.8 190.0,72.1 194.4,72.3 198.8,72.5 203.2,72.7 207.6,73.0 212.0,73.2 216.3,73.2 220.7,73.3 225.1,73.3 229.5,73.3 233.9,73.4 238.3,73.4 242.7,73.4 247.0,73.4 251.4,73.5 251.4,56.0 260.2,69.6 269.0,71.2 277.7,71.5 286.5,71.8 295.3,72.0 304.1,72.3 312.8,72.6 321.6,72.9 330.4,73.1 339.1,73.2 347.9,73.3 356.7,73.3 365.5,73.3 374.2,73.4 383.0,73.4 391.8,73.4 400.5,73.5 409.3,73.5 418.1,73.5 426.9,73.6 426.9,56.0 440.0,69.3 453.2,71.2 466.3,71.4 479.5,71.7 492.6,71.9 505.8,72.2 519.0,72.4 532.1,72.7 545.3,72.9 558.4,73.2 571.6,73.2 584.7,73.3 597.9,73.3 611.1,73.3 624.2,73.4 637.4,73.4 650.5,73.4 663.7,73.5 676.8,73.5 690.0,73.5 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0 690.0,56.0" fill="none" stroke="var(--ink)" stroke-width="2.4"/><line x1="58" y1="280" x2="698" y2="280" stroke="var(--line-strong)" stroke-width="1.2"/><line x1="76.0" y1="280" x2="76.0" y2="286" stroke="var(--line-strong)"/><text x="76.0" y="306" text-anchor="middle" class="eb-name">当天</text><line x1="163.7" y1="280" x2="163.7" y2="286" stroke="var(--line-strong)"/><text x="163.7" y="306" text-anchor="middle" class="eb-name">第1天</text><line x1="251.4" y1="280" x2="251.4" y2="286" stroke="var(--line-strong)"/><text x="251.4" y="306" text-anchor="middle" class="eb-name">第2天</text><line x1="426.9" y1="280" x2="426.9" y2="286" stroke="var(--line-strong)"/><text x="426.9" y="306" text-anchor="middle" class="eb-name">第4天</text><line x1="690.0" y1="280" x2="690.0" y2="286" stroke="var(--line-strong)"/><text x="690.0" y="306" text-anchor="middle" class="eb-name">第7天</text><circle cx="163.7" cy="56.0" r="4" fill="var(--accent)"/><text x="163.7" y="44.0" text-anchor="middle" class="eb-rev">复习</text><circle cx="251.4" cy="56.0" r="4" fill="var(--accent)"/><text x="251.4" y="44.0" text-anchor="middle" class="eb-rev">复习</text><circle cx="426.9" cy="56.0" r="4" fill="var(--accent)"/><text x="426.9" y="44.0" text-anchor="middle" class="eb-rev">复习</text><circle cx="690.0" cy="56.0" r="4" fill="var(--accent)"/><text x="690.0" y="44.0" text-anchor="middle" class="eb-rev">复习</text><text x="684.0" y="214.2" text-anchor="end" class="eb-val gray">24%</text><text x="684.0" y="99.0" text-anchor="end" class="eb-val">90%+</text><text x="374.2" y="206.0" text-anchor="middle" class="eb-label gray">不复习</text><text x="339.0" y="99.0" text-anchor="middle" class="eb-label strong">按 1/2/4/7 天复习</text></svg>
       <div class="eb-side">
         <div class="eb-big"><b>24%</b><span>不复习的话，第 7 天只剩这么多</span></div>
         <div class="eb-vs">
@@ -2435,7 +2873,8 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
       </div>
 
       <h3 class="arena-subhead">前 3000 常用字 · 单字实测（七种方案）</h3>
-<div class="tbl-scroll">
+      <div class="tbl-scroll-hint">左右滑动查看完整数据 →</div>
+      <div class="tbl-scroll">
       <table class="tier-table compare-table wide">
         <thead>
           <tr><th>方案</th><th>类型</th><th>字根数</th><th>首选准确率</th><th>平均候选位次</th><th>平均码长</th><th>全码重码字数</th><th>学习难度</th></tr>
@@ -2453,8 +2892,9 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
       </div>
 
       <div class="arena-split">
-        <div class="arena-bars">
+        <div class="arena-panel">
           <h3 class="arena-subhead">首选准确率对比</h3>
+          <div class="arena-bars">
         <div class="ab-row self"><span class="ab-name">简单鹤</span><span class="ab-track"><i class="ab-fill" style="width:99.87%"></i></span><span class="ab-val">99.87%</span></div>
 
         <div class="ab-row"><span class="ab-name">虎码</span><span class="ab-track"><i class="ab-fill" style="width:99.95%"></i></span><span class="ab-val">99.95%</span></div>
@@ -2463,10 +2903,11 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
         <div class="ab-row"><span class="ab-name">自然码双拼</span><span class="ab-track"><i class="ab-fill" style="width:84.37%"></i></span><span class="ab-val">84.37%</span></div>
         <div class="ab-row"><span class="ab-name">全拼 26 键</span><span class="ab-track"><i class="ab-fill" style="width:84.43%"></i></span><span class="ab-val">84.43%</span></div>
         <div class="ab-row"><span class="ab-name">全拼 9 键</span><span class="ab-track"><i class="ab-fill" style="width:77.06%"></i></span><span class="ab-val">77.06%</span></div>
+          </div>
           <div class="ab-cap">条长 = 前 3000 常用字的单字首选准确率</div>
         </div>
 
-        <div>
+        <div class="arena-panel">
           <h3 class="arena-subhead">简单鹤 · 分档重码</h3>
           <table class="tier-table">
             <thead><tr><th>字集范围</th><th>重码字数</th><th>首选准确率</th></tr></thead>
@@ -2476,17 +2917,24 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
               <tr><td>前 4000 字</td><td>178</td><td>99.86%</td></tr>
             </tbody>
           </table>
+          <div class="arena-panel-foot">
+            <a class="btn btn-outline btn-sm" href="#assess">查看完整单字测评 →</a>
+          </div>
         </div>
       </div>
 
-      <p style="text-align:center;margin:0 0 18px"><a class="btn btn-outline btn-sm" href="#assess">查看完整单字测评 →</a></p>
-
-      <p class="arena-note">
-        测算口径：统一取本仓库 <code>jde.dict.yaml</code> 的字频权重作为评测集，各方案只提供自己的单字码，逐字比对同码单字（不含词组）。<br>
-        码表来源：小鹤音形 <code>cubercsl/rime-flypy</code>、虎码 <code>LukNg/Rime-tiger_code</code>，均为公开码表；全拼由同字频表还原。<br>
-        关于自然码双拼：与所有纯双拼一样对拼音做一一映射，同音重码结构与同属双拼的方案完全一致，故与小鹤双拼指标相同。<br>
-        字根数量来源：简单鹤 97，取本仓库码表去重实测；虎码 241，官网原文「同源字根归并后一共 241 个字根」；字根数量按官网 flypy.cc/help 逐键统计：小鹤音形 = 6 笔画 + 88 部件（这 94 个必须掌握）+ 237 个小字字根（按小字规则推导、官方称免记忆）；简单鹤 97 个全部需要掌握，但没有小字这一层。<br>学习难度按「是否需要重新记一套字根/辅助码规则」标注：全拼极低、双拼低、音形中、形码高。<br>提醒：本表只比「单字重码」，不含词组与整句；形码（如虎码）重码虽低，但要记两百多个字根，学习成本远高于音形。复算命令 <code>python3 scripts/measure.py</code>。
-      </p>
+      <details class="clean-details arena-details">
+        <summary>展开测算口径、码表来源与复算说明</summary>
+        <div class="clean-details-body arena-note">
+          <ul class="arena-note-list">
+            <li><strong>测算口径：</strong>统一取本仓库 <code>jde.dict.yaml</code> 的字频权重作为评测集，各方案只提供自己的单字码，逐字比对同码单字（不含词组）。</li>
+            <li><strong>码表来源：</strong>小鹤音形 <code>cubercsl/rime-flypy</code>、虎码 <code>LukNg/Rime-tiger_code</code>，均为公开码表；全拼由同字频表还原。</li>
+            <li><strong>关于自然码双拼：</strong>与所有纯双拼一样对拼音做一一映射，同音重码结构与同属双拼的方案完全一致，故与小鹤双拼指标相同。</li>
+            <li><strong>字根数量来源：</strong>简单鹤 97，取本仓库码表去重实测；虎码 241，官网原文「同源字根归并后一共 241 个字根」；小鹤音形按官网 flypy.cc/help 逐键统计 = 6 笔画 + 88 部件（这 94 个必须掌握）+ 237 个小字字根（按小字规则推导、官方称免记忆）；简单鹤 97 个全部需要掌握，但没有小字这一层。</li>
+            <li><strong>学习难度与提醒：</strong>按「是否需要重新记一套字根/辅助码规则」标注（全拼极低、双拼低、音形中、形码高）。本表只比「单字重码」，不含词组与整句；形码（如虎码）重码虽低，但要记两百多个字根，学习成本远高于音形。复算命令：<code>python3 scripts/measure.py</code>。</li>
+          </ul>
+        </div>
+      </details>
     </section>
 
     </div>
@@ -3259,6 +3707,7 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
     </div>
 
     <h3 class="arena-subhead">分档重码与码长</h3>
+    <div class="tbl-scroll-hint">左右滑动查看完整数据 →</div>
     <div class="tbl-scroll">
       <table class="tier-table assess-table">
         <thead>
@@ -3308,9 +3757,8 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
       </div>
     </div>
 
-    <p class="arena-note">
-      本页只测单字（不含词组与整句）；词组性能另见「性能实测」区的多方案对照。<br>
-      数据由脚本从本仓库码表直接计算，复算命令 <code>python3 scripts/assess.py</code>。
+    <p class="arena-foot-note">
+      本页只测单字（不含词组与整句）；词组性能另见「性能实测」区的多方案对照。数据由脚本从本仓库码表直接计算，复算命令 <code>python3 scripts/assess.py</code>。
     </p>
   </section>
 
@@ -4011,16 +4459,7 @@ function initScrollReveal(scopeEl) {
   });
 }
 
-function syncSnapFit() {
-  const blocks = document.querySelectorAll('#view-home > .snap-block');
-  const vh = window.innerHeight;
-  blocks.forEach(b => {
-    b.classList.remove('snap-fit');
-    // 先测自然高度（不受 min-height 影响）
-    const h = b.scrollHeight;
-    if (h <= vh * 1.02) b.classList.add('snap-fit');
-  });
-}
+function syncSnapFit() { /* 自然流式排版，不再强制 100svh 分屏吸附 */ }
 
 function initScrollCue() {
   const cue = $('scrollCue');
