@@ -2128,13 +2128,19 @@ body.is-snap-route .snap-dots {
   line-height: 1.7;
   color: var(--ink-faint);
 }
-/* 锁定字根与规则页顶部标题+5标签栏高度：无论点哪个键帽、切哪个标签，顶部菜单栏 0px 跳动 */
+/* 锁定字根与规则页顶部标题+5标签栏高度与边距：无论点哪个键帽、切哪个标签，顶部菜单栏 0px 跳动 */
 #view-guide #guide-slide-main {
   justify-content: flex-start !important;
   padding-top: clamp(14px, 2.2vw, 24px) !important;
+  padding-left: var(--pad-x) !important;
+  padding-right: var(--pad-x) !important;
 }
 #view-guide.free-scroll {
-  padding-top: clamp(14px, 2.2vw, 24px) !important;
+  padding: 0 0 48px !important;
+}
+#view-guide.free-scroll #guide-slide-notes {
+  padding-left: var(--pad-x) !important;
+  padding-right: var(--pad-x) !important;
 }
 #view-guide .zg-detail-bar {
   min-height: 112px;
@@ -2815,13 +2821,13 @@ body.is-snap-route .snap-dots {
   font-weight: 600;
 }
 
-/* 当前字 / 最后一字拆分防忘提示条 */
+/* 当前字 / 最后一字拆分防忘提示条（锁定单/多编码等高，0px 跳动） */
 .hl-hint-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px 14px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   padding: 10px 14px;
   border-radius: 12px;
   background: var(--bg);
@@ -2835,13 +2841,17 @@ body.is-snap-route .snap-dots {
 }
 .hl-hint-bar.is-muted .hl-hint-detail {
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
+  transition: none;
 }
 .hl-hint-left {
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  min-width: 0;
+  flex: 1 1 auto;
 }
 .hl-hint-badge {
   font-size: 11px;
@@ -2852,6 +2862,7 @@ body.is-snap-route .snap-dots {
   border: 1px solid var(--line);
   color: var(--ink-soft);
   white-space: nowrap;
+  flex-shrink: 0;
 }
 .hl-hint-bar.is-last .hl-hint-badge {
   color: var(--accent);
@@ -2861,8 +2872,105 @@ body.is-snap-route .snap-dots {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  min-width: 0;
+  min-height: 30px;
   transition: opacity 0.25s ease;
+}
+.hl-hint-detail::-webkit-scrollbar { display: none; }
+.hl-hint-detail > * { flex-shrink: 0; }
+.hl-hint-tip {
+  font-size: 11.5px;
+  color: var(--ink-faint);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.hl-stall-ctrl {
+  display: none;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 4px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  height: 30px;
+}
+.hl-stall-ctrl.show {
+  display: inline-flex;
+}
+.hl-sec-step {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.hl-sec-step:hover {
+  background: var(--bg);
+  color: var(--ink);
+}
+.hl-sec-input {
+  width: 30px;
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 600;
+  text-align: center;
+  outline: none;
+  padding: 0;
+  -moz-appearance: textfield;
+}
+.hl-sec-input::-webkit-inner-spin-button,
+.hl-sec-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.hl-sec-unit {
+  font-size: 11.5px;
+  color: var(--ink-faint);
+  margin-right: 2px;
+  user-select: none;
+}
+@media (max-width: 760px) {
+  .hl-hint-bar {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 8px 10px;
+    min-height: 76px;
+  }
+  .hl-hint-left { display: contents; }
+  .hl-hint-badge { grid-column: 1; grid-row: 1; justify-self: start; }
+  .hl-hint-tip {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    font-size: 11px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+  .hl-hint-detail {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    min-height: 30px;
+  }
 }
 .hl-hint-char {
   font-family: var(--font-serif);
@@ -4470,7 +4578,7 @@ body.is-snap-route .snap-dots {
           </div>
           <div class="prac-tile">
             <div>
-              <div class="pt-idx">STEP 02 · 核心记忆</div>
+              <div class="pt-idx" id="homeCardZgTag">STEP 02 · 核心记忆</div>
               <h3>字根助记</h3>
               <p>3 键起步、渐进解锁，生疏字根自动加练。</p>
             </div>
@@ -4478,7 +4586,7 @@ body.is-snap-route .snap-dots {
           </div>
           <div class="prac-tile">
             <div>
-              <div class="pt-idx">STEP 03 · 实战提速</div>
+              <div class="pt-idx" id="homeCardSplitTag">STEP 03 · 实战提速</div>
               <h3>拆字与简码</h3>
               <p>从高频千字到全量词库，练出连贯盲打节奏。</p>
             </div>
@@ -4506,7 +4614,7 @@ body.is-snap-route .snap-dots {
         <div class="section-head" style="margin-bottom:clamp(12px,1.8dvh,20px)">
           <div>
             <div class="sec-eyebrow"><span>学习路线</span></div>
-            <h2>五步上手，<span class="serif-accent">循序成诵。</span></h2>
+            <h2><span id="rmStepCountWord">五</span>步上手，<span class="serif-accent">循序成诵。</span></h2>
             <p>不死背口诀，每天一刻钟，把规律交给指尖去记。</p>
           </div>
           <button class="btn btn-outline btn-sm" id="rmSkipToggleBtn" type="button" style="margin-top:8px">已会双拼，跳过第 1 步</button>
@@ -4533,7 +4641,7 @@ body.is-snap-route .snap-dots {
     <div class="snap-slide" id="rm-slide-m2" style="display:none">
       <div class="snap-inner">
         <div class="section-head" style="margin-bottom:12px">
-          <div><div class="sec-eyebrow"><span>STEP 02</span></div><h2>敲熟字根，<span class="serif-accent">指尖成癖。</span></h2></div>
+          <div><div class="sec-eyebrow"><span id="rmSlideM2Eyebrow">STEP 02</span></div><h2>敲熟字根，<span class="serif-accent">指尖成癖。</span></h2></div>
         </div>
         <div class="step-list" id="roadmapListM2"></div>
       </div>
@@ -4556,7 +4664,7 @@ body.is-snap-route .snap-dots {
     <div class="snap-slide" id="rm-slide-m4" style="display:none">
       <div class="snap-inner">
         <div class="section-head" style="margin-bottom:12px">
-          <div><div class="sec-eyebrow"><span>STEP 04</span></div><h2>简码提速，<span class="serif-accent">连贯成章。</span></h2></div>
+          <div><div class="sec-eyebrow"><span id="rmSlideM4Eyebrow">STEP 04</span></div><h2>简码提速，<span class="serif-accent">连贯成章。</span></h2></div>
         </div>
         <div class="step-list" id="roadmapListM4"></div>
       </div>
@@ -4567,7 +4675,7 @@ body.is-snap-route .snap-dots {
       <div class="snap-inner">
         <div class="section-head" style="margin-bottom:clamp(12px,1.8dvh,22px)">
           <div>
-            <div class="sec-eyebrow"><span>最后一步</span></div>
+            <div class="sec-eyebrow"><span id="rmSlide3Eyebrow">最后一步</span></div>
             <h2>日常实战，<span class="serif-accent">轻羽盲打。</span></h2>
           </div>
         </div>
@@ -4944,8 +5052,14 @@ body.is-snap-route .snap-dots {
             <div class="hl-pools" id="hlHintModeChips">
               <span class="hl-pools-lbl">拆分提示：</span>
               <button class="chip active" type="button" data-hl-hint="always">常显</button>
-              <button class="chip" type="button" data-hl-hint="stall">停顿 2 秒防忘</button>
+              <button class="chip" type="button" data-hl-hint="stall">停顿 <span id="hlStallSecLabel">3</span> 秒防忘</button>
               <button class="chip" type="button" data-hl-hint="off">纯盲打</button>
+              <span class="hl-stall-ctrl" id="hlStallCtrl" title="自定义停顿触发防忘提示的秒数（1–30 秒）">
+                <button class="hl-sec-step" id="hlStallDec" type="button" aria-label="减少停顿秒数">−</button>
+                <input class="hl-sec-input" id="hlStallSecInput" type="number" min="1" max="30" step="1" value="3" inputmode="numeric" aria-label="停顿防忘秒数">
+                <span class="hl-sec-unit">秒</span>
+                <button class="hl-sec-step" id="hlStallInc" type="button" aria-label="增加停顿秒数">+</button>
+              </span>
             </div>
           </div>
 
@@ -4992,7 +5106,7 @@ body.is-snap-route .snap-dots {
               <span class="hl-hint-badge" id="hlHintBadge">当前待打</span>
               <div class="hl-hint-detail" id="hlHintDetail"></div>
             </div>
-            <span style="font-size:11.5px;color:var(--ink-faint)">点击上方任意字也可随时查拆</span>
+            <span class="hl-hint-tip">点击上方任意字也可随时查拆</span>
           </div>
 
           <div class="hl-input-row">
@@ -6098,6 +6212,9 @@ function applySkipSpUi() {
   $('homeCardSpTag').textContent = sk ? '已跳过 · 双拼基础（可随时复习）' : 'STEP 01 · 双拼基础';
   $('homeCardSpTag').className = 'pt-idx';
   $('homeCardSp').style.opacity = sk ? '0.62' : '1';
+  if ($('homeCardZgTag')) $('homeCardZgTag').textContent = sk ? 'STEP 01 · 核心记忆' : 'STEP 02 · 核心记忆';
+  if ($('homeCardSplitTag')) $('homeCardSplitTag').textContent = sk ? 'STEP 02 · 实战提速' : 'STEP 03 · 实战提速';
+  if ($('rmStepCountWord')) $('rmStepCountWord').textContent = sk ? '四' : '五';
 
   $('pracSpTab').style.display = sk ? 'none' : 'inline-block';
   $('guideSpTab').classList.toggle('dimmed', sk);
@@ -6642,14 +6759,16 @@ function initScrollCue() {
     try {
       const raw = JSON.parse(localStorage.getItem(HL_STORAGE_KEY) || '{}');
       const today = new Date().toISOString().slice(0, 10);
+      const savedSec = Number(raw.stallSec);
       return {
         todayDate: raw.todayDate === today ? today : today,
         todayCount: raw.todayDate === today ? (raw.todayCount || 0) : 0,
         totalCount: raw.totalCount || 0,
-        records: Array.isArray(raw.records) ? raw.records.slice(0, 20) : []
+        records: Array.isArray(raw.records) ? raw.records.slice(0, 20) : [],
+        stallSec: (Number.isFinite(savedSec) && savedSec >= 1 && savedSec <= 30) ? Math.round(savedSec) : 3
       };
     } catch (e) {
-      return { todayDate: new Date().toISOString().slice(0, 10), todayCount: 0, totalCount: 0, records: [] };
+      return { todayDate: new Date().toISOString().slice(0, 10), todayCount: 0, totalCount: 0, records: [], stallSec: 3 };
     }
   };
   const saveHealthStore = (st) => {
@@ -6659,6 +6778,7 @@ function initScrollCue() {
   let hlStore = loadHealthStore();
   let hlMode = 'type';      // 'type' | 'cycle'
   let hlHintMode = 'always'; // 'always' | 'stall' | 'off'
+  let hlStallSec = hlStore.stallSec || 3;
   let hlPools = new Set(['top500']);
   let hlLen = 20;
   let hlTarget = '';
@@ -6730,12 +6850,13 @@ function initScrollCue() {
     const codePart = codes.length
       ? codes.slice(0, 3).map(c => '<span class="cf-code-pill" style="padding:2px 8px;font-size:12px"><span class="c-sp">' + escapeHtml(c.slice(0, 2)) + '</span><span class="c-sh">' + escapeHtml(c.slice(2)) + '</span></span>').join('')
       : (cf ? '<span class="cf-code-pill" style="padding:2px 8px;font-size:12px"><span class="c-sh">' + escapeHtml(cf[1] + cf[3]) + '</span></span>' : '');
-    hlHintDetail.innerHTML = '<span class="hl-hint-char">' + escapeHtml(ch) + '</span>' + rootPart + codePart;
-
+    const detailHtml = '<span class="hl-hint-char">' + escapeHtml(ch) + '</span>' + rootPart + codePart;
     if (forceShow || hlHintMode === 'always') {
+      hlHintDetail.innerHTML = detailHtml;
       hlHintBar.classList.remove('is-muted');
     } else {
       hlHintBar.classList.add('is-muted');
+      hlHintDetail.innerHTML = detailHtml;
     }
   };
 
@@ -6744,7 +6865,7 @@ function initScrollCue() {
     if (hlHintMode === 'stall' && ch) {
       hlStallTimer = setTimeout(() => {
         if (hlHintBar) hlHintBar.classList.remove('is-muted');
-      }, 1800);
+      }, Math.max(1, hlStallSec) * 1000);
     }
   };
 
@@ -6972,10 +7093,61 @@ function initScrollCue() {
     });
   });
 
+  const hlStallCtrl = $('hlStallCtrl');
+  const hlStallSecLabel = $('hlStallSecLabel');
+  const hlStallSecInput = $('hlStallSecInput');
+  const syncStallSecUi = (val, shouldSave) => {
+    const n = Math.min(30, Math.max(1, Math.round(Number(val) || 3)));
+    hlStallSec = n;
+    if (hlStallSecLabel) hlStallSecLabel.textContent = String(n);
+    if (hlStallSecInput && document.activeElement !== hlStallSecInput) hlStallSecInput.value = String(n);
+    if (hlStallCtrl) hlStallCtrl.classList.toggle('show', hlHintMode === 'stall');
+    if (shouldSave) {
+      hlStore.stallSec = n;
+      saveHealthStore(hlStore);
+      if (hlHintMode === 'stall') {
+        hlInspectedChar = null;
+        renderHealthState();
+      }
+    }
+  };
+  syncStallSecUi(hlStallSec, false);
+
+  if ($('hlStallDec')) {
+    $('hlStallDec').addEventListener('click', () => {
+      const next = Math.max(1, hlStallSec - 1);
+      if (hlStallSecInput) hlStallSecInput.value = String(next);
+      syncStallSecUi(next, true);
+    });
+  }
+  if ($('hlStallInc')) {
+    $('hlStallInc').addEventListener('click', () => {
+      const next = Math.min(30, hlStallSec + 1);
+      if (hlStallSecInput) hlStallSecInput.value = String(next);
+      syncStallSecUi(next, true);
+    });
+  }
+  if (hlStallSecInput) {
+    hlStallSecInput.addEventListener('input', () => {
+      const raw = parseInt(hlStallSecInput.value, 10);
+      if (!Number.isNaN(raw) && raw >= 1 && raw <= 30) {
+        syncStallSecUi(raw, true);
+      }
+    });
+    hlStallSecInput.addEventListener('blur', () => {
+      hlStallSecInput.value = String(hlStallSec);
+      syncStallSecUi(hlStallSec, true);
+    });
+    hlStallSecInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { hlStallSecInput.blur(); if (hlInput) hlInput.focus(); }
+    });
+  }
+
   document.querySelectorAll('[data-hl-hint]').forEach(btn => {
     btn.addEventListener('click', () => {
       hlHintMode = btn.dataset.hlHint || 'always';
       document.querySelectorAll('[data-hl-hint]').forEach(b => b.classList.toggle('active', b === btn));
+      if (hlStallCtrl) hlStallCtrl.classList.toggle('show', hlHintMode === 'stall');
       hlInspectedChar = null;
       renderHealthState();
     });
@@ -7255,7 +7427,10 @@ function renderRoadmap() {
   const list3 = $('roadmapList3'); if (list3) list3.innerHTML = '';
   const slM2 = $('rm-slide-m2'); if (slM2) slM2.style.display = isMobRm ? '' : 'none';
   const slM4 = $('rm-slide-m4'); if (slM4) slM4.style.display = isMobRm ? '' : 'none';
-  const eb2 = $('rmSlide2Eyebrow'); if (eb2) eb2.textContent = isMobRm ? 'STEP 03' : '中段巩固';
+  const ebM2 = $('rmSlideM2Eyebrow'); if (ebM2) ebM2.textContent = STATE.skipSp ? 'STEP 01' : 'STEP 02';
+  const eb2 = $('rmSlide2Eyebrow'); if (eb2) eb2.textContent = isMobRm ? (STATE.skipSp ? 'STEP 02' : 'STEP 03') : '中段巩固';
+  const ebM4 = $('rmSlideM4Eyebrow'); if (ebM4) ebM4.textContent = STATE.skipSp ? 'STEP 03' : 'STEP 04';
+  const eb3 = $('rmSlide3Eyebrow'); if (eb3) eb3.textContent = isMobRm ? (STATE.skipSp ? 'STEP 04 · 最后一步' : 'STEP 05 · 最后一步') : '最后一步';
   let stepNum = 0;
   ROADMAP_STEPS.forEach((st, idx) => {
     const isSkipped = !!(st.isSp && STATE.skipSp);
