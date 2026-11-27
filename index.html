@@ -2108,49 +2108,22 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
   #view-home > .snap-block { min-height: auto; padding-top: 40px; padding-bottom: 40px; }
 }
 @media (prefers-reduced-motion: reduce) { html.snap-home { scroll-snap-type: none; } }
-/* 手机端：对比表改为卡片 */
+/* 移动端：表格横向滚动，首列固定在左侧 */
+.tbl-scroll { position: relative; }
 @media (max-width: 720px) {
-  .tbl-scroll { overflow: visible; }
-  .tbl-scroll .compare-table { min-width: 0; }
-  .compare-table thead { display: none; }
-  .compare-table, .compare-table tbody { display: block; }
-  .compare-table tbody tr {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px 14px;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
+  .tbl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 12px; border: 1px solid var(--line); }
+  .compare-table { min-width: 660px; margin: 0; }
+  .compare-table th, .compare-table td { padding: 12px 14px; font-size: 12.5px; }
+  .compare-table th:first-child, .compare-table td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
     background: var(--surface);
+    box-shadow: 1px 0 0 var(--line), 8px 0 12px -8px rgba(0, 0, 0, 0.08);
   }
-  .compare-table tbody tr.self-row { border-color: var(--accent); background: var(--bg); }
-  .compare-table tbody td {
-    border: 0 !important;
-    padding: 0;
-    text-align: left;
-    font-size: 13.5px;
-    font-family: var(--font-sans);
-    font-weight: 600;
-  }
-  .compare-table tbody td:first-child {
-    grid-column: 1 / -1;
-    font-size: 14.5px;
-    font-weight: 700;
-    padding-bottom: 9px;
-    border-bottom: 1px solid var(--line) !important;
-    margin-bottom: 2px;
-  }
-  .compare-table tbody td:not(:first-child)::before {
-    content: attr(data-label);
-    display: block;
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--ink-faint);
-    margin-bottom: 3px;
-    letter-spacing: 0.02em;
-  }
-  .compare-table tbody td:last-child { grid-column: auto; }
+  .compare-table thead th:first-child { background: var(--bg); }
+  .compare-table tr.self-row td:first-child { background: var(--bg); }
+  .compare-table td:first-child { white-space: nowrap; }
 }
 </style>
 </head>
