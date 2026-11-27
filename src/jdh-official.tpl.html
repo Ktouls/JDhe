@@ -1870,9 +1870,10 @@ body[data-route="home"] #view-home.active::-webkit-scrollbar {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  justify-content: safe center;
   position: relative;
   overflow: hidden;
-  padding: clamp(14px, 2.4dvh, 32px) var(--pad-x);
+  padding: clamp(10px, 2.2dvh, 30px) var(--pad-x);
   box-sizing: border-box;
 }
 .snap-slide + .snap-slide::before {
@@ -2834,113 +2835,151 @@ body[data-route="home"] .snap-dots {
 
 @media (max-width: 540px) {
   .snap-slide {
-    padding: 12px 14px;
+    padding: 8px 14px;
   }
   .snap-slide .section-head {
-    margin: 0 auto 12px;
+    margin: 0 auto 10px;
   }
   .snap-slide .sec-eyebrow {
-    margin-bottom: 4px;
-    font-size: 11.5px;
+    margin-bottom: 3px;
+    font-size: 11px;
   }
   .snap-slide .section-head h2 {
-    font-size: clamp(21px, 5.8vw, 26px);
-    line-height: 1.22;
+    font-size: clamp(20px, 5.4vw, 24px);
+    line-height: 1.2;
   }
   .snap-slide .section-head p {
-    margin-top: 6px;
-    font-size: 12.5px;
-    line-height: 1.55;
+    margin-top: 4px;
+    font-size: 12px;
+    line-height: 1.48;
   }
   .slide-next-hint { display: none; }
 
-  /* Slide 1 手机端紧凑首屏：标题 + 试打台完整落在一屏内 */
-  .hero-grid { gap: 12px; }
-  .hero-grid .hero-badge { margin-bottom: 8px; padding: 3px 10px; font-size: 11.5px; }
-  .hero-grid .hero-editorial .hero-title { font-size: clamp(28px, 8vw, 34px); margin-bottom: 8px; line-height: 1.15; }
-  .hero-grid .hero-editorial .hero-sub { font-size: 13px; line-height: 1.55; margin-bottom: 12px; }
-  .hero-grid .hero-ctas { gap: 8px; margin-bottom: 10px; }
-  .hero-grid .hero-ctas .btn { padding: 8px 16px; font-size: 13px; }
-  .hero-grid .hero-ctas .text-link-btn { font-size: 12.5px; }
-  .hero-grid .track-switch { margin-bottom: 6px; }
-  .hero-grid .hero-status { font-size: 11.5px; gap: 14px; }
-  .hero-grid .showcase { padding: 12px 12px 10px; }
-  .hero-grid .showcase-top { margin-bottom: 10px; padding-bottom: 8px; gap: 8px; }
-  .hero-grid .showcase-kicker { font-size: 12px; }
-  .hero-grid .demo-glyph-box { padding: 8px 12px; gap: 12px; border-radius: 12px; }
-  .hero-grid .demo-glyph-box .big-hz { font-size: 34px; }
-  .hero-grid .demo-right { gap: 8px; }
-  .hero-grid .hw-keys { gap: 6px; }
-  .hero-grid .hw-key { width: 50px; height: 54px; border-radius: 10px; }
-  .hero-grid .hw-key b { font-size: 18px; }
-  .hero-grid .demo-meta { font-size: 12px; line-height: 1.5; }
-  .hero-grid .try-status { margin-top: 2px; font-size: 11.5px; }
-  .hero-grid .hero-step-pill { padding: 8px 4px; font-size: 11px; }
+  /* Slide 1 手机端超紧凑首屏：确保在带地址栏+底栏的真机浏览器内上下完整露出 */
+  .hero-grid { gap: 8px; }
+  .hero-grid .hero-badge { margin-bottom: 5px; padding: 2px 10px; font-size: 11px; }
+  .hero-grid .hero-editorial .hero-title { font-size: clamp(24px, 7.2vw, 30px); margin-bottom: 5px; line-height: 1.14; }
+  .hero-grid .hero-editorial .hero-sub { font-size: 12px; line-height: 1.45; margin-bottom: 8px; }
+  .hero-grid .hero-ctas { gap: 6px 10px; margin-bottom: 7px; }
+  .hero-grid .hero-ctas .btn { padding: 6px 14px; font-size: 12.5px; }
+  .hero-grid .hero-ctas .text-link-btn { font-size: 12px; }
+  .hero-grid .track-switch { margin-bottom: 5px; padding: 3px; }
+  .hero-grid .track-opt { padding: 5px 4px; font-size: 11.5px; }
+  .hero-grid .hero-status { font-size: 11px; gap: 14px; }
+  .hero-grid .stage-frame { border-radius: 18px; }
+  .hero-grid .showcase { padding: 10px 12px 8px; }
+  .hero-grid .showcase-top { margin-bottom: 8px; padding-bottom: 6px; gap: 6px; }
+  .hero-grid .showcase-kicker { font-size: 11px; }
+  .hero-grid .demo-pill { padding: 4px 0; font-size: 13px; }
+  /* 左字右键盘并排，瞬间省出 60px+ 高度，彻底露出顶部徽章与底部 01/02/03 */
+  .hero-grid .showcase-body {
+    grid-template-columns: 60px minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+  }
+  .hero-grid .demo-glyph-box {
+    width: 60px;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8px 4px;
+    gap: 2px;
+    border-radius: 12px;
+  }
+  .hero-grid .demo-glyph-box .big-hz { font-size: 32px; line-height: 1; }
+  .hero-grid .demo-glyph-box .big-py { font-size: 11px; margin-top: 2px; }
+  .hero-grid .demo-right { gap: 6px; }
+  .hero-grid .hw-keys { gap: 4px; }
+  .hero-grid .hw-key { width: 44px; height: 48px; border-radius: 9px; gap: 2px; }
+  .hero-grid .hw-key b { font-size: 16px; }
+  .hero-grid .hw-key.k-sound small { font-size: 10px; }
+  .hero-grid .hw-key.k-shape small { font-size: 11px; }
+  .hero-grid .hw-plus { font-size: 12px; }
+  .hero-grid .demo-meta { font-size: 11px; line-height: 1.42; }
+  .hero-grid .try-status { margin-top: 0; font-size: 10.5px; gap: 5px; }
+  .hero-grid .try-status .ts-badge { font-size: 10.5px; padding: 1px 7px; }
+  .hero-grid .hero-step-pill {
+    flex-direction: row;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 4px;
+    font-size: 11px;
+  }
 
   /* Slide 2 手机端 4 原则紧凑排版 */
-  .principles-grid { grid-template-columns: 1fr; gap: 8px; }
-  .principle-card { padding: 11px 14px; gap: 4px; border-radius: 14px; }
-  .principle-card .pc-num { font-size: 18px; }
-  .principle-card h3 { font-size: 14.5px; margin: 2px 0 2px; }
-  .principle-card p { font-size: 12px; line-height: 1.48; }
+  .principles-grid { grid-template-columns: 1fr; gap: 7px; }
+  .principle-card { padding: 9px 13px; gap: 3px; border-radius: 13px; }
+  .principle-card .pc-num { font-size: 17px; }
+  .principle-card .pc-num span { font-size: 11px; }
+  .principle-card h3 { font-size: 14px; margin: 2px 0 1px; }
+  .principle-card p { font-size: 11.5px; line-height: 1.42; }
   .principle-card .arch-inline-demo { display: none; }
 
   /* Slide 3 手机端遗忘曲线紧凑 */
-  .eb-wrap { padding: 12px 14px; gap: 10px; }
-  .eb-toolbar { margin-bottom: 4px; }
-  .eb-legend { gap: 10px; font-size: 11px; }
-  .eb-replay { padding: 3px 9px; font-size: 11px; }
-  .eb-caption { margin-top: 6px; padding: 6px 10px; font-size: 11px; }
-  .eb-side { padding-top: 10px; gap: 8px; }
-  .eb-kpi { padding: 10px 10px; border-radius: 12px; }
-  .eb-kpi b { font-size: 24px; }
-  .eb-kpi span { font-size: 10.5px; margin-top: 4px; }
-  .eb-vs { font-size: 11.5px; gap: 4px; }
-  .eb-note { font-size: 11px; padding-top: 8px; line-height: 1.5; }
+  .eb-wrap { padding: 10px 12px; gap: 8px; }
+  .eb-toolbar { margin-bottom: 2px; }
+  .eb-legend { gap: 8px; font-size: 10.5px; }
+  .eb-replay { padding: 2px 8px; font-size: 10.5px; }
+  .eb-caption { margin-top: 4px; padding: 5px 8px; font-size: 10.5px; }
+  .eb-side { padding-top: 8px; gap: 6px; }
+  .eb-kpi { padding: 8px 10px; border-radius: 10px; }
+  .eb-kpi b { font-size: 22px; }
+  .eb-kpi span { font-size: 10px; margin-top: 3px; }
+  .eb-vs { font-size: 11px; gap: 3px; line-height: 1.42; }
+  .eb-note { font-size: 10.5px; padding-top: 6px; line-height: 1.42; }
 
-  /* Slide 4 手机端硬指标 + 速度横排3格（省高度！） */
-  .metric-strip { margin-bottom: 10px; }
-  .metric-strip .ms-item { padding: 11px 8px; }
-  .metric-strip .ms-num { font-size: 21px; }
-  .metric-strip .ms-lbl { font-size: 11px; margin-top: 4px; }
-  .speed-card { padding: 12px 14px; margin-bottom: 10px; }
-  .sp-head { margin-bottom: 10px; }
-  .sp-head h3 { font-size: 14.5px; }
-  .sp-head p { font-size: 12px; }
+  /* Slide 4 手机端硬指标 + 速度横排3格 */
+  .metric-strip { margin-bottom: 8px; }
+  .metric-strip .ms-item { padding: 9px 6px; }
+  .metric-strip .ms-num { font-size: 19px; }
+  .metric-strip .ms-lbl { font-size: 10.5px; margin-top: 3px; }
+  .speed-card { padding: 10px 12px; margin-bottom: 8px; }
+  .sp-head { margin-bottom: 8px; }
+  .sp-head h3 { font-size: 14px; }
+  .sp-head p { font-size: 11.5px; }
   .sp-cols { grid-template-columns: 1fr auto 1fr auto 1fr; gap: 4px; }
-  .sp-col { padding: 10px 4px; border-radius: 10px; }
-  .sp-col b { font-size: 20px; }
-  .sp-col span { font-size: 10px; margin-top: 3px; }
+  .sp-col { padding: 8px 4px; border-radius: 10px; }
+  .sp-col b { font-size: 18px; }
+  .sp-col span { font-size: 10px; margin-top: 2px; }
   .sp-arrow { font-size: 10px; }
-  .sp-note { font-size: 11px; line-height: 1.5; margin-top: 10px; padding-top: 8px; }
+  .sp-note { font-size: 10.5px; line-height: 1.42; margin-top: 8px; padding-top: 6px; }
 
-  /* Slide 6 手机端双面板紧凑 */
-  .arena-panel { padding: 12px 14px; border-radius: 14px; }
-  .arena-subhead { margin-bottom: 6px; font-size: 11.5px; }
-  .arena-bars .ab-row { gap: 8px; padding: 4px 0; }
-  .arena-bars .ab-name { flex: 0 0 74px; font-size: 11.5px; }
-  .arena-bars .ab-val { flex: 0 0 48px; font-size: 11.5px; }
-  .arena-panel .ab-cap { font-size: 10.5px; padding-top: 6px; }
-  .arena-panel .tier-table { font-size: 12px; }
-  .arena-panel .tier-table th, .arena-panel .tier-table td { padding: 6px 6px; }
-  .arena-panel-foot { padding-top: 10px; }
-  .arena-panel-foot .btn { padding: 6px 12px; font-size: 12px; }
+  /* Slide 5 手机端表格紧凑 */
+  #slide-compare .tier-table.compare-table th,
+  #slide-compare .tier-table.compare-table td { padding: 7px 10px; font-size: 11.5px; }
+  .cmp-footnote { margin-top: 8px; font-size: 11px; gap: 6px; }
 
-  /* Slide 7 手机端练习工坊 3 卡片紧凑 */
-  #slide-practice .prac-row { gap: 10px; }
-  #slide-practice .prac-tile { padding: 12px 14px; gap: 8px; border-radius: 14px; }
-  #slide-practice .prac-tile .pt-idx { font-size: 10.5px; margin-bottom: 2px; }
-  #slide-practice .prac-tile h3 { font-size: 15.5px; margin-bottom: 2px; }
-  #slide-practice .prac-tile p { font-size: 12px; }
-  #slide-practice .prac-tile .btn { padding: 6px 12px; font-size: 12px; }
-  .slide-footer { margin-top: 12px; padding-top: 10px; font-size: 10.5px; line-height: 1.5; }
+  /* Slide 6 手机端双面板紧凑（适配 360x640 真机视口） */
+  .arena-split { gap: 6px; }
+  .arena-panel { padding: 8px 11px; border-radius: 12px; }
+  .arena-subhead { margin-bottom: 3px; font-size: 10.5px; }
+  .arena-bars .ab-row { gap: 6px; padding: 2px 0; }
+  .arena-bars .ab-name { flex: 0 0 68px; font-size: 10.5px; }
+  .arena-bars .ab-track { height: 5px; }
+  .arena-bars .ab-val { flex: 0 0 44px; font-size: 10.5px; }
+  .arena-panel .ab-cap { display: none; }
+  .arena-panel .tier-table { font-size: 11px; }
+  .arena-panel .tier-table th, .arena-panel .tier-table td { padding: 4px 5px; }
+  .arena-panel-foot { padding-top: 6px; gap: 6px; }
+  .arena-panel-foot .btn { padding: 4px 10px; font-size: 11px; }
+
+  /* Slide 7 手机端练习工坊 3 卡片紧凑（适配 360x640 真机视口） */
+  #slide-practice .prac-row { gap: 6px; }
+  #slide-practice .prac-tile { padding: 8px 12px; gap: 5px; border-radius: 12px; }
+  #slide-practice .prac-tile .pt-idx { font-size: 10px; margin-bottom: 0; }
+  #slide-practice .prac-tile h3 { font-size: 14px; margin-bottom: 1px; }
+  #slide-practice .prac-tile p { font-size: 11px; line-height: 1.35; }
+  #slide-practice .prac-tile .btn { padding: 4px 10px; font-size: 11px; }
+  .slide-footer { margin-top: 6px; padding-top: 6px; font-size: 10px; line-height: 1.4; }
   .doc-count .dc-lbl { font-size: 11px; }
 }
 
 @media (max-width: 390px) {
-  .hero-grid .hw-keys { gap: 4px; }
-  .hero-grid .hw-key { width: 44px; height: 50px; }
-  .hero-grid .hw-key b { font-size: 16.5px; }
+  .hero-grid .showcase-body { grid-template-columns: 54px minmax(0, 1fr); gap: 8px; }
+  .hero-grid .demo-glyph-box { width: 54px; padding: 6px 2px; }
+  .hero-grid .demo-glyph-box .big-hz { font-size: 28px; }
+  .hero-grid .hw-keys { gap: 3px; }
+  .hero-grid .hw-key { width: 40px; height: 44px; }
+  .hero-grid .hw-key b { font-size: 15px; }
 }
 
 /* 极矮横屏兜底（避免横屏手机截断） */
