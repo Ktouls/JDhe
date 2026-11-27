@@ -1977,6 +1977,21 @@ body[data-route="practice"] .container {
 .tier-table tbody tr.self-row td { color: var(--ink); background: var(--bg); }
 .tier-table tbody tr.self-row td:first-child { font-weight: 700; }
 .arena-bars .ab-cap { margin-top: 12px; text-align: right; font-size: 11.5px; color: var(--ink-faint); letter-spacing: 0.04em; }
+.arena .arena-subhead {
+  margin: clamp(28px, 3vw, 40px) 0 14px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.arena-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(26px, 3.4vw, 52px); align-items: start; }
+.tier-table.wide { margin-top: 0; }
+.tier-table.wide thead th { padding-top: 4px; }
+.tier-table.wide tbody tr:hover td { background: var(--surface); }
+.arena-bars .ab-row { padding: 9px 0; }
+.arena-bars .ab-name { flex: 0 0 150px; }
+@media (max-width: 900px) { .arena-split { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -2145,13 +2160,13 @@ body[data-route="practice"] .container {
       </div>
     </div>
 
-    <!-- 性能对照（实测） -->
+    <!-- 性能对照（实测 · 多方案） -->
     <div class="section-head">
       <div>
         <div class="sec-eyebrow"><span>性能实测</span></div>
-        <h2>同一张字频表，<span class="serif-accent">差出十几倍的重码。</span></h2>
+        <h2>七条路线，<span class="serif-accent">摆在同一张表上。</span></h2>
       </div>
-      <p>用本方案的官方字频表，对同一批常用字逐字测算首选准确率、候选位次与全码重码。</p>
+      <p>取同一张字频表，把音形、形码、双拼、全拼七种方案逐字测算，只看单字表现。</p>
     </div>
 
     <section class="arena" id="arena" aria-label="性能实测">
@@ -2159,43 +2174,56 @@ body[data-route="practice"] .container {
         <div class="ms-item"><div class="ms-num">99.87<i>%</i></div><div class="ms-lbl">前 3000 字首选准确率</div></div>
         <div class="ms-item"><div class="ms-num">1.001<i>位</i></div><div class="ms-lbl">平均候选位次</div></div>
         <div class="ms-item"><div class="ms-num">87<i>字</i></div><div class="ms-lbl">前 3000 字全码重码</div></div>
-        <div class="ms-item"><div class="ms-num">+15.4<i>pt</i></div><div class="ms-lbl">较全拼 26 键首选率</div></div>
+        <div class="ms-item"><div class="ms-num">最少<i>档</i></div><div class="ms-lbl">4 码方案中重码最低</div></div>
       </div>
 
-      <table class="tier-table compare-table">
-        <caption>前 3000 常用字 · 单字实测（同字频表同口径）</caption>
+      <h3 class="arena-subhead">前 3000 常用字 · 单字实测</h3>
+      <table class="tier-table compare-table wide">
         <thead>
-          <tr><th>方案</th><th>首选准确率</th><th>平均候选位次</th><th>全码重码字数</th></tr>
+          <tr><th>方案</th><th>首选准确率</th><th>平均候选位次</th><th>平均码长</th><th>全码重码字数</th></tr>
         </thead>
         <tbody>
-          <tr class="self-row"><td>简单鹤（音形 4 码）</td><td>99.87%</td><td>1.001</td><td>87</td></tr>
-          <tr><td>全拼 26 键</td><td>84.43%</td><td>1.425</td><td>2601</td></tr>
-          <tr><td>全拼 9 键</td><td>77.06%</td><td>1.959</td><td>2787</td></tr>
+          <tr class="self-row"><td>简单鹤（音形 4 码）</td><td>99.87%</td><td>1.001</td><td>4.00</td><td>87</td></tr>
+          <tr><td>虎码（纯形 4 码）</td><td>99.95%</td><td>1.000</td><td>4.00</td><td>116</td></tr>
+          <tr><td>小鹤音形（4 码）</td><td>99.66%</td><td>1.004</td><td>4.00</td><td>88</td></tr>
+          <tr><td>魔然（双拼 + 辅助码）</td><td>99.64%</td><td>1.004</td><td>3.49</td><td>224</td></tr>
+          <tr><td>小鹤双拼（纯 2 码）</td><td>84.37%</td><td>1.425</td><td>2.00</td><td>2602</td></tr>
+          <tr><td>全拼 26 键</td><td>84.43%</td><td>1.425</td><td>2.65</td><td>2601</td></tr>
+          <tr><td>全拼 9 键</td><td>77.06%</td><td>1.959</td><td>2.65</td><td>2787</td></tr>
         </tbody>
       </table>
 
-      <div class="arena-bars">
-        <div class="ab-row self"><span class="ab-name">简单鹤</span><span class="ab-track"><i class="ab-fill" style="width:99.87%"></i></span><span class="ab-val">99.87%</span></div>
+      <div class="arena-split">
+        <div class="arena-bars">
+          <h3 class="arena-subhead">首选准确率对比</h3>
+        <div class="ab-row self"><span class="ab-name">简单鹤（音形 4 码）</span><span class="ab-track"><i class="ab-fill" style="width:99.87%"></i></span><span class="ab-val">99.87%</span></div>
+        <div class="ab-row"><span class="ab-name">虎码（纯形 4 码）</span><span class="ab-track"><i class="ab-fill" style="width:99.95%"></i></span><span class="ab-val">99.95%</span></div>
+        <div class="ab-row"><span class="ab-name">小鹤音形（4 码）</span><span class="ab-track"><i class="ab-fill" style="width:99.66%"></i></span><span class="ab-val">99.66%</span></div>
+        <div class="ab-row"><span class="ab-name">魔然（双拼 + 辅助码）</span><span class="ab-track"><i class="ab-fill" style="width:99.64%"></i></span><span class="ab-val">99.64%</span></div>
+        <div class="ab-row"><span class="ab-name">小鹤双拼（纯 2 码）</span><span class="ab-track"><i class="ab-fill" style="width:84.37%"></i></span><span class="ab-val">84.37%</span></div>
         <div class="ab-row"><span class="ab-name">全拼 26 键</span><span class="ab-track"><i class="ab-fill" style="width:84.43%"></i></span><span class="ab-val">84.43%</span></div>
         <div class="ab-row"><span class="ab-name">全拼 9 键</span><span class="ab-track"><i class="ab-fill" style="width:77.06%"></i></span><span class="ab-val">77.06%</span></div>
-        <div class="ab-cap">条长 = 前 3000 常用字的单字首选准确率</div>
+          <div class="ab-cap">条长 = 前 3000 常用字的单字首选准确率</div>
+        </div>
+
+        <div>
+          <h3 class="arena-subhead">简单鹤 · 分档重码</h3>
+          <table class="tier-table">
+            <thead><tr><th>字集范围</th><th>重码字数</th><th>首选准确率</th></tr></thead>
+            <tbody>
+              <tr><td>前 1500 高频字</td><td>18</td><td>99.90%</td></tr>
+              <tr><td>前 3000 常用字</td><td>87</td><td>99.87%</td></tr>
+              <tr><td>前 4000 字</td><td>178</td><td>99.86%</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <table class="tier-table">
-        <caption>简单鹤 · 分档重码（实测）</caption>
-        <thead><tr><th>字集范围</th><th>重码码位</th><th>重码字数</th><th>首选准确率</th></tr></thead>
-        <tbody>
-          <tr><td>前 1500 高频字</td><td>18</td><td>18</td><td>99.90%</td></tr>
-          <tr><td>前 3000 常用字</td><td>80</td><td>87</td><td>99.87%</td></tr>
-          <tr><td>前 4000 字</td><td>160</td><td>178</td><td>99.86%</td></tr>
-        </tbody>
-      </table>
-
       <p class="arena-note">
-        测算口径：取本方案官方码表 <code>jde.dict.yaml</code> 的字频权重，对前 4000 常用字逐字比对同码单字候选（不含词组）。<br>
-        首选准确率 = 按字频加权「该字排候选第 1」的比例；平均候选位次 = 加权平均位置；重码字数 = 同码位中多出的单字数。<br>
-        全拼 26 键 / 全拼 9 键用同一字频表与同一套同音字判定得到，属同一口径下的对照。<br>
-        魔然、26 键 + 笔画筛选未纳入：缺少可核对的公开码表，暂不列数据。以上为单字口径，不含词组输入表现。
+        测算口径：统一取本仓库 <code>jde.dict.yaml</code> 的字频权重作为评测集，各方案只提供自己的单字码，逐字比对同码单字（不含词组）。<br>
+        码表来源：小鹤音形 <code>cubercsl/rime-flypy</code>、魔然 <code>rimeinn/rime-moran</code>、虎码 <code>LukNg/Rime-tiger_code</code>，均为各仓库公开码表；全拼由同字频表还原。<br>
+        说明：魔然为「双拼 + 1~2 位辅助码」，平均码长 3.49；纯双拼与全拼重码接近，说明双拼只缩短击键、不降低重码。<br>
+        以上均为单字口径，不含词组与整句表现；复算命令 <code>python3 scripts/measure.py</code>。
       </p>
     </section>
 

@@ -36,11 +36,11 @@ python3 -m http.server 8080
 ```
 ## 性能实测
 
-`scripts/measure.py` 基于本仓库码表做单字测算，输出 `metrics.json`：
+`scripts/measure.py` 用统一字频表做单字测算（输出 `metrics.json`）：
 
-- 字频取自 `src/jde.dict.yaml` 的权重；每字只与同码单字比较（不含词组）。
-- 指标：首选准确率、平均候选位次、全码重码。
-- 现状：简单鹤 三档（前 1500 / 3000 / 4000）、全拼 26 键、全拼 9 键。
-- 魔然、26 键 + 笔画筛选未纳入，因缺少可核对的公开码表。
+- 评测集：本仓库 `src/jde.dict.yaml` 的字频权重，所有方案共用，保证可比。
+- 对比方案：简单鹤 4 码、虎码、小鹤音形、魔然、小鹤双拼、全拼 26 键、全拼 9 键。
+- 外部码表来自 GitHub：`cubercsl/rime-flypy`、`rimeinn/rime-moran`、`LukNg/Rime-tiger_code`，首次运行自动下载到 `.cache/`。
+- 口径：每字只与同码单字比较（不含词组），按字频加权；输出首选准确率、平均候选位次、平均码长、全码重码。
 
 重跑：`python3 scripts/measure.py`
