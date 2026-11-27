@@ -736,8 +736,25 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none; }
 .hero-step-pill .snum { font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--ink-faint); }
 .hero-step-pill.active { background: var(--surface); color: var(--ink); font-weight: 600; }
 .hero-step-pill.active .snum { color: var(--accent); }
-.hero-step-pill::after { content: ""; position: absolute; left: 0; top: -1px; height: 2px; width: 0%; background: var(--ink); }
-.hero-step-pill.active::after { animation: stepSweep 3.8s linear forwards; }
+.hero-step-pill { overflow: hidden; isolation: isolate; }
+.hero-step-pill > span { position: relative; z-index: 2; }
+.hero-step-pill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 0%;
+  z-index: 1;
+  background: linear-gradient(90deg, rgba(194, 59, 50, 0.04) 0%, rgba(194, 59, 50, 0.13) 82%, rgba(194, 59, 50, 0.22) 100%);
+  border-right: 1.5px solid rgba(194, 59, 50, 0.32);
+  backdrop-filter: blur(8px) saturate(130%);
+  -webkit-backdrop-filter: blur(8px) saturate(130%);
+  pointer-events: none;
+}
+:root[data-theme="dark"] .hero-step-pill::after {
+  background: linear-gradient(90deg, rgba(224, 90, 82, 0.06) 0%, rgba(224, 90, 82, 0.18) 82%, rgba(224, 90, 82, 0.30) 100%);
+  border-right: 1.5px solid rgba(224, 90, 82, 0.45);
+}
+.hero-step-pill.active::after { animation: stepSweep 3.6s linear forwards; }
 @keyframes stepSweep { from { width: 0%; } to { width: 100%; } }
 
 /* 2x2 Architectural Principles Grid */
@@ -2076,7 +2093,7 @@ body[data-route="home"] .snap-dots {
 .hero-grid .hw-key.k-sound small { font-size: 11px; }
 .hero-grid .hw-key.k-shape small { font-size: 12.5px; }
 .hero-grid .hw-plus { font-size: 15px; margin: 0; flex-shrink: 0; }
-.hero-grid .demo-meta { font-size: 13.5px; line-height: 1.7; }
+.hero-grid .demo-meta { font-size: 13.5px; line-height: 1.7; min-height: calc(13.5px * 1.7 * 3); }
 
 @media (max-width: 1140px) and (min-width: 1001px) {
   .hero-grid { grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr); gap: 22px; }
@@ -2603,6 +2620,34 @@ body[data-route="home"] .snap-dots {
 .tier-table tbody tr:hover td { background: var(--bg); }
 .tier-table tbody tr.self-row:hover td { background: var(--accent-soft); }
 
+.compare-table tbody tr { cursor: pointer; transition: background 0.16s ease; }
+.compare-table tbody tr.active-tip td { box-shadow: inset 0 -1.5px 0 var(--accent); }
+.scheme-tip {
+  margin-top: clamp(8px, 1.3dvh, 14px);
+  padding: clamp(9px, 1.3dvh, 13px) clamp(12px, 1.6vw, 18px);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  min-height: 48px;
+}
+.scheme-tip .st-badge {
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 2px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.scheme-tip .st-text { flex: 1; min-width: 0; }
 .cmp-footnote {
   margin-top: clamp(10px, 1.6dvh, 16px);
   display: flex;
@@ -2895,7 +2940,7 @@ body[data-route="home"] .snap-dots {
   .hero-grid .hw-key.k-sound small { font-size: 10px; }
   .hero-grid .hw-key.k-shape small { font-size: 11px; }
   .hero-grid .hw-plus { font-size: 12px; }
-  .hero-grid .demo-meta { font-size: 11px; line-height: 1.42; }
+  .hero-grid .demo-meta { font-size: 11px; line-height: 1.42; min-height: calc(11px * 1.42 * 3); }
   .hero-grid .try-status { margin-top: 0; font-size: 10.5px; gap: 5px; }
   .hero-grid .try-status .ts-badge { font-size: 10.5px; padding: 1px 7px; }
   .hero-grid .hero-step-pill {
@@ -2944,10 +2989,13 @@ body[data-route="home"] .snap-dots {
   .sp-arrow { font-size: 10px; }
   .sp-note { font-size: 10.5px; line-height: 1.42; margin-top: 8px; padding-top: 6px; }
 
-  /* Slide 5 手机端表格紧凑 */
+  /* Slide 5 手机端表格紧凑（8 行 + 简评条适配 360x640） */
   #slide-compare .tier-table.compare-table th,
-  #slide-compare .tier-table.compare-table td { padding: 7px 10px; font-size: 11.5px; }
-  .cmp-footnote { margin-top: 8px; font-size: 11px; gap: 6px; }
+  #slide-compare .tier-table.compare-table td { padding: 5px 9px; font-size: 11px; }
+  .scheme-tip { margin-top: 6px; padding: 7px 10px; font-size: 11px; line-height: 1.45; min-height: 44px; gap: 7px; }
+  .scheme-tip .st-badge { font-size: 10.5px; padding: 1px 7px; }
+  .cmp-footnote { margin-top: 5px; font-size: 10px; line-height: 1.38; gap: 4px; }
+  .cmp-footnote .hide-mob { display: none; }
 
   /* Slide 6 手机端双面板紧凑（适配 360x640 真机视口） */
   .arena-split { gap: 6px; }
@@ -3396,38 +3444,44 @@ body[data-route="home"] .snap-dots {
       </div>
     </div>
 
-    <!-- ==================== SLIDE 5: 七种方案横向实测表 ==================== -->
+    <!-- ==================== SLIDE 5: 八种方案横向实测表（含 86 五笔 + 悬停/点选简评） ==================== -->
     <div class="snap-slide" id="slide-compare">
       <div class="snap-inner">
         <div class="section-head">
           <div>
             <div class="sec-eyebrow"><span>横向实测</span></div>
-            <h2>七条路线，<span class="serif-accent">摆在同一张表上。</span></h2>
+            <h2>八条路线，<span class="serif-accent">摆在同一张表上。</span></h2>
           </div>
-          <p>同一张字频表逐字测算前 3000 常用单字（不含词组），兼顾精准度与学习门槛。</p>
+          <p>同一张字频表逐字测算前 3000 常用单字（静态全码纸面数据）；悬停或点选任意方案查看特点简评。</p>
         </div>
 
-        <div class="tbl-scroll-hint">左右滑动查看完整数据 →</div>
+        <div class="tbl-scroll-hint">左右滑动查看完整数据 · 点选方案看简评 →</div>
         <div class="tbl-scroll">
-          <table class="tier-table compare-table">
+          <table class="tier-table compare-table" id="compareTable">
             <thead>
-              <tr><th>方案</th><th>类型</th><th>字根数</th><th>首选准确率</th><th>平均位次</th><th>平均码长</th><th>全码重码</th><th>学习难度</th></tr>
+              <tr><th>方案</th><th>类型</th><th>字根数</th><th>首选准确率</th><th>平均位次</th><th>理论码长</th><th>全码重码</th><th>学习难度</th></tr>
             </thead>
             <tbody>
-              <tr class="self-row"><td>简单鹤</td><td><span class="type-tag">音形</span></td><td>97</td><td>99.87%</td><td>1.001</td><td>4.00</td><td>87</td><td><span class="lv lv-2">中</span></td></tr>
-              <tr><td>虎码</td><td><span class="type-tag">形码</span></td><td>241</td><td>99.95%</td><td>1.000</td><td>4.00</td><td>116</td><td><span class="lv lv-4">高</span></td></tr>
-              <tr><td>小鹤音形</td><td><span class="type-tag">音形</span></td><td>94 + 237 小字</td><td>99.66%</td><td>1.004</td><td>4.00</td><td>88</td><td><span class="lv lv-2">中</span></td></tr>
-              <tr><td>小鹤双拼</td><td><span class="type-tag">双拼</span></td><td>0</td><td>84.37%</td><td>1.425</td><td>2.00</td><td>2602</td><td><span class="lv lv-1">低</span></td></tr>
-              <tr><td>自然码双拼</td><td><span class="type-tag">双拼</span></td><td>0</td><td>84.37%</td><td>1.425</td><td>2.00</td><td>2602</td><td><span class="lv lv-1">低</span></td></tr>
-              <tr><td>全拼 26 键</td><td><span class="type-tag">全拼</span></td><td>0</td><td>84.43%</td><td>1.425</td><td>2.65</td><td>2601</td><td><span class="lv lv-0">极低</span></td></tr>
-              <tr><td>全拼 9 键</td><td><span class="type-tag">全拼</span></td><td>0</td><td>77.06%</td><td>1.959</td><td>2.65</td><td>2787</td><td><span class="lv lv-0">极低</span></td></tr>
+              <tr class="self-row active-tip" tabindex="0" data-scheme="简单鹤" data-note="97 个乱序字根 + 小鹤双拼；四码只筛选不上屏，保留纯双拼流畅手感，前 3000 字仅 87 重码，兼顾单字精准与上手成本。"><td>简单鹤</td><td><span class="type-tag">音形</span></td><td>97</td><td>99.87%</td><td>1.001</td><td>4.00</td><td>87</td><td><span class="lv lv-2">中</span></td></tr>
+              <tr tabindex="0" data-scheme="86 五笔" data-note="115 字根，系统兼容性最广的经典形码；但方案较为古早（甚至缺反犬旁），原生方案无词，未针对现代词组优化。"><td>86 五笔</td><td><span class="type-tag">形码</span></td><td>115</td><td>99.88%</td><td>1.001</td><td>3.72</td><td>66</td><td><span class="lv lv-4">高</span></td></tr>
+              <tr tabindex="0" data-scheme="虎码" data-note="归并后 241 根，单字性能更强且词组指标明显优于 86 五笔；受字根与码位限制，个别日用词（如「表示/帮助」「下载/下班」）会重码，整体是乱序形码生态最稳定、用户最多的优秀方案。"><td>虎码</td><td><span class="type-tag">形码</span></td><td>241</td><td>99.95%</td><td>1.000</td><td>4.00</td><td>116</td><td><span class="lv lv-4">高</span></td></tr>
+              <tr tabindex="0" data-scheme="小鹤音形" data-note="94 部件/笔画 + 237 小字；不系统硬记字根易出现「猜根」犹豫（部分字根如「丽」根较抽象），一二简与官方词库偏作者主观特化，实战准确度会直接影响有效码长。"><td>小鹤音形</td><td><span class="type-tag">音形</span></td><td>94 + 237 小字</td><td>99.66%</td><td>1.004</td><td>4.00</td><td>88</td><td><span class="lv lv-2">中</span></td></tr>
+              <tr tabindex="0" data-scheme="小鹤双拼" data-note="极易上手的入门双拼方案；相较 26 键全拼舍弃简拼，换来两键定音与四码两字词的完全确定性，一日入门、成本极低、收益极高。"><td>小鹤双拼</td><td><span class="type-tag">双拼</span></td><td>0</td><td>84.37%</td><td>1.425</td><td>2.00</td><td>2602</td><td><span class="lv lv-1">低</span></td></tr>
+              <tr tabindex="0" data-scheme="自然码双拼" data-note="老资历经典双拼方案，与小鹤双拼同属双拼路线，布局经典、几乎所有系统与输入法原生内置。"><td>自然码双拼</td><td><span class="type-tag">双拼</span></td><td>0</td><td>84.37%</td><td>1.425</td><td>2.00</td><td>2602</td><td><span class="lv lv-1">低</span></td></tr>
+              <tr tabindex="0" data-scheme="全拼 26 键" data-note="零学习门槛，但高度依赖长期养成个人用户词库，跨平台迁移备份困难，盲打连打确定性较弱。"><td>全拼 26 键</td><td><span class="type-tag">全拼</span></td><td>0</td><td>84.43%</td><td>1.425</td><td>2.65</td><td>2601</td><td><span class="lv lv-0">极低</span></td></tr>
+              <tr tabindex="0" data-scheme="全拼 9 键" data-note="最入门、最省事的单手手机方案，但重码率高、日常输入需要频繁盯候选选重。"><td>全拼 9 键</td><td><span class="type-tag">全拼</span></td><td>0</td><td>77.06%</td><td>1.959</td><td>2.65</td><td>2787</td><td><span class="lv lv-0">极低</span></td></tr>
             </tbody>
           </table>
         </div>
 
+        <div class="scheme-tip" id="schemeTip" aria-live="polite">
+          <span class="st-badge" id="schemeTipName">简单鹤</span>
+          <span class="st-text" id="schemeTipText">97 个乱序字根 + 小鹤双拼；四码只筛选不上屏，保留纯双拼流畅手感，前 3000 字仅 87 重码，兼顾单字精准与上手成本。</span>
+        </div>
+
         <div class="cmp-footnote">
-          <span>口径：统一采用仓库 <code>jde.dict.yaml</code> 字频权重，公开码表逐字复算，复现命令 <code>python3 scripts/measure.py</code>。</span>
-          <a class="perf-more" href="#assess">完整测评与口径说明 →</a>
+          <span>注：静态单字全码纸面测算，实战有效码长受出码准确度影响<span class="hide-mob">（猜根/选重会导致纸面数据打折）；复算命令 <code>python3 scripts/measure.py</code></span>。</span>
+          <a class="perf-more" href="#assess">完整测评 →</a>
         </div>
       </div>
     </div>
@@ -3448,6 +3502,7 @@ body[data-route="home"] .snap-dots {
             <h3 class="arena-subhead">前 3000 字 · 单字首选准确率</h3>
             <div class="arena-bars">
               <div class="ab-row self"><span class="ab-name">简单鹤</span><span class="ab-track"><i class="ab-fill" style="width:99.87%"></i></span><span class="ab-val">99.87%</span></div>
+              <div class="ab-row"><span class="ab-name">86 五笔</span><span class="ab-track"><i class="ab-fill" style="width:99.88%"></i></span><span class="ab-val">99.88%</span></div>
               <div class="ab-row"><span class="ab-name">虎码</span><span class="ab-track"><i class="ab-fill" style="width:99.95%"></i></span><span class="ab-val">99.95%</span></div>
               <div class="ab-row"><span class="ab-name">小鹤音形</span><span class="ab-track"><i class="ab-fill" style="width:99.66%"></i></span><span class="ab-val">99.66%</span></div>
               <div class="ab-row"><span class="ab-name">小鹤双拼</span><span class="ab-track"><i class="ab-fill" style="width:84.37%"></i></span><span class="ab-val">84.37%</span></div>
@@ -4938,7 +4993,7 @@ let srObserver = null;
 
 let heroStepTimer = null;
 let heroStepIdx = 0;
-function setHeroStep(idx, syncDemo) {
+function setHeroStep(idx, advanceChar) {
   heroStepIdx = ((idx % 3) + 3) % 3;
   const pills = document.querySelectorAll('#heroSteps .hero-step-pill');
   pills.forEach((p, i) => {
@@ -4950,27 +5005,29 @@ function setHeroStep(idx, syncDemo) {
   });
   const stageCard = document.querySelector('.stage-frame .showcase');
   if (stageCard) stageCard.setAttribute('data-step', String(heroStepIdx));
-  if (syncDemo) {
-    const demoBtns = document.querySelectorAll('#demoChars .demo-pill');
-    if (demoBtns.length) {
-      const demoIdx = (heroStepIdx * 2) % demoBtns.length;
-      if (demoBtns[demoIdx]) demoBtns[demoIdx].click();
-    }
+  if (advanceChar && typeof DEMO_ITEMS !== 'undefined' && DEMO_ITEMS.length) {
+    demoIdx = (demoIdx + 1) % DEMO_ITEMS.length;
+    renderDemo();
   }
+}
+function restartHeroStepTimer() {
+  if (heroStepTimer) clearInterval(heroStepTimer);
+  heroStepTimer = setInterval(() => {
+    const wrapped = heroStepIdx === 2;
+    setHeroStep(heroStepIdx + 1, wrapped);
+  }, 3600);
 }
 function initHeroMotion() {
   const pills = document.querySelectorAll('#heroSteps .hero-step-pill');
   if (pills.length) {
     pills.forEach(p => {
       p.addEventListener('click', () => {
-        if (heroStepTimer) clearInterval(heroStepTimer);
-        setHeroStep(Number(p.dataset.stepIdx || 0), true);
-        heroStepTimer = setInterval(() => setHeroStep(heroStepIdx + 1, true), 3600);
+        setHeroStep(Number(p.dataset.stepIdx || 0), false);
+        restartHeroStepTimer();
       });
     });
     setHeroStep(0, false);
-    if (heroStepTimer) clearInterval(heroStepTimer);
-    heroStepTimer = setInterval(() => setHeroStep(heroStepIdx + 1, heroStepIdx === 2), 3600);
+    restartHeroStepTimer();
   }
   document.querySelectorAll('.bento-card').forEach(card => {
     card.addEventListener('pointermove', e => {
@@ -5045,6 +5102,70 @@ function initScrollCue() {
   document.querySelectorAll('[data-next-slide]').forEach(btn => {
     btn.addEventListener('click', () => goSlide(Number(btn.dataset.nextSlide || 1)));
   });
+
+  // 柔和缓动翻屏：解决 PC 滚轮一次跳动过快的问题（移动端保持原生触摸回弹）
+  let wheelLock = false;
+  let scrollAnimRaf = 0;
+  const smoothScrollTo = (targetTop, duration = 560) => {
+    if (scrollAnimRaf) cancelAnimationFrame(scrollAnimRaf);
+    const startTop = scroller.scrollTop;
+    const diff = targetTop - startTop;
+    if (Math.abs(diff) < 2) return;
+    const t0 = performance.now();
+    // 临时关闭 CSS snap 防止与缓动帧冲突，动画结束立刻恢复 mandatory 对齐
+    scroller.style.scrollSnapType = 'none';
+    scroller.style.scrollBehavior = 'auto';
+    const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
+    const step = (now) => {
+      const p = Math.min(1, (now - t0) / duration);
+      scroller.scrollTop = startTop + diff * easeOutQuart(p);
+      if (p < 1) {
+        scrollAnimRaf = requestAnimationFrame(step);
+      } else {
+        scroller.scrollTop = targetTop;
+        scroller.style.scrollSnapType = '';
+        scroller.style.scrollBehavior = '';
+        updateDots();
+      }
+    };
+    scrollAnimRaf = requestAnimationFrame(step);
+  };
+
+  scroller.addEventListener('wheel', (e) => {
+    if (currentRoute !== 'home') return;
+    if (Math.abs(e.deltaY) < 8 || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    if (e.target && e.target.closest('.tbl-scroll')) {
+      const box = e.target.closest('.tbl-scroll');
+      if (box.scrollWidth > box.clientWidth && Math.abs(e.deltaX) > 4) return;
+    }
+    e.preventDefault();
+    if (wheelLock) return;
+    const dir = e.deltaY > 0 ? 1 : -1;
+    const cur = getActiveIdx();
+    const next = Math.max(0, Math.min(slides.length - 1, cur + dir));
+    if (next === cur) return;
+    wheelLock = true;
+    smoothScrollTo(next * scroller.clientHeight, 560);
+    setTimeout(() => { wheelLock = false; }, 620);
+  }, { passive: false });
+
+  // 横向对比表：悬停 / 点选方案实时展示特点简评
+  const cmpTable = $('compareTable');
+  const tipName = $('schemeTipName');
+  const tipText = $('schemeTipText');
+  if (cmpTable && tipName && tipText) {
+    const rows = [...cmpTable.querySelectorAll('tbody tr[data-scheme]')];
+    const showTip = (tr) => {
+      rows.forEach(r => r.classList.toggle('active-tip', r === tr));
+      tipName.textContent = tr.dataset.scheme || '';
+      tipText.textContent = tr.dataset.note || '';
+    };
+    rows.forEach(tr => {
+      tr.addEventListener('mouseenter', () => showTip(tr));
+      tr.addEventListener('focus', () => showTip(tr));
+      tr.addEventListener('click', () => showTip(tr));
+    });
+  }
 
   // PC 键盘上下方向键 / PageDown / PageUp 翻屏（不干扰试打台字母键）
   window.addEventListener('keydown', (e) => {
@@ -5281,7 +5402,7 @@ function renderDemo() {
     b.type = 'button';
     b.className = 'demo-pill' + (idx === demoIdx ? ' active' : '');
     b.textContent = it.ch;
-    b.addEventListener('click', () => { demoIdx = idx; renderDemo(); });
+    b.addEventListener('click', () => { demoIdx = idx; renderDemo(); setHeroStep(0, false); restartHeroStepTimer(); });
     wrap.appendChild(b);
   });
   const d = DEMO_ITEMS[demoIdx];
