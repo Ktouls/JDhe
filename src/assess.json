@@ -1,0 +1,114 @@
+{
+  "total_chars": 14881,
+  "tiers": [
+    {
+      "tier": 500,
+      "full_dup": 4,
+      "full_acc": 99.93,
+      "full_len": 4.0,
+      "short_dup": 48,
+      "short_acc": 99.97,
+      "short_len": 1.67
+    },
+    {
+      "tier": 1000,
+      "full_dup": 8,
+      "full_acc": 99.92,
+      "full_len": 4.0,
+      "short_dup": 56,
+      "short_acc": 99.98,
+      "short_len": 1.72
+    },
+    {
+      "tier": 1500,
+      "full_dup": 18,
+      "full_acc": 99.9,
+      "full_len": 4.0,
+      "short_dup": 70,
+      "short_acc": 99.96,
+      "short_len": 1.75
+    },
+    {
+      "tier": 2000,
+      "full_dup": 37,
+      "full_acc": 99.89,
+      "full_len": 4.0,
+      "short_dup": 93,
+      "short_acc": 99.96,
+      "short_len": 1.76
+    },
+    {
+      "tier": 2500,
+      "full_dup": 61,
+      "full_acc": 99.88,
+      "full_len": 4.0,
+      "short_dup": 124,
+      "short_acc": 99.95,
+      "short_len": 1.76
+    },
+    {
+      "tier": 3000,
+      "full_dup": 87,
+      "full_acc": 99.87,
+      "full_len": 4.0,
+      "short_dup": 157,
+      "short_acc": 99.94,
+      "short_len": 1.77
+    },
+    {
+      "tier": 3500,
+      "full_dup": 122,
+      "full_acc": 99.86,
+      "full_len": 4.0,
+      "short_dup": 203,
+      "short_acc": 99.93,
+      "short_len": 1.77
+    },
+    {
+      "tier": 4000,
+      "full_dup": 178,
+      "full_acc": 99.86,
+      "full_len": 4.0,
+      "short_dup": 272,
+      "short_acc": 99.93,
+      "short_len": 1.77
+    },
+    {
+      "tier": 5000,
+      "full_dup": 307,
+      "full_acc": 99.85,
+      "full_len": 4.0,
+      "short_dup": 430,
+      "short_acc": 99.92,
+      "short_len": 1.77
+    },
+    {
+      "tier": 6000,
+      "full_dup": 494,
+      "full_acc": 99.84,
+      "full_len": 4.0,
+      "short_dup": 650,
+      "short_acc": 99.91,
+      "short_len": 1.77
+    },
+    {
+      "tier": 7000,
+      "full_dup": 714,
+      "full_acc": 99.84,
+      "full_len": 4.0,
+      "short_dup": 894,
+      "short_acc": 99.91,
+      "short_len": 1.78
+    },
+    {
+      "tier": 8000,
+      "full_dup": 953,
+      "full_acc": 99.83,
+      "full_len": 4.0,
+      "short_dup": 1174,
+      "short_acc": 99.9,
+      "short_len": 1.78
+    }
+  ],
+  "source": "src/jde.dict.yaml 字频 + src/jdh_dict_multi.txt 码表"
+}

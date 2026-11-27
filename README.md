@@ -44,3 +44,13 @@ python3 -m http.server 8080
 - 口径：每字只与同码单字比较（不含词组），按字频加权；输出首选准确率、平均候选位次、平均码长、全码重码。
 
 重跑：`python3 scripts/measure.py`
+
+## 单字测评
+
+`scripts/assess.py` 按字频分 12 档（前 500 ~ 前 8000 字）统计 `简单鹤` 的单字表现，输出 `src/assess.json`：
+
+- 全码重码字数、全码首选率
+- 出简重码字数、出简首选率、出简码长
+
+口径：字频取 `src/jde.dict.yaml`，码表取 `src/jdh_dict_multi.txt`，每字只与同码单字比较（不含词组）。
+复算：`python3 scripts/assess.py`，页面路由 `#assess`。

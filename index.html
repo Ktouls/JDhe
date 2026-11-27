@@ -258,8 +258,11 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none; }
 }
 .mobile-dock-inner {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  display: flex;
   gap: 4px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
 .dock-btn {
   border: 0;
@@ -2160,6 +2163,14 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
 @keyframes cueBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
 .scroll-cue.hide { opacity: 0; pointer-events: none; transform: translateX(-50%) translateY(12px); }
 @media (prefers-reduced-motion: reduce) { .scroll-cue svg { animation: none; } }
+/* 单字测评 */
+.assess-table tbody tr.self-row td { background: var(--bg); font-weight: 700; }
+.assess-table tbody td { font-variant-numeric: tabular-nums; }
+.assess-notes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 2vw, 22px); margin-top: clamp(28px, 3.4vw, 44px); }
+.an-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: clamp(18px, 2.2vw, 26px); }
+.an-card h4 { margin: 0 0 8px; font-size: 14.5px; font-weight: 700; color: var(--ink); }
+.an-card p { margin: 0; font-size: 13px; line-height: 1.85; color: var(--ink-soft); }
+@media (max-width: 760px) { .assess-notes { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -2177,6 +2188,7 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
       <button class="nav-btn" data-route="practice" type="button">练习工坊</button>
       <button class="nav-btn" data-route="ecosystem" type="button">下载安装</button>
       <button class="nav-btn" data-route="docs" type="button">进阶文档</button>
+      <button class="nav-btn" data-route="assess" type="button">单字测评</button>
     </nav>
 
     <div class="header-actions">
@@ -2196,6 +2208,7 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
       <button class="dock-btn" data-route="practice" type="button">练习</button>
       <button class="dock-btn" data-route="ecosystem" type="button">下载</button>
       <button class="dock-btn" data-route="docs" type="button">文档</button>
+      <button class="dock-btn" data-route="assess" type="button">测评</button>
     </div>
   </nav>
 </header>
@@ -2409,6 +2422,8 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
           </table>
         </div>
       </div>
+
+      <p style="text-align:center;margin:0 0 18px"><a class="btn btn-outline btn-sm" href="#assess">查看完整单字测评 →</a></p>
 
       <p class="arena-note">
         测算口径：统一取本仓库 <code>jde.dict.yaml</code> 的字频权重作为评测集，各方案只提供自己的单字码，逐字比对同码单字（不含词组）。<br>
@@ -3168,6 +3183,79 @@ html.snap-home { scroll-snap-type: y proximity; scroll-padding-top: 62px; }
         <button class="btn btn-outline btn-sm" id="docNext" type="button">下一篇 →</button>
       </div>
     </div>
+  </section>
+
+  <!-- ==================== VIEW: 单字测评 ==================== -->
+  <section class="view" id="view-assess">
+    <div class="section-head">
+      <div>
+        <div class="sec-eyebrow"><span>单字测评</span></div>
+        <h2>每一档常用字，<span class="serif-accent">都逐字测过。</span></h2>
+      </div>
+      <p>不看个案，看全量。用官方字频表把前 8000 常用字全部跑一遍，重码与码长按档公开。</p>
+    </div>
+
+    <div class="metric-strip">
+      <div class="ms-item"><div class="ms-num">18<i>字</i></div><div class="ms-lbl">前 1500 字全码重码</div></div>
+      <div class="ms-item"><div class="ms-num">99.90<i>%</i></div><div class="ms-lbl">前 1500 字首选准确率</div></div>
+      <div class="ms-item"><div class="ms-num">4.00<i>键</i></div><div class="ms-lbl">全码平均码长</div></div>
+      <div class="ms-item"><div class="ms-num">1.75<i>键</i></div><div class="ms-lbl">出简平均码长</div></div>
+    </div>
+
+    <h3 class="arena-subhead">分档重码与码长</h3>
+    <div class="tbl-scroll">
+      <table class="tier-table assess-table">
+        <thead>
+          <tr>
+            <th>字集范围</th>
+            <th>全码重码字数</th><th>全码首选率</th>
+            <th>出简重码字数</th><th>出简首选率</th><th>出简码长</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr><td>前 500 字</td><td>4</td><td>99.93%</td><td>48</td><td>99.97%</td><td>1.67</td></tr>
+            <tr><td>前 1,000 字</td><td>8</td><td>99.92%</td><td>56</td><td>99.98%</td><td>1.72</td></tr>
+            <tr class="self-row"><td>前 1,500 字</td><td>18</td><td>99.90%</td><td>70</td><td>99.96%</td><td>1.75</td></tr>
+            <tr><td>前 2,000 字</td><td>37</td><td>99.89%</td><td>93</td><td>99.96%</td><td>1.76</td></tr>
+            <tr><td>前 2,500 字</td><td>61</td><td>99.88%</td><td>124</td><td>99.95%</td><td>1.76</td></tr>
+            <tr><td>前 3,000 字</td><td>87</td><td>99.87%</td><td>157</td><td>99.94%</td><td>1.77</td></tr>
+            <tr><td>前 3,500 字</td><td>122</td><td>99.86%</td><td>203</td><td>99.93%</td><td>1.77</td></tr>
+            <tr><td>前 4,000 字</td><td>178</td><td>99.86%</td><td>272</td><td>99.93%</td><td>1.77</td></tr>
+            <tr><td>前 5,000 字</td><td>307</td><td>99.85%</td><td>430</td><td>99.92%</td><td>1.77</td></tr>
+            <tr><td>前 6,000 字</td><td>494</td><td>99.84%</td><td>650</td><td>99.91%</td><td>1.77</td></tr>
+            <tr><td>前 7,000 字</td><td>714</td><td>99.84%</td><td>894</td><td>99.91%</td><td>1.78</td></tr>
+            <tr><td>前 8,000 字</td><td>953</td><td>99.83%</td><td>1174</td><td>99.90%</td><td>1.78</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="assess-notes">
+      <div class="an-card">
+        <h4>全码与出简，为什么重码差这么多</h4>
+        <p>全码是「双拼两码 + 首末形码两码」，形码把同音字彻底分开，所以前 1500 字只有 18 个重码字。
+        出简允许两码或三码直接出字，省了击键，但同音字挤在更短的码位上，重码自然变多——这是所有音形方案的共同规律，不是缺陷。</p>
+      </div>
+      <div class="an-card">
+        <h4>重码主要来自同音</h4>
+        <p>音形方案的前两码是拼音，同音字天然共用入口。简单鹤用乱序字根压低形码重码，
+        剩下的重码基本集中在高频同音字上，属于「一眼就能看出该选哪个」的类型。</p>
+      </div>
+      <div class="an-card">
+        <h4>码长怎么算</h4>
+        <p>码长为字均用键数，不含空格确认键。全码恒为 4.00；出简后平均 1.75，即大部分常用字两键左右就能出字。
+        若把空格算作一键，实际击键为码长 +1。</p>
+      </div>
+      <div class="an-card">
+        <h4>测评口径</h4>
+        <p>字频取官方码表 <code>jde.dict.yaml</code> 的权重，按字频从高到低取前 N 字；每字只与「同码单字」比较，不含词组。
+        全部数据由 <code>python3 scripts/assess.py</code> 生成，结果固定可复现，不是抽样估算。</p>
+      </div>
+    </div>
+
+    <p class="arena-note">
+      本页只测单字（不含词组与整句）；词组性能另见「性能实测」区的多方案对照。<br>
+      数据由脚本从本仓库码表直接计算，复算命令 <code>python3 scripts/assess.py</code>。
+    </p>
   </section>
 
 </main>
@@ -4126,6 +4214,7 @@ function renderRoadmap() {
 }
 
 const DOC_ORDER = ['commit', 'manual', 'philosophy', 'checklist', 'shortcuts'];
+const ROUTES = ['home', 'roadmap', 'guide', 'practice', 'ecosystem', 'docs', 'assess'];
 
 function openDoc(id) {
   const idx = DOC_ORDER.indexOf(id);
@@ -4159,8 +4248,7 @@ function routeFromHash() {
     if (DOC_ORDER.includes(id)) { openDoc(id); return; }
   }
   if (h === 'docs') { switchRoute('docs'); return; }
-  const map = { home: 'home', roadmap: 'roadmap', guide: 'guide', practice: 'practice', ecosystem: 'ecosystem' };
-  if (map[h]) switchRoute(map[h]);
+  if (ROUTES.includes(h)) { switchRoute(h); }
 }
 
 window.addEventListener('hashchange', routeFromHash);
@@ -5060,7 +5148,7 @@ function bindEvents() {
 
   document.querySelectorAll('.nav-btn, .dock-btn').forEach(b => b.addEventListener('click', () => {
     const r = b.dataset.route;
-    if (r === 'docs' || ['home', 'roadmap', 'guide', 'practice', 'ecosystem'].includes(r)) {
+    if (ROUTES.includes(r)) {
       if (location.hash.slice(1) === r || (r === 'home' && !location.hash)) switchRoute(r);
       else location.hash = r;
     } else switchRoute(r);
