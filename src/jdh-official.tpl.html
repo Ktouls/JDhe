@@ -6473,7 +6473,7 @@ function initScrollCue() {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     const tag = (e.target && e.target.tagName) || '';
     if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
-    if (document.querySelector('.mask.show')) return;
+    if (document.querySelector('.mask.on')) return;
     const slides = getVisibleSlides(scroller);
     if (slides.length <= 1) return;
     const h = scroller.clientHeight || 1;
@@ -7221,6 +7221,7 @@ function applyTheme() {
 
 function switchRoute(route, subTarget) {
   currentRoute = route;
+  if (ROUTE_TITLES[route]) document.title = ROUTE_TITLES[route];
   document.body.dataset.route = route;
   document.documentElement.classList.toggle('snap-home', route === 'home');
   if (window.__scrollCueUpdate) window.__scrollCueUpdate();
@@ -7489,6 +7490,16 @@ function renderRoadmap() {
 
 const DOC_ORDER = ['commit', 'manual', 'philosophy', 'checklist', 'shortcuts'];
 const ROUTES = ['home', 'roadmap', 'guide', 'practice', 'ecosystem', 'docs', 'assess'];
+const ROUTE_TITLES = {
+  home: '简单鹤 · 轻羽落键，意到字成。',
+  roadmap: '上手路径 · 简单鹤',
+  guide: '字根与规则 · 简单鹤',
+  practice: '练习工坊 · 简单鹤',
+  ecosystem: '下载安装 · 简单鹤',
+  docs: '进阶文档 · 简单鹤',
+  assess: '单字测评 · 简单鹤',
+  doc: '简单鹤文档'
+};
 
 function openDoc(id) {
   const idx = DOC_ORDER.indexOf(id);
@@ -8588,7 +8599,10 @@ function bindEvents() {
   });
 
   document.querySelectorAll('#view-docs [data-doc]').forEach(el => {
-    el.addEventListener('click', () => goDoc(el.dataset.doc));
+    el.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return;
+      goDoc(el.dataset.doc);
+    });
   });
   document.querySelectorAll('[data-doc-back]').forEach(el => {
     el.addEventListener('click', (e) => { e.preventDefault(); history.pushState(null, '', '#docs'); switchRoute('docs'); });
