@@ -3697,17 +3697,31 @@ body.is-snap-route .snap-dots {
   flex-shrink: 0;
 }
 .scheme-tip .st-text { flex: 1; min-width: 0; }
-.cmp-footnote {
-  margin-top: clamp(10px, 1.6dvh, 16px);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px 16px;
-  flex-wrap: wrap;
-  font-size: 12px;
-  color: var(--ink-faint);
-  line-height: 1.6;
+#slide-compare .snap-inner {
+  max-height: 100%;
+  overflow-y: auto;
+  scrollbar-width: none;
 }
+#slide-compare .snap-inner::-webkit-scrollbar { display: none; }
+.cmp-footnote {
+  margin-top: clamp(8px, 1.3dvh, 14px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px 16px;
+  flex-wrap: wrap;
+  font-size: 11.5px;
+  color: var(--ink-faint);
+  line-height: 1.5;
+}
+.cmp-footnote-list {
+  flex: 1 1 560px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 18px;
+}
+.cmp-footnote-item { margin: 0; }
+.cmp-footnote-item b { color: var(--ink-soft); font-weight: 600; }
 .cmp-footnote code {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -4044,6 +4058,7 @@ body.is-snap-route .snap-dots {
   .scheme-tip { margin-top: 6px; padding: 7px 10px; font-size: 11px; line-height: 1.45; min-height: 44px; gap: 7px; }
   .scheme-tip .st-badge { font-size: 10.5px; padding: 1px 7px; }
   .cmp-footnote { margin-top: 5px; font-size: 10px; line-height: 1.38; gap: 4px; }
+  .cmp-footnote-list { grid-template-columns: 1fr; gap: 3px; }
   .cmp-footnote .hide-mob { display: none; }
 
   /* Slide 6 手机端双面板紧凑（适配 360x640 真机视口） */
@@ -4534,13 +4549,13 @@ body.is-snap-route .snap-dots {
               <tr><th>方案</th><th>类型</th><th>字根数</th><th>首选准确率</th><th>拆字准确度</th><th>全码/出简码长</th><th>全码重码</th><th>学习难度</th></tr>
             </thead>
             <tbody>
-              <tr class="self-row active-tip" tabindex="0" data-scheme="简单鹤" data-note="97 个乱序字根 + 小鹤双拼；没有小字字根，四码只筛选不上屏，拆字稳定少返工。前 3000 字全码 87 重码，出简平均码长 1.77 键。"><td>简单鹤</td><td><span class="type-tag">音形</span></td><td>97</td><td>99.87%</td><td><span class="lv lv-0">极高</span></td><td>4.00 / 1.77</td><td>87</td><td><span class="lv lv-2">中</span></td></tr>
-              <tr tabindex="0" data-scheme="86 五笔" data-note="115 字根，系统兼容性最广的经典形码；但方案较为古早（甚至缺反犬旁），难拆字容易卡顿，且原生方案无词、未针对现代词组优化。"><td>86 五笔</td><td><span class="type-tag">形码</span></td><td>115</td><td>99.88%</td><td><span class="lv lv-2">中</span></td><td>3.72</td><td>66</td><td><span class="lv lv-4">高</span></td></tr>
-              <tr tabindex="0" data-scheme="虎码" data-note="归并后 241 根，单字性能更强且词组指标明显优于 86 五笔；受字根与码位限制，个别日用词（如「表示/帮助」「下载/下班」）会重码，整体是乱序形码生态最稳定、用户最多的优秀方案。"><td>虎码</td><td><span class="type-tag">形码</span></td><td>241</td><td>99.95%</td><td><span class="lv lv-1">高</span></td><td>4.00</td><td>116</td><td><span class="lv lv-4">高</span></td></tr>
-              <tr tabindex="0" data-scheme="小鹤音形" data-note="94 部件/笔画 + 237 小字；不系统硬记字根易出现「猜根」犹豫（部分字根如「丽」根较抽象），实战码长会受熟练度影响；一二简与官方词库也偏作者主观特化。"><td>小鹤音形</td><td><span class="type-tag">音形</span></td><td>94 + 237 小字</td><td>99.66%</td><td><span class="lv lv-2">中</span></td><td>4.00</td><td>88</td><td><span class="lv lv-2">中</span></td></tr>
-              <tr tabindex="0" data-scheme="小鹤双拼" data-note="上手很快的双拼方案；相比 26 键全拼少了简拼，换来两键定音和四码两字词的固定码长，学习成本低。"><td>小鹤双拼</td><td><span class="type-tag">双拼</span></td><td>0</td><td>84.37%</td><td style="color:var(--ink-faint)">—</td><td>2.00</td><td>2602</td><td><span class="lv lv-1">低</span></td></tr>
+              <tr class="self-row active-tip" tabindex="0" data-scheme="简单鹤" data-note="同采用艾宾浩斯遗忘曲线助记，并经前沿退火算法多步迭代调校、筛选取舍至 97 个字根，记忆更简单。完整保留小鹤双拼打词性能，前期字根或规则基础不稳时可直接边学边用、以词定字，对投产焦虑用户友好；词库可离线保存终身受用，并有成熟云同步方案支持及时同步与回退。"><td>简单鹤</td><td><span class="type-tag">音形</span></td><td>97</td><td>99.87%</td><td><span class="lv lv-0">极高</span></td><td>4.00 / 1.77</td><td>87</td><td><span class="lv lv-2">中</span></td></tr>
+              <tr tabindex="0" data-scheme="86 五笔" data-note="25 键方案，汉字从纸面进入计算机时代的皇冠明珠，推广于 1986 年；115 字根多按规则分区排列，但受限于时代认知，单字大量使用成字、分区识别码等强制记忆机制，缺少常用字根（如「犭」），一简 25 字纯无理硬记且语料与现代部分脱钩。传统字根歌学习古早低效，入门需持续吟唱字根歌检索部件，在性能受限的基础上更增学习成本。"><td>86 五笔</td><td><span class="type-tag">形码</span></td><td>115</td><td>99.88%</td><td><span class="lv lv-2">中</span></td><td>3.72</td><td>66</td><td><span class="lv lv-4">高</span></td></tr>
+              <tr tabindex="0" data-scheme="虎码" data-note="26 键音托方案，优化了形码识别码难题，通过作者原创字根乱序算法大幅提升性能，并采用艾宾浩斯遗忘曲线大幅降低入门难度——普通用户 1 天碎片学习即可基本记全 241 字根入门（极端个例 1 小时入门，或记忆大师 1 日练至 200 字/分 95%+ 键准）。但作为形码，平均仍需约 20 万字练习量才能稳定 100 速 90+ 键准投产，入门至少需脱产约 7 天逐步恢复并提高生产力。"><td>虎码</td><td><span class="type-tag">形码</span></td><td>241</td><td>99.95%</td><td><span class="lv lv-1">高</span></td><td>4.00</td><td>116</td><td><span class="lv lv-4">高</span></td></tr>
+              <tr tabindex="0" data-scheme="小鹤音形" data-note="在熟练小鹤双拼基础上数日记忆并适应字根即可快速投产，凭借猜根与词库特化优越性在特定文本下可速成 100–150 字/分；但速成投产单字确定性较差，极易形成错误条件反射导致长期叠加约 88% 键准的额外损耗，增加怒气值、降低效率（有个例 3 年重复错误练习卡在 120 速 88% 键准，亦有个例 30 日完成 150 字/分快速毕业），系统练习不如直接学习简单鹤。"><td>小鹤音形</td><td><span class="type-tag">音形</span></td><td>94 + 237 小字</td><td>99.66%</td><td><span class="lv lv-2">中</span></td><td>4.00</td><td>88</td><td><span class="lv lv-2">中</span></td></tr>
+              <tr tabindex="0" data-scheme="小鹤双拼" data-note="熟练掌握 26 键拼音的用户数日即可养成双拼习惯，连打长句性能大幅提升、击键节奏统一；但对正确使用平翘舌、前后鼻音有较高要求，且仍未脱离词库养成框架，各平台内置小鹤双拼词库质量良莠不齐，选错平台会影响长期生产。"><td>小鹤双拼</td><td><span class="type-tag">双拼</span></td><td>0</td><td>84.37%</td><td style="color:var(--ink-faint)">—</td><td>2.00</td><td>2602</td><td><span class="lv lv-1">低</span></td></tr>
               <tr tabindex="0" data-scheme="自然码双拼" data-note="老资历经典双拼方案，与小鹤双拼同属双拼路线，布局经典、几乎所有系统与输入法原生内置。"><td>自然码双拼</td><td><span class="type-tag">双拼</span></td><td>0</td><td>84.37%</td><td style="color:var(--ink-faint)">—</td><td>2.00</td><td>2602</td><td><span class="lv lv-1">低</span></td></tr>
-              <tr tabindex="0" data-scheme="全拼 26 键" data-note="零学习门槛，但高度依赖长期养成个人用户词库，跨平台迁移备份困难，盲打连打确定性较弱。"><td>全拼 26 键</td><td><span class="type-tag">全拼</span></td><td>0</td><td>84.43%</td><td style="color:var(--ink-faint)">—</td><td>~3.0</td><td>2601</td><td><span class="lv lv-0">极低</span></td></tr>
+              <tr tabindex="0" data-scheme="全拼 26 键" data-note="chang 等五字拼音码长较长，虽可用简拼缩短整体码长，但一旦简拼猜错就需大段退格修正与试错；准确度相对随机，熟稿速度易误导用户形成认知偏差。高度依赖个人词库养成与掌握度，沉没成本较高、跨平台迁移备份麻烦。"><td>全拼 26 键</td><td><span class="type-tag">全拼</span></td><td>0</td><td>84.43%</td><td style="color:var(--ink-faint)">—</td><td>~3.0</td><td>2601</td><td><span class="lv lv-0">极低</span></td></tr>
               <tr tabindex="0" data-scheme="全拼 9 键" data-note="最入门、最省事的单手手机方案，但重码率高、日常输入需要频繁盯候选选重。"><td>全拼 9 键</td><td><span class="type-tag">全拼</span></td><td>0</td><td>77.06%</td><td style="color:var(--ink-faint)">—</td><td>~3.0</td><td>2787</td><td><span class="lv lv-0">极低</span></td></tr>
             </tbody>
           </table>
@@ -4548,11 +4563,16 @@ body.is-snap-route .snap-dots {
 
         <div class="scheme-tip" id="schemeTip" aria-live="polite">
           <span class="st-badge" id="schemeTipName">简单鹤</span>
-          <span class="st-text" id="schemeTipText">97 个乱序字根 + 小鹤双拼；没有小字字根，四码只筛选不上屏，拆字稳定少返工。前 3000 字全码 87 重码，出简平均码长 1.77 键。</span>
+          <span class="st-text" id="schemeTipText">同采用艾宾浩斯遗忘曲线助记，并经前沿退火算法多步迭代调校、筛选取舍至 97 个字根，记忆更简单。完整保留小鹤双拼打词性能，前期字根或规则基础不稳时可直接边学边用、以词定字，对投产焦虑用户友好；词库可离线保存终身受用，并有成熟云同步方案支持及时同步与回退。</span>
         </div>
 
         <div class="cmp-footnote">
-          <span>注：有形码方案的纸面码长需结合实战「拆字准确度」看待（纯拼音无形码记为 —）；简单鹤单字确定性「极高」仅限同音形赛道对比<span class="hide-mob">；猜根或返工会让理论码长在实战中打折；全拼按常用字平均拼音长度计约 3.0 键，简单鹤出简码长 1.77 取自 <code>assess.py</code></span>。</span>
+          <div class="cmp-footnote-list">
+            <p class="cmp-footnote-item"><b>1. 纸面与实战：</b>纸面数据仅供参考，实际投产考量个人有效练习量形成的高质量条件反射，方案熟练度与输入确定性正相关。</p>
+            <p class="cmp-footnote-item"><b>2. 确定性代价：</b>确定性差则易打错字、增加回改次数，降低效率的同时极易打断输入状态。</p>
+            <p class="cmp-footnote-item"><b>3. 码长与耗损：</b>非竞速玩家而言，入门码长决定未来长期消耗，方案性能好可有效减少长期生产的生理耗损。</p>
+            <p class="cmp-footnote-item"><b>4. 投产与心流：</b>三分写七分删改，长段连续输入较少，确定性与码长直接影响脱离腹稿的心流创作；确定性高投入、低纸面反馈却关乎长期情绪稳定与生理健康，养成反射后极难再纠偏，选对确定性高的方案尤为重要。</p>
+          </div>
           <a class="perf-more" href="#assess">完整测评 →</a>
         </div>
       </div>
