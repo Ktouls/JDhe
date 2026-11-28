@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """从 src/ 源文件重新构建单文件静态站点 index.html（无需第三方依赖）。"""
-import base64, collections, gzip, json, pathlib, re
+import base64, collections, gzip, hashlib, json, pathlib, re
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SRC = ROOT / "src"
@@ -110,6 +110,7 @@ chaifen_gz = gzip_bytes(chaifen_json)
 print(f"已生成 assets/dict-core.gz：{len(core_gz):,} 字节")
 print(f"已生成 assets/dict-search.gz：{len(search_gz):,} 字节")
 print(f"已生成 assets/chaifen.gz：{len(chaifen_gz):,} 字节")
+asset_ver = hashlib.sha1(core_gz + search_gz + chaifen_gz).hexdigest()[:10]
 
 # 首屏不再内嵌词库/拆分表，改为进入练习页/查字时按需加载 assets/*.gz
 dict_gz_b64 = ""
@@ -121,6 +122,7 @@ out = (
        .replace("__JDH_SPLIT_JSON__", split_json)
        .replace("__JDH_CHAIFEN_JSON__", "{}")
        .replace("__JDH_DICT_GZ_B64__", dict_gz_b64)
+       .replace("__JDH_ASSET_VER__", asset_ver)
        .replace("__JDH_SHORT_CODE_LOOKUP__", json.dumps(short_code_lookup, ensure_ascii=False, separators=(",", ":")))
 )
 assert "__JDH_" not in out, "存在未替换占位符"
