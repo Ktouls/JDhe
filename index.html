@@ -4114,6 +4114,40 @@ body.is-snap-route .snap-dots {
   .snap-slide { height: auto; min-height: var(--slide-h, calc(100dvh - var(--top-bar-h))); overflow: visible; padding-top: 20px; padding-bottom: 20px; }
 }
 
+
+/* ==================== 小屏模式（<=340px 首页；<=360px 键图） ==================== */
+#view-home.free-scroll { padding: 0 0 40px; }
+#view-home.free-scroll .snap-slide {
+  display: block;
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+  padding: 24px var(--pad-x);
+}
+#view-home.free-scroll .snap-inner {
+  transform: none !important;
+  margin-top: 0 !important;
+}
+#view-home.free-scroll .snap-dots { display: none; }
+
+@media (max-width: 360px) {
+  .zg-kb-scroll.kb-scroll,
+  .sp-kb-scroll.kb-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 6px;
+  }
+  .zg-kb.is-scroll,
+  .sp-kb.is-scroll { transform: none; }
+}
+
+.kb-scroll-hint {
+  margin-top: 8px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-faint);
+}
 </style>
 </head>
 <body data-route="home" class="is-snap-route">
@@ -6190,6 +6224,27 @@ function scaleKeyboardToFit(kbId, baseWidth) {
   const kb = $(kbId);
   if (!kb || !kb.parentElement) return;
   const wrap = kb.parentElement;
+  if (window.matchMedia('(max-width: 360px)').matches) {
+    // 小屏不再整体缩放：保持 1 倍键帽，外层横向滚动
+    kb.classList.remove('is-scaled');
+    kb.classList.add('is-scroll');
+    wrap.classList.add('kb-scroll');
+    kb.style.width = baseWidth + 'px';
+    kb.style.transform = 'none';
+    wrap.style.height = '';
+    let hint = wrap.previousElementSibling;
+    if (!hint || !hint.classList || !hint.classList.contains('kb-scroll-hint')) {
+      hint = document.createElement('div');
+      hint.className = 'kb-scroll-hint';
+      hint.textContent = '左右滑动查看完整键盘 · 点键看详情';
+      wrap.insertAdjacentElement('beforebegin', hint);
+    }
+    return;
+  }
+  wrap.classList.remove('kb-scroll');
+  kb.classList.remove('is-scroll');
+  const oldHint = wrap.previousElementSibling;
+  if (oldHint && oldHint.classList && oldHint.classList.contains('kb-scroll-hint')) oldHint.remove();
   const avail = wrap.clientWidth;
   if (!avail) return;
   if (avail < baseWidth) {
@@ -6346,6 +6401,10 @@ function syncTopBarHeight() {
   const vh = Math.round((window.visualViewport && window.visualViewport.height) || window.innerHeight || 0);
   const avail = Math.max(320, vh - h);
   document.documentElement.style.setProperty('--slide-h', avail + 'px');
+
+  // 极窄屏（320 级）首页改为正常纵向流，避免整屏吸附把内容裁掉
+  const homeView = $('view-home');
+  if (homeView) homeView.classList.toggle('free-scroll', window.matchMedia('(max-width: 340px)').matches);
 
   // 先无条件清空所有旧缩放，彻底杜绝切换标签后残留 0.68 缩小比例的 Bug
   document.querySelectorAll('.view.snap-view > .snap-slide').forEach(sl => {
