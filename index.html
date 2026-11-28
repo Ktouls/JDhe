@@ -8160,7 +8160,7 @@ async function syncOnlineDict(manual) {
       const url = ONLINE_SOURCES[onlineIndex];
       const label = url.includes('jde_ext') ? '扩展字集' : '主词库';
       try {
-        const res = await fetchTextWithTimeout(url, manual ? 8000 : 4000);
+        const res = await fetchTextWithTimeout(url, manual ? 20000 : 4000);
         if (!res.ok) { lastReason = 'HTTP ' + res.status; onlineIndex = (onlineIndex + 1) % ONLINE_SOURCES.length; continue; }
         const txt = res.text;
         const dict = parseOnlineDict(txt);
@@ -8261,7 +8261,7 @@ async function syncShortCodeDict(manual) {
   ];
   for (const url of urls) {
     try {
-      const res = await fetchTextWithTimeout(url, manual ? 8000 : 4000);
+      const res = await fetchTextWithTimeout(url, manual ? 20000 : 4000);
       if (!res.ok) continue;
       const txt = res.text;
       const sc = parseRimeShortCodes(txt, 'rime-JDhe 固词简码');
