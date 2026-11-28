@@ -25,7 +25,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 GZ_RE = re.compile(r'(const EMBEDDED_DICT_GZ_B64 = ")([A-Za-z0-9+/=]+)(")')
-FILES = ["index.html", "zigen-chart.svg", "src/zigen-chart.svg", "src/assess.json"]
+FILES = ["index.html", "zigen-chart.svg", "src/zigen-chart.svg", "src/assess.json", "assets/jdh_font.woff", "assets/jdh_roots_font.woff"]
 GZ_FILES = ["assets/dict-core.gz", "assets/dict-search.gz", "assets/chaifen.gz"]
 
 

@@ -16,13 +16,13 @@
 <style id="jdh-font-css">
 @font-face {
   font-family: 'JdhChai';
-  src: url(data:font/woff;base64,__JDH_FONT_BASE64__) format('woff');
+  src: url("assets/jdh_font.woff?v=__JDH_ASSET_VER__") format('woff');
   font-display: swap;
   unicode-range: U+E000-F8FF;
 }
 @font-face {
   font-family: 'JdhChai';
-  src: url(data:font/woff;base64,__JDH_ROOTS_FONT_BASE64__) format('woff');
+  src: url("assets/jdh_roots_font.woff?v=__JDH_ASSET_VER__") format('woff');
   font-display: swap;
   unicode-range: U+3000-303F, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF;
 }
@@ -4168,6 +4168,8 @@ body.is-snap-route .snap-dots {
   font-size: 12px;
   color: var(--ink-faint);
 }
+
+.stage-frame .showcase-body { min-height: 123px; }
 </style>
 </head>
 <body data-route="home" class="is-snap-route">

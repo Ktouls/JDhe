@@ -34,6 +34,8 @@ jobs:
           cp assets/dict-core.gz /tmp/baseline/assets/dict-core.gz
           cp assets/dict-search.gz /tmp/baseline/assets/dict-search.gz
           cp assets/chaifen.gz /tmp/baseline/assets/chaifen.gz
+          cp assets/jdh_font.woff /tmp/baseline/assets/jdh_font.woff
+          cp assets/jdh_roots_font.woff /tmp/baseline/assets/jdh_roots_font.woff
 
       - name: Rebuild site and assessment
         run: |

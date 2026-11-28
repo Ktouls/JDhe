@@ -101,6 +101,12 @@ def gzip_bytes(text):
 
 assets_dir = ROOT / "assets"
 assets_dir.mkdir(exist_ok=True)
+font_bytes = base64.b64decode(font_b64)
+roots_font_bytes = base64.b64decode(roots_font_b64)
+(assets_dir / "jdh_font.woff").write_bytes(font_bytes)
+(assets_dir / "jdh_roots_font.woff").write_bytes(roots_font_bytes)
+print(f"已生成 assets/jdh_font.woff：{len(font_bytes):,} 字节")
+print(f"已生成 assets/jdh_roots_font.woff：{len(roots_font_bytes):,} 字节")
 search_gz = gzip_bytes(search_payload)
 (assets_dir / "dict-search.gz").write_bytes(search_gz)
 core_gz = gzip_bytes(core_payload)
@@ -110,14 +116,13 @@ chaifen_gz = gzip_bytes(chaifen_json)
 print(f"已生成 assets/dict-core.gz：{len(core_gz):,} 字节")
 print(f"已生成 assets/dict-search.gz：{len(search_gz):,} 字节")
 print(f"已生成 assets/chaifen.gz：{len(chaifen_gz):,} 字节")
-asset_ver = hashlib.sha1(core_gz + search_gz + chaifen_gz).hexdigest()[:10]
+asset_ver = hashlib.sha1(core_gz + search_gz + chaifen_gz + font_bytes + roots_font_bytes).hexdigest()[:10]
 
 # 首屏不再内嵌词库/拆分表，改为进入练习页/查字时按需加载 assets/*.gz
 dict_gz_b64 = ""
 
 out = (
-    tpl.replace("__JDH_FONT_BASE64__", font_b64)
-       .replace("__JDH_ROOTS_FONT_BASE64__", roots_font_b64)
+    tpl
        .replace("__JDH_RAW_JSON__", raw_zigen_json)
        .replace("__JDH_SPLIT_JSON__", split_json)
        .replace("__JDH_CHAIFEN_JSON__", "{}")
