@@ -24,11 +24,20 @@ jobs:
       - name: Install build dependencies
         run: python3 -m pip install --upgrade pip fonttools
 
+      - name: Save baseline generated files
+        run: |
+          mkdir -p /tmp/baseline/src
+          cp index.html /tmp/baseline/index.html
+          cp zigen-chart.svg /tmp/baseline/zigen-chart.svg
+          cp src/zigen-chart.svg /tmp/baseline/src/zigen-chart.svg
+          cp src/assess.json /tmp/baseline/src/assess.json
+
       - name: Rebuild site and assessment
         run: |
           python3 scripts/build.py
           python3 scripts/assess.py
 
+      # index.html 内嵌的词库是 gzip 结果，字节会随 Python/zlib 版本变化，
+      # 因此用脚本做归一化比对，而不是直接 git diff。
       - name: Check generated files are up to date
-        run: |
-          git diff --exit-code -- index.html zigen-chart.svg src/zigen-chart.svg src/assess.json
+        run: python3 scripts/check-generated.py /tmp/baseline
