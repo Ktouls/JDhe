@@ -103,16 +103,23 @@ assets_dir = ROOT / "assets"
 assets_dir.mkdir(exist_ok=True)
 search_gz = gzip_bytes(search_payload)
 (assets_dir / "dict-search.gz").write_bytes(search_gz)
+core_gz = gzip_bytes(core_payload)
+(assets_dir / "dict-core.gz").write_bytes(core_gz)
+chaifen_gz = gzip_bytes(chaifen_json)
+(assets_dir / "chaifen.gz").write_bytes(chaifen_gz)
+print(f"已生成 assets/dict-core.gz：{len(core_gz):,} 字节")
 print(f"已生成 assets/dict-search.gz：{len(search_gz):,} 字节")
+print(f"已生成 assets/chaifen.gz：{len(chaifen_gz):,} 字节")
 
-dict_gz_b64 = base64.b64encode(gzip_bytes(core_payload)).decode("ascii")
+# 首屏不再内嵌词库/拆分表，改为进入练习页/查字时按需加载 assets/*.gz
+dict_gz_b64 = ""
 
 out = (
     tpl.replace("__JDH_FONT_BASE64__", font_b64)
        .replace("__JDH_ROOTS_FONT_BASE64__", roots_font_b64)
        .replace("__JDH_RAW_JSON__", raw_zigen_json)
        .replace("__JDH_SPLIT_JSON__", split_json)
-       .replace("__JDH_CHAIFEN_JSON__", chaifen_json)
+       .replace("__JDH_CHAIFEN_JSON__", "{}")
        .replace("__JDH_DICT_GZ_B64__", dict_gz_b64)
        .replace("__JDH_SHORT_CODE_LOOKUP__", json.dumps(short_code_lookup, ensure_ascii=False, separators=(",", ":")))
 )

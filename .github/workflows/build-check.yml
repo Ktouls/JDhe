@@ -31,7 +31,9 @@ jobs:
           cp zigen-chart.svg /tmp/baseline/zigen-chart.svg
           cp src/zigen-chart.svg /tmp/baseline/src/zigen-chart.svg
           cp src/assess.json /tmp/baseline/src/assess.json
+          cp assets/dict-core.gz /tmp/baseline/assets/dict-core.gz
           cp assets/dict-search.gz /tmp/baseline/assets/dict-search.gz
+          cp assets/chaifen.gz /tmp/baseline/assets/chaifen.gz
 
       - name: Rebuild site and assessment
         run: |

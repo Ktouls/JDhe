@@ -7349,6 +7349,7 @@ function switchRoute(route, subTarget) {
     let sub = map[subTarget] || subTarget || currentPracticeSub;
     if (sub === 'p-sp' && STATE.skipSp) $('pracSpTab').style.display = 'inline-block';
     switchSubTab('practiceTabs', 'view-practice', sub);
+    loadCoreAssets();
   }
   if (route === 'roadmap') renderRoadmap();
   syncOverviewCounters();
@@ -7915,6 +7916,8 @@ function renderZigenTable() {
 let splitCur = null, splitTyped = '', splitLocked = false, splitMissed = false;
 let splitScope = 'top1000';
 let dictSyncState = 'idle'; // idle | loading | synced | local | fallback
+let coreLoading = false;
+let coreAssetsPromise = null;
 
 function activeSplitPool() {
   if (splitScope === 'builtin' || !CUSTOM_DICT.length) return SPLIT_BANK;
@@ -7981,6 +7984,7 @@ function renderSplitHud() {
   $('splitMastered').textContent = countMasteredInPool(targetPool) + '/' + targetPool.length;
   const hasFull = CUSTOM_DICT.length > 0;
   $('splitPoolLbl').textContent =
+    coreLoading ? '正在加载内置词库…' :
     dictSyncState === 'loading' ? '正在检查在线更新…' :
     dictSyncState === 'synced' && lastSyncInfo ? (splitScope === 'top1000' ? '官方 v9.3 · 前 1000 常用字' : (splitScope === 'full' ? '官方 v9.3 全词库' : '内置精校 167 字')) + ' · 已核对 ' + lastSyncInfo.at.toLocaleTimeString('zh-CN', { hour12: false }) :
     dictSyncState === 'synced' ? (splitScope === 'top1000' ? 'v9.3 前 1000 常用字' : (splitScope === 'full' ? 'v9.3 官方全词库' : '内置精校 167 字')) :
@@ -8068,24 +8072,35 @@ function parseRimeDictText(text, sourceLabel) {
   }
   return Array.from(map.values());
 }
-async function loadEmbeddedDict() {
-  if (!EMBEDDED_DICT_GZ_B64 || EMBEDDED_DICT_GZ_B64.startsWith('__')) return false;
+async function fetchGzipAsset(url, ms) {
+  const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const timer = controller ? setTimeout(() => controller.abort(), ms) : null;
   try {
-    const bin = atob(EMBEDDED_DICT_GZ_B64);
-    const bytes = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-    let txt;
-    if (typeof DecompressionStream !== 'undefined') {
-      const ds = new DecompressionStream('gzip');
-      const stream = new Blob([bytes]).stream().pipeThrough(ds);
-      txt = await new Response(stream).text();
-    } else if (typeof fflate !== 'undefined' && fflate.gunzipSync) {
-      // Safari 16.4 以下没有 DecompressionStream；用内置 fflate 解压同一份 gzip 词库。
-      txt = new TextDecoder('utf-8').decode(fflate.gunzipSync(bytes));
-    } else {
-      return false;
-    }
-    const parts = txt.split('\n===\n');
+    const res = await fetch(url, controller ? { cache: 'no-cache', signal: controller.signal } : { cache: 'no-cache' });
+    if (!res.ok) return null;
+    const bytes = new Uint8Array(await res.arrayBuffer());
+    return await decompressGzipBytes(bytes);
+  } catch (e) {
+    return null;
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
+async function loadCoreAssets() {
+  if (CUSTOM_DICT.length) return true;
+  if (coreAssetsPromise) return coreAssetsPromise;
+  coreLoading = true;
+  dictSyncState = 'loading';
+  renderSplitHud();
+  coreAssetsPromise = (async () => {
+    const [coreTxt, cfTxt] = await Promise.all([
+      fetchGzipAsset('assets/dict-core.gz', 20000),
+      fetchGzipAsset('assets/chaifen.gz', 20000)
+    ]);
+    if (!coreTxt || !cfTxt) return false;
+    Object.assign(CHAIFEN, JSON.parse(cfTxt));
+    const parts = coreTxt.split('\n===\n');
     const splitLookup = new Map(SPLIT_BANK.map(x => [x.ch, x]));
     const dict = [];
     if (parts[0]) {
@@ -8137,15 +8152,23 @@ async function loadEmbeddedDict() {
     if (sc2.length) CUSTOM_SHORT_2 = sc2;
     if (sc3.length) CUSTOM_SHORT_3 = sc3;
     dictSyncState = 'embedded';
-    renderSplitHud();
-    nextSplitQuestion();
-    renderShortHud();
-    if (STATE.short.cat === 'dict2' || STATE.short.cat === 'dict3') nextShortQuestion();
     return true;
-  } catch (e) {
+  })();
+  const ok = await coreAssetsPromise;
+  coreAssetsPromise = null;
+  coreLoading = false;
+  if (!ok) {
+    dictSyncState = 'fallback';
+    renderSplitHud();
     return false;
   }
+  renderSplitHud();
+  nextSplitQuestion();
+  renderShortHud();
+  if (STATE.short.cat === 'dict2' || STATE.short.cat === 'dict3') nextShortQuestion();
+  return true;
 }
+
 const ONLINE_SOURCES = [
   'https://raw.githubusercontent.com/rimeinn/rime-JDhe/main/cn_dicts/jde/jde.dict.yaml',
   'https://fastly.jsdelivr.net/gh/rimeinn/rime-JDhe@main/cn_dicts/jde/jde.dict.yaml',
@@ -8325,6 +8348,7 @@ async function decompressGzipBytes(bytes) {
 
 async function loadSearchIndex() {
   if (window.JDH_WORD_RANKED || window.JDH_SINGLE_RANKED) return true;
+  if (!(await loadCoreAssets())) return false;
   if (searchIndexPromise) return searchIndexPromise;
   searchIndexPromise = (async () => {
     const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
@@ -8835,17 +8859,7 @@ initScrollReveal($('view-home'));
 initHeroMotion();
 syncAllSliders();
 setTimeout(syncAllSliders, 120);
-loadEmbeddedDict().then(ok => {
-  if (ok) return;
-  // iOS 16.0 等没有 DecompressionStream 的浏览器无法解压内嵌词库。
-  // 不再自动拉在线词库，避免长时间卡在“正在检查在线更新”；让用户手动重试。
-  if (typeof DecompressionStream === 'undefined') {
-    dictSyncState = 'fallback';
-    renderSplitHud();
-    return;
-  }
-  syncOnlineDict(false);
-});
+// 核心词库/拆分表在进入练习页或查字时按需加载（loadCoreAssets），首屏不再内嵌。
 
 if (document.fonts && document.fonts.load) {
   document.fonts.load('48px JdhChai').then(() => {
