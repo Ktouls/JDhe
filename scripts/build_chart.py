@@ -134,7 +134,7 @@ def main():
 
     # 1. 顶部编辑感页头（与官网首屏徽标 & 标题风格统一）
     parts.append(f'<circle cx="58" cy="54" r="3.5" fill="{ACCENT}"/>')
-    parts.append(text_paths("简单鹤 · 轻羽落键，意到字成", 70, 59, 13.5, INK_FAINT))
+    parts.append(text_paths("简单鹤 · 双拼加形输入法", 70, 59, 13.5, INK_FAINT))
     parts.append(text_paths("简单鹤 26 键字根图", 52, 102, 32, INK))
 
     # 右上角胶囊规格标签
