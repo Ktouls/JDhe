@@ -89,7 +89,7 @@ s5 = "\n".join(
     for w, cs in word_all_ranked.items()
 )
 payload = "\n===\n".join([s1, s2, s3, s4, s5])
-dict_gz_b64 = base64.b64encode(gzip.compress(payload.encode("utf-8"), 9)).decode("ascii")
+dict_gz_b64 = base64.b64encode(gzip.compress(payload.encode("utf-8"), 9, mtime=0)).decode("ascii")
 
 out = (
     tpl.replace("__JDH_FONT_BASE64__", font_b64)
