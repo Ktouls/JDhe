@@ -7879,6 +7879,7 @@ function renderSplitHud() {
     dictSyncState === 'synced' && lastSyncInfo ? (splitScope === 'top1000' ? '官方 v9.3 · 前 1000 常用字' : (splitScope === 'full' ? '官方 v9.3 全词库' : '内置精校 167 字')) + ' · 已核对 ' + lastSyncInfo.at.toLocaleTimeString('zh-CN', { hour12: false }) :
     dictSyncState === 'synced' ? (splitScope === 'top1000' ? 'v9.3 前 1000 常用字' : (splitScope === 'full' ? 'v9.3 官方全词库' : '内置精校 167 字')) :
     dictSyncState === 'local' ? (splitScope === 'top1000' ? '本地词库 · 前 1000 字' : (splitScope === 'full' ? '已导入本地全词库' : '内置精校 167 字')) :
+    dictSyncState === 'fallback' ? '内置精校 167 字 · 在线词库未加载' :
     hasFull ? (splitScope === 'top1000' ? '内置全词库 · 前 1000 常用字' : (splitScope === 'full' ? '内置全词库（含容错）' : '内置精校 167 字')) :
     '内置精校 167 字';
   $('splitCombo').textContent = STATE.split.combo;
@@ -8135,21 +8136,33 @@ function setSyncBusy(busy) {
   });
 }
 
+async function fetchTextWithTimeout(url, ms) {
+  const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const timer = controller ? setTimeout(() => controller.abort(), ms) : null;
+  try {
+    const res = await fetch(url, controller ? { cache: 'no-cache', signal: controller.signal } : { cache: 'no-cache' });
+    if (!res.ok) return { ok: false, status: res.status, text: '' };
+    return { ok: true, status: res.status, text: await res.text() };
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
 async function syncOnlineDict(manual) {
   if (dictSyncState === 'loading') return;
   const prevState = dictSyncState;
   dictSyncState = 'loading';
   renderSplitHud();
-  if (manual) setSyncBusy(true);
+  setSyncBusy(true);
   let lastReason = '网络不可达';
   try {
     for (let round = 0; round < 2; round++) {
       const url = ONLINE_SOURCES[onlineIndex];
       const label = url.includes('jde_ext') ? '扩展字集' : '主词库';
       try {
-        const res = await fetch(url, { cache: 'no-cache' });
+        const res = await fetchTextWithTimeout(url, manual ? 8000 : 4000);
         if (!res.ok) { lastReason = 'HTTP ' + res.status; onlineIndex = (onlineIndex + 1) % ONLINE_SOURCES.length; continue; }
-        const txt = await res.text();
+        const txt = res.text;
         const dict = parseOnlineDict(txt);
         if (!dict.chars.size && !dict.short3.size) {
           lastReason = '返回内容无法识别（' + label + '）';
@@ -8180,12 +8193,12 @@ async function syncOnlineDict(manual) {
         }
         return;
       } catch (e) {
-        lastReason = '跨域或网络错误';
+        lastReason = e && e.name === 'AbortError' ? '请求超时' : '跨域或网络错误';
         onlineIndex = (onlineIndex + 1) % ONLINE_SOURCES.length;
       }
     }
   } finally {
-    if (manual) setSyncBusy(false);
+    setSyncBusy(false);
     renderSplitHud();
   }
   dictSyncState = CUSTOM_DICT.length ? (prevState === 'local' ? 'local' : 'embedded') : 'fallback';
@@ -8248,9 +8261,9 @@ async function syncShortCodeDict(manual) {
   ];
   for (const url of urls) {
     try {
-      const res = await fetch(url);
+      const res = await fetchTextWithTimeout(url, manual ? 8000 : 4000);
       if (!res.ok) continue;
-      const txt = await res.text();
+      const txt = res.text;
       const sc = parseRimeShortCodes(txt, 'rime-JDhe 固词简码');
       if (sc.s2.length || sc.s3.length) {
         CUSTOM_SHORT_2 = sc.s2;
@@ -8671,7 +8684,17 @@ initScrollReveal($('view-home'));
 initHeroMotion();
 syncAllSliders();
 setTimeout(syncAllSliders, 120);
-loadEmbeddedDict().then(ok => { if (!ok) syncOnlineDict(false); });
+loadEmbeddedDict().then(ok => {
+  if (ok) return;
+  // iOS 16.0 等没有 DecompressionStream 的浏览器无法解压内嵌词库。
+  // 不再自动拉在线词库，避免长时间卡在“正在检查在线更新”；让用户手动重试。
+  if (typeof DecompressionStream === 'undefined') {
+    dictSyncState = 'fallback';
+    renderSplitHud();
+    return;
+  }
+  syncOnlineDict(false);
+});
 
 if (document.fonts && document.fonts.load) {
   document.fonts.load('48px JdhChai').then(() => {
