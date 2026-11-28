@@ -89,7 +89,11 @@ s5 = "\n".join(
     for w, cs in word_all_ranked.items()
 )
 payload = "\n===\n".join([s1, s2, s3, s4, s5])
-dict_gz_b64 = base64.b64encode(gzip.compress(payload.encode("utf-8"), 9, mtime=0)).decode("ascii")
+dict_gz = bytearray(gzip.compress(payload.encode("utf-8"), 9, mtime=0))
+# gzip 头的第 9 字节是 OS 字段：不同 Python/zlib 构建会写 0x03 或 0xff，
+# 导致同一份数据在不同环境生成不同 base64。固定成 0xff，保证跨版本可复现。
+dict_gz[9] = 0xFF
+dict_gz_b64 = base64.b64encode(bytes(dict_gz)).decode("ascii")
 
 out = (
     tpl.replace("__JDH_FONT_BASE64__", font_b64)
