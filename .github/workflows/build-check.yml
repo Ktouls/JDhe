@@ -26,11 +26,12 @@ jobs:
 
       - name: Save baseline generated files
         run: |
-          mkdir -p /tmp/baseline/src
+          mkdir -p /tmp/baseline/src /tmp/baseline/assets
           cp index.html /tmp/baseline/index.html
           cp zigen-chart.svg /tmp/baseline/zigen-chart.svg
           cp src/zigen-chart.svg /tmp/baseline/src/zigen-chart.svg
           cp src/assess.json /tmp/baseline/src/assess.json
+          cp assets/dict-search.gz /tmp/baseline/assets/dict-search.gz
 
       - name: Rebuild site and assessment
         run: |

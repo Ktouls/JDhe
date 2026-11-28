@@ -6655,6 +6655,12 @@ function initScrollCue() {
       cfResults.innerHTML = '<div class="cf-empty"><h4>从一个汉字开始</h4><p>输入单字、词语或整句，即时查看全拼、首末字根拆分、单字简码与全码（含选重键 ␣ / ; / &#39;）。</p></div>';
       return;
     }
+    if (!window.JDH_WORD_RANKED && !window.JDH_SINGLE_RANKED && !window.__searchIndexTried) {
+      window.__searchIndexTried = true;
+      cfResults.innerHTML = '<div class="cf-empty"><h4>正在加载查字索引…</h4><p>首次查询需要加载约 1.4MB 的选重位次数据，加载后会缓存在浏览器里。</p></div>';
+      loadSearchIndex().then(() => { if (cfInput) renderChaifenSearch(cfInput.value); });
+      return;
+    }
 
     // 1. 词组编码卡片（含二简 / 三简 / 四码全码 + 选重符，对标简单鹤 9.3 查码卡）
     const cleanWord = text.replace(/[^\u3400-\u9fff]/g, '');
@@ -8052,19 +8058,6 @@ async function loadEmbeddedDict() {
     };
     const sc2 = parseSec(parts[1], 'dict2', '内置全词库二简词');
     const sc3 = parseSec(parts[2], 'dict3', '内置全词库三简词');
-    const parseMapSec = (sec) => {
-      const m = new Map();
-      if (!sec) return m;
-      for (const line of sec.split('\n')) {
-        if (!line) continue;
-        const sep = line.indexOf(':');
-        if (sep <= 0) continue;
-        m.set(line.slice(0, sep), line.slice(sep + 1).split(',').filter(Boolean));
-      }
-      return m;
-    };
-    if (parts[3]) window.JDH_SINGLE_RANKED = parseMapSec(parts[3]);
-    if (parts[4]) window.JDH_WORD_RANKED = parseMapSec(parts[4]);
     if (dict.length) CUSTOM_DICT = dict;
     if (sc2.length) CUSTOM_SHORT_2 = sc2;
     if (sc3.length) CUSTOM_SHORT_3 = sc3;
@@ -8239,6 +8232,57 @@ async function syncOnlineDict(manual) {
     toast('在线更新失败（' + lastReason + '）· 继续使用内置 v9.3 词库：单字 '
       + CUSTOM_DICT.length + ' · 二简 ' + CUSTOM_SHORT_2.length + ' · 三简 ' + CUSTOM_SHORT_3.length);
   }
+}
+
+let searchIndexPromise = null;
+
+async function decompressGzipBytes(bytes) {
+  if (typeof DecompressionStream !== 'undefined') {
+    const ds = new DecompressionStream('gzip');
+    const stream = new Blob([bytes]).stream().pipeThrough(ds);
+    return await new Response(stream).text();
+  }
+  if (typeof fflate !== 'undefined' && fflate.gunzipSync) {
+    return new TextDecoder('utf-8').decode(fflate.gunzipSync(bytes));
+  }
+  return '';
+}
+
+async function loadSearchIndex() {
+  if (window.JDH_WORD_RANKED || window.JDH_SINGLE_RANKED) return true;
+  if (searchIndexPromise) return searchIndexPromise;
+  searchIndexPromise = (async () => {
+    const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    const timer = controller ? setTimeout(() => controller.abort(), 20000) : null;
+    try {
+      const res = await fetch('assets/dict-search.gz', controller ? { cache: 'no-cache', signal: controller.signal } : { cache: 'no-cache' });
+      if (!res.ok) return false;
+      const bytes = new Uint8Array(await res.arrayBuffer());
+      const txt = await decompressGzipBytes(bytes);
+      if (!txt) return false;
+      const parts = txt.split('\n===\n');
+      const parseMapSec = (sec) => {
+        const m = new Map();
+        if (!sec) return m;
+        for (const line of sec.split('\n')) {
+          if (!line) continue;
+          const sep = line.indexOf(':');
+          if (sep <= 0) continue;
+          m.set(line.slice(0, sep), line.slice(sep + 1).split(',').filter(Boolean));
+        }
+        return m;
+      };
+      if (parts[0]) window.JDH_SINGLE_RANKED = parseMapSec(parts[0]);
+      if (parts[1]) window.JDH_WORD_RANKED = parseMapSec(parts[1]);
+      return true;
+    } catch (e) {
+      return false;
+    } finally {
+      if (timer) clearTimeout(timer);
+      searchIndexPromise = null;
+    }
+  })();
+  return searchIndexPromise;
 }
 
 function handleSplitKey(k) {
