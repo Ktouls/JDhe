@@ -88,12 +88,24 @@ s5 = "\n".join(
     f"{w}:{','.join(sorted(cs, key=lambda x: (len(x), x)))}"
     for w, cs in word_all_ranked.items()
 )
-payload = "\n===\n".join([s1, s2, s3, s4, s5])
-dict_gz = bytearray(gzip.compress(payload.encode("utf-8"), 9, mtime=0))
-# gzip 头的第 9 字节是 OS 字段：不同 Python/zlib 构建会写 0x03 或 0xff，
-# 导致同一份数据在不同环境生成不同 base64。固定成 0xff，保证跨版本可复现。
-dict_gz[9] = 0xFF
-dict_gz_b64 = base64.b64encode(bytes(dict_gz)).decode("ascii")
+# 首屏只保留 s1/s2/s3（核心单字 + 二简 + 三简）；s4/s5 是查字用的
+# 全部编码/选重位次，单独输出 assets/dict-search.gz，首次查字时再加载。
+core_payload = "\n===\n".join([s1, s2, s3])
+search_payload = "\n===\n".join([s4, s5])
+
+def gzip_bytes(text):
+    gz = bytearray(gzip.compress(text.encode("utf-8"), 9, mtime=0))
+    # gzip 头第 9 字节 OS 字段跨 Python/zlib 版本可能不同，固定成 0xff。
+    gz[9] = 0xFF
+    return bytes(gz)
+
+assets_dir = ROOT / "assets"
+assets_dir.mkdir(exist_ok=True)
+search_gz = gzip_bytes(search_payload)
+(assets_dir / "dict-search.gz").write_bytes(search_gz)
+print(f"已生成 assets/dict-search.gz：{len(search_gz):,} 字节")
+
+dict_gz_b64 = base64.b64encode(gzip_bytes(core_payload)).decode("ascii")
 
 out = (
     tpl.replace("__JDH_FONT_BASE64__", font_b64)

@@ -26,6 +26,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 GZ_RE = re.compile(r'(const EMBEDDED_DICT_GZ_B64 = ")([A-Za-z0-9+/=]+)(")')
 FILES = ["index.html", "zigen-chart.svg", "src/zigen-chart.svg", "src/assess.json"]
+GZ_FILES = ["assets/dict-search.gz"]
 
 
 def normalize_html(text):
@@ -64,6 +65,18 @@ def main():
             problems.append(f"缺少文件：{rel}")
         elif old.exists() and cur.read_bytes() != old.read_bytes():
             problems.append(f"{rel} 未随源码更新")
+
+    for rel in GZ_FILES:
+        cur, old = ROOT / rel, base / rel
+        if not cur.exists():
+            problems.append(f"缺少文件：{rel}")
+        elif old.exists():
+            try:
+                same = gzip.decompress(cur.read_bytes()) == gzip.decompress(old.read_bytes())
+            except Exception:
+                same = False
+            if not same:
+                problems.append(f"{rel} 内容未随源码更新")
 
     if problems:
         print("生成物校验未通过：")
